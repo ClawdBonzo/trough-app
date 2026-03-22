@@ -51,26 +51,81 @@ final class OnboardingViewModel: ObservableObject {
     @Published var addSecondary = false
     @Published var secondaryEntries: [SecondaryCompoundEntry] = []
 
-    // Step 1.5: Peptides
-    static let peptidePresets = [
-        "Semaglutide",
-        "Tirzepatide",
-        "Liraglutide",
-        "BPC-157",
-        "Ipamorelin",
-        "CJC-1295",
-        "MK-677",
-        "hCG",
-        "Anastrozole",
-        "Aromasin (Exemestane)",
-        "Letrozole",
-        "Cabergoline",
-        "Custom",
+    // Step 1.5: Adjuncts / Peptides / GLP-1 (multi-select)
+    struct CompoundCategory: Identifiable {
+        let id = UUID()
+        let name: String
+        let compounds: [String]
+    }
+    static let compoundCategories: [CompoundCategory] = [
+        CompoundCategory(name: "GLP-1", compounds: ["Semaglutide", "Tirzepatide", "Liraglutide"]),
+        CompoundCategory(name: "Peptides", compounds: ["BPC-157", "CJC-1295", "Ipamorelin", "MK-677"]),
+        CompoundCategory(name: "AI / Ancillary", compounds: ["Anastrozole", "Aromasin", "Cabergoline", "hCG", "Letrozole"]),
     ]
-    @Published var trackPeptides = false
-    @Published var peptideName = "Semaglutide"
-    @Published var customPeptideName = ""
-    @Published var peptideDoseMcg: Double = 100
+
+    struct SelectedCompound: Identifiable {
+        let id = UUID()
+        var name: String
+        var dose: Double
+        var unit: String
+        var isCustom: Bool = false
+    }
+
+    @Published var selectedCompounds: Set<String> = []
+    @Published var customCompoundName = ""
+    @Published var compoundDoses: [SelectedCompound] = []
+
+    static func defaultUnit(for compound: String) -> String {
+        let mgCompounds = ["Semaglutide", "Tirzepatide", "Liraglutide", "Anastrozole", "Aromasin", "Cabergoline", "Letrozole", "MK-677"]
+        let iuCompounds = ["hCG"]
+        if mgCompounds.contains(compound) { return "mg" }
+        if iuCompounds.contains(compound) { return "IU" }
+        return "mcg"
+    }
+
+    static func defaultDose(for compound: String) -> Double {
+        switch compound {
+        case "Semaglutide":  return 0.25
+        case "Tirzepatide":  return 2.5
+        case "Liraglutide":  return 0.6
+        case "BPC-157":      return 250
+        case "CJC-1295":     return 100
+        case "Ipamorelin":   return 200
+        case "MK-677":       return 25
+        case "Anastrozole":  return 0.5
+        case "Aromasin":     return 12.5
+        case "Cabergoline":  return 0.25
+        case "hCG":          return 500
+        case "Letrozole":    return 2.5
+        default:             return 100
+        }
+    }
+
+    func toggleCompound(_ name: String) {
+        if selectedCompounds.contains(name) {
+            selectedCompounds.remove(name)
+        } else {
+            selectedCompounds.insert(name)
+        }
+    }
+
+    func addCustomCompound() {
+        let name = customCompoundName.trimmingCharacters(in: .whitespaces)
+        guard !name.isEmpty, !selectedCompounds.contains(name) else { return }
+        selectedCompounds.insert(name)
+        customCompoundName = ""
+    }
+
+    func buildCompoundDoses() {
+        compoundDoses = selectedCompounds.sorted().map { name in
+            SelectedCompound(
+                name: name,
+                dose: Self.defaultDose(for: name),
+                unit: Self.defaultUnit(for: name),
+                isCustom: !Self.compoundCategories.flatMap(\.compounds).contains(name)
+            )
+        }
+    }
 
     // Step 2: Last injection
     @Published var lastInjectionDates: [String: Date] = [:]
@@ -117,14 +172,22 @@ final class OnboardingViewModel: ObservableObject {
 
     // MARK: Navigation
 
+    // Steps: 0=audience, 1=importData, 2=protocol, 3=compoundSelect, 4=compoundDoses, 5=lastInjection, 6=reminders
     func advance() {
         let nextIndex: Int
         switch stepIndex {
         case 0:  nextIndex = 1                                      // audience → importData
-        case 1:  nextIndex = userType == "trt" ? 2 : 5             // importData → protocol or reminders
-        case 2:  nextIndex = 3                                      // protocol → peptides
-        case 3:  nextIndex = 4                                      // peptides → last injection
-        case 4:  nextIndex = 5                                      // last injection → reminders
+        case 1:  nextIndex = userType == "trt" ? 2 : 6             // importData → protocol or reminders
+        case 2:  nextIndex = 3                                      // protocol → compound select
+        case 3:                                                      // compound select → doses or last injection
+            if selectedCompounds.isEmpty {
+                nextIndex = 5                                        // skip doses → last injection
+            } else {
+                buildCompoundDoses()
+                nextIndex = 4                                        // → compound doses
+            }
+        case 4:  nextIndex = 5                                      // compound doses → last injection
+        case 5:  nextIndex = 6                                      // last injection → reminders
         default: nextIndex = stepIndex
         }
         withAnimation(.easeInOut(duration: 0.3)) { stepIndex = nextIndex }
@@ -134,7 +197,8 @@ final class OnboardingViewModel: ObservableObject {
         guard stepIndex > 0 else { return }
         let prevIndex: Int
         switch stepIndex {
-        case 5 where userType == "natural": prevIndex = 1
+        case 5 where selectedCompounds.isEmpty: prevIndex = 3       // skip doses going back
+        case 6 where userType == "natural": prevIndex = 1
         default: prevIndex = stepIndex - 1
         }
         withAnimation(.easeInOut(duration: 0.3)) { stepIndex = prevIndex }
@@ -295,7 +359,7 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 // Progress bar
                 if vm.stepIndex > 0 {
-                    ProgressBar(current: vm.stepIndex, total: 5)
+                    ProgressBar(current: vm.stepIndex, total: 6)
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
                 }
@@ -305,13 +369,14 @@ struct OnboardingView: View {
                     AudienceStep(vm: vm).tag(0)
                     ImportDataStep(vm: vm).tag(1)
                     ProtocolSetupStep(vm: vm).tag(2)
-                    PeptidesStep(vm: vm).tag(3)
-                    LastInjectionStep(vm: vm).tag(4)
+                    CompoundSelectStep(vm: vm).tag(3)
+                    CompoundDosesStep(vm: vm).tag(4)
+                    LastInjectionStep(vm: vm).tag(5)
                     RemindersStep(vm: vm, onDone: {
                         let uid = UUID(uuidString: userIDString) ?? UUID()
                         vm.save(userID: uid)
                         onboardingCompleted = true
-                    }).tag(5)
+                    }).tag(6)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
@@ -716,55 +781,194 @@ private struct FormCard<Content: View>: View {
 
 // MARK: - Step 3: Peptides
 
-private struct PeptidesStep: View {
-    @ObservedObject var vm: OnboardingViewModel
+// MARK: - Step 3: Compound Select (multi-select chips)
 
-    private var doseUnit: String {
-        let glp1s = ["Semaglutide", "Tirzepatide", "Liraglutide"]
-        let mgCompounds = ["Anastrozole", "Aromasin (Exemestane)", "Letrozole", "Cabergoline", "MK-677"]
-        let iuCompounds = ["hCG"]
-        if glp1s.contains(vm.peptideName) { return "mg" }
-        if mgCompounds.contains(vm.peptideName) { return "mg" }
-        if iuCompounds.contains(vm.peptideName) { return "IU" }
-        return "mcg"
-    }
+private struct CompoundSelectStep: View {
+    @ObservedObject var vm: OnboardingViewModel
+    @State private var showCustomField = false
 
     var body: some View {
         StepContainer(
-            title: "Peptides or GLP-1?",
-            subtitle: "Track any additional compounds alongside your protocol.",
+            title: "What else are you taking?",
+            subtitle: "Tap all that apply. You can always add more later.",
             content: {
-                VStack(spacing: 16) {
-                    Toggle("Track peptides / GLP-1", isOn: $vm.trackPeptides.animation())
-                        .tint(AppColors.accent)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
+                VStack(alignment: .leading, spacing: 20) {
+                    ForEach(OnboardingViewModel.compoundCategories) { category in
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(category.name)
+                                .font(.caption.bold())
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
 
-                    if vm.trackPeptides {
-                        FormCard(title: "Compound") {
-                            Picker("Compound", selection: $vm.peptideName) {
-                                ForEach(OnboardingViewModel.peptidePresets, id: \.self) { name in
-                                    Text(name).tag(name)
+                            OnboardingFlowLayout(spacing: 8) {
+                                ForEach(category.compounds, id: \.self) { compound in
+                                    CompoundChip(
+                                        name: compound,
+                                        isSelected: vm.selectedCompounds.contains(compound)
+                                    ) {
+                                        vm.toggleCompound(compound)
+                                    }
                                 }
                             }
-                            .pickerStyle(.menu)
-                            .tint(AppColors.accent)
+                        }
+                    }
 
-                            if vm.peptideName == "Custom" {
-                                Divider().background(Color.white.opacity(0.07))
-                                TextField("Enter compound name", text: $vm.customPeptideName)
+                    // Custom compounds already added
+                    let customNames = vm.selectedCompounds.filter { name in
+                        !OnboardingViewModel.compoundCategories.flatMap(\.compounds).contains(name)
+                    }.sorted()
+                    if !customNames.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Custom")
+                                .font(.caption.bold())
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                            OnboardingFlowLayout(spacing: 8) {
+                                ForEach(customNames, id: \.self) { name in
+                                    CompoundChip(name: name, isSelected: true) {
+                                        vm.toggleCompound(name)
+                                    }
+                                }
                             }
+                        }
+                    }
 
-                            Divider().background(Color.white.opacity(0.07))
+                    // Add custom button / field
+                    if showCustomField {
+                        HStack {
+                            TextField("Compound name", text: $vm.customCompoundName)
+                                .padding(10)
+                                .background(AppColors.background)
+                                .cornerRadius(8)
+                                .foregroundColor(.white)
+                            Button("Add") {
+                                vm.addCustomCompound()
+                                if vm.customCompoundName.isEmpty {
+                                    showCustomField = false
+                                }
+                            }
+                            .font(.subheadline.bold())
+                            .foregroundColor(AppColors.accent)
+                        }
+                    } else {
+                        Button {
+                            showCustomField = true
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Add custom compound")
+                            }
+                            .font(.subheadline)
+                            .foregroundColor(AppColors.accent)
+                        }
+                    }
 
+                    if !vm.selectedCompounds.isEmpty {
+                        HStack(spacing: 6) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text("\(vm.selectedCompounds.count) selected")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.top, 4)
+                    }
+                }
+            },
+            primaryLabel: vm.selectedCompounds.isEmpty ? "Skip" : "Next",
+            onPrimary: { vm.advance() },
+            showBack: true,
+            onBack: { vm.back() }
+        )
+    }
+}
+
+private struct CompoundChip: View {
+    let name: String
+    let isSelected: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            Text(name)
+                .font(.subheadline)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(isSelected ? AppColors.accent.opacity(0.2) : AppColors.card)
+                .foregroundColor(isSelected ? AppColors.accent : .white)
+                .cornerRadius(20)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(isSelected ? AppColors.accent : Color.white.opacity(0.1), lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// Simple flow layout for chips
+private struct OnboardingFlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let result = arrange(proposal: proposal, subviews: subviews)
+        return result.size
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let result = arrange(proposal: ProposedViewSize(width: bounds.width, height: bounds.height), subviews: subviews)
+        for (index, position) in result.positions.enumerated() {
+            subviews[index].place(at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y), proposal: .unspecified)
+        }
+    }
+
+    private func arrange(proposal: ProposedViewSize, subviews: Subviews) -> (size: CGSize, positions: [CGPoint]) {
+        let maxWidth = proposal.width ?? .infinity
+        var positions: [CGPoint] = []
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        var maxX: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x + size.width > maxWidth, x > 0 {
+                x = 0
+                y += rowHeight + spacing
+                rowHeight = 0
+            }
+            positions.append(CGPoint(x: x, y: y))
+            rowHeight = max(rowHeight, size.height)
+            x += size.width + spacing
+            maxX = max(maxX, x)
+        }
+
+        return (CGSize(width: maxX, height: y + rowHeight), positions)
+    }
+}
+
+// MARK: - Step 4: Compound Doses
+
+private struct CompoundDosesStep: View {
+    @ObservedObject var vm: OnboardingViewModel
+
+    var body: some View {
+        StepContainer(
+            title: "Set your doses",
+            subtitle: "We'll use these defaults — you can adjust anytime.",
+            content: {
+                VStack(spacing: 14) {
+                    ForEach($vm.compoundDoses) { $compound in
+                        FormCard(title: compound.name) {
                             HStack {
                                 Text("Dose")
                                 Spacer()
-                                TextField(doseUnit, value: $vm.peptideDoseMcg, format: .number)
+                                TextField(compound.unit, value: $compound.dose, format: .number)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 80)
-                                Text(doseUnit).foregroundColor(.secondary)
+                                Text(compound.unit)
+                                    .foregroundColor(.secondary)
                             }
                         }
                     }
