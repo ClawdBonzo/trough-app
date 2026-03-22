@@ -56,6 +56,9 @@ private struct MetricsScreenView: View {
                 }
                 .padding()
             }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
