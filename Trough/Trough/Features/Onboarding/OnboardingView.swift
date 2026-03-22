@@ -52,15 +52,43 @@ final class OnboardingViewModel: ObservableObject {
     @Published var secondaryEntries: [SecondaryCompoundEntry] = []
 
     // Step 1.5: Peptides
+    static let peptidePresets = [
+        "Semaglutide",
+        "Tirzepatide",
+        "Liraglutide",
+        "BPC-157",
+        "Ipamorelin",
+        "CJC-1295",
+        "MK-677",
+        "hCG",
+        "Anastrozole",
+        "Aromasin (Exemestane)",
+        "Letrozole",
+        "Cabergoline",
+        "Custom",
+    ]
     @Published var trackPeptides = false
-    @Published var peptideName = ""
+    @Published var peptideName = "Semaglutide"
+    @Published var customPeptideName = ""
     @Published var peptideDoseMcg: Double = 100
 
     // Step 2: Last injection
     @Published var lastInjectionDates: [String: Date] = [:]
 
     // Step 3: Reminders
+    static let reminderFrequencies: [(label: String, key: String)] = [
+        ("Daily",                     "daily"),
+        ("Every other day",           "eod"),
+        ("Twice a week (Mon, Thu)",   "2x_week"),
+        ("Three times a week",        "3x_week"),
+        ("Weekly",                    "weekly"),
+        ("Biweekly",                  "biweekly"),
+        ("Monthly",                   "monthly"),
+        ("Custom days",               "custom"),
+    ]
     @Published var reminderEnabled = true
+    @Published var reminderFreqIndex = 0  // default: Daily
+    @Published var reminderCustomDays: Set<Int> = []  // 1=Sun..7=Sat
     @Published var reminderTime: Date = {
         var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
         comps.hour = 9; comps.minute = 0
@@ -148,9 +176,14 @@ final class OnboardingViewModel: ObservableObject {
         // Reminder
         UserDefaults.standard.set(reminderEnabled, forKey: "reminderEnabled")
         if reminderEnabled {
+            let freq = Self.reminderFrequencies[min(reminderFreqIndex, Self.reminderFrequencies.count - 1)]
+            UserDefaults.standard.set(freq.key, forKey: "reminderFrequency")
             let comps = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
             UserDefaults.standard.set(comps.hour ?? 9, forKey: "reminderHour")
             UserDefaults.standard.set(comps.minute ?? 0, forKey: "reminderMinute")
+            if freq.key == "custom" {
+                UserDefaults.standard.set(Array(reminderCustomDays), forKey: "reminderCustomDays")
+            }
         }
 
         try? ctx.save()
@@ -686,6 +719,16 @@ private struct FormCard<Content: View>: View {
 private struct PeptidesStep: View {
     @ObservedObject var vm: OnboardingViewModel
 
+    private var doseUnit: String {
+        let glp1s = ["Semaglutide", "Tirzepatide", "Liraglutide"]
+        let mgCompounds = ["Anastrozole", "Aromasin (Exemestane)", "Letrozole", "Cabergoline", "MK-677"]
+        let iuCompounds = ["hCG"]
+        if glp1s.contains(vm.peptideName) { return "mg" }
+        if mgCompounds.contains(vm.peptideName) { return "mg" }
+        if iuCompounds.contains(vm.peptideName) { return "IU" }
+        return "mcg"
+    }
+
     var body: some View {
         StepContainer(
             title: "Peptides or GLP-1?",
@@ -698,17 +741,30 @@ private struct PeptidesStep: View {
                         .foregroundColor(.white)
 
                     if vm.trackPeptides {
-                        FormCard(title: "Peptide") {
-                            TextField("Compound name (e.g. BPC-157)", text: $vm.peptideName)
+                        FormCard(title: "Compound") {
+                            Picker("Compound", selection: $vm.peptideName) {
+                                ForEach(OnboardingViewModel.peptidePresets, id: \.self) { name in
+                                    Text(name).tag(name)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(AppColors.accent)
+
+                            if vm.peptideName == "Custom" {
+                                Divider().background(Color.white.opacity(0.07))
+                                TextField("Enter compound name", text: $vm.customPeptideName)
+                            }
+
                             Divider().background(Color.white.opacity(0.07))
+
                             HStack {
                                 Text("Dose")
                                 Spacer()
-                                TextField("mcg", value: $vm.peptideDoseMcg, format: .number)
+                                TextField(doseUnit, value: $vm.peptideDoseMcg, format: .number)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .frame(width: 80)
-                                Text("mcg").foregroundColor(.secondary)
+                                Text(doseUnit).foregroundColor(.secondary)
                             }
                         }
                     }
@@ -769,19 +825,63 @@ private struct RemindersStep: View {
     @ObservedObject var vm: OnboardingViewModel
     let onDone: () -> Void
 
+    private let weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+    private var showCustomDays: Bool {
+        OnboardingViewModel.reminderFrequencies[vm.reminderFreqIndex].key == "custom"
+    }
+
     var body: some View {
         StepContainer(
-            title: "Daily reminder",
-            subtitle: "Get a nudge to log your check-in each day.",
+            title: "Reminders",
+            subtitle: "Get a nudge to log check-ins, injections, or peptides.",
             content: {
                 VStack(spacing: 16) {
-                    Toggle("Enable daily reminder", isOn: $vm.reminderEnabled)
+                    Toggle("Enable reminders", isOn: $vm.reminderEnabled)
                         .tint(AppColors.accent)
                         .font(.subheadline)
                         .foregroundColor(.white)
 
                     if vm.reminderEnabled {
-                        FormCard(title: "Reminder Time") {
+                        FormCard(title: "Frequency") {
+                            Picker("How often", selection: $vm.reminderFreqIndex) {
+                                ForEach(OnboardingViewModel.reminderFrequencies.indices, id: \.self) { i in
+                                    Text(OnboardingViewModel.reminderFrequencies[i].label).tag(i)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(AppColors.accent)
+
+                            if showCustomDays {
+                                Divider().background(Color.white.opacity(0.07))
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Select days")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    HStack(spacing: 6) {
+                                        ForEach(1...7, id: \.self) { wd in
+                                            let name = weekdayNames[wd - 1]
+                                            let selected = vm.reminderCustomDays.contains(wd)
+                                            Button(name) {
+                                                if selected {
+                                                    vm.reminderCustomDays.remove(wd)
+                                                } else {
+                                                    vm.reminderCustomDays.insert(wd)
+                                                }
+                                            }
+                                            .font(.caption.bold())
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 5)
+                                            .background(selected ? AppColors.accent : AppColors.background)
+                                            .foregroundColor(selected ? .white : .secondary)
+                                            .clipShape(Capsule())
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        FormCard(title: "Time") {
                             DatePicker("Time", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
                                 .tint(AppColors.accent)
                         }
