@@ -8,15 +8,28 @@ final class RevenueCatService {
     static let shared = RevenueCatService()
     private init() {}
 
-    private static var isConfigured = false
+    static private(set) var isConfiguredFlag = false
+    private static var isConfigured: Bool {
+        get { isConfiguredFlag }
+        set { isConfiguredFlag = newValue }
+    }
 
     // MARK: Configure
 
     static func configure(apiKey: String) {
         guard !apiKey.isEmpty else {
             print("[RevenueCat] No API key configured — purchases disabled.")
+            isConfigured = false
             return
         }
+        #if !DEBUG
+        // Prevent test keys from crashing in Release builds
+        if apiKey.hasPrefix("test_") {
+            print("[RevenueCat] Test API key detected in Release build — purchases disabled.")
+            isConfigured = false
+            return
+        }
+        #endif
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: apiKey)
         isConfigured = true
@@ -26,7 +39,12 @@ final class RevenueCatService {
 
     func fetchOfferings() async -> Offerings? {
         guard RevenueCatService.isConfigured else { return nil }
-        return try? await Purchases.shared.offerings()
+        do {
+            return try await Purchases.shared.offerings()
+        } catch {
+            print("[RevenueCat] Failed to fetch offerings: \(error)")
+            return nil
+        }
     }
 
     // MARK: Purchase
