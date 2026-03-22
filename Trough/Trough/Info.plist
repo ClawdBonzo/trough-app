@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Trough</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>3</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Trough reads your HRV, sleep, and activity data to correlate with your hormone protocol.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Trough may write workout data.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Trough uses your camera to photograph bloodwork results for easy tracking.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Trough reads photos from your library to import lab result images.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Trough uses anonymous analytics to understand which features help users most. No personal health data is included.</string>
+</dict>
+</plist>

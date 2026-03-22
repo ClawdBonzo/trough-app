@@ -1,0 +1,704 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EE1528F85B094B94A0CB00A5 /* TroughApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77403EEC9DAE42BAB03773FB /* TroughApp.swift */; };
+		D2ADEBEB85724274955445D3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AFCC3A86424879AC535649 /* ContentView.swift */; };
+		1335C149E10345BAA59A8009 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8F16387807402AA8FF9181 /* AppColors.swift */; };
+		3ABDAE3FF8B94454A9092B09 /* TroughSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C366C041F44FE3BA72429B /* TroughSchemaV1.swift */; };
+		82E843F002F24380A93255C8 /* TroughMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21845092679249BE91F9C902 /* TroughMigrationPlan.swift */; };
+		7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90068C9514204B23A9A9F59E /* SupabaseService.swift */; };
+		7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55107EFC75E74D0E97097A68 /* SyncEngine.swift */; };
+		61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BFE36059E4003B02441B5 /* HealthKitService.swift */; };
+		43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E8DD8413C64082A81BB49A /* DisclaimerService.swift */; };
+		8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8663BF9EA184443DA308FD0E /* DashboardView.swift */; };
+		80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */; };
+		DD08E81BB8514F34953954A3 /* DailyCheckinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5A16FB8C7B49F48FB0F21C /* DailyCheckinView.swift */; };
+		22481BB9E9674A0C8982269C /* DailyCheckinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB9F88650304C6AB4F20F0F /* DailyCheckinViewModel.swift */; };
+		9F5D55CE7E764F76807D7A0C /* InjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6700DE90AB24455083083527 /* InjectionsView.swift */; };
+		0F7B1589E66B430DA6DE8191 /* InjectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DBDF7A47914F68ABCA540B /* InjectionsViewModel.swift */; };
+		A7681EF0F90F432FB130F90B /* BloodworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */; };
+		BB3AEE2599124499B5CA4165 /* BloodworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */; };
+		6512DAA45FCE4C72A6C1BF3A /* PeptidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BECDAEDC3994D1294FABFD9 /* PeptidesView.swift */; };
+		A5765172DC1A4C639882B9E9 /* PeptidesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495F474897E45968444B68F /* PeptidesViewModel.swift */; };
+		PL001ABUILDFILE000000 /* PeptideLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL001AFILEREF0000000000 /* PeptideLogView.swift */; };
+		27BAFC5810064D9C8C4645B3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0E6545CF0D4DF3BD8226D9 /* SettingsView.swift */; };
+		D3FB58F7807C4509B26653F8 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7288B93B716541C89EF746DF /* SettingsViewModel.swift */; };
+		SC001BUILDFILE00000000 /* SupplementConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SC001FILEREF0000000000 /* SupplementConfigView.swift */; };
+		49404BD7AACB46A89F40B508 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E8486E1336492ABD4254F6 /* Extensions.swift */; };
+		CB53E9065E874F1DAA776FB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0242BF1CC804F9D95D006A8 /* Assets.xcassets */; };
+		41DE374EBFEA44AC9FCA09E1 /* TroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */; };
+		E21215AE43A749D59D368CC2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9677675ECF484DEFBE2D9507 /* Supabase */; };
+		A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = EC01114F50764DA4AF3BF092 /* PostHog */; };
+		471D87D0674949C5ACC727B2 /* HapticSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68895EEF483945ECA13E505F /* HapticSlider.swift */; };
+		D753D23AF043408F93E68A3C /* InjectionCycleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */; };
+		91D06458391E493BAFCE99B9 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */; };
+		18F49A5F058C41A89A751A5A /* BinaryTapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42AECCC3A5D472BBE0E72A4 /* BinaryTapsView.swift */; };
+		9A89F955B10D44D0A128AFE9 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473FDDA8D28468F90567F47 /* CompletionView.swift */; };
+		AA11BB22CC330011AA11BB22 /* PKCurveEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */; };
+		AA11BB22CC330022AA11BB22 /* PKCurveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD440022BB11CC22 /* PKCurveView.swift */; };
+		AA11BB22CC330033AA11BB22 /* DisclaimerBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD440033BB11CC22 /* DisclaimerBanner.swift */; };
+		CC110011DD220011CC11DD22 /* InjectionSitePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD110011EE220011DD11EE22 /* InjectionSitePicker.swift */; };
+		CC110022DD220022CC11DD22 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD110022EE220022DD11EE22 /* OnboardingView.swift */; };
+		EE220033FF440033EE22FF33 /* HealthKitPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */; };
+		BB110011BB220033BB440055 /* WeeklyReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB110011BB220033BB440066 /* WeeklyReportService.swift */; };
+		BB110011BB220033BB440077 /* WeeklyReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB110011BB220033BB440088 /* WeeklyReportView.swift */; };
+		RC00112233445566778899CC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC00112233445566778899BB /* RevenueCat */; };
+		RC00112233445566778899DD /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC00112233445566778899EE /* RevenueCatService.swift */; };
+		RC00112233445566778899FF /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA00 /* SubscriptionManager.swift */; };
+		RC001122334455667788AA11 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA22 /* PaywallView.swift */; };
+		BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA02 /* BloodworkEntryView.swift */; };
+		BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA04 /* BloodworkTrendsView.swift */; };
+		PL001 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL002 /* AnalyticsService.swift */; };
+		PL003 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL004 /* ToastManager.swift */; };
+		PL005 /* SampleDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL006 /* SampleDataService.swift */; };
+		PL007 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL008 /* SkeletonView.swift */; };
+		PL009 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL010 /* PrivacyPolicyView.swift */; };
+		CSV001 /* CSVImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV002 /* CSVImportService.swift */; };
+		CSV003 /* CSVImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV004 /* CSVImportView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		77403EEC9DAE42BAB03773FB /* TroughApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughApp.swift; sourceTree = "<group>"; };
+		24AFCC3A86424879AC535649 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2B8F16387807402AA8FF9181 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		91C366C041F44FE3BA72429B /* TroughSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughSchemaV1.swift; sourceTree = "<group>"; };
+		21845092679249BE91F9C902 /* TroughMigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughMigrationPlan.swift; sourceTree = "<group>"; };
+		90068C9514204B23A9A9F59E /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		55107EFC75E74D0E97097A68 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
+		E49BFE36059E4003B02441B5 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		98E8DD8413C64082A81BB49A /* DisclaimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerService.swift; sourceTree = "<group>"; };
+		8663BF9EA184443DA308FD0E /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		FD5A16FB8C7B49F48FB0F21C /* DailyCheckinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCheckinView.swift; sourceTree = "<group>"; };
+		4FB9F88650304C6AB4F20F0F /* DailyCheckinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCheckinViewModel.swift; sourceTree = "<group>"; };
+		6700DE90AB24455083083527 /* InjectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionsView.swift; sourceTree = "<group>"; };
+		F4DBDF7A47914F68ABCA540B /* InjectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionsViewModel.swift; sourceTree = "<group>"; };
+		CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkView.swift; sourceTree = "<group>"; };
+		6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkViewModel.swift; sourceTree = "<group>"; };
+		8BECDAEDC3994D1294FABFD9 /* PeptidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptidesView.swift; sourceTree = "<group>"; };
+		2495F474897E45968444B68F /* PeptidesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptidesViewModel.swift; sourceTree = "<group>"; };
+		PL001AFILEREF0000000000 /* PeptideLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideLogView.swift; sourceTree = "<group>"; };
+		7A0E6545CF0D4DF3BD8226D9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7288B93B716541C89EF746DF /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		74E8486E1336492ABD4254F6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughTests.swift; sourceTree = "<group>"; };
+		F0242BF1CC804F9D95D006A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		577D31A90D4A49AF8077E3ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F72A5F6891E6486680F49CA1 /* Trough.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trough.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D75C34D8565248EBABD63A93 /* TroughTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TroughTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		68895EEF483945ECA13E505F /* HapticSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSlider.swift; sourceTree = "<group>"; };
+		A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionCycleService.swift; sourceTree = "<group>"; };
+		5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
+		A42AECCC3A5D472BBE0E72A4 /* BinaryTapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTapsView.swift; sourceTree = "<group>"; };
+		9473FDDA8D28468F90567F47 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
+		BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCurveEngine.swift; sourceTree = "<group>"; };
+		BB11CC22DD440022BB11CC22 /* PKCurveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCurveView.swift; sourceTree = "<group>"; };
+		BB11CC22DD440033BB11CC22 /* DisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerBanner.swift; sourceTree = "<group>"; };
+		DD110011EE220011DD11EE22 /* InjectionSitePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionSitePicker.swift; sourceTree = "<group>"; };
+		DD110022EE220022DD11EE22 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionView.swift; sourceTree = "<group>"; };
+		BB110011BB220033BB440066 /* WeeklyReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyReportService.swift; sourceTree = "<group>"; };
+		BB110011BB220033BB440088 /* WeeklyReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyReportView.swift; sourceTree = "<group>"; };
+		RC00112233445566778899EE /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
+		RC001122334455667788AA00 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
+		RC001122334455667788AA22 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		BW001122334455667788AA02 /* BloodworkEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkEntryView.swift; sourceTree = "<group>"; };
+		BW001122334455667788AA04 /* BloodworkTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkTrendsView.swift; sourceTree = "<group>"; };
+		PL002 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		PL004 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
+		PL006 /* SampleDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataService.swift; sourceTree = "<group>"; };
+		PL008 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
+		PL010 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		SC001FILEREF0000000000 /* SupplementConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementConfigView.swift; sourceTree = "<group>"; };
+		CSV002 /* CSVImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportService.swift; sourceTree = "<group>"; };
+		CSV004 /* CSVImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DABE0845BA674FE5B618D4C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E21215AE43A749D59D368CC2 /* Supabase in Frameworks */,
+				A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */,
+							RC00112233445566778899CC /* RevenueCat in Frameworks */,
+);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34B91014B4E640EFAE81378B /* Frameworks (tests) */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2D6C384FF21A40698B048A4C = {
+			isa = PBXGroup;
+			children = (
+				80B49B1B9DC04F628EF43E13 /* Trough */,
+				37C6AFAF0F904950A8769766 /* TroughTests */,
+				2C700729301C4C148F188778 /* Products */,
+			);
+			name = Trough;
+			sourceTree = "<group>";
+		};
+		2C700729301C4C148F188778 = {
+			isa = PBXGroup;
+			children = (
+				F72A5F6891E6486680F49CA1 /* Trough.app */,
+				D75C34D8565248EBABD63A93 /* TroughTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80B49B1B9DC04F628EF43E13 = {
+			isa = PBXGroup;
+			children = (
+				77403EEC9DAE42BAB03773FB /* TroughApp.swift */,
+				24AFCC3A86424879AC535649 /* ContentView.swift */,
+				2B8F16387807402AA8FF9181 /* AppColors.swift */,
+				F0242BF1CC804F9D95D006A8 /* Assets.xcassets */,
+				577D31A90D4A49AF8077E3ED /* Info.plist */,
+				9053DE7CB84C490CACD976F8 /* Models */,
+				169FEFB61B33444FAEBADF4D /* Services */,
+				6DFCB169D7F04A06A55631AA /* Features */,
+				4E3EDB5265A44230B8D8BFCE /* Utilities */,
+			);
+			path = Trough;
+			sourceTree = "<group>";
+		};
+		9053DE7CB84C490CACD976F8 = {
+			isa = PBXGroup;
+			children = (
+				4B6EC1CF57214B2BBC159FDE /* Schema */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4B6EC1CF57214B2BBC159FDE = {
+			isa = PBXGroup;
+			children = (
+				91C366C041F44FE3BA72429B /* TroughSchemaV1.swift */,
+				21845092679249BE91F9C902 /* TroughMigrationPlan.swift */,
+			);
+			path = Schema;
+			sourceTree = "<group>";
+		};
+		169FEFB61B33444FAEBADF4D = {
+			isa = PBXGroup;
+			children = (
+				5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */,
+				A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */,
+				90068C9514204B23A9A9F59E /* SupabaseService.swift */,
+				55107EFC75E74D0E97097A68 /* SyncEngine.swift */,
+				E49BFE36059E4003B02441B5 /* HealthKitService.swift */,
+				98E8DD8413C64082A81BB49A /* DisclaimerService.swift */,
+				BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */,
+				BB110011BB220033BB440066 /* WeeklyReportService.swift */,
+				RC00112233445566778899EE /* RevenueCatService.swift */,
+				RC001122334455667788AA00 /* SubscriptionManager.swift */,
+				PL002 /* AnalyticsService.swift */,
+				PL004 /* ToastManager.swift */,
+				PL006 /* SampleDataService.swift */,
+				CSV002 /* CSVImportService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6DFCB169D7F04A06A55631AA = {
+			isa = PBXGroup;
+			children = (
+				C726F7F192B444558859C027 /* Dashboard */,
+				93FE31CF1CBD4AB99E673224 /* DailyCheckin */,
+				3ED1FCAFC99C40BAAFD67E88 /* Injections */,
+				91EC5DBE145A4558A97D7A40 /* Bloodwork */,
+				BA212D3D776448769A13E345 /* Peptides */,
+				6F4BBF3FB293441F87E981DC /* Settings */,
+				CC990011FF220099CC99FF11 /* Onboarding */,
+				RC001122334455667788AA33 /* Paywall */,
+				CSVIMP01 /* Import */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		C726F7F192B444558859C027 = {
+			isa = PBXGroup;
+			children = (
+				8663BF9EA184443DA308FD0E /* DashboardView.swift */,
+				13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */,
+				BB11CC22DD440022BB11CC22 /* PKCurveView.swift */,
+				BB110011BB220033BB440088 /* WeeklyReportView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		93FE31CF1CBD4AB99E673224 = {
+			isa = PBXGroup;
+			children = (
+				9473FDDA8D28468F90567F47 /* CompletionView.swift */,
+				A42AECCC3A5D472BBE0E72A4 /* BinaryTapsView.swift */,
+				FD5A16FB8C7B49F48FB0F21C /* DailyCheckinView.swift */,
+				4FB9F88650304C6AB4F20F0F /* DailyCheckinViewModel.swift */,
+			);
+			path = DailyCheckin;
+			sourceTree = "<group>";
+		};
+		3ED1FCAFC99C40BAAFD67E88 = {
+			isa = PBXGroup;
+			children = (
+				6700DE90AB24455083083527 /* InjectionsView.swift */,
+				F4DBDF7A47914F68ABCA540B /* InjectionsViewModel.swift */,
+				DD110011EE220011DD11EE22 /* InjectionSitePicker.swift */,
+			);
+			path = Injections;
+			sourceTree = "<group>";
+		};
+		91EC5DBE145A4558A97D7A40 = {
+			isa = PBXGroup;
+			children = (
+				CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */,
+				6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */,
+				BW001122334455667788AA02 /* BloodworkEntryView.swift */,
+				BW001122334455667788AA04 /* BloodworkTrendsView.swift */,
+			);
+			path = Bloodwork;
+			sourceTree = "<group>";
+		};
+		BA212D3D776448769A13E345 = {
+			isa = PBXGroup;
+			children = (
+				8BECDAEDC3994D1294FABFD9 /* PeptidesView.swift */,
+				2495F474897E45968444B68F /* PeptidesViewModel.swift */,
+				PL001AFILEREF0000000000 /* PeptideLogView.swift */,
+			);
+			path = Peptides;
+			sourceTree = "<group>";
+		};
+		6F4BBF3FB293441F87E981DC = {
+			isa = PBXGroup;
+			children = (
+				7A0E6545CF0D4DF3BD8226D9 /* SettingsView.swift */,
+				7288B93B716541C89EF746DF /* SettingsViewModel.swift */,
+				PL010 /* PrivacyPolicyView.swift */,
+				SC001FILEREF0000000000 /* SupplementConfigView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4E3EDB5265A44230B8D8BFCE = {
+			isa = PBXGroup;
+			children = (
+				68895EEF483945ECA13E505F /* HapticSlider.swift */,
+				74E8486E1336492ABD4254F6 /* Extensions.swift */,
+				BB11CC22DD440033BB11CC22 /* DisclaimerBanner.swift */,
+				PL008 /* SkeletonView.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		37C6AFAF0F904950A8769766 = {
+			isa = PBXGroup;
+			children = (
+				D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */,
+			);
+			path = TroughTests;
+			sourceTree = "<group>";
+		};
+		CC990011FF220099CC99FF11 = {
+			isa = PBXGroup;
+			children = (
+				DD110022EE220022DD11EE22 /* OnboardingView.swift */,
+				FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		RC001122334455667788AA33 = {
+			isa = PBXGroup;
+			children = (
+				RC001122334455667788AA22 /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		CSVIMP01 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				CSV004 /* CSVImportView.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42B4F737C4F34E529CC017E5 /* Trough */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8082625A0C44804A7C92E59 /* Build configuration list for PBXNativeTarget "Trough" */;
+			buildPhases = (
+				A0CCD6F98659419EADD3B3B9 /* Sources */,
+				DABE0845BA674FE5B618D4C4 /* Frameworks */,
+				58C8BC6A01704C87AC03DAFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Trough;
+			packageProductDependencies = (
+				9677675ECF484DEFBE2D9507 /* Supabase */,
+				EC01114F50764DA4AF3BF092 /* PostHog */,
+			);
+			productName = Trough;
+			productReference = F72A5F6891E6486680F49CA1 /* Trough.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FE8911DF885549FC97482996 /* TroughTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 11460CF194BE4137AA397663 /* Build configuration list for PBXNativeTarget "TroughTests" */;
+			buildPhases = (
+				6D4DA293CF9C449A9B7CFBA5 /* Sources */,
+				34B91014B4E640EFAE81378B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TroughTests;
+			productName = TroughTests;
+			productReference = D75C34D8565248EBABD63A93 /* TroughTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A4F2D5BAD262475484D02D76 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					42B4F737C4F34E529CC017E5 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					FE8911DF885549FC97482996 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 42B4F737C4F34E529CC017E5;
+					};
+				};
+			};
+			buildConfigurationList = 8B6FC47D48C44D69A8D22044 /* Build configuration list for PBXProject "Trough" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2D6C384FF21A40698B048A4C;
+			packageReferences = (
+				FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */,
+							RC00112233445566778899AA /* XCRemoteSwiftPackageReference "purchases-ios" */,
+);
+			productRefGroup = 2C700729301C4C148F188778 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42B4F737C4F34E529CC017E5 /* Trough */,
+				FE8911DF885549FC97482996 /* TroughTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		58C8BC6A01704C87AC03DAFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB53E9065E874F1DAA776FB7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0CCD6F98659419EADD3B3B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				471D87D0674949C5ACC727B2 /* HapticSlider.swift in Sources */,
+				D753D23AF043408F93E68A3C /* InjectionCycleService.swift in Sources */,
+				91D06458391E493BAFCE99B9 /* InsightEngine.swift in Sources */,
+				18F49A5F058C41A89A751A5A /* BinaryTapsView.swift in Sources */,
+				9A89F955B10D44D0A128AFE9 /* CompletionView.swift in Sources */,
+				EE1528F85B094B94A0CB00A5 /* TroughApp.swift in Sources */,
+				D2ADEBEB85724274955445D3 /* ContentView.swift in Sources */,
+				1335C149E10345BAA59A8009 /* AppColors.swift in Sources */,
+				3ABDAE3FF8B94454A9092B09 /* TroughSchemaV1.swift in Sources */,
+				82E843F002F24380A93255C8 /* TroughMigrationPlan.swift in Sources */,
+				7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */,
+				7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */,
+				61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */,
+				43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */,
+				8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */,
+				80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */,
+				DD08E81BB8514F34953954A3 /* DailyCheckinView.swift in Sources */,
+				22481BB9E9674A0C8982269C /* DailyCheckinViewModel.swift in Sources */,
+				9F5D55CE7E764F76807D7A0C /* InjectionsView.swift in Sources */,
+				0F7B1589E66B430DA6DE8191 /* InjectionsViewModel.swift in Sources */,
+				A7681EF0F90F432FB130F90B /* BloodworkView.swift in Sources */,
+				BB3AEE2599124499B5CA4165 /* BloodworkViewModel.swift in Sources */,
+				6512DAA45FCE4C72A6C1BF3A /* PeptidesView.swift in Sources */,
+				A5765172DC1A4C639882B9E9 /* PeptidesViewModel.swift in Sources */,
+					PL001ABUILDFILE000000 /* PeptideLogView.swift in Sources */,
+				27BAFC5810064D9C8C4645B3 /* SettingsView.swift in Sources */,
+				D3FB58F7807C4509B26653F8 /* SettingsViewModel.swift in Sources */,
+					SC001BUILDFILE00000000 /* SupplementConfigView.swift in Sources */,
+				49404BD7AACB46A89F40B508 /* Extensions.swift in Sources */,
+				AA11BB22CC330011AA11BB22 /* PKCurveEngine.swift in Sources */,
+				AA11BB22CC330022AA11BB22 /* PKCurveView.swift in Sources */,
+				AA11BB22CC330033AA11BB22 /* DisclaimerBanner.swift in Sources */,
+				EE220033FF440033EE22FF33 /* HealthKitPermissionView.swift in Sources */,
+				CC110011DD220011CC11DD22 /* InjectionSitePicker.swift in Sources */,
+				CC110022DD220022CC11DD22 /* OnboardingView.swift in Sources */,
+				BB110011BB220033BB440055 /* WeeklyReportService.swift in Sources */,
+				BB110011BB220033BB440077 /* WeeklyReportView.swift in Sources */,
+				RC00112233445566778899DD /* RevenueCatService.swift in Sources */,
+				RC00112233445566778899FF /* SubscriptionManager.swift in Sources */,
+				RC001122334455667788AA11 /* PaywallView.swift in Sources */,
+				BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */,
+				BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */,
+				PL001 /* AnalyticsService.swift in Sources */,
+				PL003 /* ToastManager.swift in Sources */,
+				PL005 /* SampleDataService.swift in Sources */,
+				PL007 /* SkeletonView.swift in Sources */,
+				PL009 /* PrivacyPolicyView.swift in Sources */,
+				CSV001 /* CSVImportService.swift in Sources */,
+				CSV003 /* CSVImportView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D4DA293CF9C449A9B7CFBA5 /* Sources (tests) */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41DE374EBFEA44AC9FCA09E1 /* TroughTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CDF6AD45730F4663B455310A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1 $(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		56854966887B4F16820A3F36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CB58BDC52AE54F219108DF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Trough/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.trough.ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Debug;
+		};
+		62F1E75025E740F2A86F3166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Trough/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.trough.ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Release;
+		};
+		67038C8F813F496A8DB12DA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.trough.app.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Trough.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Trough";
+			};
+			name = Debug;
+		};
+		DCA7668742AA4AB99A82737C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.trough.app.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Trough.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Trough";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8B6FC47D48C44D69A8D22044 /* Build configuration list for PBXProject "Trough" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDF6AD45730F4663B455310A /* Debug */,
+				56854966887B4F16820A3F36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8082625A0C44804A7C92E59 /* Build configuration list for PBXNativeTarget "Trough" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB58BDC52AE54F219108DF3A /* Debug */,
+				62F1E75025E740F2A86F3166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		11460CF194BE4137AA397663 /* Build configuration list for PBXNativeTarget "TroughTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67038C8F813F496A8DB12DA1 /* Debug */,
+				DCA7668742AA4AB99A82737C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "2.0.0";
+			};
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+		};
+		29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "3.0.0";
+			};
+			repositoryURL = "https://github.com/PostHog/posthog-ios";
+		};
+		RC00112233445566778899AA /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "5.0.0";
+			};
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9677675ECF484DEFBE2D9507 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		EC01114F50764DA4AF3BF092 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
+		RC00112233445566778899BB /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = RC00112233445566778899AA /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+	};
+	rootObject = A4F2D5BAD262475484D02D76 /* Project object */;
+}
