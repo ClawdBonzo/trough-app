@@ -5,15 +5,8 @@ import SwiftData
 
 struct InjectionsView: View {
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var vm: InjectionsViewModel
-
-    init() {
-        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
-        _vm = StateObject(wrappedValue: InjectionsViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
-        ))
-    }
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @StateObject private var vm = InjectionsViewModel()
 
     var body: some View {
         NavigationStack {
@@ -30,6 +23,11 @@ struct InjectionsView: View {
                         } else {
                             injectionList
                         }
+
+                        DisclaimerBanner(type: .standard)
+                            .padding(.horizontal)
+                            .padding(.top, 16)
+                            .padding(.bottom, 80)
                     }
                 }
 
@@ -46,13 +44,17 @@ struct InjectionsView: View {
                         .shadow(color: AppColors.accent.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(20)
+                .accessibilityLabel("Log new injection")
             }
             .navigationTitle("Injections")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $vm.showingLogSheet, onDismiss: { vm.load() }) {
                 LogInjectionSheet(vm: vm)
             }
-            .onAppear { vm.load() }
+            .onAppear {
+                let uid = UUID(uuidString: userIDString) ?? UUID()
+                vm.setup(context: modelContext, userID: uid)
+            }
             .alert("Error", isPresented: Binding(
                 get: { vm.errorMessage != nil },
                 set: { if !$0 { vm.errorMessage = nil } }

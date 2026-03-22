@@ -38,6 +38,7 @@ struct PeptidesView: View {
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 28)
+                .accessibilityLabel("Log new dose")
             }
             .navigationTitle("Adjuncts & Peptides")
             .sheet(isPresented: $vm.showingLogSheet) {
@@ -56,6 +57,9 @@ struct PeptidesView: View {
                     activeCompoundsSection
                 }
                 timelineSection
+
+                DisclaimerBanner(type: .supplementAdvice)
+                    .padding(.horizontal)
             }
             .padding(.bottom, 100)
         }
@@ -63,15 +67,30 @@ struct PeptidesView: View {
 
     // MARK: - Active Compounds
 
+    private var glp1Compounds: [ActiveCompound] {
+        vm.activeCompounds.filter { PeptidesViewModel.isGLP1Compound($0.name) }
+    }
     private var aiCompounds: [ActiveCompound] {
         vm.activeCompounds.filter { PeptidesViewModel.isAICompound($0.name) }
     }
     private var peptideCompounds: [ActiveCompound] {
-        vm.activeCompounds.filter { !PeptidesViewModel.isAICompound($0.name) }
+        vm.activeCompounds.filter {
+            !PeptidesViewModel.isAICompound($0.name) && !PeptidesViewModel.isGLP1Compound($0.name)
+        }
     }
 
     private var activeCompoundsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
+            if !glp1Compounds.isEmpty {
+                compoundScrollSection(
+                    title: "GLP-1 / Weight Management",
+                    compounds: glp1Compounds,
+                    showE2Badge: false,
+                    badgeText: "Weight tracking",
+                    badgeColor: .green
+                )
+            }
+
             if !aiCompounds.isEmpty {
                 compoundScrollSection(
                     title: "AI / Ancillary",
@@ -80,11 +99,21 @@ struct PeptidesView: View {
                 )
             }
 
-            compoundScrollSection(
-                title: aiCompounds.isEmpty ? "Active Compounds" : "Peptides",
-                compounds: aiCompounds.isEmpty ? vm.activeCompounds : peptideCompounds,
-                showE2Badge: false
-            )
+            if !peptideCompounds.isEmpty {
+                compoundScrollSection(
+                    title: "Peptides",
+                    compounds: peptideCompounds,
+                    showE2Badge: false
+                )
+            }
+
+            if glp1Compounds.isEmpty && aiCompounds.isEmpty && peptideCompounds.isEmpty {
+                compoundScrollSection(
+                    title: "Active Compounds",
+                    compounds: vm.activeCompounds,
+                    showE2Badge: false
+                )
+            }
         }
         .padding(.top, 16)
     }
@@ -92,7 +121,9 @@ struct PeptidesView: View {
     private func compoundScrollSection(
         title: String,
         compounds: [ActiveCompound],
-        showE2Badge: Bool
+        showE2Badge: Bool,
+        badgeText: String? = nil,
+        badgeColor: Color? = nil
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
@@ -106,6 +137,15 @@ struct PeptidesView: View {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
                         .background(AppColors.accent.opacity(0.15))
+                        .clipShape(Capsule())
+                }
+                if let badge = badgeText {
+                    Text(badge)
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundColor(badgeColor ?? .green)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background((badgeColor ?? .green).opacity(0.15))
                         .clipShape(Capsule())
                 }
             }

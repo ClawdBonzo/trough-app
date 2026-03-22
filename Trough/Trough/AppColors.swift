@@ -9,6 +9,8 @@ enum AppColors {
     static let textPrimary   = Color.white
     /// #A0A0C0 — use for secondary / muted text
     static let textSecondary = Color(hex: "#A0A0C0")
+    /// #2E86AB — calm teal-blue for soft trial CTAs (replaces aggressive pink "Unlock")
+    static let softCTA       = Color(hex: "#2E86AB")
 }
 
 extension Color {

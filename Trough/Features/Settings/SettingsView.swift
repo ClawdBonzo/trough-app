@@ -7,7 +7,10 @@ struct SettingsView: View {
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("trackBodyWeight") private var trackBodyWeight = false
     @EnvironmentObject private var syncEngine: SyncEngine
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var vm: SettingsViewModel
+    @State private var showProFeatures = false
+    @State private var showPaywall = false
 
     init() {
         let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
@@ -31,6 +34,9 @@ struct SettingsView: View {
                     if !vm.syncConflicts.filter({ !$0.isReviewed }).isEmpty {
                         conflictsSection
                     }
+                    if !subscriptionManager.isSubscribed {
+                        proSection
+                    }
                     legalSection
                     accountSection
                 }
@@ -39,6 +45,8 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .sheet(isPresented: $vm.showingAddProtocol) { ProtocolFormView(vm: vm) }
+            .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
+            .sheet(isPresented: $showPaywall) { PaywallView() }
             .onAppear { vm.load() }
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
@@ -170,6 +178,34 @@ struct SettingsView: View {
                 Task { await vm.signOut() }
             }
             .accessibilityLabel("Sign out of your account")
+        }
+        .listRowBackground(AppColors.card)
+    }
+
+    private var proSection: some View {
+        Section {
+            Button { showProFeatures = true } label: {
+                HStack {
+                    Label("What You Get With Pro", systemImage: "star.fill")
+                        .foregroundColor(AppColors.softCTA)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .buttonStyle(.plain)
+            Button { showPaywall = true } label: {
+                Text("Start Free Trial")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(AppColors.softCTA)
+                    .cornerRadius(10)
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(Color.clear)
         }
         .listRowBackground(AppColors.card)
     }

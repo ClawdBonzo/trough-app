@@ -53,7 +53,6 @@
 		RC00112233445566778899DD /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC00112233445566778899EE /* RevenueCatService.swift */; };
 		RC00112233445566778899FF /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA00 /* SubscriptionManager.swift */; };
 		RC001122334455667788AA11 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA22 /* PaywallView.swift */; };
-		PRFT001122334455667788B1 /* ProFeaturesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = PRFT001122334455667788B2 /* ProFeaturesSheet.swift */; };
 		BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA02 /* BloodworkEntryView.swift */; };
 		BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA04 /* BloodworkTrendsView.swift */; };
 		PL001 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL002 /* AnalyticsService.swift */; };
@@ -111,7 +110,6 @@
 		RC00112233445566778899EE /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		RC001122334455667788AA00 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		RC001122334455667788AA22 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
-		PRFT001122334455667788B2 /* ProFeaturesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeaturesSheet.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA02 /* BloodworkEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkEntryView.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA04 /* BloodworkTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkTrendsView.swift; sourceTree = "<group>"; };
 		PL002 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
@@ -331,7 +329,6 @@
 			isa = PBXGroup;
 			children = (
 				RC001122334455667788AA22 /* PaywallView.swift */,
-				PRFT001122334455667788B2 /* ProFeaturesSheet.swift */,
 			);
 			path = Paywall;
 			sourceTree = "<group>";
@@ -484,7 +481,6 @@
 				RC00112233445566778899DD /* RevenueCatService.swift in Sources */,
 				RC00112233445566778899FF /* SubscriptionManager.swift in Sources */,
 				RC001122334455667788AA11 /* PaywallView.swift in Sources */,
-				PRFT001122334455667788B1 /* ProFeaturesSheet.swift in Sources */,
 				BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */,
 				BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */,
 				PL001 /* AnalyticsService.swift in Sources */,
@@ -559,7 +555,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -582,7 +578,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -603,7 +599,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -620,7 +616,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;

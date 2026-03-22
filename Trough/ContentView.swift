@@ -68,7 +68,7 @@ struct MoreView: View {
                             Label("Bloodwork", systemImage: "drop.fill")
                         }
                         NavigationLink(destination: PeptidesView()) {
-                            Label("Peptides", systemImage: "pills.fill")
+                            Label("Adjuncts & Peptides", systemImage: "pills.fill")
                         }
                     } else {
                         Button {
@@ -87,10 +87,15 @@ struct MoreView: View {
                         Button {
                             showPaywall = true
                         } label: {
-                            HStack {
-                                Label("Peptides", systemImage: "pills.fill")
-                                Spacer()
-                                Image(systemName: "lock.fill")
+                            VStack(alignment: .leading, spacing: 3) {
+                                HStack {
+                                    Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                                    Spacer()
+                                    Image(systemName: "lock.fill")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Text("Track GLP-1, BPC-157 & more")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }

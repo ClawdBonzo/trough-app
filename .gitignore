@@ -1,2 +1,6 @@
 build/
 fastlane/AuthKey_*.p8
+vendor/
+.bundle/
+vendor/
+.bundle/
