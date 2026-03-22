@@ -1,6 +1,7 @@
 import AuthenticationServices
 import CryptoKit
 import Foundation
+import UIKit
 
 /// Handles the ASAuthorization flow for Sign In with Apple.
 /// Usage: call `signIn()` which presents the Apple sheet and returns
@@ -28,6 +29,7 @@ final class AppleSignInCoordinator: NSObject, ObservableObject {
 
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
+        controller.presentationContextProvider = self
 
         return try await withCheckedThrowingContinuation { continuation in
             self.continuation = continuation
@@ -86,6 +88,20 @@ extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
             continuation?.resume(throwing: error)
             continuation = nil
         }
+    }
+}
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+
+extension AppleSignInCoordinator: ASAuthorizationControllerPresentationContextProviding {
+    nonisolated func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        // Return the key window as the presentation anchor
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = scene.windows.first(where: { $0.isKeyWindow })
+        else {
+            return UIWindow()
+        }
+        return window
     }
 }
 
