@@ -38,16 +38,30 @@ final class SupabaseService {
 
     /// Signs in (or signs up) with an Apple ID token obtained from ASAuthorization.
     func signInWithApple(idToken: String, nonce: String) async throws {
-        let session = try await client.auth.signInWithIdToken(
-            credentials: .init(provider: .apple, idToken: idToken, nonce: nonce)
-        )
+        print("[Supabase] signInWithApple: starting with idToken length=\(idToken.count), nonce length=\(nonce.count)")
+        let session: Session
+        do {
+            session = try await client.auth.signInWithIdToken(
+                credentials: .init(provider: .apple, idToken: idToken, nonce: nonce)
+            )
+            print("[Supabase] signInWithApple: auth succeeded, uid=\(session.user.id)")
+        } catch {
+            print("[Supabase] signInWithApple: auth FAILED — \(error)")
+            throw error
+        }
         // Ensure a users-table row exists (upsert avoids duplicate-key errors on repeat sign-ins)
         let uid = session.user.id.uuidString
         let email = session.user.email ?? ""
-        try await client
-            .from("users")
-            .upsert(["id": uid, "email": email], onConflict: "id")
-            .execute()
+        do {
+            try await client
+                .from("users")
+                .upsert(["id": uid, "email": email], onConflict: "id")
+                .execute()
+            print("[Supabase] signInWithApple: users row upserted for \(email)")
+        } catch {
+            print("[Supabase] signInWithApple: users upsert FAILED (non-fatal) — \(error)")
+            // Non-fatal: auth succeeded even if row upsert fails
+        }
     }
 
     /// Signs out the current user.
