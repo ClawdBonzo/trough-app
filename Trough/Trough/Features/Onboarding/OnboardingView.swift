@@ -587,9 +587,10 @@ private struct OnboardingTrialView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    Text("No charge for 14 days. Cancel anytime.")
+                    Text("No charge for 14 days. Cancel anytime in Settings → Subscriptions.")
                         .font(.caption2)
                         .foregroundColor(.secondary.opacity(0.6))
+                        .multilineTextAlignment(.center)
 
                     HStack(spacing: 20) {
                         Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)

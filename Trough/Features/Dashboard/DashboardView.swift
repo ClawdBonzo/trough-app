@@ -31,6 +31,9 @@ struct DashboardView: View {
                         if subscriptionManager.showTrialExpiryWarning {
                             trialExpiryBanner
                         }
+                        if subscriptionManager.showGracePeriodWarning {
+                            gracePeriodBanner
+                        }
                         protocolScoreHero
                         if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
                             activeProtocolCard
@@ -168,6 +171,30 @@ struct DashboardView: View {
         .background(Color.orange.opacity(0.1))
         .cornerRadius(14)
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.orange.opacity(0.3), lineWidth: 1))
+    }
+
+    // MARK: - Grace Period Banner
+
+    private var gracePeriodBanner: some View {
+        let days = subscriptionManager.graceDaysRemaining ?? 0
+        return HStack(spacing: 12) {
+            Image(systemName: "creditcard.trianglebadge.exclamationmark")
+                .font(.title3)
+                .foregroundColor(.yellow)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Payment issue")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                Text("We'll retry billing — your access continues for \(days) more day\(days == 1 ? "" : "s").")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding(14)
+        .background(Color.yellow.opacity(0.08))
+        .cornerRadius(14)
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.yellow.opacity(0.2), lineWidth: 1))
     }
 
     // MARK: - Active Protocol Card (FREE)
