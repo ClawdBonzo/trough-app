@@ -260,18 +260,29 @@ struct AuthView: View {
         } catch let error as ASAuthorizationError where error.code == .canceled {
             // User tapped Cancel — no error to show
         } catch let error as ASAuthorizationError where error.code == .unknown {
-            // Error 1000: Apple ID not configured, or Supabase provider not set up
             print("[Auth] Apple Sign In error 1000 (unknown): \(error)")
-            errorMessage = "Apple Sign In failed. Make sure you have an Apple ID signed in on this device and that Sign in with Apple is enabled in your Supabase project settings."
-            appleSignInFailed = true
+            // Check if auth actually succeeded despite the error (race condition)
+            if let _ = try? await SupabaseService.shared.client.auth.session {
+                print("[Auth] Session exists despite error — treating as success")
+                isAuthenticated = true
+            } else {
+                errorMessage = "Apple Sign In failed. Make sure you have an Apple ID signed in on this device and that Sign in with Apple is enabled in your Supabase project settings."
+                appleSignInFailed = true
+            }
         } catch let error as ASAuthorizationError {
             print("[Auth] Apple Sign In ASAuthorizationError: code=\(error.code.rawValue) \(error)")
             errorMessage = "Apple Sign In failed (error \(error.code.rawValue)). Please try email sign-in instead."
             appleSignInFailed = true
         } catch {
             print("[Auth] Apple Sign In unexpected error: \(error)")
-            errorMessage = "Sign in failed: \(error.localizedDescription)"
-            appleSignInFailed = true
+            // Check if auth actually succeeded (e.g. users table upsert failed but auth worked)
+            if let _ = try? await SupabaseService.shared.client.auth.session {
+                print("[Auth] Session exists despite error — treating as success")
+                isAuthenticated = true
+            } else {
+                errorMessage = "Sign in failed: \(error.localizedDescription)"
+                appleSignInFailed = true
+            }
         }
         isLoading = false
     }
