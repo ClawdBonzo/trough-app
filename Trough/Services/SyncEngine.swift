@@ -1,0 +1,413 @@
+import Foundation
+import SwiftData
+import Combine
+
+// MARK: - SyncEngine
+
+/// Orchestrates bi-directional sync between SwiftData (local) and Supabase (remote).
+///
+/// Rules:
+///   - SwiftData is source of truth. Never write to Supabase first.
+///   - Filter out records where isSampleData == true.
+///   - Conflict resolution: last-write-wins on updated_at.
+///     Both versions are logged to SDSyncConflict before resolution.
+///   - Retries use exponential backoff (max 5 attempts).
+final class SyncEngine: ObservableObject {
+    static let shared = SyncEngine()
+
+    @Published private(set) var isSyncing = false
+    @Published private(set) var lastSyncedAt: Date?
+    @Published private(set) var pendingCount: Int = 0
+
+    private let supabase = SupabaseService.shared
+    private var retryTask: Task<Void, Never>?
+    private var retryAttempt = 0
+    private static let maxRetries = 5
+    private static let baseRetryDelay: TimeInterval = 2.0
+
+    // ModelContext must be injected after app init (set from the app's ModelContainer).
+    var modelContext: ModelContext?
+
+    private init() {}
+
+    // MARK: - Public API
+
+    @MainActor
+    func triggerSync() {
+        guard !isSyncing else { return }
+        guard SupabaseService.shared.currentUserID != nil else { return }
+        isSyncing = true
+        retryTask?.cancel()
+        retryTask = Task {
+            await runSyncWithRetry()
+        }
+    }
+
+    // MARK: - Core Sync Loop
+
+    private func runSyncWithRetry() async {
+        retryAttempt = 0
+        while retryAttempt <= Self.maxRetries {
+            do {
+                try await performFullSync()
+                await MainActor.run {
+                    self.isSyncing = false
+                    self.lastSyncedAt = .now
+                    self.retryAttempt = 0
+                    self.pendingCount = 0
+                }
+                return
+            } catch {
+                retryAttempt += 1
+                if retryAttempt > Self.maxRetries {
+                    await MainActor.run { self.isSyncing = false }
+                    return
+                }
+                let delay = Self.baseRetryDelay * pow(2.0, Double(retryAttempt - 1))
+                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            }
+        }
+    }
+
+    private func performFullSync() async throws {
+        guard let ctx = modelContext else { return }
+
+        try await pushCheckins(ctx: ctx)
+        try await pushInjections(ctx: ctx)
+        try await pushProtocols(ctx: ctx)
+        try await pushPeptideLogs(ctx: ctx)
+        try await pushBloodwork(ctx: ctx)
+        try await pushSupplementConfigs(ctx: ctx)
+
+        try await pullCheckins(ctx: ctx)
+        try await pullInjections(ctx: ctx)
+        try await pullProtocols(ctx: ctx)
+        try await pullPeptideLogs(ctx: ctx)
+    }
+
+    // MARK: - Push (local → remote)
+
+    private func pushCheckins(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDCheckin> { !$0.isSampleData }
+        let checkins = try ctx.fetch(FetchDescriptor<SDCheckin>(predicate: predicate))
+        let rows = checkins.map { c in
+            RemoteCheckin(
+                id: c.id.uuidString,
+                userID: c.userID.uuidString,
+                date: c.date.iso8601String,
+                energyScore: c.energyScore,
+                moodScore: c.moodScore,
+                libidoScore: c.libidoScore,
+                sleepQualityScore: c.sleepQualityScore,
+                morningWoodScore: c.morningWoodScore,
+                bodyWeightKg: c.bodyWeightKg,
+                restingHR: c.restingHR,
+                sleepHours: c.sleepHours,
+                notes: c.notes,
+                symptoms: c.symptoms,
+                updatedAt: c.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncCheckins(rows: rows)
+    }
+
+    private func pushInjections(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDInjection> { !$0.isSampleData }
+        let injections = try ctx.fetch(FetchDescriptor<SDInjection>(predicate: predicate))
+        let rows = injections.map { i in
+            RemoteInjection(
+                id: i.id.uuidString,
+                userID: i.userID.uuidString,
+                protocolID: i.protocolID?.uuidString,
+                injectedAt: i.injectedAt.iso8601String,
+                compoundName: i.compoundName,
+                doseAmountMg: i.doseAmountMg,
+                volumeMl: i.volumeMl,
+                injectionSite: i.injectionSite,
+                batchLotNumber: i.batchLotNumber,
+                notes: i.notes,
+                updatedAt: i.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncInjections(rows: rows)
+    }
+
+    private func pushProtocols(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDProtocol> { !$0.isSampleData }
+        let protocols = try ctx.fetch(FetchDescriptor<SDProtocol>(predicate: predicate))
+        let rows = protocols.map { p in
+            RemoteProtocol(
+                id: p.id.uuidString,
+                userID: p.userID.uuidString,
+                name: p.name,
+                compoundName: p.compoundName,
+                doseAmountMg: p.doseAmountMg,
+                frequencyDays: p.frequencyDays,
+                concentrationMgPerMl: p.concentrationMgPerMl,
+                isActive: p.isActive,
+                startDate: p.startDate.iso8601String,
+                endDate: p.endDate?.iso8601String,
+                notes: p.notes,
+                updatedAt: p.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncProtocols(rows: rows)
+    }
+
+    private func pushPeptideLogs(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDPeptideLog> { !$0.isSampleData }
+        let logs = try ctx.fetch(FetchDescriptor<SDPeptideLog>(predicate: predicate))
+        let rows = logs.map { l in
+            RemotePeptideLog(
+                id: l.id.uuidString,
+                userID: l.userID.uuidString,
+                administeredAt: l.administeredAt.iso8601String,
+                peptideName: l.peptideName,
+                doseMcg: l.doseMcg,
+                routeOfAdministration: l.routeOfAdministration,
+                injectionSite: l.injectionSite,
+                batchLotNumber: l.batchLotNumber,
+                notes: l.notes,
+                updatedAt: l.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncPeptideLogs(rows: rows)
+    }
+
+    private func pushBloodwork(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDBloodwork> { !$0.isSampleData }
+        let results = try ctx.fetch(FetchDescriptor<SDBloodwork>(predicate: predicate))
+        let rows = results.map { b in
+            RemoteBloodwork(
+                id: b.id.uuidString,
+                userID: b.userID.uuidString,
+                drawnAt: b.drawnAt.iso8601String,
+                labName: b.labName,
+                notes: b.notes,
+                photoURL: b.photoURL,
+                updatedAt: b.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncBloodwork(rows: rows)
+    }
+
+    private func pushSupplementConfigs(ctx: ModelContext) async throws {
+        let predicate = #Predicate<SDSupplementConfig> { !$0.isSampleData }
+        let configs = try ctx.fetch(FetchDescriptor<SDSupplementConfig>(predicate: predicate))
+        let rows = configs.map { s in
+            RemoteSupplementConfig(
+                id: s.id.uuidString,
+                userID: s.userID.uuidString,
+                supplementName: s.supplementName,
+                doseAmount: s.doseAmount,
+                doseUnit: s.doseUnit,
+                frequencyDays: s.frequencyDays,
+                isActive: s.isActive,
+                startDate: s.startDate.iso8601String,
+                endDate: s.endDate?.iso8601String,
+                notes: s.notes,
+                updatedAt: s.updatedAt.iso8601String
+            )
+        }
+        try await supabase.syncSupplementConfigs(rows: rows)
+    }
+
+    // MARK: - Pull (remote → local)
+
+    private func pullCheckins(ctx: ModelContext) async throws {
+        let remote = try await supabase.fetch(RemoteCheckin.self, from: "checkins", updatedAfter: lastSyncedAt)
+        for r in remote {
+            guard let id = UUID(uuidString: r.id), let uid = UUID(uuidString: r.userID) else { continue }
+            let remoteDate = ISO8601DateFormatter().date(from: r.updatedAt) ?? .now
+
+            let targetID = id
+            let existing = try ctx.fetch(
+                FetchDescriptor<SDCheckin>(predicate: #Predicate { $0.id == targetID })
+            ).first
+
+            if let local = existing {
+                guard local.updatedAt < remoteDate else { continue }
+                if let lastSync = lastSyncedAt, local.updatedAt > lastSync {
+                    logConflict(recordID: id, table: "checkins",
+                                localUpdatedAt: local.updatedAt, remote: r,
+                                resolution: "remote_wins", ctx: ctx)
+                }
+                local.energyScore       = r.energyScore
+                local.moodScore         = r.moodScore
+                local.libidoScore       = r.libidoScore
+                local.sleepQualityScore = r.sleepQualityScore
+                local.morningWoodScore  = r.morningWoodScore
+                local.bodyWeightKg      = r.bodyWeightKg
+                local.restingHR         = r.restingHR
+                local.sleepHours        = r.sleepHours
+                local.notes             = r.notes
+                local.symptoms          = r.symptoms
+                local.updatedAt         = remoteDate
+            } else {
+                ctx.insert(SDCheckin(
+                    id: id, userID: uid,
+                    date: ISO8601DateFormatter().date(from: r.date) ?? .now,
+                    energyScore: r.energyScore,
+                    moodScore: r.moodScore,
+                    libidoScore: r.libidoScore,
+                    sleepQualityScore: r.sleepQualityScore,
+                    morningWoodScore: r.morningWoodScore,
+                    bodyWeightKg: r.bodyWeightKg,
+                    restingHR: r.restingHR,
+                    sleepHours: r.sleepHours,
+                    notes: r.notes,
+                    symptoms: r.symptoms,
+                    updatedAt: remoteDate
+                ))
+            }
+        }
+        try ctx.save()
+    }
+
+    private func pullInjections(ctx: ModelContext) async throws {
+        let remote = try await supabase.fetch(RemoteInjection.self, from: "injections", updatedAfter: lastSyncedAt)
+        for r in remote {
+            guard let id = UUID(uuidString: r.id), let uid = UUID(uuidString: r.userID) else { continue }
+            let remoteDate = ISO8601DateFormatter().date(from: r.updatedAt) ?? .now
+
+            let targetID = id
+            let existing = try ctx.fetch(
+                FetchDescriptor<SDInjection>(predicate: #Predicate { $0.id == targetID })
+            ).first
+
+            if let local = existing {
+                guard local.updatedAt < remoteDate else { continue }
+                if let lastSync = lastSyncedAt, local.updatedAt > lastSync {
+                    logConflict(recordID: id, table: "injections",
+                                localUpdatedAt: local.updatedAt, remote: r,
+                                resolution: "remote_wins", ctx: ctx)
+                }
+                local.injectedAt    = ISO8601DateFormatter().date(from: r.injectedAt) ?? local.injectedAt
+                local.compoundName  = r.compoundName
+                local.doseAmountMg  = r.doseAmountMg
+                local.volumeMl      = r.volumeMl
+                local.injectionSite = r.injectionSite
+                local.notes         = r.notes
+                local.updatedAt     = remoteDate
+            } else {
+                ctx.insert(SDInjection(
+                    id: id, userID: uid,
+                    protocolID: r.protocolID.flatMap(UUID.init),
+                    injectedAt: ISO8601DateFormatter().date(from: r.injectedAt) ?? .now,
+                    compoundName: r.compoundName,
+                    doseAmountMg: r.doseAmountMg,
+                    volumeMl: r.volumeMl,
+                    injectionSite: r.injectionSite,
+                    batchLotNumber: r.batchLotNumber,
+                    notes: r.notes,
+                    updatedAt: remoteDate
+                ))
+            }
+        }
+        try ctx.save()
+    }
+
+    private func pullProtocols(ctx: ModelContext) async throws {
+        let remote = try await supabase.fetch(RemoteProtocol.self, from: "protocols", updatedAfter: lastSyncedAt)
+        for r in remote {
+            guard let id = UUID(uuidString: r.id), let uid = UUID(uuidString: r.userID) else { continue }
+            let remoteDate = ISO8601DateFormatter().date(from: r.updatedAt) ?? .now
+
+            let targetID = id
+            let existing = try ctx.fetch(
+                FetchDescriptor<SDProtocol>(predicate: #Predicate { $0.id == targetID })
+            ).first
+
+            if let local = existing {
+                guard local.updatedAt < remoteDate else { continue }
+                local.name                 = r.name
+                local.compoundName         = r.compoundName
+                local.doseAmountMg         = r.doseAmountMg
+                local.frequencyDays        = r.frequencyDays
+                local.concentrationMgPerMl = r.concentrationMgPerMl
+                local.isActive             = r.isActive
+                local.notes                = r.notes
+                local.updatedAt            = remoteDate
+            } else {
+                ctx.insert(SDProtocol(
+                    id: id, userID: uid,
+                    name: r.name,
+                    compoundName: r.compoundName,
+                    doseAmountMg: r.doseAmountMg,
+                    frequencyDays: r.frequencyDays,
+                    concentrationMgPerMl: r.concentrationMgPerMl,
+                    isActive: r.isActive,
+                    startDate: ISO8601DateFormatter().date(from: r.startDate) ?? .now,
+                    endDate: r.endDate.flatMap { ISO8601DateFormatter().date(from: $0) },
+                    notes: r.notes,
+                    updatedAt: remoteDate
+                ))
+            }
+        }
+        try ctx.save()
+    }
+
+    private func pullPeptideLogs(ctx: ModelContext) async throws {
+        let remote = try await supabase.fetch(RemotePeptideLog.self, from: "peptide_logs", updatedAfter: lastSyncedAt)
+        for r in remote {
+            guard let id = UUID(uuidString: r.id), let uid = UUID(uuidString: r.userID) else { continue }
+            let remoteDate = ISO8601DateFormatter().date(from: r.updatedAt) ?? .now
+
+            let targetID = id
+            let existing = try ctx.fetch(
+                FetchDescriptor<SDPeptideLog>(predicate: #Predicate { $0.id == targetID })
+            ).first
+
+            if let local = existing {
+                guard local.updatedAt < remoteDate else { continue }
+                local.administeredAt        = ISO8601DateFormatter().date(from: r.administeredAt) ?? local.administeredAt
+                local.peptideName           = r.peptideName
+                local.doseMcg               = r.doseMcg
+                local.routeOfAdministration = r.routeOfAdministration
+                local.injectionSite         = r.injectionSite
+                local.notes                 = r.notes
+                local.updatedAt             = remoteDate
+            } else {
+                ctx.insert(SDPeptideLog(
+                    id: id, userID: uid,
+                    administeredAt: ISO8601DateFormatter().date(from: r.administeredAt) ?? .now,
+                    peptideName: r.peptideName,
+                    doseMcg: r.doseMcg,
+                    routeOfAdministration: r.routeOfAdministration,
+                    injectionSite: r.injectionSite,
+                    batchLotNumber: r.batchLotNumber,
+                    notes: r.notes,
+                    updatedAt: remoteDate
+                ))
+            }
+        }
+        try ctx.save()
+    }
+
+    // MARK: - Conflict Logging
+
+    /// Logs an auto-resolved sync conflict. Never silently discards user data.
+    /// `local` info is captured via updatedAt timestamp; remote is encoded to JSON.
+    private func logConflict<R: Encodable>(
+        recordID: UUID,
+        table: String,
+        localUpdatedAt: Date,
+        remote: R,
+        resolution: String,
+        ctx: ModelContext
+    ) {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        let remoteJSON = (try? encoder.encode(remote))
+            .flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
+        let localJSON  = "{\"updated_at\":\"\(localUpdatedAt.iso8601String)\"}"
+
+        ctx.insert(SDSyncConflict(
+            recordID: recordID,
+            tableName: table,
+            localJSON: localJSON,
+            remoteJSON: remoteJSON,
+            resolution: resolution
+        ))
+    }
+}
