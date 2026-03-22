@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import UserNotifications
+import RevenueCat
 
 // MARK: - Supporting types
 
@@ -444,6 +445,7 @@ struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("onboardingCompleted") private var onboardingCompleted = false
+    @State private var showTrialPaywall = false
 
     @StateObject private var vm: OnboardingViewModel
 
@@ -474,13 +476,160 @@ struct OnboardingView: View {
                     RemindersStep(vm: vm, onDone: {
                         let uid = UUID(uuidString: userIDString) ?? UUID()
                         vm.save(userID: uid)
-                        onboardingCompleted = true
+                        showTrialPaywall = true
                     }).tag(6)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
         .onAppear { vm.setup(context: modelContext) }
+        .fullScreenCover(isPresented: $showTrialPaywall) {
+            OnboardingTrialView {
+                onboardingCompleted = true
+            }
+        }
+    }
+}
+
+// MARK: - Onboarding Trial Prompt (full-screen)
+
+private struct OnboardingTrialView: View {
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @State private var offerings: Offerings?
+    @State private var isPurchasing = false
+    @State private var errorMessage: String?
+    let onContinue: () -> Void
+
+    private var annualPackage: Package? {
+        offerings?.current?.availablePackages.first {
+            $0.storeProduct.productIdentifier == "com.trough.annual"
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            AppColors.background.ignoresSafeArea()
+
+            VStack(spacing: 28) {
+                Spacer()
+
+                // Hero
+                VStack(spacing: 12) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 50))
+                        .foregroundColor(AppColors.accent)
+
+                    Text("You're all set!")
+                        .font(.system(size: 28, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
+
+                    Text("Start your 14-day free trial to unlock everything.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+
+                // What's included
+                VStack(alignment: .leading, spacing: 12) {
+                    FeatureRow(icon: "waveform.path.ecg",        text: "PK curves with confidence bands")
+                    FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Full history & trend analysis")
+                    FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & custom ranges")
+                    FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & PDF export")
+                    FeatureRow(icon: "brain.head.profile",        text: "AI-powered insights & correlations")
+                    FeatureRow(icon: "pills.fill",                text: "GLP-1 & peptide analytics")
+                }
+                .padding(18)
+                .background(AppColors.card)
+                .cornerRadius(16)
+
+                Spacer()
+
+                // CTA
+                VStack(spacing: 14) {
+                    Button {
+                        guard let pkg = annualPackage else {
+                            // No package available (RevenueCat not configured) — skip trial
+                            onContinue()
+                            return
+                        }
+                        Task { await startTrial(package: pkg) }
+                    } label: {
+                        Group {
+                            if isPurchasing {
+                                ProgressView().tint(.white)
+                            } else {
+                                Text("Start 14-Day Free Trial")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(AppColors.accent)
+                        .cornerRadius(16)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isPurchasing)
+
+                    if let error = errorMessage {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundColor(AppColors.accent)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    // Skip option (smaller, secondary)
+                    Button {
+                        onContinue()
+                    } label: {
+                        Text("Maybe later")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Text("No charge for 14 days. Cancel anytime.")
+                        .font(.caption2)
+                        .foregroundColor(.secondary.opacity(0.6))
+
+                    HStack(spacing: 20) {
+                        Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
+                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                        Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
+                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                        Button("Restore") {
+                            Task {
+                                _ = try? await RevenueCatService.shared.restorePurchases()
+                                await subscriptionManager.refresh()
+                                if subscriptionManager.isSubscribed { onContinue() }
+                            }
+                        }
+                        .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 20)
+        }
+        .task {
+            offerings = await RevenueCatService.shared.fetchOfferings()
+        }
+    }
+
+    private func startTrial(package: Package) async {
+        isPurchasing = true
+        errorMessage = nil
+        do {
+            _ = try await RevenueCatService.shared.purchase(package: package)
+            await subscriptionManager.refresh()
+            onContinue()
+        } catch {
+            if (error as NSError).code == 1 { // user cancelled
+                // Don't show error — they can tap "Maybe later"
+            } else {
+                errorMessage = error.localizedDescription
+            }
+        }
+        isPurchasing = false
     }
 }
 

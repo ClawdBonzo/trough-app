@@ -28,6 +28,9 @@ struct DashboardView: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         if showSampleDataBanner { sampleDataBanner }
+                        if subscriptionManager.showTrialExpiryWarning {
+                            trialExpiryBanner
+                        }
                         protocolScoreHero
                         if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
                             activeProtocolCard
@@ -134,6 +137,37 @@ struct DashboardView: View {
         .background(AppColors.card)
         .cornerRadius(16)
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.3), lineWidth: 1))
+    }
+
+    // MARK: - Trial Expiry Banner
+
+    private var trialExpiryBanner: some View {
+        let days = subscriptionManager.trialDaysRemaining ?? 0
+        return HStack(spacing: 12) {
+            Image(systemName: "clock.badge.exclamationmark")
+                .font(.title3)
+                .foregroundColor(.orange)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(days <= 0 ? "Your trial has ended" : "Trial ends in \(days) day\(days == 1 ? "" : "s")")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                Text("Subscribe to keep all your data and features.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Button("Subscribe") { showPaywall = true }
+                .font(.caption.bold())
+                .foregroundColor(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(AppColors.accent)
+                .clipShape(Capsule())
+        }
+        .padding(14)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(14)
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.orange.opacity(0.3), lineWidth: 1))
     }
 
     // MARK: - Active Protocol Card (FREE)
