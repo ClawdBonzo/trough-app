@@ -20,7 +20,16 @@ struct BinaryTapsView: View {
                     if vm.workoutToday == true {
                         trainingPerformanceCard
                     }
-                    if userType == "natural" && !vm.availableSupplements.isEmpty {
+                    // AI-specific: joint pain (feeds InsightEngine E2 crash rule)
+                    if vm.hasAICompound {
+                        aiSymptomsCard
+                    }
+                    // GLP-1-specific: nausea tracking
+                    if vm.hasGLP1Compound {
+                        glp1SymptomsCard
+                    }
+                    // Show supplements/compounds for all users who have them
+                    if !vm.availableSupplements.isEmpty {
                         supplementsCard
                     }
                     Spacer(minLength: 20)
@@ -99,7 +108,70 @@ struct BinaryTapsView: View {
         .transition(.move(edge: .top).combined(with: .opacity))
     }
 
-    // MARK: Supplements (natural users only)
+    // MARK: AI symptoms (joint pain → E2 crash detection)
+
+    private var aiSymptomsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "shield.lefthalf.filled")
+                    .foregroundColor(.orange)
+                Text("AI Side Effects")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+            Text("Helps detect if your AI dose is crashing estrogen.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack(spacing: 12) {
+                BinaryButton(
+                    label: "Joint pain",
+                    isSelected: vm.hasJointPain == true,
+                    activeColor: .orange
+                ) { vm.hasJointPain = (vm.hasJointPain == true) ? nil : true }
+
+                BinaryButton(
+                    label: "No issues",
+                    isSelected: vm.hasJointPain == false,
+                    activeColor: yesGreen
+                ) { vm.hasJointPain = (vm.hasJointPain == false) ? nil : false }
+            }
+        }
+        .cardStyle()
+        .transition(.move(edge: .top).combined(with: .opacity))
+    }
+
+    // MARK: GLP-1 symptoms (nausea tracking)
+
+    private var glp1SymptomsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "scalemass")
+                    .foregroundColor(.green)
+                Text("GLP-1 Check")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+
+            HStack(spacing: 12) {
+                BinaryButton(
+                    label: "Nausea",
+                    isSelected: vm.hasNausea == true,
+                    activeColor: .orange
+                ) { vm.hasNausea = (vm.hasNausea == true) ? nil : true }
+
+                BinaryButton(
+                    label: "No nausea",
+                    isSelected: vm.hasNausea == false,
+                    activeColor: yesGreen
+                ) { vm.hasNausea = (vm.hasNausea == false) ? nil : false }
+            }
+        }
+        .cardStyle()
+        .transition(.move(edge: .top).combined(with: .opacity))
+    }
+
+    // MARK: Supplements
 
     private var supplementsCard: some View {
         VStack(alignment: .leading, spacing: 12) {

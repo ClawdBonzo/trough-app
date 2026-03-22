@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 // MARK: - Supporting types
 
@@ -68,6 +69,7 @@ final class OnboardingViewModel: ObservableObject {
         var name: String
         var dose: Double
         var unit: String
+        var frequencyDays: Int
         var isCustom: Bool = false
     }
 
@@ -81,6 +83,20 @@ final class OnboardingViewModel: ObservableObject {
         if mgCompounds.contains(compound) { return "mg" }
         if iuCompounds.contains(compound) { return "IU" }
         return "mcg"
+    }
+
+    static func defaultFrequencyDays(for compound: String) -> Int {
+        switch compound {
+        case "Semaglutide", "Tirzepatide", "Liraglutide": return 7  // weekly
+        case "BPC-157", "Ipamorelin", "CJC-1295":       return 1  // daily
+        case "MK-677":                                    return 1  // daily
+        case "Anastrozole":                               return 4  // twice weekly (E3.5D)
+        case "Aromasin":                                  return 3  // EOD-ish
+        case "Cabergoline":                               return 7  // weekly
+        case "hCG":                                       return 3  // E3D
+        case "Letrozole":                                 return 3  // E3D
+        default:                                          return 1  // daily
+        }
     }
 
     static func defaultDose(for compound: String) -> Double {
@@ -122,10 +138,21 @@ final class OnboardingViewModel: ObservableObject {
                 name: name,
                 dose: Self.defaultDose(for: name),
                 unit: Self.defaultUnit(for: name),
+                frequencyDays: Self.defaultFrequencyDays(for: name),
                 isCustom: !Self.compoundCategories.flatMap(\.compounds).contains(name)
             )
         }
     }
+
+    static let compoundFrequencyOptions: [(label: String, days: Int)] = [
+        ("Daily",         1),
+        ("Every other day", 2),
+        ("Every 3 days",  3),
+        ("Twice weekly",  4),
+        ("Weekly",        7),
+        ("Biweekly",      14),
+        ("Monthly",       30),
+    ]
 
     // Step 2: Last injection
     @Published var lastInjectionDates: [String: Date] = [:]
@@ -237,23 +264,95 @@ final class OnboardingViewModel: ObservableObject {
             }
         }
 
-        // Reminder
+        // Persist selected compounds as SDSupplementConfig records
+        for compound in compoundDoses {
+            let config = SDSupplementConfig(
+                userID: userID,
+                supplementName: compound.name,
+                doseAmount: compound.dose,
+                doseUnit: compound.unit,
+                frequencyDays: compound.frequencyDays,
+                isActive: true
+            )
+            ctx.insert(config)
+        }
+
+        // Reminder settings
         UserDefaults.standard.set(reminderEnabled, forKey: "reminderEnabled")
         if reminderEnabled {
-            let freq = Self.reminderFrequencies[min(reminderFreqIndex, Self.reminderFrequencies.count - 1)]
-            UserDefaults.standard.set(freq.key, forKey: "reminderFrequency")
             let comps = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
             UserDefaults.standard.set(comps.hour ?? 9, forKey: "reminderHour")
             UserDefaults.standard.set(comps.minute ?? 0, forKey: "reminderMinute")
-            if freq.key == "custom" {
-                UserDefaults.standard.set(Array(reminderCustomDays), forKey: "reminderCustomDays")
-            }
+
+            // Schedule per-compound local notifications
+            scheduleCompoundReminders(hour: comps.hour ?? 9, minute: comps.minute ?? 0)
         }
 
         try? ctx.save()
         SyncEngine.shared.triggerSync()
 
         UserDefaults.standard.set(true, forKey: "onboardingCompleted")
+    }
+
+    // MARK: Local notifications per compound
+
+    private func scheduleCompoundReminders(hour: Int, minute: Int) {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
+
+        // Remove old compound reminders
+        center.removePendingNotificationRequests(withIdentifiers:
+            compoundDoses.map { "compound-\($0.name)" } + ["daily-checkin"]
+        )
+
+        // Daily check-in reminder
+        let checkinContent = UNMutableNotificationContent()
+        checkinContent.title = "Time to check in"
+        checkinContent.body = "Log your energy, mood, and wellness for today."
+        checkinContent.sound = .default
+        var checkinComps = DateComponents()
+        checkinComps.hour = hour
+        checkinComps.minute = minute
+        let checkinTrigger = UNCalendarNotificationTrigger(dateMatching: checkinComps, repeats: true)
+        center.add(UNNotificationRequest(identifier: "daily-checkin", content: checkinContent, trigger: checkinTrigger))
+
+        // Per-compound reminders
+        for compound in compoundDoses {
+            let content = UNMutableNotificationContent()
+            content.title = "\(compound.name) dose"
+            content.body = "Time for \(compound.name) — \(formatDose(compound.dose, unit: compound.unit))"
+            content.sound = .default
+
+            if compound.frequencyDays == 1 {
+                // Daily: calendar trigger at the reminder time
+                var daily = DateComponents()
+                daily.hour = hour
+                daily.minute = minute
+                let trigger = UNCalendarNotificationTrigger(dateMatching: daily, repeats: true)
+                center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
+            } else if compound.frequencyDays == 7 {
+                // Weekly: trigger on same weekday as today
+                var weekly = DateComponents()
+                weekly.hour = hour
+                weekly.minute = minute
+                weekly.weekday = Calendar.current.component(.weekday, from: .now)
+                let trigger = UNCalendarNotificationTrigger(dateMatching: weekly, repeats: true)
+                center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
+            } else {
+                // Every N days: use time interval
+                let interval = TimeInterval(compound.frequencyDays * 86400)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: true)
+                center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
+            }
+        }
+    }
+
+    private func formatDose(_ dose: Double, unit: String) -> String {
+        if dose == dose.rounded() {
+            return "\(Int(dose)) \(unit)"
+        } else {
+            return String(format: "%.2g %@", dose, unit)
+        }
     }
 
     // MARK: Private
@@ -955,7 +1054,7 @@ private struct CompoundDosesStep: View {
     var body: some View {
         StepContainer(
             title: "Set your doses",
-            subtitle: "We'll use these defaults — you can adjust anytime.",
+            subtitle: "We pre-filled typical doses and schedules — adjust as needed.",
             content: {
                 VStack(spacing: 14) {
                     ForEach($vm.compoundDoses) { $compound in
@@ -970,8 +1069,23 @@ private struct CompoundDosesStep: View {
                                 Text(compound.unit)
                                     .foregroundColor(.secondary)
                             }
+
+                            Divider().background(Color.white.opacity(0.07))
+
+                            Picker("Schedule", selection: $compound.frequencyDays) {
+                                ForEach(OnboardingViewModel.compoundFrequencyOptions, id: \.days) { opt in
+                                    Text(opt.label).tag(opt.days)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(AppColors.accent)
                         }
                     }
+
+                    Text("We'll send reminders based on each compound's schedule.")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
             },
             primaryLabel: "Next",

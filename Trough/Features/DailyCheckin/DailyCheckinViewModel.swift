@@ -31,6 +31,22 @@ final class DailyCheckinViewModel: ObservableObject {
     @Published var trainingPerformanceScore: Double = 3
     @Published var supplementsTaken: Set<String> = []
 
+    // Compound-aware questions
+    @Published var hasJointPain: Bool? = nil   // AI users — feeds E2 crash insight
+    @Published var hasNausea: Bool? = nil       // GLP-1 users
+
+    // Compound detection flags
+    var hasAICompound: Bool {
+        availableSupplements.contains { s in
+            ["Anastrozole", "Aromasin", "Letrozole"].contains(s.supplementName)
+        }
+    }
+    var hasGLP1Compound: Bool {
+        availableSupplements.contains { s in
+            ["Semaglutide", "Tirzepatide", "Liraglutide"].contains(s.supplementName)
+        }
+    }
+
     // MARK: Supporting data
     @Published var cycleInfo: InjectionCycleService.CycleInfo? = nil
     @Published var availableSupplements: [SDSupplementConfig] = []
@@ -160,6 +176,12 @@ final class DailyCheckinViewModel: ObservableObject {
         let mwScore: Double = morningWood == true ? 5 : morningWood == false ? 1 : 3
         let trainScore: Double? = workoutToday == true ? trainingPerformanceScore : nil
 
+        // Build symptoms string from compound-aware questions
+        var symptomTags: [String] = []
+        if hasJointPain == true { symptomTags.append("joint_pain") }
+        if hasNausea == true { symptomTags.append("nausea") }
+        let symptomsStr = symptomTags.isEmpty ? nil : symptomTags.joined(separator: ",")
+
         if let existing = existingCheckin {
             existing.energyScore             = energyScore
             existing.moodScore               = moodScore
@@ -173,6 +195,7 @@ final class DailyCheckinViewModel: ObservableObject {
             existing.supplementsTaken        = suppStr.isEmpty ? nil : suppStr
             existing.bodyWeightKg            = bwKg
             existing.bodyFatPercent          = bfPct
+            existing.symptoms               = symptomsStr
             existing.updatedAt               = .now
             savedCheckin = existing
         } else {
@@ -190,7 +213,8 @@ final class DailyCheckinViewModel: ObservableObject {
                 trainingPerformanceScore: trainScore,
                 supplementsTaken: suppStr.isEmpty ? nil : suppStr,
                 bodyWeightKg: bwKg,
-                bodyFatPercent: bfPct
+                bodyFatPercent: bfPct,
+                symptoms: symptomsStr
             )
             ctx.insert(checkin)
             savedCheckin = checkin

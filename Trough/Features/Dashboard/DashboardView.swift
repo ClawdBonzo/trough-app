@@ -29,6 +29,9 @@ struct DashboardView: View {
                     VStack(spacing: 16) {
                         if showSampleDataBanner { sampleDataBanner }
                         protocolScoreHero
+                        if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
+                            activeProtocolCard
+                        }
                         checkinCTACard
                         streakCard
                         // PK Curve / Body Composition — blurred preview for free users
@@ -131,6 +134,101 @@ struct DashboardView: View {
         .background(AppColors.card)
         .cornerRadius(16)
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.3), lineWidth: 1))
+    }
+
+    // MARK: - Active Protocol Card (FREE)
+
+    private var activeProtocolCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "list.bullet.clipboard")
+                    .foregroundColor(AppColors.accent)
+                Text("Active Protocol")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Spacer()
+            }
+
+            // Primary TRT protocol
+            if let proto = vm.activeProtocol {
+                HStack(spacing: 8) {
+                    Circle().fill(Color(hex: proto.colorHex)).frame(width: 8, height: 8)
+                    Text(proto.name)
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Spacer()
+                    if vm.injectionOverdueDays > 0 {
+                        Text("OVERDUE")
+                            .font(.caption2.bold())
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(AppColors.accent)
+                            .cornerRadius(4)
+                    } else {
+                        Text("Next in \(max(0, (vm.activeProtocol?.frequencyDays ?? 7) - vm.daysSinceLastInjection))d")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+
+            // Adjuncts / Peptides / GLP-1
+            if !vm.activeCompounds.isEmpty {
+                Divider().background(Color.white.opacity(0.1))
+                ForEach(vm.activeCompounds, id: \.id) { compound in
+                    HStack(spacing: 8) {
+                        let category = compoundCategory(compound.supplementName)
+                        Image(systemName: categoryIcon(category))
+                            .font(.caption)
+                            .foregroundColor(categoryColor(category))
+                            .frame(width: 16)
+                        Text(compound.supplementName)
+                            .font(.caption)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text("\(formatCompoundDose(compound.doseAmount, unit: compound.doseUnit)) · E\(compound.frequencyDays)D")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(AppColors.card)
+        .cornerRadius(14)
+    }
+
+    private func compoundCategory(_ name: String) -> String {
+        let glp1 = ["Semaglutide", "Tirzepatide", "Liraglutide"]
+        let ai = ["Anastrozole", "Aromasin", "Letrozole", "Cabergoline"]
+        if glp1.contains(name) { return "glp1" }
+        if ai.contains(name) { return "ai" }
+        if name == "hCG" { return "fertility" }
+        return "peptide"
+    }
+
+    private func categoryIcon(_ cat: String) -> String {
+        switch cat {
+        case "glp1":      return "scalemass"
+        case "ai":        return "shield.lefthalf.filled"
+        case "fertility": return "heart.fill"
+        default:          return "pills.fill"
+        }
+    }
+
+    private func categoryColor(_ cat: String) -> Color {
+        switch cat {
+        case "glp1":      return .green
+        case "ai":        return .orange
+        case "fertility": return .pink
+        default:          return .cyan
+        }
+    }
+
+    private func formatCompoundDose(_ dose: Double, unit: String) -> String {
+        if dose == dose.rounded() { return "\(Int(dose))\(unit)" }
+        return String(format: "%.2g%@", dose, unit)
     }
 
     // MARK: - Protocol Score Hero
