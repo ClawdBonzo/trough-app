@@ -450,17 +450,17 @@ private struct AudienceButton: View {
 
 private struct ImportDataStep: View {
     @ObservedObject var vm: OnboardingViewModel
+    @State private var showCSVImport = false
 
     var body: some View {
         StepContainer(
-            title: "Existing data?",
-            subtitle: "Do you have tracking data from a spreadsheet or another app?",
+            title: "Have existing data?",
+            subtitle: "Import your tracking spreadsheet — we'll auto-map your columns.",
             content: {
                 VStack(spacing: 14) {
                     OptionCard(icon: "doc.text", title: "Import from spreadsheet",
-                               subtitle: "CSV import — available after setup") {
-                        // CSV import is Prompt 10 — skip for now
-                        vm.advance()
+                               subtitle: "CSV, TSV — auto-detects columns & dates") {
+                        showCSVImport = true
                     }
                     OptionCard(icon: "sparkles", title: "Start fresh",
                                subtitle: "We'll guide you through setup") {
@@ -468,11 +468,17 @@ private struct ImportDataStep: View {
                     }
                 }
             },
-            primaryLabel: "Start fresh",
+            primaryLabel: "Skip — start fresh",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
         )
+        .sheet(isPresented: $showCSVImport) {
+            CSVImportView(onComplete: {
+                showCSVImport = false
+                vm.advance()
+            })
+        }
     }
 }
 

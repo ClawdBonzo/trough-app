@@ -11,13 +11,10 @@ struct SettingsView: View {
     @StateObject private var vm: SettingsViewModel
     @State private var showProFeatures = false
     @State private var showPaywall = false
+    @State private var showCSVImport = false
 
     init() {
-        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
-        _vm = StateObject(wrappedValue: SettingsViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
-        ))
+        _vm = StateObject(wrappedValue: SettingsViewModel())
     }
 
     var body: some View {
@@ -30,6 +27,7 @@ struct SettingsView: View {
                     if userType == "trt" {
                         trackingSection
                     }
+                    importSection
                     syncSection
                     if !vm.syncConflicts.filter({ !$0.isReviewed }).isEmpty {
                         conflictsSection
@@ -47,7 +45,12 @@ struct SettingsView: View {
             .sheet(isPresented: $vm.showingAddProtocol) { ProtocolFormView(vm: vm) }
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
             .sheet(isPresented: $showPaywall) { PaywallView() }
-            .onAppear { vm.load() }
+            .sheet(isPresented: $showCSVImport) { CSVImportView() }
+            .onAppear {
+                let uid = UUID(uuidString: userIDString) ?? UUID()
+                vm.setup(context: modelContext, userID: uid)
+                vm.load()
+            }
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
             }
@@ -206,6 +209,24 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
             .listRowBackground(Color.clear)
+        }
+        .listRowBackground(AppColors.card)
+    }
+
+    private var importSection: some View {
+        Section("Data Import") {
+            Button {
+                showCSVImport = true
+            } label: {
+                HStack {
+                    Label("Import from Spreadsheet", systemImage: "doc.text")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .foregroundColor(.primary)
         }
         .listRowBackground(AppColors.card)
     }

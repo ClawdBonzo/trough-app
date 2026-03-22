@@ -223,13 +223,15 @@ struct CSVImportView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var vm: CSVImportViewModel
     @State private var showFilePicker = false
+    private var onComplete: (() -> Void)?
 
-    init() {
+    init(onComplete: (() -> Void)? = nil) {
         let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
         _vm = StateObject(wrappedValue: CSVImportViewModel(
             modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
             userID: id
         ))
+        self.onComplete = onComplete
     }
 
     var body: some View {
@@ -324,7 +326,9 @@ struct CSVImportView: View {
         case .importing:
             ImportingStep(progress: vm.progress)
         case .report:
-            ImportReportView(vm: vm, onDone: { dismiss() })
+            ImportReportView(vm: vm, onDone: {
+                if let onComplete { onComplete() } else { dismiss() }
+            })
         }
     }
 }
