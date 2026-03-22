@@ -125,6 +125,7 @@ struct AuthView: View {
     @State private var isSignUp = false
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var appleSignInFailed = false
     @State private var appleSignInCoordinator = AppleSignInCoordinator()
     @AppStorage("isAuthenticated") private var isAuthenticated = false
 
@@ -194,27 +195,40 @@ struct AuthView: View {
                     } label: {
                         Text(isSignUp ? "Already have an account? Sign In" : "New here? Create Account")
                             .font(.caption)
-                            .foregroundColor(AppColors.secondary)
+                            .foregroundColor(AppColors.textSecondary)
                     }
 
-                    dividerRow
+                    if !appleSignInFailed {
+                        dividerRow
 
-                    Button {
-                        Task { await authenticateWithApple() }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "apple.logo")
-                                .font(.title3)
-                            Text("Sign in with Apple")
-                                .fontWeight(.semibold)
+                        Button {
+                            Task { await authenticateWithApple() }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "apple.logo")
+                                    .font(.title3)
+                                Text("Sign in with Apple")
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(.white)
+                            .foregroundColor(.black)
+                            .cornerRadius(12)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(.white)
-                        .foregroundColor(.black)
-                        .cornerRadius(12)
+                        .disabled(isLoading)
+                    } else {
+                        // Apple Sign In failed — show fallback note
+                        HStack(spacing: 6) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.caption)
+                                .foregroundColor(Color(hex: "#F39C12"))
+                            Text("Apple Sign In unavailable — use email instead")
+                                .font(.caption)
+                                .foregroundColor(AppColors.textSecondary)
+                        }
+                        .padding(.top, 4)
                     }
-                    .disabled(isLoading)
                 }
 
                 Spacer()
@@ -245,8 +259,19 @@ struct AuthView: View {
             isAuthenticated = true
         } catch let error as ASAuthorizationError where error.code == .canceled {
             // User tapped Cancel — no error to show
+        } catch let error as ASAuthorizationError where error.code == .unknown {
+            // Error 1000: Apple ID not configured, or Supabase provider not set up
+            print("[Auth] Apple Sign In error 1000 (unknown): \(error)")
+            errorMessage = "Apple Sign In failed. Make sure you have an Apple ID signed in on this device and that Sign in with Apple is enabled in your Supabase project settings."
+            appleSignInFailed = true
+        } catch let error as ASAuthorizationError {
+            print("[Auth] Apple Sign In ASAuthorizationError: code=\(error.code.rawValue) \(error)")
+            errorMessage = "Apple Sign In failed (error \(error.code.rawValue)). Please try email sign-in instead."
+            appleSignInFailed = true
         } catch {
-            errorMessage = error.localizedDescription
+            print("[Auth] Apple Sign In unexpected error: \(error)")
+            errorMessage = "Sign in failed: \(error.localizedDescription)"
+            appleSignInFailed = true
         }
         isLoading = false
     }
