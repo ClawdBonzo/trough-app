@@ -89,13 +89,11 @@ final class CSVImportViewModel: ObservableObject {
     @Published var bloodworkResult: ImportResult? = nil
     @Published var errorMessage: String? = nil
 
-    private var modelContext: ModelContext?
-    private var userID: UUID = UUID()
+    private let modelContext: ModelContext
+    private let userID: UUID
 
-    init() {}
-
-    func setup(context: ModelContext, userID: UUID) {
-        self.modelContext = context
+    init(modelContext: ModelContext, userID: UUID) {
+        self.modelContext = modelContext
         self.userID = userID
     }
 
@@ -148,7 +146,7 @@ final class CSVImportViewModel: ObservableObject {
     // MARK: Run import
 
     func runImport() async {
-        guard let data = parseResult, let modelContext else { return }
+        guard let data = parseResult else { return }
         step = .importing
         progress = 0
 
@@ -223,20 +221,24 @@ final class CSVImportViewModel: ObservableObject {
 
 struct CSVImportView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    @AppStorage("userIDString") private var userIDString = UUID().uuidString
-    @StateObject private var vm = CSVImportViewModel()
+    @StateObject private var vm: CSVImportViewModel
     @State private var showFilePicker = false
+    private var onComplete: (() -> Void)?
+
+    init(onComplete: (() -> Void)? = nil) {
+        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
+        _vm = StateObject(wrappedValue: CSVImportViewModel(
+            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
+            userID: id
+        ))
+        self.onComplete = onComplete
+    }
 
     var body: some View {
         NavigationStack {
             ZStack {
                 AppColors.background.ignoresSafeArea()
                 stepContent
-            }
-            .onAppear {
-                let uid = UUID(uuidString: userIDString) ?? UUID()
-                vm.setup(context: modelContext, userID: uid)
             }
             .navigationTitle(navTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -324,7 +326,9 @@ struct CSVImportView: View {
         case .importing:
             ImportingStep(progress: vm.progress)
         case .report:
-            ImportReportView(vm: vm, onDone: { dismiss() })
+            ImportReportView(vm: vm, onDone: {
+                if let onComplete { onComplete() } else { dismiss() }
+            })
         }
     }
 }
