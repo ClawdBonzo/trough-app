@@ -263,11 +263,20 @@ final class DailyCheckinViewModel: ObservableObject {
             d = Calendar.current.date(byAdding: .day, value: -1, to: d) ?? d
         }
 
+        // Recent peptide/adjunct logs for AI correlation insight
+        let peptPred = #Predicate<SDPeptideLog> { $0.administeredAt >= cutoff30 && !$0.isSampleData }
+        let peptDesc = FetchDescriptor<SDPeptideLog>(
+            predicate: peptPred,
+            sortBy: [SortDescriptor(\.administeredAt, order: .reverse)]
+        )
+        let recentPeptideLogs = (try? ctx.fetch(peptDesc)) ?? []
+
         return InsightContext(
             recentCheckins: recentCheckins,
             recentInjections: recentInjections,
             activeProtocol: activeProtocol,
-            streak: streak
+            streak: streak,
+            recentPeptideLogs: recentPeptideLogs
         )
     }
 }

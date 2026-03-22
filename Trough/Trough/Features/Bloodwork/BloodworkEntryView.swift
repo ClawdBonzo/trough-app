@@ -11,6 +11,7 @@ struct BloodworkEntryView: View {
     @State private var photoImage: UIImage? = nil
     @State private var showCamera = false
     @State private var showPhotoSourcePicker = false
+    @State private var editingRangeMarkerIndex: Int? = nil
 
     var body: some View {
         NavigationStack {
@@ -23,8 +24,17 @@ struct BloodworkEntryView: View {
                     }
                     photoSection
                     notesSection
+                    doctorNotesSection
                 }
                 .scrollContentBackground(.hidden)
+            }
+            .sheet(isPresented: Binding(
+                get: { editingRangeMarkerIndex != nil },
+                set: { if !$0 { editingRangeMarkerIndex = nil } }
+            )) {
+                if let idx = editingRangeMarkerIndex, idx < vm.formMarkers.count {
+                    RangeEditSheet(entry: $vm.formMarkers[idx])
+                }
             }
             .navigationTitle(vm.editingResult == nil ? "Add Bloodwork" : "Edit Bloodwork")
             .navigationBarTitleDisplayMode(.inline)
@@ -94,35 +104,62 @@ struct BloodworkEntryView: View {
     private func markerRow(for entry: BloodworkViewModel.MarkerEntry) -> some View {
         let idx = vm.formMarkers.firstIndex(where: { $0.id == entry.id })
 
-        return HStack(spacing: 10) {
-            // In-range indicator
-            Circle()
-                .fill(rangeColor(for: entry))
-                .frame(width: 8, height: 8)
+        return VStack(spacing: 4) {
+            HStack(spacing: 10) {
+                // In-range indicator
+                Circle()
+                    .fill(rangeColor(for: entry))
+                    .frame(width: 8, height: 8)
 
-            VStack(alignment: .leading, spacing: 1) {
-                Text(entry.name)
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                Text("Ref: \(entry.rangeLow, specifier: "%.1f")–\(entry.rangeHigh, specifier: "%.1f")")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(entry.name)
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                    HStack(spacing: 4) {
+                        Text("Ref: \(entry.rangeLow, specifier: "%.1f")–\(entry.rangeHigh, specifier: "%.1f")")
+                            .font(.caption2)
+                            .foregroundColor(entry.hasCustomRange ? .green : .secondary)
+                        if entry.hasCustomRange {
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.system(size: 9))
+                                .foregroundColor(.green)
+                        }
+                    }
+                }
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    if let i = idx {
+                        TextField("–", text: $vm.formMarkers[i].value)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.trailing)
+                            .frame(width: 72)
+                            .foregroundColor(.white)
+                    }
+                    Text(entry.unit)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .frame(width: 52, alignment: .leading)
+                }
             }
 
-            Spacer()
-
-            HStack(spacing: 4) {
-                if let i = idx {
-                    TextField("–", text: $vm.formMarkers[i].value)
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
-                        .frame(width: 72)
-                        .foregroundColor(.white)
+            // Edit reference range button
+            if let i = idx {
+                Button {
+                    editingRangeMarkerIndex = i
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.system(size: 10))
+                        Text("Edit reference range")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(AppColors.accent.opacity(0.7))
                 }
-                Text(entry.unit)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .frame(width: 52, alignment: .leading)
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 18)
             }
         }
         .padding(.vertical, 2)
@@ -180,6 +217,103 @@ struct BloodworkEntryView: View {
                 .foregroundColor(.white)
         }
         .listRowBackground(AppColors.card)
+    }
+
+    // MARK: Doctor Notes section
+
+    private var doctorNotesSection: some View {
+        Section {
+            TextField("Notes for your doctor about this panel...", text: $vm.formDoctorNotes, axis: .vertical)
+                .lineLimit(3...8)
+                .foregroundColor(.white)
+        } header: {
+            HStack(spacing: 6) {
+                Image(systemName: "stethoscope")
+                Text("Notes for Doctor")
+            }
+        } footer: {
+            Text("Included in your exported report for doctor visits.")
+                .font(.caption2)
+        }
+        .listRowBackground(AppColors.card)
+    }
+}
+
+// MARK: - RangeEditSheet
+
+struct RangeEditSheet: View {
+    @Binding var entry: BloodworkViewModel.MarkerEntry
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColors.background.ignoresSafeArea()
+                Form {
+                    Section {
+                        Text(entry.name)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        Text("Default: \(entry.defaultRangeLow, specifier: "%.1f")–\(entry.defaultRangeHigh, specifier: "%.1f") \(entry.unit)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .listRowBackground(AppColors.card)
+
+                    Section("Your Lab's Reference Range") {
+                        HStack {
+                            Text("Low")
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            TextField(String(format: "%.1f", entry.defaultRangeLow), text: $entry.customRangeLow)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 100)
+                                .foregroundColor(.white)
+                            Text(entry.unit)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .frame(width: 52, alignment: .leading)
+                        }
+                        HStack {
+                            Text("High")
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            TextField(String(format: "%.1f", entry.defaultRangeHigh), text: $entry.customRangeHigh)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 100)
+                                .foregroundColor(.white)
+                            Text(entry.unit)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .frame(width: 52, alignment: .leading)
+                        }
+                    }
+                    .listRowBackground(AppColors.card)
+
+                    if entry.hasCustomRange {
+                        Section {
+                            Button("Reset to Default") {
+                                entry.customRangeLow = ""
+                                entry.customRangeHigh = ""
+                            }
+                            .foregroundColor(AppColors.accent)
+                        }
+                        .listRowBackground(AppColors.card)
+                    }
+                }
+                .scrollContentBackground(.hidden)
+            }
+            .navigationTitle("Reference Range")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                        .foregroundColor(AppColors.accent)
+                }
+            }
+        }
     }
 }
 

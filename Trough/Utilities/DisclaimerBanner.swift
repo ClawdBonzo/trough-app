@@ -10,6 +10,7 @@ enum DisclaimerType {
     case insight
     case weeklyReport
     case supplementAdvice
+    case fertility
 }
 
 // MARK: - Banner component
@@ -27,6 +28,7 @@ struct DisclaimerBanner: View {
         case .insight:       return DisclaimerService.insight
         case .weeklyReport:      return DisclaimerService.weeklyReport
         case .supplementAdvice:  return DisclaimerService.supplementAdvice
+        case .fertility:         return DisclaimerService.fertility
         }
     }
 

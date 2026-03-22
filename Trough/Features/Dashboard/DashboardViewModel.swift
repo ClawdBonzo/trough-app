@@ -53,6 +53,11 @@ final class DashboardViewModel: ObservableObject {
     @Published var daysSinceLastInjection: Int = 0
     @Published var injectionOverdueDays: Int = 0   // > 0 if overdue
 
+    // MARK: Fertility (hCG)
+    @Published var hcgProtocol: SDProtocol? = nil
+    @Published var hcgStartDate: Date? = nil
+    @Published var fertilityEstimate: String? = nil
+
     // MARK: Trend chart
     @Published var metricSeries: [MetricSeries] = []
 
@@ -78,16 +83,23 @@ final class DashboardViewModel: ObservableObject {
     @Published var isSyncing = false
 
     // MARK: Private
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext?
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+    init() {
         self.userType = UserDefaults.standard.string(forKey: "userType") ?? "trt"
+    }
+
+    /// Inject the shared environment ModelContext (called from onAppear).
+    func setModelContext(_ ctx: ModelContext) {
+        if modelContext == nil {
+            modelContext = ctx
+        }
     }
 
     // MARK: - Load
 
     func load() {
+        guard modelContext != nil else { return }
         isLoading = true
         loadCheckins()
         loadStreak()
@@ -102,6 +114,7 @@ final class DashboardViewModel: ObservableObject {
     // MARK: Check-ins
 
     private func loadCheckins() {
+        guard let modelContext else { return }
         let pred = #Predicate<SDCheckin> { !$0.isSampleData }
         let desc = FetchDescriptor<SDCheckin>(
             predicate: pred,
@@ -157,6 +170,7 @@ final class DashboardViewModel: ObservableObject {
     // MARK: Protocol + injections for PK curve
 
     private func loadProtocolAndInjections() {
+        guard let modelContext else { return }
         let protoPred = #Predicate<SDProtocol> { $0.isActive && !$0.isSampleData }
         var protoDesc = FetchDescriptor<SDProtocol>(predicate: protoPred)
         protoDesc.fetchLimit = 1
@@ -176,7 +190,7 @@ final class DashboardViewModel: ObservableObject {
         let halfLife = PKCurveEngine.shared.effectiveHalfLife(compound: proto.compoundName)
         let cutoff   = Calendar.current.date(byAdding: .day, value: -Int(halfLife * 5), to: .now) ?? .now
         let injPred  = #Predicate<SDInjection> { $0.injectedAt > cutoff && !$0.isSampleData }
-        let injDesc  = FetchDescriptor<SDInjection>(predicate: injPred, sortBy: [SortDescriptor(\.injectedAt)])
+        let injDesc  = FetchDescriptor<SDInjection>(predicate: injPred, sortBy: [SortDescriptor(\SDInjection.injectedAt)])
         let injs     = (try? modelContext.fetch(injDesc)) ?? []
 
         pkInjections = injs.map {
@@ -193,6 +207,26 @@ final class DashboardViewModel: ObservableObject {
             daysSinceLastInjection = Date.now.daysSince(lastInj.injectedAt)
             let overdue = daysSinceLastInjection - proto.frequencyDays
             injectionOverdueDays = max(0, overdue)
+        }
+
+        // hCG fertility detection — look for active HCG protocol (secondary compound)
+        let hcgPred = #Predicate<SDProtocol> {
+            $0.isActive && !$0.isSampleData && $0.compoundName == "HCG"
+        }
+        var hcgDesc = FetchDescriptor<SDProtocol>(predicate: hcgPred)
+        hcgDesc.fetchLimit = 1
+        if let hcg = try? modelContext.fetch(hcgDesc).first {
+            hcgProtocol = hcg
+            hcgStartDate = hcg.startDate
+            let result = InjectionCycleService.fertilityRecoveryEstimate(
+                hcgStartDate: hcg.startDate,
+                trtStartDate: proto.startDate
+            )
+            fertilityEstimate = result?.estimate
+        } else {
+            hcgProtocol = nil
+            hcgStartDate = nil
+            fertilityEstimate = nil
         }
     }
 

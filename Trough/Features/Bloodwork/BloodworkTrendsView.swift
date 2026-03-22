@@ -12,7 +12,7 @@ struct BloodworkTrendsView: View {
                 // Panel selector
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(BloodworkViewModel.TrendPanel.allCases) { panel in
+                        ForEach(vm.availablePanels) { panel in
                             Button {
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     vm.selectedPanel = panel
@@ -87,6 +87,13 @@ struct BloodworkTrendsView: View {
                 markerChart(name: "HDL",               color: Color(hex: "#27AE60"), title: "HDL")
                 markerChart(name: "Triglycerides",     color: Color(hex: "#F39C12"), title: "Triglycerides")
             }
+        case .fertility:
+            VStack(spacing: 12) {
+                fertilityChart(name: "FSH", color: .green, title: "FSH — Fertility Recovery Zone",
+                               recoveryLow: 1.5, recoveryHigh: 9.0)
+                markerChart(name: "LH", color: Color(hex: "#4ECDC4"), title: "LH")
+                DisclaimerBanner(type: .fertility)
+            }
         }
     }
 
@@ -96,8 +103,13 @@ struct BloodworkTrendsView: View {
         let points = vm.trendPoints[name] ?? []
         let def = vm.def(for: name)
         let unit = def?.unit ?? ""
-        let rangeLow = def?.rangeLow
-        let rangeHigh = def?.rangeHigh
+        // Use most-recent stored custom range if available, else fall back to MarkerDef default
+        let storedMarkers = vm.results
+            .sorted { $0.drawnAt < $1.drawnAt }
+            .flatMap(\.markers)
+            .filter { $0.markerName == name && $0.referenceRangeLow != nil }
+        let rangeLow = storedMarkers.last?.referenceRangeLow ?? def?.rangeLow
+        let rangeHigh = storedMarkers.last?.referenceRangeHigh ?? def?.rangeHigh
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -220,6 +232,112 @@ struct BloodworkTrendsView: View {
         }
         .chartBackground { _ in AppColors.card }
         .frame(height: 140)
+    }
+
+    /// Like `markerChart` but adds a labeled green "Fertility Recovery Zone" band.
+    private func fertilityChart(
+        name: String,
+        color: Color,
+        title: String,
+        recoveryLow: Double,
+        recoveryHigh: Double
+    ) -> some View {
+        let points = vm.trendPoints[name] ?? []
+        let def = vm.def(for: name)
+        let unit = def?.unit ?? ""
+
+        return VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(title)
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                Spacer()
+                if let last = points.last {
+                    HStack(spacing: 4) {
+                        Text(String(format: "%.1f", last.value))
+                            .font(.subheadline.bold())
+                            .foregroundColor(valueColor(last.value, def: def))
+                        Text(unit)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+
+            if points.isEmpty {
+                Text("No data — add bloodwork with FSH to see fertility trends")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 80)
+                    .multilineTextAlignment(.center)
+            } else {
+                let minDate = points.map(\.date).min() ?? .now
+                let maxDate = points.map(\.date).max() ?? .now
+                let pad: TimeInterval = 86400
+                let xStart = minDate.addingTimeInterval(-pad)
+                let xEnd   = maxDate.addingTimeInterval(pad)
+
+                Chart {
+                    // Green "Fertility Recovery Zone" band
+                    RectangleMark(
+                        xStart: .value("Start", xStart),
+                        xEnd:   .value("End",   xEnd),
+                        yStart: .value("Low",   recoveryLow),
+                        yEnd:   .value("High",  recoveryHigh)
+                    )
+                    .foregroundStyle(Color.green.opacity(0.12))
+
+                    RuleMark(y: .value("RecLow",  recoveryLow))
+                        .foregroundStyle(Color.green.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
+                    RuleMark(y: .value("RecHigh", recoveryHigh))
+                        .foregroundStyle(Color.green.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
+
+                    // Data line
+                    ForEach(points) { pt in
+                        LineMark(x: .value("Date", pt.date), y: .value("Value", pt.value))
+                            .foregroundStyle(color)
+                            .lineStyle(StrokeStyle(lineWidth: 2))
+                            .interpolationMethod(.catmullRom)
+                        PointMark(x: .value("Date", pt.date), y: .value("Value", pt.value))
+                            .foregroundStyle(color)
+                            .symbolSize(40)
+                    }
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
+                            .foregroundStyle(Color.white.opacity(0.08))
+                        AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                            .foregroundStyle(Color.secondary)
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks { _ in
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
+                            .foregroundStyle(Color.white.opacity(0.08))
+                        AxisValueLabel().foregroundStyle(Color.secondary)
+                    }
+                }
+                .chartBackground { _ in AppColors.card }
+                .frame(height: 140)
+            }
+
+            // Recovery zone label
+            HStack(spacing: 4) {
+                Rectangle()
+                    .fill(Color.green.opacity(0.3))
+                    .frame(width: 12, height: 6)
+                    .cornerRadius(2)
+                Text("Fertility Recovery Zone: \(recoveryLow, specifier: "%.1f")–\(recoveryHigh, specifier: "%.1f") \(unit)")
+                    .font(.caption2)
+                    .foregroundColor(.green)
+            }
+        }
+        .padding(14)
+        .background(AppColors.card)
+        .cornerRadius(14)
     }
 
     private func valueColor(_ value: Double, def: MarkerDef?) -> Color {

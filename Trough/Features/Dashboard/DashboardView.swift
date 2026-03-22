@@ -5,7 +5,7 @@ import Charts
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncEngine: SyncEngine
-    @StateObject private var vm: DashboardViewModel
+    @StateObject private var vm = DashboardViewModel()
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @EnvironmentObject private var toastManager: ToastManager
     @State private var showCheckin = false
@@ -14,12 +14,6 @@ struct DashboardView: View {
     @State private var showSampleDataBanner = false
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
-
-    init() {
-        _vm = StateObject(wrappedValue: DashboardViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models)))
-        ))
-    }
 
     var body: some View {
         NavigationStack {
@@ -39,6 +33,9 @@ struct DashboardView: View {
                         if subscriptionManager.isSubscribed {
                             if userType == "trt" {
                                 pkCurveCard
+                                if vm.hcgProtocol != nil {
+                                    fertilityCard
+                                }
                             } else {
                                 bodyCompositionCard
                             }
@@ -64,7 +61,6 @@ struct DashboardView: View {
                 }
                 } // end else isLoading
             }
-            .animation(.easeInOut(duration: 0.3), value: vm.isLoading)
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -81,11 +77,9 @@ struct DashboardView: View {
                 }
             }
             .onAppear {
+                vm.setModelContext(modelContext)
                 vm.load()
-                let ctx = (try? ModelContext(ModelContainer(for: Schema(TroughSchemaV1.models))))
-                if let ctx {
-                    showSampleDataBanner = !SampleDataService.hasRealData(context: ctx)
-                }
+                showSampleDataBanner = !SampleDataService.hasRealData(context: modelContext)
             }
             .sheet(isPresented: $showCheckin, onDismiss: { vm.load() }) {
                 DailyCheckinView()
@@ -112,11 +106,9 @@ struct DashboardView: View {
             HStack(spacing: 12) {
                 Button("Load Sample Data") {
                     let userID = UUID(uuidString: userIDString) ?? UUID()
-                    if let ctx = try? ModelContext(ModelContainer(for: Schema(TroughSchemaV1.models))) {
-                        SampleDataService.insertSampleData(context: ctx, userID: userID)
-                        showSampleDataBanner = false
-                        vm.load()
-                    }
+                    SampleDataService.insertSampleData(context: modelContext, userID: userID)
+                    showSampleDataBanner = false
+                    vm.load()
                 }
                 .font(.subheadline.bold())
                 .foregroundColor(AppColors.accent)
@@ -139,49 +131,46 @@ struct DashboardView: View {
     @State private var ringGlow = false
 
     private var protocolScoreHero: some View {
-        ZStack {
-            AppColors.card
-                .cornerRadius(20)
-                .shadow(color: vm.scoreColor.opacity(ringGlow ? 0.35 : 0.15), radius: ringGlow ? 18 : 10)
-
-            VStack(spacing: 16) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Protocol Score")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        Text(vm.interpretation)
-                            .font(.title2.bold())
-                            .foregroundColor(vm.scoreColor)
-                    }
-                    Spacer()
-                    trendBadge
+        VStack(spacing: 16) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Protocol Score")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    Text(vm.interpretation)
+                        .font(.title2.bold())
+                        .foregroundColor(vm.scoreColor)
                 }
-
-                HStack(spacing: 24) {
-                    CircularRingView(score: vm.protocolScore, color: vm.scoreColor)
-                        .frame(width: 120, height: 120)
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        StatRow(label: "7-day avg", value: String(format: "%.0f", vm.sevenDayAvg))
-                        StatRow(label: "Prior 7-day", value: String(format: "%.0f", vm.priorSevenDayAvg))
-                        if vm.recentCheckins.isEmpty {
-                            Button {
-                                showCheckin = true
-                            } label: {
-                                Label("Log today", systemImage: "plus.circle.fill")
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(AppColors.accent)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                }
-
-                DisclaimerBanner(type: .protocolScore)
+                Spacer()
+                trendBadge
             }
-            .padding(16)
+
+            HStack(spacing: 24) {
+                CircularRingView(score: vm.protocolScore, color: vm.scoreColor)
+                    .frame(width: 120, height: 120)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    StatRow(label: "7-day avg", value: String(format: "%.0f", vm.sevenDayAvg))
+                    StatRow(label: "Prior 7-day", value: String(format: "%.0f", vm.priorSevenDayAvg))
+                    if vm.recentCheckins.isEmpty {
+                        Button {
+                            showCheckin = true
+                        } label: {
+                            Label("Log today", systemImage: "plus.circle.fill")
+                                .font(.subheadline.bold())
+                                .foregroundColor(AppColors.accent)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+
+            DisclaimerBanner(type: .protocolScore)
         }
+        .padding(16)
+        .background(AppColors.card)
+        .cornerRadius(20)
+        .shadow(color: vm.scoreColor.opacity(ringGlow ? 0.35 : 0.15), radius: ringGlow ? 18 : 10)
         .onAppear {
             withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
                 ringGlow = true
@@ -344,6 +333,46 @@ struct DashboardView: View {
         .background(AppColors.card)
         .cornerRadius(16)
         .onAppear { AnalyticsService.pkCurveViewed(absorptionDelay: pkAbsorptionDelay) }
+    }
+
+    // MARK: - Fertility Card (hCG users)
+
+    private var fertilityCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 10) {
+                Image(systemName: "figure.2.circle")
+                    .font(.title2)
+                    .foregroundColor(.green)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Fertility Mode Active")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    if let estimate = vm.fertilityEstimate {
+                        Text(estimate)
+                            .font(.caption)
+                            .foregroundColor(.green)
+                    }
+                }
+                Spacer()
+            }
+
+            if let startDate = vm.hcgStartDate {
+                let weeks = max(0, Int(Date.now.timeIntervalSince(startDate) / (7 * 86400)))
+                HStack(spacing: 16) {
+                    StatRow(label: "hCG started", value: "\(weeks)w ago")
+                    StatRow(label: "Protocol", value: vm.hcgProtocol?.name ?? "hCG")
+                }
+            }
+
+            DisclaimerBanner(type: .fertility)
+        }
+        .padding(16)
+        .background(AppColors.card)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.green.opacity(0.3), lineWidth: 1)
+        )
     }
 
     // MARK: - Body Composition Card (natural users)

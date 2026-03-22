@@ -475,11 +475,22 @@ enum CSVImportService {
             context.insert(bw)
 
             for entry in markerEntries {
+                // Check for optional custom range columns: {markerkey}_low, {markerkey}_high
+                let markerKey = bloodworkMarkerMap.first { $0.value.name == entry.name }?.key
+                let customLow: Double? = markerKey.flatMap { key in
+                    mapping["\(key)_low"].flatMap { idx in idx < row.count ? extractNumeric(row[idx]) : nil }
+                }
+                let customHigh: Double? = markerKey.flatMap { key in
+                    mapping["\(key)_high"].flatMap { idx in idx < row.count ? extractNumeric(row[idx]) : nil }
+                }
+
                 let marker = SDBloodworkMarker(
                     bloodworkID: bw.id,
                     markerName: entry.name,
                     value: entry.value,
-                    unit: entry.unit
+                    unit: entry.unit,
+                    referenceRangeLow: customLow,
+                    referenceRangeHigh: customHigh
                 )
                 context.insert(marker)
                 bw.markers.append(marker)

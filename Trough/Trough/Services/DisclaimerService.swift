@@ -33,4 +33,8 @@ enum DisclaimerService {
     static let supplementAdvice =
         "Supplement information is for personal tracking only. " +
         "Consult a qualified healthcare provider before starting any new supplement."
+
+    static let fertility =
+        "Fertility recovery estimates are based on published averages. " +
+        "Individual timelines vary significantly. Always consult a reproductive endocrinologist."
 }

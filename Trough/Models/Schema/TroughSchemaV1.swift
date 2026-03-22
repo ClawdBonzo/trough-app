@@ -274,6 +274,7 @@ enum TroughSchemaV1: VersionedSchema {
         var drawnAt: Date
         var labName: String?
         var notes: String?
+        var doctorNotes: String?           // "Notes for Doctor" — for doctor visits / PDF export
         var photoURL: String?              // Supabase Storage URL, set after background upload
         var createdAt: Date
         var updatedAt: Date
@@ -287,6 +288,7 @@ enum TroughSchemaV1: VersionedSchema {
             drawnAt: Date = .now,
             labName: String? = nil,
             notes: String? = nil,
+            doctorNotes: String? = nil,
             photoURL: String? = nil,
             createdAt: Date = .now,
             updatedAt: Date = .now,
@@ -297,6 +299,7 @@ enum TroughSchemaV1: VersionedSchema {
             self.drawnAt = drawnAt
             self.labName = labName
             self.notes = notes
+            self.doctorNotes = doctorNotes
             self.photoURL = photoURL
             self.createdAt = createdAt
             self.updatedAt = updatedAt

@@ -15,6 +15,7 @@
 		7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90068C9514204B23A9A9F59E /* SupabaseService.swift */; };
 		7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55107EFC75E74D0E97097A68 /* SyncEngine.swift */; };
 		61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BFE36059E4003B02441B5 /* HealthKitService.swift */; };
+		A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */; };
 		43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E8DD8413C64082A81BB49A /* DisclaimerService.swift */; };
 		8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8663BF9EA184443DA308FD0E /* DashboardView.swift */; };
 		80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */; };
@@ -72,6 +73,7 @@
 		90068C9514204B23A9A9F59E /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		55107EFC75E74D0E97097A68 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		E49BFE36059E4003B02441B5 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
 		98E8DD8413C64082A81BB49A /* DisclaimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerService.swift; sourceTree = "<group>"; };
 		8663BF9EA184443DA308FD0E /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				90068C9514204B23A9A9F59E /* SupabaseService.swift */,
 				55107EFC75E74D0E97097A68 /* SyncEngine.swift */,
 				E49BFE36059E4003B02441B5 /* HealthKitService.swift */,
+				A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */,
 				98E8DD8413C64082A81BB49A /* DisclaimerService.swift */,
 				BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */,
 				BB110011BB220033BB440066 /* WeeklyReportService.swift */,
@@ -450,6 +453,7 @@
 				7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */,
 				7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */,
 				61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */,
+				A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */,
 				43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */,
 				8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */,
 				80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */,
@@ -549,8 +553,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -571,8 +576,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -593,7 +599,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -610,7 +616,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;

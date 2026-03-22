@@ -30,6 +30,9 @@ struct WeeklyReport {
     let priorAvgSleep: Double
     let priorAvgClarity: Double
     let peptideSummary: String?    // e.g. "BPC-157 ×3, Semaglutide ×1" or nil
+    let aiDosesSummary: String?    // e.g. "Anastrozole ×2" or nil
+    let fertilitySnapshot: String? // e.g. "hCG active · FSH 3.2 IU/L · Recovery: 12–20 wks" or nil
+    let doctorNotes: String?       // aggregated doctor notes from this week's bloodwork
 }
 
 // MARK: - WeeklyReportService
@@ -95,6 +98,10 @@ enum WeeklyReportService {
             d = cal.date(byAdding: .day, value: -1, to: d) ?? d
         }
 
+        // Peptide / adjunct logs
+        let peptPred = #Predicate<SDPeptideLog> { !$0.isSampleData }
+        let allPepts = (try? context.fetch(FetchDescriptor<SDPeptideLog>(predicate: peptPred))) ?? []
+
         // Top insight from most recent check-in this week
         let protoPred = #Predicate<SDProtocol> { $0.isActive && $0.isPrimary && !$0.isSampleData }
         var protoDesc = FetchDescriptor<SDProtocol>(predicate: protoPred)
@@ -107,7 +114,8 @@ enum WeeklyReportService {
                 recentCheckins: all,
                 recentInjections: Array(allInjs.sorted { $0.injectedAt > $1.injectedAt }.prefix(30)),
                 activeProtocol: activeProtocol,
-                streak: streak
+                streak: streak,
+                recentPeptideLogs: allPepts.sorted { $0.administeredAt > $1.administeredAt }
             )
             topInsight = InsightEngine.shared.generateInsight(
                 for: latest, userType: userType, context: ctx
@@ -136,14 +144,55 @@ enum WeeklyReportService {
         let hrvValues = thisWeek.compactMap(\.hrv)
         let sleepValues = thisWeek.compactMap(\.sleepHours)
 
-        // Peptide summary
-        let peptPred = #Predicate<SDPeptideLog> { !$0.isSampleData }
-        let allPepts = (try? context.fetch(FetchDescriptor<SDPeptideLog>(predicate: peptPred))) ?? []
+        // Peptide & AI summary
         let weekPepts = allPepts.filter { $0.administeredAt >= weekStart && $0.administeredAt <= weekEnd }
-        let peptideSummary: String? = weekPepts.isEmpty ? nil : Dictionary(grouping: weekPepts, by: \.peptideName)
+
+        let weekAIDoses = weekPepts.filter { PeptidesViewModel.isAICompound($0.peptideName) }
+        let weekPeptOnly = weekPepts.filter { !PeptidesViewModel.isAICompound($0.peptideName) }
+
+        let peptideSummary: String? = weekPeptOnly.isEmpty ? nil : Dictionary(grouping: weekPeptOnly, by: \.peptideName)
             .sorted { $0.key < $1.key }
             .map { "\($0.key) ×\($0.value.count)" }
             .joined(separator: ", ")
+
+        let aiDosesSummary: String? = weekAIDoses.isEmpty ? nil : Dictionary(grouping: weekAIDoses, by: \.peptideName)
+            .sorted { $0.key < $1.key }
+            .map { "\($0.key) ×\($0.value.count)" }
+            .joined(separator: ", ")
+
+        // Fertility snapshot — detect active hCG protocol
+        let fertilitySnapshot: String?
+        if let activeProto = activeProtocol {
+            let hcgPred = #Predicate<SDProtocol> {
+                $0.isActive && !$0.isSampleData && $0.compoundName == "HCG"
+            }
+            var hcgDesc = FetchDescriptor<SDProtocol>(predicate: hcgPred)
+            hcgDesc.fetchLimit = 1
+            if let hcg = try? context.fetch(hcgDesc).first {
+                var parts = ["hCG active"]
+                // Latest FSH value
+                let allBW = (try? context.fetch(FetchDescriptor<SDBloodwork>())) ?? []
+                let fshValues = allBW.flatMap(\.markers).filter { $0.markerName == "FSH" }
+                    .sorted { $0.bloodworkID < $1.bloodworkID }
+                if let latestFSH = fshValues.last {
+                    parts.append("FSH \(String(format: "%.1f", latestFSH.value)) IU/L")
+                }
+                if let result = InjectionCycleService.fertilityRecoveryEstimate(
+                    hcgStartDate: hcg.startDate,
+                    trtStartDate: activeProto.startDate
+                ) {
+                    // Extract just the week range
+                    let short = result.estimate
+                        .replacingOccurrences(of: "Expected FSH/LH recovery window: ", with: "Recovery: ")
+                    parts.append(short)
+                }
+                fertilitySnapshot = parts.joined(separator: " · ")
+            } else {
+                fertilitySnapshot = nil
+            }
+        } else {
+            fertilitySnapshot = nil
+        }
 
         return WeeklyReport(
             weekStart: weekStart,
@@ -168,7 +217,15 @@ enum WeeklyReportService {
             priorAvgLibido:  avg(\.libidoScore,        in: priorWeek),
             priorAvgSleep:   avg(\.sleepQualityScore,  in: priorWeek),
             priorAvgClarity: avg(\.mentalClarityScore, in: priorWeek),
-            peptideSummary: peptideSummary
+            peptideSummary: peptideSummary,
+            aiDosesSummary: aiDosesSummary,
+            fertilitySnapshot: fertilitySnapshot,
+            doctorNotes: {
+                let allBW = (try? context.fetch(FetchDescriptor<SDBloodwork>())) ?? []
+                let weekBW = allBW.filter { $0.drawnAt >= weekStart && $0.drawnAt <= weekEnd }
+                let notes = weekBW.compactMap(\.doctorNotes).filter { !$0.isEmpty }
+                return notes.isEmpty ? nil : notes.joined(separator: "\n")
+            }()
         )
     }
 

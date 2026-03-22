@@ -53,6 +53,11 @@ final class DashboardViewModel: ObservableObject {
     @Published var daysSinceLastInjection: Int = 0
     @Published var injectionOverdueDays: Int = 0   // > 0 if overdue
 
+    // MARK: Fertility (hCG)
+    @Published var hcgProtocol: SDProtocol? = nil
+    @Published var hcgStartDate: Date? = nil
+    @Published var fertilityEstimate: String? = nil
+
     // MARK: Trend chart
     @Published var metricSeries: [MetricSeries] = []
 
@@ -84,16 +89,11 @@ final class DashboardViewModel: ObservableObject {
         self.userType = UserDefaults.standard.string(forKey: "userType") ?? "trt"
     }
 
-    // MARK: - Setup (call from .onAppear with the environment's ModelContext)
-
-    func setup(context: ModelContext) {
-        guard modelContext == nil else {
-            // Already set up — just reload data
-            load()
-            return
+    /// Inject the shared environment ModelContext (called from onAppear).
+    func setModelContext(_ ctx: ModelContext) {
+        if modelContext == nil {
+            modelContext = ctx
         }
-        modelContext = context
-        load()
     }
 
     // MARK: - Load
@@ -190,7 +190,7 @@ final class DashboardViewModel: ObservableObject {
         let halfLife = PKCurveEngine.shared.effectiveHalfLife(compound: proto.compoundName)
         let cutoff   = Calendar.current.date(byAdding: .day, value: -Int(halfLife * 5), to: .now) ?? .now
         let injPred  = #Predicate<SDInjection> { $0.injectedAt > cutoff && !$0.isSampleData }
-        let injDesc  = FetchDescriptor<SDInjection>(predicate: injPred, sortBy: [SortDescriptor(\.injectedAt)])
+        let injDesc  = FetchDescriptor<SDInjection>(predicate: injPred, sortBy: [SortDescriptor(\SDInjection.injectedAt)])
         let injs     = (try? modelContext.fetch(injDesc)) ?? []
 
         pkInjections = injs.map {
@@ -207,6 +207,26 @@ final class DashboardViewModel: ObservableObject {
             daysSinceLastInjection = Date.now.daysSince(lastInj.injectedAt)
             let overdue = daysSinceLastInjection - proto.frequencyDays
             injectionOverdueDays = max(0, overdue)
+        }
+
+        // hCG fertility detection — look for active HCG protocol (secondary compound)
+        let hcgPred = #Predicate<SDProtocol> {
+            $0.isActive && !$0.isSampleData && $0.compoundName == "HCG"
+        }
+        var hcgDesc = FetchDescriptor<SDProtocol>(predicate: hcgPred)
+        hcgDesc.fetchLimit = 1
+        if let hcg = try? modelContext.fetch(hcgDesc).first {
+            hcgProtocol = hcg
+            hcgStartDate = hcg.startDate
+            let result = InjectionCycleService.fertilityRecoveryEstimate(
+                hcgStartDate: hcg.startDate,
+                trtStartDate: proto.startDate
+            )
+            fertilityEstimate = result?.estimate
+        } else {
+            hcgProtocol = nil
+            hcgStartDate = nil
+            fertilityEstimate = nil
         }
     }
 
@@ -266,8 +286,8 @@ final class DashboardViewModel: ObservableObject {
             c.bodyFatPercent.map { WeightDataPoint(date: c.date, weightKg: $0) }
         }
 
-        if let first = weightSeries30d.first, let last = weightSeries30d.last, weightSeries30d.count >= 2 {
-            weightDelta30d = last.weightKg - first.weightKg
+        if weightSeries30d.count >= 2 {
+            weightDelta30d = weightSeries30d.last!.weightKg - weightSeries30d.first!.weightKg
         } else {
             weightDelta30d = nil
         }

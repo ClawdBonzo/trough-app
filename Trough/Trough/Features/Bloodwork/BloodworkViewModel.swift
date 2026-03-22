@@ -39,14 +39,24 @@ final class BloodworkViewModel: ObservableObject {
         case hematocrit = "Hematocrit"
         case shbg       = "SHBG"
         case lipids     = "Lipids"
+        case fertility  = "Fertility"
         var id: String { rawValue }
     }
     @Published var selectedPanel: TrendPanel = .primary
+    @Published var showFertilityTimeline = false
+
+    /// Panels to display — includes Fertility only when hCG injections exist.
+    var availablePanels: [TrendPanel] {
+        let hasHCG = results.flatMap(\.markers).contains { $0.markerName == "LH" || $0.markerName == "FSH" }
+        if hasHCG { return TrendPanel.allCases }
+        return TrendPanel.allCases.filter { $0 != .fertility }
+    }
 
     // MARK: Form state
     @Published var formDrawnAt: Date = .now
     @Published var formLabName: String = ""
     @Published var formNotes: String = ""
+    @Published var formDoctorNotes: String = ""
     @Published var formMarkers: [MarkerEntry] = []
     @Published var pendingPhotoData: Data? = nil
 
@@ -56,8 +66,21 @@ final class BloodworkViewModel: ObservableObject {
         var name: String
         var value: String = ""
         let unit: String
-        let rangeLow: Double
-        let rangeHigh: Double
+        let defaultRangeLow: Double      // original MarkerDef range
+        let defaultRangeHigh: Double
+        var customRangeLow: String = ""   // user-editable text fields
+        var customRangeHigh: String = ""
+
+        /// Effective range — uses custom if set, else default
+        var rangeLow: Double {
+            Double(customRangeLow) ?? defaultRangeLow
+        }
+        var rangeHigh: Double {
+            Double(customRangeHigh) ?? defaultRangeHigh
+        }
+        var hasCustomRange: Bool {
+            Double(customRangeLow) != nil || Double(customRangeHigh) != nil
+        }
 
         var valueDouble: Double? { Double(value) }
         var isInRange: Bool? {
@@ -118,24 +141,18 @@ final class BloodworkViewModel: ObservableObject {
 
     // MARK: Private
 
-    private var modelContext: ModelContext?
+    private let modelContext: ModelContext
     private let syncEngine = SyncEngine.shared
-    private(set) var userID: UUID = UUID()
+    let userID: UUID
 
-    init() {}
-
-    // MARK: - Setup
-
-    func setup(context: ModelContext, userID: UUID) {
-        self.modelContext = context
+    init(modelContext: ModelContext, userID: UUID) {
+        self.modelContext = modelContext
         self.userID = userID
-        load()
     }
 
     // MARK: Load
 
     func load() {
-        guard let modelContext else { return }
         let pred = #Predicate<SDBloodwork> { !$0.isSampleData }
         let desc = FetchDescriptor<SDBloodwork>(
             predicate: pred,
@@ -151,12 +168,13 @@ final class BloodworkViewModel: ObservableObject {
         formDrawnAt = .now
         formLabName = ""
         formNotes = ""
+        formDoctorNotes = ""
         pendingPhotoData = nil
         formMarkers = Self.sections.flatMap { section in
             section.defs.map { def in
                 MarkerEntry(sectionTitle: section.title, name: def.name,
                             value: "", unit: def.unit,
-                            rangeLow: def.rangeLow, rangeHigh: def.rangeHigh)
+                            defaultRangeLow: def.rangeLow, defaultRangeHigh: def.rangeHigh)
             }
         }
         showingEntrySheet = true
@@ -167,14 +185,23 @@ final class BloodworkViewModel: ObservableObject {
         formDrawnAt = bw.drawnAt
         formLabName = bw.labName ?? ""
         formNotes = bw.notes ?? ""
+        formDoctorNotes = bw.doctorNotes ?? ""
         pendingPhotoData = nil
         formMarkers = Self.sections.flatMap { section in
             section.defs.map { def in
                 let existing = bw.markers.first { $0.markerName == def.name }
+                // Detect custom ranges: if stored range differs from default, show it
+                let customLow = existing.flatMap { m in
+                    m.referenceRangeLow.flatMap { $0 != def.rangeLow ? String(format: "%.1f", $0) : nil }
+                } ?? ""
+                let customHigh = existing.flatMap { m in
+                    m.referenceRangeHigh.flatMap { $0 != def.rangeHigh ? String(format: "%.1f", $0) : nil }
+                } ?? ""
                 return MarkerEntry(
                     sectionTitle: section.title, name: def.name,
                     value: existing.map { String(format: "%.1f", $0.value) } ?? "",
-                    unit: def.unit, rangeLow: def.rangeLow, rangeHigh: def.rangeHigh
+                    unit: def.unit, defaultRangeLow: def.rangeLow, defaultRangeHigh: def.rangeHigh,
+                    customRangeLow: customLow, customRangeHigh: customHigh
                 )
             }
         }
@@ -184,16 +211,16 @@ final class BloodworkViewModel: ObservableObject {
     // MARK: Save
 
     func saveForm() {
-        guard let modelContext else { return }
         let filled = formMarkers.filter { $0.valueDouble != nil }
         guard !filled.isEmpty else { errorMessage = "Enter at least one value."; return }
 
         let bw: SDBloodwork
         if let existing = editingResult {
-            existing.drawnAt   = formDrawnAt
-            existing.labName   = formLabName.trimmed.nilIfEmpty
-            existing.notes     = formNotes.trimmed.nilIfEmpty
-            existing.updatedAt = .now
+            existing.drawnAt      = formDrawnAt
+            existing.labName      = formLabName.trimmed.nilIfEmpty
+            existing.notes        = formNotes.trimmed.nilIfEmpty
+            existing.doctorNotes  = formDoctorNotes.trimmed.nilIfEmpty
+            existing.updatedAt    = .now
             // Replace markers
             for m in existing.markers { modelContext.delete(m) }
             existing.markers = []
@@ -203,20 +230,20 @@ final class BloodworkViewModel: ObservableObject {
                 userID: userID,
                 drawnAt: formDrawnAt,
                 labName: formLabName.trimmed.nilIfEmpty,
-                notes: formNotes.trimmed.nilIfEmpty
+                notes: formNotes.trimmed.nilIfEmpty,
+                doctorNotes: formDoctorNotes.trimmed.nilIfEmpty
             )
             modelContext.insert(bw)
         }
 
         for entry in filled {
-            let def = self.def(for: entry.name)
             let marker = SDBloodworkMarker(
                 bloodworkID: bw.id,
                 markerName: entry.name,
                 value: entry.valueDouble!,
                 unit: entry.unit,
-                referenceRangeLow: def?.rangeLow,
-                referenceRangeHigh: def?.rangeHigh
+                referenceRangeLow: entry.rangeLow,
+                referenceRangeHigh: entry.rangeHigh
             )
             modelContext.insert(marker)
             bw.markers.append(marker)
@@ -246,7 +273,6 @@ final class BloodworkViewModel: ObservableObject {
     // MARK: Delete
 
     func delete(_ bw: SDBloodwork) {
-        guard let modelContext else { return }
         modelContext.delete(bw)
         try? modelContext.save()
         load()

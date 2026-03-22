@@ -33,15 +33,31 @@ final class PeptidesViewModel: ObservableObject {
     @Published var formDate: Date = .now
     @Published var editingLog: SDPeptideLog?
 
+    // AI / ancillary compounds shown first, then peptides
     static let presetCompounds = [
-        "BPC-157", "TB-500", "Ipamorelin", "CJC-1295",
-        "Semaglutide", "Tirzepatide", "MK-677", "Sermorelin",
+        "Anastrozole", "Aromasin (Exemestane)", "Letrozole", "Cabergoline",
+        "hCG", "BPC-157", "TB-500", "Semaglutide", "Tirzepatide",
+        "Ipamorelin", "CJC-1295", "MK-677", "Sermorelin",
         "GHRP-2", "PT-141", "Epithalon", "Custom"
     ]
+
+    /// Aromatase inhibitors and ancillary compounds tracked for E2 correlation.
+    nonisolated static let aiCompounds: Set<String> = [
+        "Anastrozole", "Aromasin (Exemestane)", "Letrozole", "Cabergoline"
+    ]
+
+    nonisolated static func isAICompound(_ name: String) -> Bool {
+        aiCompounds.contains(name)
+    }
+
     static let routes = ["subcutaneous", "intramuscular", "intranasal", "oral"]
     static let doseUnits = ["mcg", "mg", "units"]
 
     private static let defaultUnits: [String: String] = [
+        // AI / ancillary
+        "Anastrozole": "mg", "Aromasin (Exemestane)": "mg",
+        "Letrozole": "mg", "Cabergoline": "mg", "hCG": "units",
+        // Peptides
         "BPC-157": "mcg", "TB-500": "mcg", "Ipamorelin": "mcg",
         "CJC-1295": "mcg", "Sermorelin": "mcg", "GHRP-2": "mcg",
         "PT-141": "mcg", "Epithalon": "mcg",
@@ -52,24 +68,18 @@ final class PeptidesViewModel: ObservableObject {
         formCompoundSelection == "Custom" ? formCustomName : formCompoundSelection
     }
 
-    private var modelContext: ModelContext?
+    private let modelContext: ModelContext
     private let syncEngine = SyncEngine.shared
-    private(set) var userID: UUID = UUID()
+    let userID: UUID
 
-    init() {}
-
-    // MARK: - Setup
-
-    func setup(context: ModelContext, userID: UUID) {
-        self.modelContext = context
+    init(modelContext: ModelContext, userID: UUID) {
+        self.modelContext = modelContext
         self.userID = userID
-        load()
     }
 
     // MARK: - Load
 
     func load() {
-        guard let modelContext else { return }
         let predicate = #Predicate<SDPeptideLog> { !$0.isSampleData }
         let descriptor = FetchDescriptor<SDPeptideLog>(
             predicate: predicate,
@@ -127,7 +137,6 @@ final class PeptidesViewModel: ObservableObject {
     }
 
     func saveForm() {
-        guard let modelContext else { return }
         guard let dose = Double(formDoseAmount), dose > 0 else {
             errorMessage = "Please enter a valid dose."
             return
@@ -174,7 +183,6 @@ final class PeptidesViewModel: ObservableObject {
     }
 
     func delete(_ log: SDPeptideLog) {
-        guard let modelContext else { return }
         modelContext.delete(log)
         try? modelContext.save()
         load()
@@ -184,9 +192,9 @@ final class PeptidesViewModel: ObservableObject {
 
     private func buildActiveCompounds() {
         let grouped = Dictionary(grouping: logs) { $0.peptideName }
-        activeCompounds = grouped.compactMap { name, entries in
+        activeCompounds = grouped.map { name, entries in
             let sorted = entries.sorted { $0.administeredAt > $1.administeredAt }
-            guard let last = sorted.first else { return nil }
+            let last = sorted[0]
             return ActiveCompound(
                 name: name,
                 lastAdministered: last.administeredAt,
