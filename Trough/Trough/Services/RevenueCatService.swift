@@ -8,7 +8,11 @@ final class RevenueCatService {
     static let shared = RevenueCatService()
     private init() {}
 
-    private static var isConfigured = false
+    static private(set) var isConfiguredFlag = false
+    private static var isConfigured: Bool {
+        get { isConfiguredFlag }
+        set { isConfiguredFlag = newValue }
+    }
 
     // MARK: Configure
 
@@ -18,6 +22,14 @@ final class RevenueCatService {
             isConfigured = false
             return
         }
+        #if !DEBUG
+        // Prevent test keys from crashing in Release builds
+        if apiKey.hasPrefix("test_") {
+            print("[RevenueCat] Test API key detected in Release build — purchases disabled.")
+            isConfigured = false
+            return
+        }
+        #endif
         Purchases.logLevel = .warn
         Purchases.configure(withAPIKey: apiKey)
         isConfigured = true

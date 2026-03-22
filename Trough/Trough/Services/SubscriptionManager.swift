@@ -35,6 +35,17 @@ final class SubscriptionManager: ObservableObject {
     func refresh() async {
         isLoading = true
 
+        // Guard: if RevenueCat isn't configured, skip all checks
+        guard RevenueCatService.isConfiguredFlag else {
+            isSubscribed = false
+            isInTrial = false
+            isInGracePeriod = false
+            trialDaysRemaining = nil
+            graceDaysRemaining = nil
+            isLoading = false
+            return
+        }
+
         // Check entitlement state from RevenueCat
         if let info = try? await Purchases.shared.customerInfo(),
            let entitlement = info.entitlements["pro"] {
