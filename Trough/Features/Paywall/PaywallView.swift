@@ -233,10 +233,16 @@ struct PaywallView: View {
     }
 
     private var disclaimerText: some View {
-        Text("This app requires a subscription after the free trial period.")
-            .font(.caption2)
-            .foregroundColor(.secondary.opacity(0.6))
-            .multilineTextAlignment(.center)
+        VStack(spacing: 6) {
+            Text("Cancel anytime in Settings → Subscriptions.")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            Text("No charge during your 14-day free trial. Subscription auto-renews after trial unless cancelled at least 24 hours before the end of the trial period.")
+                .font(.caption2)
+                .foregroundColor(.secondary.opacity(0.5))
+                .multilineTextAlignment(.center)
+        }
     }
 
     // MARK: Actions
