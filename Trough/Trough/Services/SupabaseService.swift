@@ -26,7 +26,7 @@ final class SupabaseService {
         // Create users row — table must have RLS policy allowing insert for auth.uid()
         try await client
             .from("users")
-            .insert(["id": uid, "email": email])
+            .insert(["id": uid])
             .execute()
     }
 
