@@ -29,13 +29,22 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Preset Library
 
     static let presets: [(name: String, doseAmount: Double, doseUnit: String)] = [
-        ("Creatine",     5,    "g"),
-        ("Vitamin D",    5000, "IU"),
-        ("Zinc",         30,   "mg"),
-        ("Magnesium",    400,  "mg"),
-        ("Ashwagandha",  600,  "mg"),
-        ("Omega-3",      2,    "g"),
-        ("Tongkat Ali",  400,  "mg"),
+        ("Ashwagandha",       600,  "mg"),
+        ("Berberine",         500,  "mg"),
+        ("Boron",             6,    "mg"),
+        ("CoQ10",             200,  "mg"),
+        ("Creatine",          5,    "g"),
+        ("DHEA",              25,   "mg"),
+        ("DIM",               200,  "mg"),
+        ("Fadogia Agrestis",  600,  "mg"),
+        ("Fish Oil / Omega-3", 2,   "g"),
+        ("Magnesium",         400,  "mg"),
+        ("Pregnenolone",      30,   "mg"),
+        ("Saw Palmetto",      320,  "mg"),
+        ("Tongkat Ali",       400,  "mg"),
+        ("Vitamin D3",        5000, "IU"),
+        ("Vitamin K2",        100,  "mcg"),
+        ("Zinc",              30,   "mg"),
     ]
     static let presetNames: [String] = presets.map(\.name) + ["Custom"]
 

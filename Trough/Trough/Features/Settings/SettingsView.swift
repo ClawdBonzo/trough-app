@@ -14,7 +14,11 @@ struct SettingsView: View {
     @State private var showCSVImport = false
 
     init() {
-        _vm = StateObject(wrappedValue: SettingsViewModel())
+        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
+        _vm = StateObject(wrappedValue: SettingsViewModel(
+            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
+            userID: id
+        ))
     }
 
     var body: some View {
@@ -46,11 +50,7 @@ struct SettingsView: View {
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
             .sheet(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showCSVImport) { CSVImportView() }
-            .onAppear {
-                let uid = UUID(uuidString: userIDString) ?? UUID()
-                vm.setup(context: modelContext, userID: uid)
-                vm.load()
-            }
+            .onAppear { vm.load() }
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
             }
