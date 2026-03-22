@@ -128,8 +128,6 @@ struct DashboardView: View {
 
     // MARK: - Protocol Score Hero
 
-    @State private var ringGlow = false
-
     private var protocolScoreHero: some View {
         VStack(spacing: 16) {
             HStack(alignment: .top) {
@@ -138,8 +136,10 @@ struct DashboardView: View {
                         .font(.headline)
                         .foregroundColor(.secondary)
                     Text(vm.interpretation)
-                        .font(.title2.bold())
+                        .font(.title3.bold())
                         .foregroundColor(vm.scoreColor)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 Spacer()
                 trendBadge
@@ -170,12 +170,7 @@ struct DashboardView: View {
         .padding(16)
         .background(AppColors.card)
         .cornerRadius(20)
-        .shadow(color: vm.scoreColor.opacity(ringGlow ? 0.35 : 0.15), radius: ringGlow ? 18 : 10)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
-                ringGlow = true
-            }
-        }
+        .shadow(color: vm.scoreColor.opacity(0.2), radius: 12)
     }
 
     private var trendBadge: some View {
