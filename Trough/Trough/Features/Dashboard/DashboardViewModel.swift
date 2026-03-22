@@ -78,6 +78,9 @@ final class DashboardViewModel: ObservableObject {
     @Published var bodyFatSeries: [WeightDataPoint] = []
     @Published var weightDelta30d: Double? = nil
 
+    // MARK: Active compounds (from onboarding)
+    @Published var activeCompounds: [SDSupplementConfig] = []
+
     // MARK: User type
     @Published var userType: String = "trt"
 
@@ -109,12 +112,22 @@ final class DashboardViewModel: ObservableObject {
         loadCheckins()
         loadStreak()
         loadProtocolAndInjections()
+        loadActiveCompounds()
         loadTrendChart()
         loadQuickStats()
         loadGLP1Correlation()
         if userType == "natural" { loadBodyComposition() }
         isSyncing = SyncEngine.shared.isSyncing
         isLoading = false
+    }
+
+    // MARK: Active Compounds
+
+    private func loadActiveCompounds() {
+        guard let modelContext else { return }
+        let pred = #Predicate<SDSupplementConfig> { $0.isActive }
+        let desc = FetchDescriptor<SDSupplementConfig>(predicate: pred, sortBy: [SortDescriptor(\.supplementName)])
+        activeCompounds = (try? modelContext.fetch(desc)) ?? []
     }
 
     // MARK: Check-ins
