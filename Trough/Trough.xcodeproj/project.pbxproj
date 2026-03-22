@@ -15,6 +15,7 @@
 		7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90068C9514204B23A9A9F59E /* SupabaseService.swift */; };
 		7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55107EFC75E74D0E97097A68 /* SyncEngine.swift */; };
 		61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BFE36059E4003B02441B5 /* HealthKitService.swift */; };
+		A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */; };
 		43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E8DD8413C64082A81BB49A /* DisclaimerService.swift */; };
 		8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8663BF9EA184443DA308FD0E /* DashboardView.swift */; };
 		80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */; };
@@ -52,6 +53,7 @@
 		RC00112233445566778899DD /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC00112233445566778899EE /* RevenueCatService.swift */; };
 		RC00112233445566778899FF /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA00 /* SubscriptionManager.swift */; };
 		RC001122334455667788AA11 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RC001122334455667788AA22 /* PaywallView.swift */; };
+		PRFT001122334455667788B1 /* ProFeaturesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = PRFT001122334455667788B2 /* ProFeaturesSheet.swift */; };
 		BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA02 /* BloodworkEntryView.swift */; };
 		BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA04 /* BloodworkTrendsView.swift */; };
 		PL001 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL002 /* AnalyticsService.swift */; };
@@ -72,6 +74,7 @@
 		90068C9514204B23A9A9F59E /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		55107EFC75E74D0E97097A68 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		E49BFE36059E4003B02441B5 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
 		98E8DD8413C64082A81BB49A /* DisclaimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerService.swift; sourceTree = "<group>"; };
 		8663BF9EA184443DA308FD0E /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 		RC00112233445566778899EE /* RevenueCatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		RC001122334455667788AA00 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		RC001122334455667788AA22 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		PRFT001122334455667788B2 /* ProFeaturesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProFeaturesSheet.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA02 /* BloodworkEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkEntryView.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA04 /* BloodworkTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkTrendsView.swift; sourceTree = "<group>"; };
 		PL002 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 				90068C9514204B23A9A9F59E /* SupabaseService.swift */,
 				55107EFC75E74D0E97097A68 /* SyncEngine.swift */,
 				E49BFE36059E4003B02441B5 /* HealthKitService.swift */,
+				A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */,
 				98E8DD8413C64082A81BB49A /* DisclaimerService.swift */,
 				BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */,
 				BB110011BB220033BB440066 /* WeeklyReportService.swift */,
@@ -326,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				RC001122334455667788AA22 /* PaywallView.swift */,
+				PRFT001122334455667788B2 /* ProFeaturesSheet.swift */,
 			);
 			path = Paywall;
 			sourceTree = "<group>";
@@ -450,6 +456,7 @@
 				7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */,
 				7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */,
 				61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */,
+				A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */,
 				43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */,
 				8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */,
 				80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */,
@@ -477,6 +484,7 @@
 				RC00112233445566778899DD /* RevenueCatService.swift in Sources */,
 				RC00112233445566778899FF /* SubscriptionManager.swift in Sources */,
 				RC001122334455667788AA11 /* PaywallView.swift in Sources */,
+				PRFT001122334455667788B1 /* ProFeaturesSheet.swift in Sources */,
 				BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */,
 				BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */,
 				PL001 /* AnalyticsService.swift in Sources */,
@@ -549,8 +557,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -571,8 +580,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -593,7 +603,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -610,7 +620,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 8;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;

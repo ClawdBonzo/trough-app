@@ -133,6 +133,41 @@ enum InjectionCycleService {
         return Date.now.daysSince(latest)
     }
 
+    // MARK: - Fertility Recovery
+
+    /// Literature-based fertility recovery estimate based on time on TRT.
+    /// Returns nil if hCG start date is not available.
+    /// - Parameters:
+    ///   - hcgStartDate: When hCG therapy began
+    ///   - trtStartDate: When TRT was first started (for duration context)
+    /// - Returns: Tuple of (display string, weeks on TRT) or nil
+    static func fertilityRecoveryEstimate(
+        hcgStartDate: Date?,
+        trtStartDate: Date?
+    ) -> (estimate: String, weeksOnTRT: Int)? {
+        guard hcgStartDate != nil else { return nil }
+
+        let trtWeeks: Int
+        if let trtStart = trtStartDate {
+            trtWeeks = max(0, Int(Date.now.timeIntervalSince(trtStart) / (7 * 86400)))
+        } else {
+            trtWeeks = 0
+        }
+
+        // Literature-based recovery windows (Kohn et al., Fertility & Sterility 2017)
+        let estimate: String
+        switch trtWeeks {
+        case 0..<52:     // < 1 year on TRT
+            estimate = "8–12 weeks"
+        case 52..<156:   // 1–3 years
+            estimate = "12–20 weeks"
+        default:         // 3+ years
+            estimate = "16–26 weeks"
+        }
+
+        return (estimate: "Expected FSH/LH recovery window: \(estimate)", weeksOnTRT: trtWeeks)
+    }
+
     // MARK: - Private
 
     private static func nextWeekdayDate(after date: Date, weekdays: [Int]) -> Date {

@@ -1,5 +1,6 @@
 import Foundation
 import Supabase
+import Auth
 
 // MARK: - SupabaseService
 
@@ -26,13 +27,27 @@ final class SupabaseService {
         // Create users row — table must have RLS policy allowing insert for auth.uid()
         try await client
             .from("users")
-            .insert(["id": uid])
+            .insert(["id": uid, "email": email])
             .execute()
     }
 
     /// Signs in an existing user.
     func signIn(email: String, password: String) async throws {
         try await client.auth.signIn(email: email, password: password)
+    }
+
+    /// Signs in (or signs up) with an Apple ID token obtained from ASAuthorization.
+    func signInWithApple(idToken: String, nonce: String) async throws {
+        let session = try await client.auth.signInWithIdToken(
+            credentials: .init(provider: .apple, idToken: idToken, nonce: nonce)
+        )
+        // Ensure a users-table row exists (upsert avoids duplicate-key errors on repeat sign-ins)
+        let uid = session.user.id.uuidString
+        let email = session.user.email ?? ""
+        try await client
+            .from("users")
+            .upsert(["id": uid, "email": email], onConflict: "id")
+            .execute()
     }
 
     /// Signs out the current user.

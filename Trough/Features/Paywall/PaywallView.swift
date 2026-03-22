@@ -273,7 +273,7 @@ struct PaywallView: View {
 
 // MARK: - FeatureRow
 
-private struct FeatureRow: View {
+struct FeatureRow: View {
     let icon: String
     let text: String
 
@@ -291,11 +291,12 @@ private struct FeatureRow: View {
 
 // MARK: - LockedCard
 
-/// Drop-in replacement for a paid card. Shows a lock overlay with CTA.
+/// Drop-in replacement for a paid card. Shows a lock overlay with soft CTA.
 struct LockedCard: View {
     let icon: String
     let title: String
     let subtitle: String
+    var onInfo: (() -> Void)? = nil
     var onUnlock: () -> Void
 
     var body: some View {
@@ -313,6 +314,14 @@ struct LockedCard: View {
                     Text(title)
                         .font(.headline)
                         .foregroundColor(.secondary)
+                    if let onInfo {
+                        Button { onInfo() } label: {
+                            Image(systemName: "info.circle")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
                 Text(subtitle)
                     .font(.caption)
@@ -324,12 +333,12 @@ struct LockedCard: View {
             Button {
                 onUnlock()
             } label: {
-                Text("Unlock")
+                Text("Start Free Trial")
                     .font(.caption.bold())
                     .foregroundColor(.white)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 7)
-                    .background(AppColors.accent)
+                    .background(AppColors.softCTA)
                     .clipShape(Capsule())
             }
             .buttonStyle(.plain)

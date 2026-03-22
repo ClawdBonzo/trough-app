@@ -78,7 +78,7 @@ enum SampleDataService {
         let cal   = Calendar.current
         let today = Date.now.startOfDay
 
-        // ── Protocol ────────────────────────────────────────────────────────
+        // ── Primary Protocol (Cyp) ─────────────────────────────────────────
         let freqLabel = config.frequencyDays == 7 ? "E7D"
             : config.frequencyDays == 14 ? "E14D"
             : "E\(config.frequencyDays)D"
@@ -91,27 +91,67 @@ enum SampleDataService {
             concentrationMgPerMl: 200,
             isActive: true, isPrimary: true,
             colorHex: compoundHex(config.compound),
+            startDate: cal.date(byAdding: .day, value: -(config.daysOfHistory - 1), to: today) ?? today,
             isSampleData: true
         )
         context.insert(proto)
 
+        // ── Secondary Protocol: Test Prop 25 mg pre-workout MWF ────────────
+        let propProto = SDProtocol(
+            userID: userID,
+            name: "Test Prop 25mg MWF (Sample)",
+            compoundName: "Testosterone Propionate",
+            doseAmountMg: 25,
+            frequencyDays: 2,  // ~EOD (MWF approximation)
+            concentrationMgPerMl: 100,
+            isActive: true, isPrimary: false,
+            colorHex: "#F39C12",
+            weekdaysString: "2,4,6",  // Mon, Wed, Fri
+            startDate: cal.date(byAdding: .day, value: -(config.daysOfHistory - 1), to: today) ?? today,
+            isSampleData: true
+        )
+        context.insert(propProto)
+
+        // ── Secondary Protocol: HCG 500 IU 2x/week ────────────────────────
+        let hcgProto = SDProtocol(
+            userID: userID,
+            name: "hCG 500 IU E3.5D (Sample)",
+            compoundName: "HCG",
+            doseAmountMg: 500,
+            frequencyDays: 3,
+            concentrationMgPerMl: 5000,
+            isActive: true, isPrimary: false,
+            colorHex: "#E74C3C",
+            weekdaysString: "2,5",  // Mon, Thu
+            startDate: cal.date(byAdding: .day, value: -(config.daysOfHistory - 1), to: today) ?? today,
+            isSampleData: true
+        )
+        context.insert(hcgProto)
+
         // ── Per-day generation (d=0 oldest, d=daysOfHistory-1 today) ────────
         let sites = ["Left Glute", "Right Glute", "Left Quad",
                      "Right Quad", "Left Delt",  "Right Delt"]
+        let subQSites = ["Left Delt", "Right Delt", "Abdomen Left", "Abdomen Right"]
         var siteIdx        = 0
+        var subQSiteIdx    = 0
         let bloodworkDay   = config.daysOfHistory / 2   // midpoint ≈ day 21
+
+        // Body weight: 195 lbs (88.5 kg) trending to 192 lbs (87.1 kg) — realistic TRT recomp
+        let startLbs = 195.0
+        let endLbs   = 192.0
 
         for d in 0..<config.daysOfHistory {
             let daysAgo = (config.daysOfHistory - 1) - d
             guard let date = cal.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
 
             let dayInCycle = d % config.frequencyDays
+            let weekday    = cal.component(.weekday, from: date) // 1=Sun 2=Mon 3=Tue 4=Wed 5=Thu 6=Fri 7=Sat
             var rng = Seeded(seed: d * 137 + 9973)
 
-            // ── Injection on first day of each cycle ─────────────────────
+            // ── Primary injection (Cyp) on first day of each cycle ──────
             if dayInCycle == 0 {
                 let injTime = cal.date(bySettingHour: 9, minute: 0, second: 0, of: date) ?? date
-                let inj = SDInjection(
+                context.insert(SDInjection(
                     userID: userID,
                     protocolID: proto.id,
                     injectedAt: injTime,
@@ -120,9 +160,39 @@ enum SampleDataService {
                     volumeMl: config.doseMg / 200.0,
                     injectionSite: sites[siteIdx % sites.count],
                     isSampleData: true
-                )
-                context.insert(inj)
+                ))
                 siteIdx += 1
+            }
+
+            // ── Prop injection on Mon/Wed/Fri ───────────────────────────
+            if weekday == 2 || weekday == 4 || weekday == 6 {
+                let injTime = cal.date(bySettingHour: 7, minute: 30, second: 0, of: date) ?? date
+                context.insert(SDInjection(
+                    userID: userID,
+                    protocolID: propProto.id,
+                    injectedAt: injTime,
+                    compoundName: "Testosterone Propionate",
+                    doseAmountMg: 25,
+                    volumeMl: 0.25,
+                    injectionSite: subQSites[subQSiteIdx % subQSites.count],
+                    isSampleData: true
+                ))
+                subQSiteIdx += 1
+            }
+
+            // ── HCG injection on Mon/Thu ────────────────────────────────
+            if weekday == 2 || weekday == 5 {
+                let injTime = cal.date(bySettingHour: 20, minute: 0, second: 0, of: date) ?? date
+                context.insert(SDInjection(
+                    userID: userID,
+                    protocolID: hcgProto.id,
+                    injectedAt: injTime,
+                    compoundName: "HCG",
+                    doseAmountMg: 500,
+                    volumeMl: 0.1,
+                    injectionSite: "Abdomen",
+                    isSampleData: true
+                ))
             }
 
             // ── Scores ───────────────────────────────────────────────────
@@ -159,6 +229,13 @@ enum SampleDataService {
             let mwProb = sleepHrs < 6.5 ? mwBaseProbability * 0.70 : mwBaseProbability
             let mw     = rng.bool(probability: mwProb)
 
+            // Body weight: lbs trending down with daily noise, stored as kg for SwiftData
+            let progress = config.daysOfHistory > 1
+                ? Double(d) / Double(config.daysOfHistory - 1) : 0
+            let currentLbs = startLbs + (endLbs - startLbs) * progress
+                           + rng.uniform(in: -1.2...1.2)
+            let currentKg  = currentLbs * 0.453592
+
             let checkin = SDCheckin(
                 userID: userID, date: date,
                 energyScore: energy, moodScore: mood, libidoScore: libido,
@@ -166,7 +243,8 @@ enum SampleDataService {
                 mentalClarityScore: clarity,
                 morningWood: mw,
                 workoutToday: rng.bool(probability: 0.58),
-                bodyWeightKg: 86.0 + rng.uniform(in: -0.8...0.8),   // ~190 lbs
+                bodyWeightKg: currentKg,
+                bodyFatPercent: 18.5 + rng.uniform(in: -0.3...0.3) - progress * 1.2,  // trending 18.5% → 17.3%
                 sleepHours: sleepHrs,
                 hrv: hrv,
                 stepCount: steps,
@@ -186,14 +264,13 @@ enum SampleDataService {
                 let daysAgo = (config.daysOfHistory - 1) - d
                 guard let date = cal.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
                 let t = cal.date(bySettingHour: 8, minute: 0, second: 0, of: date) ?? date
-                let log = SDPeptideLog(
+                context.insert(SDPeptideLog(
                     userID: userID, administeredAt: t,
                     peptideName: "BPC-157", doseMcg: 250,
                     routeOfAdministration: "subcutaneous",
                     injectionSite: "Abdomen",
                     isSampleData: true
-                )
-                context.insert(log)
+                ))
             }
         }
     }

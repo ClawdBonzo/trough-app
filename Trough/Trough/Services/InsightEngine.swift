@@ -26,6 +26,8 @@ struct InsightContext {
     var activeProtocol: SDProtocol?
     /// Current daily check-in streak.
     var streak: Int
+    /// Recent peptide/adjunct logs, sorted newest-first. Used for AI correlation rule.
+    var recentPeptideLogs: [SDPeptideLog] = []
 }
 
 // MARK: - InsightEngine
@@ -50,6 +52,9 @@ final class InsightEngine {
             { $0.supplementAdherence(checkin: checkin, userType: userType, ctx: context) },
             { $0.weightTrend(checkin: checkin, userType: userType, ctx: context) },
             { $0.positiveReinforcement(checkin: checkin, ctx: context) },
+            // Rule 7 reserved
+            { $0.aiCorrelation(checkin: checkin, ctx: context) },
+            { $0.glp1Correlation(checkin: checkin, ctx: context) },
         ]
         for rule in rules {
             if let result = rule(self) { return result }
@@ -242,6 +247,86 @@ final class InsightEngine {
             type: .positive,
             ruleID: "positive_reinforcement"
         )
+    }
+
+    // MARK: - Rule 8: AI / E2 correlation
+
+    private func aiCorrelation(
+        checkin: SDCheckin,
+        ctx: InsightContext
+    ) -> InsightResult? {
+        // Need AI doses in last 14 days
+        let cutoff14 = Calendar.current.date(byAdding: .day, value: -14, to: Date.now) ?? Date.now
+        let recentAIDoses = ctx.recentPeptideLogs.filter {
+            PeptidesViewModel.isAICompound($0.peptideName) && $0.administeredAt >= cutoff14
+        }
+        guard !recentAIDoses.isEmpty else { return nil }
+
+        let last14 = Array(ctx.recentCheckins.prefix(14))
+        guard last14.count >= 5 else { return nil }
+
+        let avgEnergy = mean(last14.map(\.energyScore))
+        let avgMood   = mean(last14.map(\.moodScore))
+        let avgLibido = mean(last14.map(\.libidoScore))
+
+        let energyDrop = avgEnergy - checkin.energyScore > 1
+        let moodDrop   = avgMood   - checkin.moodScore   > 1
+        let libidoDrop = avgLibido - checkin.libidoScore  > 1
+
+        let jointPainNoted = (checkin.notes ?? "").localizedCaseInsensitiveContains("joint")
+            || last14.prefix(3).contains { ($0.notes ?? "").localizedCaseInsensitiveContains("joint") }
+
+        guard energyDrop || moodDrop || libidoDrop || jointPainNoted else { return nil }
+
+        return InsightResult(
+            message: "Recent AI use may be crashing your E2 — check bloodwork.",
+            type: .warning,
+            ruleID: "ai_e2_correlation"
+        )
+    }
+
+    // MARK: - Rule 9: GLP-1 / Weight correlation
+
+    private func glp1Correlation(
+        checkin: SDCheckin,
+        ctx: InsightContext
+    ) -> InsightResult? {
+        // Need GLP-1 doses in last 14 days
+        let cutoff14 = Calendar.current.date(byAdding: .day, value: -14, to: Date.now) ?? Date.now
+        let recentGLP1 = ctx.recentPeptideLogs.filter {
+            PeptidesViewModel.isGLP1Compound($0.peptideName) && $0.administeredAt >= cutoff14
+        }
+        guard recentGLP1.count >= 2 else { return nil }
+
+        let last14 = Array(ctx.recentCheckins.prefix(14))
+        guard last14.count >= 7 else { return nil }
+
+        // Check weight trend (need bodyWeightKg on checkins)
+        let weights = last14.compactMap(\.bodyWeightKg)
+        let weightTrendingDown = weights.count >= 4 && weights.first! > weights.last!
+
+        // Check energy is stable (not dropping)
+        let avgEnergy = mean(last14.map(\.energyScore))
+        let energyStable = avgEnergy >= 3.0
+
+        if weightTrendingDown && energyStable {
+            return InsightResult(
+                message: "Consistent GLP-1 use + weight trending down + stable energy = protocol working well.",
+                type: .positive,
+                ruleID: "glp1_weight_correlation"
+            )
+        }
+
+        // If on GLP-1 but energy is tanking, flag it
+        if !energyStable && recentGLP1.count >= 3 {
+            return InsightResult(
+                message: "Energy dropping while on GLP-1 — check calorie intake and recovery.",
+                type: .warning,
+                ruleID: "glp1_energy_warning"
+            )
+        }
+
+        return nil
     }
 
     // MARK: - Legacy compatibility (DailyCheckinViewModel calls this before context is built)

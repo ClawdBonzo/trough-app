@@ -47,17 +47,19 @@ platform :ios do
     )
     increment_build_number(
       build_number: current_build + 1,
-      xcodeproj:    "Trough.xcodeproj"
+      xcodeproj:    "Trough/Trough.xcodeproj"
     )
 
     # ── Archive ───────────────────────────────────────────────────────────────
     gym(
       scheme:           "Trough",
-      project:          "Trough.xcodeproj",
+      project:          "Trough/Trough.xcodeproj",
       configuration:    "Release",
       export_method:    "app-store",
       output_directory: "build",
       output_name:      "Trough.ipa",
+      sdk:              "iphoneos",
+      destination:      "generic/platform=iOS",
       xcargs:           "DEVELOPMENT_TEAM=3N9RY9EG8V -allowProvisioningUpdates",
       clean:            true
     )

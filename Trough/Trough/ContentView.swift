@@ -1,3 +1,4 @@
+import AuthenticationServices
 import SwiftUI
 
 struct ContentView: View {
@@ -67,7 +68,7 @@ struct MoreView: View {
                             Label("Bloodwork", systemImage: "drop.fill")
                         }
                         NavigationLink(destination: PeptidesView()) {
-                            Label("Peptides", systemImage: "pills.fill")
+                            Label("Adjuncts & Peptides", systemImage: "pills.fill")
                         }
                     } else {
                         Button {
@@ -86,10 +87,15 @@ struct MoreView: View {
                         Button {
                             showPaywall = true
                         } label: {
-                            HStack {
-                                Label("Peptides", systemImage: "pills.fill")
-                                Spacer()
-                                Image(systemName: "lock.fill")
+                            VStack(alignment: .leading, spacing: 3) {
+                                HStack {
+                                    Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                                    Spacer()
+                                    Image(systemName: "lock.fill")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Text("Track GLP-1, BPC-157 & more")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -119,6 +125,7 @@ struct AuthView: View {
     @State private var isSignUp = false
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var appleSignInCoordinator = AppleSignInCoordinator()
     @AppStorage("isAuthenticated") private var isAuthenticated = false
 
     var body: some View {
@@ -189,12 +196,59 @@ struct AuthView: View {
                             .font(.caption)
                             .foregroundColor(AppColors.secondary)
                     }
+
+                    dividerRow
+
+                    Button {
+                        Task { await authenticateWithApple() }
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "apple.logo")
+                                .font(.title3)
+                            Text("Sign in with Apple")
+                                .fontWeight(.semibold)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.white)
+                        .foregroundColor(.black)
+                        .cornerRadius(12)
+                    }
+                    .disabled(isLoading)
                 }
 
                 Spacer()
             }
             .padding(.horizontal, 24)
         }
+    }
+
+    private var dividerRow: some View {
+        HStack {
+            Rectangle().frame(height: 1).foregroundColor(AppColors.card)
+            Text("or")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Rectangle().frame(height: 1).foregroundColor(AppColors.card)
+        }
+    }
+
+    private func authenticateWithApple() async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            let result = try await appleSignInCoordinator.signIn()
+            try await SupabaseService.shared.signInWithApple(
+                idToken: result.idToken,
+                nonce: result.nonce
+            )
+            isAuthenticated = true
+        } catch let error as ASAuthorizationError where error.code == .canceled {
+            // User tapped Cancel — no error to show
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
     }
 
     private func authenticate() async {

@@ -23,6 +23,11 @@ struct InjectionsView: View {
                         } else {
                             injectionList
                         }
+
+                        DisclaimerBanner(type: .standard)
+                            .padding(.horizontal)
+                            .padding(.top, 16)
+                            .padding(.bottom, 80)
                     }
                 }
 
@@ -39,6 +44,7 @@ struct InjectionsView: View {
                         .shadow(color: AppColors.accent.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(20)
+                .accessibilityLabel("Log new injection")
             }
             .navigationTitle("Injections")
             .navigationBarTitleDisplayMode(.large)

@@ -21,7 +21,7 @@ struct PeptideLogView: View {
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle(vm.editingLog != nil ? "Edit Log" : "Log Peptide")
+            .navigationTitle(vm.editingLog != nil ? "Edit Log" : "Log Dose")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -46,7 +46,7 @@ struct PeptideLogView: View {
     // MARK: - Sections
 
     private var compoundSection: some View {
-        Section("Compound") {
+        Section("Adjunct / Peptide") {
             Picker("Compound", selection: $vm.formCompoundSelection) {
                 ForEach(PeptidesViewModel.presetCompounds, id: \.self) { Text($0) }
             }

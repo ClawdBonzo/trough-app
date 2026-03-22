@@ -313,6 +313,28 @@ struct WeeklyReportCard: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            if let aiSummary = report.aiDosesSummary {
+                Label(aiSummary, systemImage: "shield.checkered")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            if let fertility = report.fertilitySnapshot {
+                Label(fertility, systemImage: "figure.2.circle")
+                    .font(.caption)
+                    .foregroundColor(.green)
+            }
+            if let doctorNotes = report.doctorNotes {
+                VStack(alignment: .leading, spacing: 4) {
+                    Label("Notes for Doctor", systemImage: "stethoscope")
+                        .font(.caption.bold())
+                        .foregroundColor(.white)
+                    Text(doctorNotes)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.top, 4)
+            }
             if let summary = report.peptideSummary {
                 Label(summary, systemImage: "pills.fill")
                     .font(.caption)

@@ -11,8 +11,6 @@ struct PKCurveView: View {
     @AppStorage("pkAbsorptionDelay") private var absorptionDelay = true
     @AppStorage("pkShowBands")       private var showBands = true
 
-    @State private var glowing = false
-
     private var engine: PKCurveEngine { PKCurveEngine.shared }
 
     private var data: PKCurveData {
@@ -35,7 +33,7 @@ struct PKCurveView: View {
             }
             DisclaimerBanner(type: .pkCurve)
         }
-        .onAppear { withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) { glowing = true } }
+        // No repeatForever animation — it causes visible layout shift
     }
 
     // MARK: Header
@@ -129,7 +127,7 @@ struct PKCurveView: View {
                     x: .value("Day", current.time),
                     y: .value("Level (ng/dL)", current.level)
                 )
-                .symbolSize(glowing ? 140 : 80)
+                .symbolSize(120)
                 .foregroundStyle(AppColors.accent)
                 .annotation(position: .top) {
                     Text("Now")
