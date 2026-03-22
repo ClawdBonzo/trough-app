@@ -29,34 +29,37 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Preset Library
 
     static let presets: [(name: String, doseAmount: Double, doseUnit: String)] = [
-        ("Creatine",     5,    "g"),
-        ("Vitamin D",    5000, "IU"),
-        ("Zinc",         30,   "mg"),
-        ("Magnesium",    400,  "mg"),
-        ("Ashwagandha",  600,  "mg"),
-        ("Omega-3",      2,    "g"),
-        ("Tongkat Ali",  400,  "mg"),
+        ("Ashwagandha",       600,  "mg"),
+        ("Berberine",         500,  "mg"),
+        ("Boron",             6,    "mg"),
+        ("CoQ10",             200,  "mg"),
+        ("Creatine",          5,    "g"),
+        ("DHEA",              25,   "mg"),
+        ("DIM",               200,  "mg"),
+        ("Fadogia Agrestis",  600,  "mg"),
+        ("Fish Oil / Omega-3", 2,   "g"),
+        ("Magnesium",         400,  "mg"),
+        ("Pregnenolone",      30,   "mg"),
+        ("Saw Palmetto",      320,  "mg"),
+        ("Tongkat Ali",       400,  "mg"),
+        ("Vitamin D3",        5000, "IU"),
+        ("Vitamin K2",        100,  "mcg"),
+        ("Zinc",              30,   "mg"),
     ]
     static let presetNames: [String] = presets.map(\.name) + ["Custom"]
 
-    private var modelContext: ModelContext?
+    private let modelContext: ModelContext
     private let syncEngine = SyncEngine.shared
-    private(set) var userID: UUID = UUID()
+    let userID: UUID
 
-    init() {}
-
-    // MARK: - Setup
-
-    func setup(context: ModelContext, userID: UUID) {
-        self.modelContext = context
+    init(modelContext: ModelContext, userID: UUID) {
+        self.modelContext = modelContext
         self.userID = userID
-        load()
     }
 
     // MARK: - Load
 
     func load() {
-        guard let modelContext else { return }
         let protoPred = #Predicate<SDProtocol> { $0.isActive && !$0.isSampleData }
         var protoDesc = FetchDescriptor<SDProtocol>(predicate: protoPred)
         protoDesc.fetchLimit = 1
@@ -81,7 +84,6 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Protocol
 
     func saveProtocol() {
-        guard let modelContext else { return }
         guard !formProtoName.isBlank,
               let dose = Double(formDoseMg), dose > 0,
               let freq = Int(formFrequencyDays), freq > 0,
@@ -138,7 +140,6 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func saveSupplement() {
-        guard let modelContext else { return }
         let name = formPresetName == "Custom" ? formSupplName : formPresetName
         guard !name.isBlank,
               let dose = Double(formSupplDose), dose > 0,
@@ -167,7 +168,6 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func toggleSupplementActive(_ s: SDSupplementConfig) {
-        guard let modelContext else { return }
         if s.isActive {
             s.isActive = false
             s.endDate  = .now
@@ -181,7 +181,6 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func deactivateSupplement(_ s: SDSupplementConfig) {
-        guard let modelContext else { return }
         s.isActive  = false
         s.endDate   = .now
         s.updatedAt = .now
@@ -190,7 +189,6 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func deleteSupplement(_ s: SDSupplementConfig) {
-        guard let modelContext else { return }
         modelContext.delete(s)
         try? modelContext.save()
         load()
@@ -199,7 +197,6 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Conflicts
 
     func markConflictReviewed(_ c: SDSyncConflict) {
-        guard let modelContext else { return }
         c.isReviewed = true
         try? modelContext.save()
         load()
