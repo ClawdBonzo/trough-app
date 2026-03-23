@@ -37,12 +37,12 @@ final class SupabaseService {
     }
 
     /// Signs in (or signs up) with an Apple ID token obtained from ASAuthorization.
-    func signInWithApple(idToken: String, nonce: String) async throws {
-        print("[Supabase] signInWithApple: starting with idToken length=\(idToken.count), nonce length=\(nonce.count)")
+    func signInWithApple(idToken: String) async throws {
+        print("[Supabase] signInWithApple: starting with idToken length=\(idToken.count)")
         let session: Session
         do {
             session = try await client.auth.signInWithIdToken(
-                credentials: .init(provider: .apple, idToken: idToken, nonce: nonce)
+                credentials: .init(provider: .apple, idToken: idToken)
             )
             print("[Supabase] signInWithApple: auth succeeded, uid=\(session.user.id)")
         } catch {

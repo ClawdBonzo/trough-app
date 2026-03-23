@@ -1,31 +1,20 @@
 import AuthenticationServices
-import CryptoKit
 import Foundation
 import UIKit
 
 /// Handles the ASAuthorization flow for Sign In with Apple.
 /// Usage: call `signIn()` which presents the Apple sheet and returns
-/// the id-token + nonce needed by Supabase.
+/// the id-token needed by Supabase.
 @MainActor
 final class AppleSignInCoordinator: NSObject, ObservableObject {
 
-    private var currentNonce: String?
-    private var continuation: CheckedContinuation<AppleSignInResult, Error>?
+    private var continuation: CheckedContinuation<String, Error>?
 
-    struct AppleSignInResult {
-        let idToken: String
-        let nonce: String
-    }
-
-    /// Presents the Sign In with Apple sheet and returns the credential on success.
-    func signIn() async throws -> AppleSignInResult {
-        let nonce = Self.randomNonceString()
-        currentNonce = nonce
-
+    /// Presents the Sign In with Apple sheet and returns the idToken on success.
+    func signIn() async throws -> String {
         let provider = ASAuthorizationAppleIDProvider()
         let request = provider.createRequest()
         request.requestedScopes = [.email, .fullName]
-        request.nonce = Self.sha256(nonce)
 
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
@@ -35,25 +24,6 @@ final class AppleSignInCoordinator: NSObject, ObservableObject {
             self.continuation = continuation
             controller.performRequests()
         }
-    }
-
-    // MARK: - Nonce helpers
-
-    private static func randomNonceString(length: Int = 32) -> String {
-        precondition(length > 0)
-        var randomBytes = [UInt8](repeating: 0, count: length)
-        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-        guard errorCode == errSecSuccess else {
-            fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
-        }
-        let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-        return String(randomBytes.map { charset[Int($0) % charset.count] })
-    }
-
-    private static func sha256(_ input: String) -> String {
-        let data = Data(input.utf8)
-        let hash = SHA256.hash(data: data)
-        return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
 }
 
@@ -68,14 +38,13 @@ extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
         Task { @MainActor in
             guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
                   let tokenData = credential.identityToken,
-                  let idToken = String(data: tokenData, encoding: .utf8),
-                  let nonce = currentNonce
+                  let idToken = String(data: tokenData, encoding: .utf8)
             else {
                 continuation?.resume(throwing: AppleSignInError.missingToken)
                 continuation = nil
                 return
             }
-            continuation?.resume(returning: AppleSignInResult(idToken: idToken, nonce: nonce))
+            continuation?.resume(returning: idToken)
             continuation = nil
         }
     }
@@ -95,7 +64,6 @@ extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
 
 extension AppleSignInCoordinator: ASAuthorizationControllerPresentationContextProviding {
     nonisolated func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        // Return the key window as the presentation anchor
         guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = scene.windows.first(where: { $0.isKeyWindow })
         else {
