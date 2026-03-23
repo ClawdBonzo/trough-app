@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
@@ -14,7 +15,11 @@ struct SettingsView: View {
     @State private var showCSVImport = false
 
     init() {
-        _vm = StateObject(wrappedValue: SettingsViewModel())
+        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
+        _vm = StateObject(wrappedValue: SettingsViewModel(
+            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
+            userID: id
+        ))
     }
 
     var body: some View {
@@ -35,6 +40,8 @@ struct SettingsView: View {
                     if !subscriptionManager.isSubscribed {
                         proSection
                     }
+                    remindersSection
+                    recommendSection
                     legalSection
                     accountSection
                 }
@@ -46,11 +53,7 @@ struct SettingsView: View {
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
             .sheet(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showCSVImport) { CSVImportView() }
-            .onAppear {
-                let uid = UUID(uuidString: userIDString) ?? UUID()
-                vm.setup(context: modelContext, userID: uid)
-                vm.load()
-            }
+            .onAppear { vm.load() }
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
             }
@@ -229,6 +232,122 @@ struct SettingsView: View {
             .foregroundColor(.primary)
         }
         .listRowBackground(AppColors.card)
+    }
+
+    private var remindersSection: some View {
+        Section("Reminders") {
+            Toggle("Daily check-in reminder", isOn: Binding(
+                get: { UserDefaults.standard.bool(forKey: "reminderEnabled") },
+                set: { enabled in
+                    UserDefaults.standard.set(enabled, forKey: "reminderEnabled")
+                    if enabled {
+                        rescheduleReminders()
+                    } else {
+                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                    }
+                }
+            ))
+            .tint(AppColors.accent)
+
+            if UserDefaults.standard.bool(forKey: "reminderEnabled") {
+                DatePicker("Reminder time", selection: Binding(
+                    get: {
+                        var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+                        comps.hour = UserDefaults.standard.integer(forKey: "reminderHour")
+                        comps.minute = UserDefaults.standard.integer(forKey: "reminderMinute")
+                        return Calendar.current.date(from: comps) ?? .now
+                    },
+                    set: { date in
+                        let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
+                        UserDefaults.standard.set(comps.hour ?? 9, forKey: "reminderHour")
+                        UserDefaults.standard.set(comps.minute ?? 0, forKey: "reminderMinute")
+                        rescheduleReminders()
+                    }
+                ), displayedComponents: .hourAndMinute)
+                .tint(AppColors.accent)
+
+                // Show active compound reminders
+                let compounds = vm.supplements.filter { $0.isActive }
+                if !compounds.isEmpty {
+                    ForEach(compounds, id: \.id) { compound in
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .font(.caption)
+                                .foregroundColor(AppColors.accent)
+                            Text(compound.supplementName)
+                                .font(.subheadline)
+                            Spacer()
+                            Text("Every \(compound.frequencyDays)d")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func rescheduleReminders() {
+        let hour = UserDefaults.standard.integer(forKey: "reminderHour")
+        let minute = UserDefaults.standard.integer(forKey: "reminderMinute")
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+
+        // Daily check-in
+        let content = UNMutableNotificationContent()
+        content.title = "Time to check in"
+        content.body = "Log your energy, mood, and wellness for today."
+        content.sound = .default
+        var comps = DateComponents()
+        comps.hour = hour
+        comps.minute = minute
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
+        center.add(UNNotificationRequest(identifier: "daily-checkin", content: content, trigger: trigger))
+
+        // Per-compound reminders
+        for compound in vm.supplements.filter({ $0.isActive }) {
+            let compContent = UNMutableNotificationContent()
+            compContent.title = "\(compound.supplementName) dose"
+            compContent.body = "Time for your \(compound.supplementName) dose."
+            compContent.sound = .default
+
+            if compound.frequencyDays == 1 {
+                var daily = DateComponents()
+                daily.hour = hour
+                daily.minute = minute
+                let t = UNCalendarNotificationTrigger(dateMatching: daily, repeats: true)
+                center.add(UNNotificationRequest(identifier: "compound-\(compound.supplementName)", content: compContent, trigger: t))
+            } else if compound.frequencyDays == 7 || compound.frequencyDays == 14 {
+                var weekly = DateComponents()
+                weekly.hour = hour
+                weekly.minute = minute
+                weekly.weekday = Calendar.current.component(.weekday, from: .now)
+                let t = UNCalendarNotificationTrigger(dateMatching: weekly, repeats: true)
+                center.add(UNNotificationRequest(identifier: "compound-\(compound.supplementName)", content: compContent, trigger: t))
+            } else {
+                for i in 1...8 {
+                    let nextDate = Calendar.current.date(byAdding: .day, value: compound.frequencyDays * i, to: .now)!
+                    var c = Calendar.current.dateComponents([.year, .month, .day], from: nextDate)
+                    c.hour = hour
+                    c.minute = minute
+                    let t = UNCalendarNotificationTrigger(dateMatching: c, repeats: false)
+                    center.add(UNNotificationRequest(identifier: "compound-\(compound.supplementName)-\(i)", content: compContent, trigger: t))
+                }
+            }
+        }
+    }
+
+    private var recommendSection: some View {
+        Section {
+            ShareLink(
+                item: URL(string: "https://apps.apple.com/app/id6760955550")!,
+                subject: Text("Check out Trough"),
+                message: Text("I've been using Trough to track my TRT protocol — it's really well done.")
+            ) {
+                Label("Recommend Trough to a Friend", systemImage: "heart.fill")
+                    .foregroundColor(AppColors.accent)
+            }
+        }
     }
 
     private var legalSection: some View {

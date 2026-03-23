@@ -3,16 +3,15 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("isAuthenticated")       private var isAuthenticated       = false
-    @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
     @AppStorage("onboardingCompleted")   private var onboardingCompleted   = false
+    @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
 
     var body: some View {
         Group {
             if !isAuthenticated {
                 AuthView()
-            } else if !hkPermissionRequested {
-                HealthKitPermissionView()
             } else if !onboardingCompleted {
+                // Onboarding includes: protocol setup → compounds → first check-in → HealthKit → trial prompt
                 OnboardingView()
             } else {
                 MainTabView()

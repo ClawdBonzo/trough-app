@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 // MARK: - Supporting types
 
@@ -416,14 +417,46 @@ final class DashboardViewModel: ObservableObject {
 
     private static func milestone(for streak: Int) -> String? {
         switch streak {
-        case 7:   return "🔥 One week!"
-        case 14:  return "🔥 Two weeks!"
-        case 30:  return "🔥 One month!"
-        case 60:  return "🔥 Two months!"
-        case 90:  return "🔥 Three months!"
+        case 7:   return "🔥 One week! Top 30% of TRT trackers"
+        case 14:  return "🔥🔥 Two weeks! Top 15% of TRT trackers"
+        case 30:  return "🔥🔥🔥 One month! Top 5% of TRT trackers"
+        case 60:  return "🔥🔥🔥🔥 Two months! Top 2% — you're elite"
+        case 90:  return "🔥🔥🔥🔥🔥 Three months! Top 1% — legend"
         default:  return nil
         }
     }
+
+    // MARK: - Review Prompt
+
+    /// Call this after check-in or milestone to potentially prompt for App Store review.
+    func checkReviewPrompt() {
+        let hasPrompted = UserDefaults.standard.bool(forKey: "hasPromptedReview")
+        guard !hasPrompted else { return }
+
+        // Trigger at positive moments: score ≥ 75, streak at 14+, or score improving
+        let shouldPrompt: Bool
+        if streak >= 14 {
+            shouldPrompt = true
+        } else if protocolScore >= 75 {
+            shouldPrompt = true
+        } else {
+            shouldPrompt = false
+        }
+
+        if shouldPrompt {
+            UserDefaults.standard.set(true, forKey: "hasPromptedReview")
+            requestAppReview()
+        }
+    }
+
+    private func requestAppReview() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+        }
+    }
+
 }
 
 // MARK: - Extension on PKCurveEngine for color lookup

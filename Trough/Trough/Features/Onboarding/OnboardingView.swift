@@ -200,12 +200,26 @@ final class OnboardingViewModel: ObservableObject {
 
     // MARK: Navigation
 
-    // Steps: 0=audience, 1=importData, 2=protocol, 3=compoundSelect, 4=compoundDoses, 5=lastInjection, 6=reminders
+    // Steps: 0=audience, 1=importData, 2=protocol, 3=compoundSelect, 4=compoundDoses,
+    //        5=lastInjection, 6=firstCheckin, 7=healthKit, 8=reminders
+    @Published var firstCheckinEnergy: Double = 3
+    @Published var firstCheckinMood: Double = 3
+    @Published var firstCheckinLibido: Double = 3
+    @Published var firstCheckinSleep: Double = 3
+    @Published var firstCheckinClarity: Double = 3
+
+    var firstProtocolScore: Int {
+        let weights: [Double] = [0.25, 0.20, 0.20, 0.20, 0.15]
+        let values = [firstCheckinEnergy, firstCheckinMood, firstCheckinLibido, firstCheckinSleep, firstCheckinClarity]
+        let weighted = zip(values, weights).reduce(0.0) { $0 + $1.0 * $1.1 }
+        return Int(((weighted - 1.0) / 4.0) * 100)
+    }
+
     func advance() {
         let nextIndex: Int
         switch stepIndex {
         case 0:  nextIndex = 1                                      // audience → importData
-        case 1:  nextIndex = userType == "trt" ? 2 : 6             // importData → protocol or reminders
+        case 1:  nextIndex = userType == "trt" ? 2 : 6             // importData → protocol or firstCheckin
         case 2:  nextIndex = 3                                      // protocol → compound select
         case 3:                                                      // compound select → doses or last injection
             if selectedCompounds.isEmpty {
@@ -215,7 +229,9 @@ final class OnboardingViewModel: ObservableObject {
                 nextIndex = 4                                        // → compound doses
             }
         case 4:  nextIndex = 5                                      // compound doses → last injection
-        case 5:  nextIndex = 6                                      // last injection → reminders
+        case 5:  nextIndex = 6                                      // last injection → first check-in
+        case 6:  nextIndex = 7                                      // first check-in → healthKit
+        case 7:  nextIndex = 8                                      // healthKit → reminders
         default: nextIndex = stepIndex
         }
         withAnimation(.easeInOut(duration: 0.3)) { stepIndex = nextIndex }
@@ -226,7 +242,10 @@ final class OnboardingViewModel: ObservableObject {
         let prevIndex: Int
         switch stepIndex {
         case 5 where selectedCompounds.isEmpty: prevIndex = 3       // skip doses going back
-        case 6 where userType == "natural": prevIndex = 1
+        case 6: prevIndex = 5                                        // first check-in → last injection
+        case 7: prevIndex = 6                                        // healthKit → first check-in
+        case 8 where userType == "natural": prevIndex = 1
+        case 8: prevIndex = 7                                        // reminders → healthKit
         default: prevIndex = stepIndex - 1
         }
         withAnimation(.easeInOut(duration: 0.3)) { stepIndex = prevIndex }
@@ -278,6 +297,17 @@ final class OnboardingViewModel: ObservableObject {
             ctx.insert(config)
         }
 
+        // First check-in
+        let checkin = SDCheckin(
+            userID: userID,
+            energyScore: firstCheckinEnergy,
+            moodScore: firstCheckinMood,
+            libidoScore: firstCheckinLibido,
+            sleepQualityScore: firstCheckinSleep,
+            mentalClarityScore: firstCheckinClarity
+        )
+        ctx.insert(checkin)
+
         // Reminder settings
         UserDefaults.standard.set(reminderEnabled, forKey: "reminderEnabled")
         if reminderEnabled {
@@ -301,10 +331,13 @@ final class OnboardingViewModel: ObservableObject {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
 
-        // Remove old compound reminders
-        center.removePendingNotificationRequests(withIdentifiers:
-            compoundDoses.map { "compound-\($0.name)" } + ["daily-checkin"]
-        )
+        // Remove old compound reminders (including numbered E-N-D ones)
+        var idsToRemove = ["daily-checkin"]
+        for compound in compoundDoses {
+            idsToRemove.append("compound-\(compound.name)")
+            for i in 1...8 { idsToRemove.append("compound-\(compound.name)-\(i)") }
+        }
+        center.removePendingNotificationRequests(withIdentifiers: idsToRemove)
 
         // Daily check-in reminder
         let checkinContent = UNMutableNotificationContent()
@@ -317,7 +350,7 @@ final class OnboardingViewModel: ObservableObject {
         let checkinTrigger = UNCalendarNotificationTrigger(dateMatching: checkinComps, repeats: true)
         center.add(UNNotificationRequest(identifier: "daily-checkin", content: checkinContent, trigger: checkinTrigger))
 
-        // Per-compound reminders
+        // Per-compound reminders — ALL use calendar triggers at the user's chosen time
         for compound in compoundDoses {
             let content = UNMutableNotificationContent()
             content.title = "\(compound.name) dose"
@@ -325,25 +358,40 @@ final class OnboardingViewModel: ObservableObject {
             content.sound = .default
 
             if compound.frequencyDays == 1 {
-                // Daily: calendar trigger at the reminder time
+                // Daily: fire every day at reminder time
                 var daily = DateComponents()
                 daily.hour = hour
                 daily.minute = minute
                 let trigger = UNCalendarNotificationTrigger(dateMatching: daily, repeats: true)
                 center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
-            } else if compound.frequencyDays == 7 {
-                // Weekly: trigger on same weekday as today
+
+            } else if compound.frequencyDays == 7 || compound.frequencyDays == 14 {
+                // Weekly/biweekly: schedule on the same weekday as the last injection date (or today)
+                let refDate = lastInjectionDates[compound.name] ?? .now
+                let weekday = Calendar.current.component(.weekday, from: refDate)
                 var weekly = DateComponents()
                 weekly.hour = hour
                 weekly.minute = minute
-                weekly.weekday = Calendar.current.component(.weekday, from: .now)
+                weekly.weekday = weekday
                 let trigger = UNCalendarNotificationTrigger(dateMatching: weekly, repeats: true)
                 center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
+
             } else {
-                // Every N days: use time interval
-                let interval = TimeInterval(compound.frequencyDays * 86400)
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: true)
-                center.add(UNNotificationRequest(identifier: "compound-\(compound.name)", content: content, trigger: trigger))
+                // Every N days (E2D, E3D, E3.5D): schedule the next 8 occurrences as individual notifications
+                // This avoids TimeInterval drift and fires at the correct time each day
+                let startDate = lastInjectionDates[compound.name] ?? .now
+                for i in 1...8 {
+                    let nextDate = Calendar.current.date(byAdding: .day, value: compound.frequencyDays * i, to: startDate)!
+                    var comps = Calendar.current.dateComponents([.year, .month, .day], from: nextDate)
+                    comps.hour = hour
+                    comps.minute = minute
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+                    center.add(UNNotificationRequest(
+                        identifier: "compound-\(compound.name)-\(i)",
+                        content: content,
+                        trigger: trigger
+                    ))
+                }
             }
         }
     }
@@ -445,6 +493,7 @@ struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("onboardingCompleted") private var onboardingCompleted = false
+    @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
     @State private var showTrialPaywall = false
 
     @StateObject private var vm: OnboardingViewModel
@@ -460,7 +509,7 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 // Progress bar
                 if vm.stepIndex > 0 {
-                    ProgressBar(current: vm.stepIndex, total: 6)
+                    ProgressBar(current: vm.stepIndex, total: 8)
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
                 }
@@ -473,18 +522,20 @@ struct OnboardingView: View {
                     CompoundSelectStep(vm: vm).tag(3)
                     CompoundDosesStep(vm: vm).tag(4)
                     LastInjectionStep(vm: vm).tag(5)
+                    FirstCheckinStep(vm: vm).tag(6)
+                    HealthKitStep(vm: vm).tag(7)
                     RemindersStep(vm: vm, onDone: {
                         let uid = UUID(uuidString: userIDString) ?? UUID()
                         vm.save(userID: uid)
                         showTrialPaywall = true
-                    }).tag(6)
+                    }).tag(8)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
         .onAppear { vm.setup(context: modelContext) }
         .fullScreenCover(isPresented: $showTrialPaywall) {
-            OnboardingTrialView {
+            OnboardingTrialView(firstScore: vm.firstProtocolScore) {
                 onboardingCompleted = true
             }
         }
@@ -498,6 +549,7 @@ private struct OnboardingTrialView: View {
     @State private var offerings: Offerings?
     @State private var isPurchasing = false
     @State private var errorMessage: String?
+    let firstScore: Int
     let onContinue: () -> Void
 
     private var annualPackage: Package? {
@@ -513,17 +565,27 @@ private struct OnboardingTrialView: View {
             VStack(spacing: 28) {
                 Spacer()
 
-                // Hero
+                // Hero — show their first Protocol Score
                 VStack(spacing: 12) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 50))
-                        .foregroundColor(AppColors.accent)
+                    ZStack {
+                        Circle()
+                            .stroke(Color.white.opacity(0.1), lineWidth: 8)
+                            .frame(width: 100, height: 100)
+                        Circle()
+                            .trim(from: 0, to: CGFloat(firstScore) / 100.0)
+                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                            .frame(width: 100, height: 100)
+                            .rotationEffect(.degrees(-90))
+                        Text("\(firstScore)")
+                            .font(.system(size: 36, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                    }
 
-                    Text("You're all set!")
+                    Text("Your Protocol Score")
                         .font(.system(size: 28, weight: .black, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("Start your 14-day free trial to unlock everything.")
+                    Text("You're tracking. Start your 14-day free trial to unlock full insights.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -1365,5 +1427,135 @@ private struct RemindersStep: View {
             showBack: true,
             onBack: { vm.back() }
         )
+    }
+}
+
+// MARK: - Step 6: First Check-in
+
+private struct FirstCheckinStep: View {
+    @ObservedObject var vm: OnboardingViewModel
+
+    var body: some View {
+        StepContainer(
+            title: "How are you feeling?",
+            subtitle: "Your first check-in. This creates your Protocol Score.",
+            content: {
+                VStack(spacing: 20) {
+                    MetricSlider(label: "⚡ Energy", value: $vm.firstCheckinEnergy)
+                    MetricSlider(label: "😌 Mood", value: $vm.firstCheckinMood)
+                    MetricSlider(label: "🔥 Libido", value: $vm.firstCheckinLibido)
+                    MetricSlider(label: "🌙 Sleep Quality", value: $vm.firstCheckinSleep)
+                    MetricSlider(label: "🧠 Mental Clarity", value: $vm.firstCheckinClarity)
+
+                    // Live Protocol Score preview
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Protocol Score")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("\(vm.firstProtocolScore)")
+                                .font(.system(size: 42, weight: .black, design: .rounded))
+                                .foregroundColor(AppColors.accent)
+                        }
+                        Spacer()
+                        Text("/ 100")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(AppColors.card)
+                    .cornerRadius(14)
+                }
+            },
+            primaryLabel: "Next",
+            onPrimary: { vm.advance() },
+            showBack: true,
+            onBack: { vm.back() }
+        )
+    }
+}
+
+private struct MetricSlider: View {
+    let label: String
+    @Binding var value: Double
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .frame(width: 150, alignment: .leading)
+            Slider(value: $value, in: 1...5, step: 1)
+                .tint(AppColors.accent)
+            Text("\(Int(value))")
+                .font(.headline)
+                .foregroundColor(AppColors.accent)
+                .frame(width: 30)
+        }
+    }
+}
+
+// MARK: - Step 7: HealthKit Permission
+
+private struct HealthKitStep: View {
+    @ObservedObject var vm: OnboardingViewModel
+    @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
+
+    var body: some View {
+        StepContainer(
+            title: "Supercharge with HealthKit",
+            subtitle: "Automatically track sleep, steps, and heart rate variability.",
+            content: {
+                VStack(spacing: 16) {
+                    HKFeatureRow(icon: "bed.double.fill", title: "Sleep", desc: "Auto-log sleep duration & quality")
+                    HKFeatureRow(icon: "figure.walk", title: "Steps", desc: "Daily activity without manual entry")
+                    HKFeatureRow(icon: "heart.fill", title: "HRV", desc: "Heart rate variability for recovery insights")
+                    HKFeatureRow(icon: "scalemass.fill", title: "Body Weight", desc: "Sync from your smart scale")
+
+                    Text("Your data stays on-device. We never share it.")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 8)
+                }
+            },
+            primaryLabel: "Enable HealthKit",
+            onPrimary: {
+                Task {
+                    try? await HealthKitService.shared.requestPermissions()
+                    hkPermissionRequested = true
+                    vm.advance()
+                }
+            },
+            showBack: true,
+            onBack: { vm.back() }
+        )
+    }
+}
+
+private struct HKFeatureRow: View {
+    let icon: String
+    let title: String
+    let desc: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(AppColors.accent)
+                .frame(width: 36)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                Text(desc)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding(12)
+        .background(AppColors.card)
+        .cornerRadius(12)
     }
 }

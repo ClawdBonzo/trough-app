@@ -13,8 +13,10 @@ struct DashboardView: View {
     @State private var showPaywall = false
     @State private var showSampleDataBanner = false
     @State private var showProFeatures = false
+    @State private var showTrialEndedSheet = false
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @AppStorage("hasShownTrialEndedScreen") private var hasShownTrialEndedScreen = false
 
     var body: some View {
         NavigationStack {
@@ -105,6 +107,33 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showProFeatures) {
                 ProFeaturesSheet { showPaywall = true }
+            }
+            .fullScreenCover(isPresented: $showTrialEndedSheet) {
+                TrialEndedView(
+                    streak: vm.streak,
+                    totalCheckins: vm.streak,  // approximate with streak length
+                    latestScore: vm.protocolScore > 0 ? Int(vm.protocolScore) : nil,
+                    onSubscribe: {
+                        showTrialEndedSheet = false
+                        showPaywall = true
+                    },
+                    onContinueFree: {
+                        showTrialEndedSheet = false
+                    }
+                )
+            }
+            .onReceive(subscriptionManager.$isInTrial) { inTrial in
+                // Show soft downgrade once when trial expires
+                if !inTrial && !hasShownTrialEndedScreen && !subscriptionManager.isSubscribed {
+                    let trialStarted = UserDefaults.standard.bool(forKey: "trialWasStarted")
+                    if trialStarted {
+                        hasShownTrialEndedScreen = true
+                        showTrialEndedSheet = true
+                    }
+                }
+            }
+            .onChange(of: showCheckin) { _, dismissed in
+                if !dismissed { vm.checkReviewPrompt() }
             }
         }
     }
@@ -1103,5 +1132,127 @@ struct FlowLayout: Layout {
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
         }
+    }
+}
+
+// MARK: - Trial Ended (Soft Downgrade) View
+
+struct TrialEndedView: View {
+    let streak: Int
+    let totalCheckins: Int
+    let latestScore: Int?
+    let onSubscribe: () -> Void
+    let onContinueFree: () -> Void
+
+    var body: some View {
+        ZStack {
+            AppColors.background.ignoresSafeArea()
+
+            VStack(spacing: 28) {
+                Spacer()
+
+                // Hero
+                VStack(spacing: 14) {
+                    Image(systemName: "star.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(AppColors.accent)
+
+                    Text("Your trial has ended")
+                        .font(.system(size: 28, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
+
+                    Text("Here's what you accomplished:")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                // Accomplishment stats
+                HStack(spacing: 16) {
+                    StatBubble(value: "\(totalCheckins)", label: "Check-ins")
+                    if streak > 0 {
+                        StatBubble(value: "\(streak)d", label: "Streak")
+                    }
+                    if let score = latestScore {
+                        StatBubble(value: "\(score)", label: "Protocol\nScore")
+                    }
+                }
+
+                // What you keep vs what you lose
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("FREE FOREVER")
+                        .font(.caption.bold())
+                        .foregroundColor(.green)
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill").foregroundColor(.green).font(.caption)
+                        Text("Daily check-in, Protocol Score, streak, HealthKit sync")
+                            .font(.caption).foregroundColor(.secondary)
+                    }
+
+                    Divider().background(Color.white.opacity(0.1))
+
+                    Text("WITH PRO")
+                        .font(.caption.bold())
+                        .foregroundColor(AppColors.accent)
+                    HStack(spacing: 8) {
+                        Image(systemName: "lock.fill").foregroundColor(AppColors.accent).font(.caption)
+                        Text("PK curves, bloodwork trends, weekly reports, AI insights, GLP-1 analytics")
+                            .font(.caption).foregroundColor(.secondary)
+                    }
+                }
+                .padding(16)
+                .background(AppColors.card)
+                .cornerRadius(14)
+
+                Spacer()
+
+                // CTAs
+                VStack(spacing: 14) {
+                    Button(action: onSubscribe) {
+                        Text("Subscribe to Pro")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(AppColors.accent)
+                            .foregroundColor(.white)
+                            .cornerRadius(16)
+                    }
+                    .buttonStyle(.plain)
+
+                    Button(action: onContinueFree) {
+                        Text("Continue with Free")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Text("Your data is safe. Upgrade anytime to unlock everything.")
+                        .font(.caption2)
+                        .foregroundColor(.secondary.opacity(0.6))
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 20)
+        }
+    }
+}
+
+private struct StatBubble: View {
+    let value: String
+    let label: String
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.system(size: 28, weight: .black, design: .rounded))
+                .foregroundColor(AppColors.accent)
+            Text(label)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(AppColors.card)
+        .cornerRadius(12)
     }
 }
