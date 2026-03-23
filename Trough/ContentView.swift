@@ -250,10 +250,9 @@ struct AuthView: View {
         isLoading = true
         errorMessage = nil
         do {
-            let result = try await appleSignInCoordinator.signIn()
+            let idToken = try await appleSignInCoordinator.signIn()
             try await SupabaseService.shared.signInWithApple(
-                idToken: result.idToken,
-                nonce: result.nonce
+                idToken: idToken
             )
             // Give Apple's sheet time to dismiss before switching views.
             // Without this delay, SwiftUI destroys AuthView (and the coordinator)
