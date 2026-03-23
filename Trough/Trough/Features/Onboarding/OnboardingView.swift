@@ -170,13 +170,25 @@ final class OnboardingViewModel: ObservableObject {
         ("Custom days",               "custom"),
     ]
     @Published var reminderEnabled = true
-    @Published var reminderFreqIndex = 0  // default: Daily
+    @Published var reminderMode = "simple"  // "simple" = one for all, "perCompound" = individual
+    @Published var reminderFreqIndex = 0  // default: Daily (used in simple mode)
     @Published var reminderCustomDays: Set<Int> = []  // 1=Sun..7=Sat
     @Published var reminderTime: Date = {
         var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
         comps.hour = 9; comps.minute = 0
         return Calendar.current.date(from: comps) ?? .now
     }()
+
+    // Per-compound reminder overrides (compound name → time)
+    @Published var perCompoundTimes: [String: Date] = [:]
+
+    /// Returns the reminder time for a given compound (falls back to global time)
+    func reminderTimeFor(_ compound: String) -> Binding<Date> {
+        Binding<Date>(
+            get: { self.perCompoundTimes[compound] ?? self.reminderTime },
+            set: { self.perCompoundTimes[compound] = $0 }
+        )
+    }
 
     private var modelContext: ModelContext?
 
@@ -322,7 +334,9 @@ final class OnboardingViewModel: ObservableObject {
         try? ctx.save()
         SyncEngine.shared.triggerSync()
 
-        UserDefaults.standard.set(true, forKey: "onboardingCompleted")
+        // NOTE: Do NOT set onboardingCompleted here.
+        // It must be set AFTER the trial prompt screen is shown/dismissed,
+        // which happens in OnboardingTrialView.onContinue.
     }
 
     // MARK: Local notifications per compound
@@ -1361,6 +1375,18 @@ private struct RemindersStep: View {
         OnboardingViewModel.reminderFrequencies[vm.reminderFreqIndex].key == "custom"
     }
 
+    /// Frequency label for a compound based on its frequencyDays
+    private func freqLabel(for compound: OnboardingViewModel.SelectedCompound) -> String {
+        switch compound.frequencyDays {
+        case 1:  return "Daily"
+        case 2:  return "Every other day"
+        case 3:  return "Every 3 days"
+        case 7:  return "Weekly"
+        case 14: return "Every 2 weeks"
+        default: return "Every \(compound.frequencyDays) days"
+        }
+    }
+
     var body: some View {
         StepContainer(
             title: "Reminders",
@@ -1373,47 +1399,90 @@ private struct RemindersStep: View {
                         .foregroundColor(.white)
 
                     if vm.reminderEnabled {
-                        FormCard(title: "Frequency") {
-                            Picker("How often", selection: $vm.reminderFreqIndex) {
-                                ForEach(OnboardingViewModel.reminderFrequencies.indices, id: \.self) { i in
-                                    Text(OnboardingViewModel.reminderFrequencies[i].label).tag(i)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(AppColors.accent)
+                        // Mode toggle: simple vs per-compound
+                        Picker("Reminder mode", selection: $vm.reminderMode) {
+                            Text("Same time for all").tag("simple")
+                            Text("Per compound").tag("perCompound")
+                        }
+                        .pickerStyle(.segmented)
 
-                            if showCustomDays {
-                                Divider().background(Color.white.opacity(0.07))
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Select days")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    HStack(spacing: 6) {
-                                        ForEach(1...7, id: \.self) { wd in
-                                            let name = weekdayNames[wd - 1]
-                                            let selected = vm.reminderCustomDays.contains(wd)
-                                            Button(name) {
-                                                if selected {
-                                                    vm.reminderCustomDays.remove(wd)
-                                                } else {
-                                                    vm.reminderCustomDays.insert(wd)
+                        if vm.reminderMode == "simple" {
+                            // ── Simple mode: one frequency + one time ──
+                            FormCard(title: "Frequency") {
+                                Picker("How often", selection: $vm.reminderFreqIndex) {
+                                    ForEach(OnboardingViewModel.reminderFrequencies.indices, id: \.self) { i in
+                                        Text(OnboardingViewModel.reminderFrequencies[i].label).tag(i)
+                                    }
+                                }
+                                .pickerStyle(.menu)
+                                .tint(AppColors.accent)
+
+                                if showCustomDays {
+                                    Divider().background(Color.white.opacity(0.07))
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text("Select days")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        HStack(spacing: 6) {
+                                            ForEach(1...7, id: \.self) { wd in
+                                                let name = weekdayNames[wd - 1]
+                                                let selected = vm.reminderCustomDays.contains(wd)
+                                                Button(name) {
+                                                    if selected {
+                                                        vm.reminderCustomDays.remove(wd)
+                                                    } else {
+                                                        vm.reminderCustomDays.insert(wd)
+                                                    }
                                                 }
+                                                .font(.caption.bold())
+                                                .padding(.horizontal, 8)
+                                                .padding(.vertical, 5)
+                                                .background(selected ? AppColors.accent : AppColors.background)
+                                                .foregroundColor(selected ? .white : .secondary)
+                                                .clipShape(Capsule())
                                             }
-                                            .font(.caption.bold())
-                                            .padding(.horizontal, 8)
-                                            .padding(.vertical, 5)
-                                            .background(selected ? AppColors.accent : AppColors.background)
-                                            .foregroundColor(selected ? .white : .secondary)
-                                            .clipShape(Capsule())
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        FormCard(title: "Time") {
-                            DatePicker("Time", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
-                                .tint(AppColors.accent)
+                            FormCard(title: "Reminder time") {
+                                DatePicker("Time", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
+                                    .tint(AppColors.accent)
+                            }
+                        } else {
+                            // ── Per-compound mode: each compound gets its own time ──
+                            FormCard(title: "Daily check-in") {
+                                DatePicker("Check-in reminder", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
+                                    .tint(AppColors.accent)
+                            }
+
+                            if !vm.compoundDoses.isEmpty {
+                                ForEach(vm.compoundDoses, id: \.name) { compound in
+                                    FormCard(title: compound.name) {
+                                        HStack {
+                                            Text(freqLabel(for: compound))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Spacer()
+                                        }
+                                        DatePicker("Time", selection: vm.reminderTimeFor(compound.name), displayedComponents: .hourAndMinute)
+                                            .tint(AppColors.accent)
+                                    }
+                                }
+                            }
+
+                            // Show TRT protocol reminder too
+                            FormCard(title: vm.autoProtocolName.isEmpty ? "TRT Injection" : vm.autoProtocolName) {
+                                HStack {
+                                    Text(vm.primaryFreq.label)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                }
+                                DatePicker("Time", selection: vm.reminderTimeFor(vm.primaryCompound), displayedComponents: .hourAndMinute)
+                                    .tint(AppColors.accent)
+                            }
                         }
                     }
 
