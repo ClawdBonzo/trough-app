@@ -256,6 +256,10 @@ struct AuthView: View {
                 idToken: result.idToken,
                 nonce: result.nonce
             )
+            // Give Apple's sheet time to dismiss before switching views.
+            // Without this delay, SwiftUI destroys AuthView (and the coordinator)
+            // while the Apple sheet is still animating, causing "Sign Up Not Completed".
+            try await Task.sleep(for: .seconds(0.8))
             isAuthenticated = true
         } catch let error as ASAuthorizationError where error.code == .canceled {
             // User tapped Cancel — no error to show
@@ -264,6 +268,7 @@ struct AuthView: View {
             // Check if auth actually succeeded despite the error (race condition)
             if let _ = try? await SupabaseService.shared.client.auth.session {
                 print("[Auth] Session exists despite error — treating as success")
+                try? await Task.sleep(for: .seconds(0.8))
                 isAuthenticated = true
             } else {
                 errorMessage = "Apple Sign In failed. Make sure you have an Apple ID signed in on this device and that Sign in with Apple is enabled in your Supabase project settings."
@@ -278,6 +283,7 @@ struct AuthView: View {
             // Check if auth actually succeeded (e.g. users table upsert failed but auth worked)
             if let _ = try? await SupabaseService.shared.client.auth.session {
                 print("[Auth] Session exists despite error — treating as success")
+                try? await Task.sleep(for: .seconds(0.8))
                 isAuthenticated = true
             } else {
                 errorMessage = "Sign in failed: \(error.localizedDescription)"
