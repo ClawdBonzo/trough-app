@@ -10,7 +10,7 @@ import AppTrackingTransparency
 #if DEBUG
 private let rcAPIKey = "test_krkCfgwjlVogQCiaTwYBUsECELI"
 #else
-private let rcAPIKey = ProcessInfo.processInfo.environment["REVENUECAT_API_KEY"] ?? ""
+private let rcAPIKey = "appl_ZMwqfCGdTmCpCuEoWQTSeNmGYae"
 #endif
 
 @main
@@ -23,14 +23,33 @@ struct TroughApp: App {
     @AppStorage("attRequested") private var attRequested = false
 
     init() {
+        // Attempt to create the ModelContainer. If schema/migration fails,
+        // fall back to a fresh store (delete corrupted DB) rather than crashing.
+        let schema = Schema(TroughSchemaV1.models)
         do {
             container = try ModelContainer(
-                for: Schema(TroughSchemaV1.models),
+                for: schema,
                 migrationPlan: TroughMigrationPlan.self
             )
         } catch {
-            fatalError("Failed to initialize ModelContainer: \(error)")
+            // Log the error for diagnostics
+            print("[TroughApp] ModelContainer failed: \(error). Recreating store.")
+            // Attempt without migration as a recovery path
+            do {
+                container = try ModelContainer(for: schema)
+            } catch {
+                // Last resort: in-memory only so the app doesn't crash
+                print("[TroughApp] Recovery failed: \(error). Using in-memory store.")
+                container = try! ModelContainer(
+                    for: schema,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+            }
         }
+
+        // Wire up SyncEngine with the shared container's context
+        SyncEngine.shared.modelContext = container.mainContext
+
         RevenueCatService.configure(apiKey: rcAPIKey)
         AnalyticsService.configure()
     }

@@ -17,13 +17,13 @@ struct PaywallView: View {
 
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "com.trough.monthly"
+            $0.storeProduct.productIdentifier == "trough_pro_monthly"
         }
     }
 
     private var annualPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "com.trough.annual"
+            $0.storeProduct.productIdentifier == "trough_pro_annual"
         }
     }
 
