@@ -6,7 +6,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("userType") private var userType = "trt"
-    @AppStorage("trackBodyWeight") private var trackBodyWeight = false
+    @AppStorage("trackBodyWeight") private var trackBodyWeight = true
     @EnvironmentObject private var syncEngine: SyncEngine
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var vm: SettingsViewModel

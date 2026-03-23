@@ -219,6 +219,8 @@ final class OnboardingViewModel: ObservableObject {
     @Published var firstCheckinLibido: Double = 3
     @Published var firstCheckinSleep: Double = 3
     @Published var firstCheckinClarity: Double = 3
+    @Published var bodyWeightLbs: String = ""
+    @Published var bodyFatPercent: String = ""
 
     var firstProtocolScore: Int {
         let weights: [Double] = [0.25, 0.20, 0.20, 0.20, 0.15]
@@ -309,7 +311,7 @@ final class OnboardingViewModel: ObservableObject {
             ctx.insert(config)
         }
 
-        // First check-in
+        // First check-in (with body weight if provided)
         let checkin = SDCheckin(
             userID: userID,
             energyScore: firstCheckinEnergy,
@@ -318,7 +320,16 @@ final class OnboardingViewModel: ObservableObject {
             sleepQualityScore: firstCheckinSleep,
             mentalClarityScore: firstCheckinClarity
         )
+        if let weight = Double(bodyWeightLbs), weight > 0 {
+            checkin.bodyWeightKg = weight * 0.453592 // lbs to kg
+        }
+        if let bf = Double(bodyFatPercent), bf > 0 {
+            checkin.bodyFatPercent = bf
+        }
         ctx.insert(checkin)
+
+        // Enable body weight tracking by default
+        UserDefaults.standard.set(true, forKey: "trackBodyWeight")
 
         // Reminder settings
         UserDefaults.standard.set(reminderEnabled, forKey: "reminderEnabled")
@@ -563,8 +574,17 @@ private struct OnboardingTrialView: View {
     @State private var offerings: Offerings?
     @State private var isPurchasing = false
     @State private var errorMessage: String?
+    @State private var selectedPlan: PlanType = .annual
     let firstScore: Int
     let onContinue: () -> Void
+
+    enum PlanType { case monthly, annual }
+
+    private var monthlyPackage: Package? {
+        offerings?.current?.availablePackages.first {
+            $0.storeProduct.productIdentifier == "trough_pro_monthly"
+        }
+    }
 
     private var annualPackage: Package? {
         offerings?.current?.availablePackages.first {
@@ -572,120 +592,186 @@ private struct OnboardingTrialView: View {
         }
     }
 
+    private var selectedPackage: Package? {
+        selectedPlan == .annual ? annualPackage : monthlyPackage
+    }
+
     var body: some View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
-            VStack(spacing: 28) {
-                Spacer()
+            ScrollView {
+                VStack(spacing: 24) {
+                    Spacer().frame(height: 20)
 
-                // Hero — show their first Protocol Score
-                VStack(spacing: 12) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.white.opacity(0.1), lineWidth: 8)
-                            .frame(width: 100, height: 100)
-                        Circle()
-                            .trim(from: 0, to: CGFloat(firstScore) / 100.0)
-                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                            .frame(width: 100, height: 100)
-                            .rotationEffect(.degrees(-90))
-                        Text("\(firstScore)")
-                            .font(.system(size: 36, weight: .black, design: .rounded))
+                    // Hero — show their first Protocol Score
+                    VStack(spacing: 10) {
+                        ZStack {
+                            Circle()
+                                .stroke(Color.white.opacity(0.1), lineWidth: 8)
+                                .frame(width: 100, height: 100)
+                            Circle()
+                                .trim(from: 0, to: CGFloat(firstScore) / 100.0)
+                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                                .frame(width: 100, height: 100)
+                                .rotationEffect(.degrees(-90))
+                            Text("\(firstScore)")
+                                .font(.system(size: 36, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+
+                        Text("Your Protocol Score")
+                            .font(.system(size: 24, weight: .black, design: .rounded))
                             .foregroundColor(.white)
-                    }
 
-                    Text("Your Protocol Score")
-                        .font(.system(size: 28, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
-
-                    Text("You're tracking. Start your 14-day free trial to unlock full insights.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-
-                // What's included
-                VStack(alignment: .leading, spacing: 12) {
-                    FeatureRow(icon: "waveform.path.ecg",        text: "PK curves with confidence bands")
-                    FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Full history & trend analysis")
-                    FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & custom ranges")
-                    FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & PDF export")
-                    FeatureRow(icon: "brain.head.profile",        text: "AI-powered insights & correlations")
-                    FeatureRow(icon: "pills.fill",                text: "GLP-1 & peptide analytics")
-                }
-                .padding(18)
-                .background(AppColors.card)
-                .cornerRadius(16)
-
-                Spacer()
-
-                // CTA
-                VStack(spacing: 14) {
-                    Button {
-                        guard let pkg = annualPackage else {
-                            // No package available (RevenueCat not configured) — skip trial
-                            onContinue()
-                            return
-                        }
-                        Task { await startTrial(package: pkg) }
-                    } label: {
-                        Group {
-                            if isPurchasing {
-                                ProgressView().tint(.white)
-                            } else {
-                                Text("Start 14-Day Free Trial")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(AppColors.accent)
-                        .cornerRadius(16)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(isPurchasing)
-
-                    if let error = errorMessage {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundColor(AppColors.accent)
+                        Text("Start your free trial to unlock full insights.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
 
-                    // Skip option (smaller, secondary)
-                    Button {
-                        onContinue()
-                    } label: {
-                        Text("Maybe later")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    // What's included
+                    VStack(alignment: .leading, spacing: 10) {
+                        FeatureRow(icon: "waveform.path.ecg",        text: "PK curves with confidence bands")
+                        FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Full history & trend analysis")
+                        FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & custom ranges")
+                        FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & PDF export")
+                        FeatureRow(icon: "brain.head.profile",        text: "AI-powered insights & correlations")
+                        FeatureRow(icon: "pills.fill",                text: "GLP-1 & peptide analytics")
+                    }
+                    .padding(16)
+                    .background(AppColors.card)
+                    .cornerRadius(16)
+
+                    // Plan selector
+                    HStack(spacing: 12) {
+                        // Monthly
+                        Button {
+                            selectedPlan = .monthly
+                        } label: {
+                            VStack(spacing: 6) {
+                                Text("Monthly")
+                                    .font(.subheadline.bold())
+                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
+                                Text(monthlyPackage?.localizedPriceString ?? "$6.99")
+                                    .font(.title3.bold())
+                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
+                                Text("per month")
+                                    .font(.caption2)
+                                    .foregroundColor(selectedPlan == .monthly ? .white.opacity(0.7) : .secondary.opacity(0.6))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(selectedPlan == .monthly ? AppColors.card : AppColors.card.opacity(0.4))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(selectedPlan == .monthly ? AppColors.accent : Color.clear, lineWidth: 2)
+                            )
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(.plain)
+
+                        // Annual
+                        Button {
+                            selectedPlan = .annual
+                        } label: {
+                            VStack(spacing: 6) {
+                                HStack(spacing: 4) {
+                                    Text("Annual")
+                                        .font(.subheadline.bold())
+                                    Text("Save 40%")
+                                        .font(.caption2.bold())
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(AppColors.accent)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                }
+                                .foregroundColor(selectedPlan == .annual ? .white : .secondary)
+                                Text(annualPackage?.localizedPriceString ?? "$49.99")
+                                    .font(.title3.bold())
+                                    .foregroundColor(selectedPlan == .annual ? .white : .secondary)
+                                Text("per year")
+                                    .font(.caption2)
+                                    .foregroundColor(selectedPlan == .annual ? .white.opacity(0.7) : .secondary.opacity(0.6))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(selectedPlan == .annual ? AppColors.card : AppColors.card.opacity(0.4))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(selectedPlan == .annual ? AppColors.accent : Color.clear, lineWidth: 2)
+                            )
+                            .cornerRadius(12)
+                        }
+                        .buttonStyle(.plain)
                     }
 
-                    Text("No charge for 14 days. Cancel anytime in Settings → Subscriptions.")
-                        .font(.caption2)
-                        .foregroundColor(.secondary.opacity(0.6))
-                        .multilineTextAlignment(.center)
-
-                    HStack(spacing: 20) {
-                        Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
-                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
-                        Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
-                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
-                        Button("Restore") {
-                            Task {
-                                _ = try? await RevenueCatService.shared.restorePurchases()
-                                await subscriptionManager.refresh()
-                                if subscriptionManager.isSubscribed { onContinue() }
+                    // CTA
+                    VStack(spacing: 12) {
+                        Button {
+                            guard let pkg = selectedPackage else {
+                                onContinue()
+                                return
                             }
+                            Task { await startTrial(package: pkg) }
+                        } label: {
+                            Group {
+                                if isPurchasing {
+                                    ProgressView().tint(.white)
+                                } else {
+                                    Text("Start 14-Day Free Trial")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(AppColors.accent)
+                            .cornerRadius(16)
                         }
-                        .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                        .buttonStyle(.plain)
+                        .disabled(isPurchasing)
+
+                        if let error = errorMessage {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(AppColors.accent)
+                                .multilineTextAlignment(.center)
+                        }
+
+                        Button {
+                            onContinue()
+                        } label: {
+                            Text("Maybe later")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Text("No charge for 14 days. Cancel anytime in Settings → Subscriptions.")
+                            .font(.caption2)
+                            .foregroundColor(.secondary.opacity(0.6))
+                            .multilineTextAlignment(.center)
+
+                        HStack(spacing: 20) {
+                            Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                            Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                            Button("Restore") {
+                                Task {
+                                    _ = try? await RevenueCatService.shared.restorePurchases()
+                                    await subscriptionManager.refresh()
+                                    if subscriptionManager.isSubscribed { onContinue() }
+                                }
+                            }
+                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                        }
                     }
                 }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 20)
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
@@ -1516,6 +1602,52 @@ private struct FirstCheckinStep: View {
                     MetricSlider(label: "🌙 Sleep Quality", value: $vm.firstCheckinSleep)
                     MetricSlider(label: "🧠 Mental Clarity", value: $vm.firstCheckinClarity)
 
+                    // Body metrics
+                    VStack(spacing: 12) {
+                        Text("BODY METRICS")
+                            .font(.caption.bold())
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        HStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Weight")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    TextField("185", text: $vm.bodyWeightLbs)
+                                        .keyboardType(.decimalPad)
+                                        .font(.title3.bold())
+                                        .foregroundColor(.white)
+                                    Text("lbs")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding(12)
+                            .background(AppColors.card)
+                            .cornerRadius(10)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Body Fat")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    TextField("18", text: $vm.bodyFatPercent)
+                                        .keyboardType(.decimalPad)
+                                        .font(.title3.bold())
+                                        .foregroundColor(.white)
+                                    Text("%")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding(12)
+                            .background(AppColors.card)
+                            .cornerRadius(10)
+                        }
+                    }
+
                     // Live Protocol Score preview
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
@@ -1523,7 +1655,7 @@ private struct FirstCheckinStep: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Text("\(vm.firstProtocolScore)")
-                                .font(.system(size: 42, weight: .black, design: .rounded))
+                                .font(.system(size: 36, weight: .black, design: .rounded))
                                 .foregroundColor(AppColors.accent)
                         }
                         Spacer()
