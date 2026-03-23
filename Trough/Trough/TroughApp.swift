@@ -10,7 +10,7 @@ import AppTrackingTransparency
 #if DEBUG
 private let rcAPIKey = "test_krkCfgwjlVogQCiaTwYBUsECELI"
 #else
-private let rcAPIKey = ProcessInfo.processInfo.environment["REVENUECAT_API_KEY"] ?? ""
+private let rcAPIKey = "appl_ZMwqfCGdTmCpCuEoWQTSeNmGYae"
 #endif
 
 @main
