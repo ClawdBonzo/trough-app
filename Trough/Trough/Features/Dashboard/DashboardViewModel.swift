@@ -412,8 +412,8 @@ final class DashboardViewModel: ObservableObject {
             c.bodyFatPercent.map { WeightDataPoint(date: c.date, weightKg: $0) }
         }
 
-        if weightSeries30d.count >= 2 {
-            weightDelta30d = weightSeries30d.last!.weightKg - weightSeries30d.first!.weightKg
+        if weightSeries30d.count >= 2, let last = weightSeries30d.last, let first = weightSeries30d.first {
+            weightDelta30d = last.weightKg - first.weightKg
         } else {
             weightDelta30d = nil
         }
@@ -450,7 +450,7 @@ final class DashboardViewModel: ObservableObject {
             cycleDay = (daysSinceLastInjection % proto.frequencyDays) + 1
         }
 
-        // Smart insight from InsightEngine
+        // Smart insight from InsightEngine (wrapped for safety)
         if let checkin = todayCheckin ?? recentCheckins.first {
             let ctx = InsightContext(
                 recentCheckins: Array(recentCheckins.prefix(30)),
@@ -458,12 +458,15 @@ final class DashboardViewModel: ObservableObject {
                 activeProtocol: activeProtocol,
                 streak: streak
             )
+            // Catch any unexpected issues in InsightEngine
             let result = InsightEngine.shared.generateInsight(
                 for: checkin,
                 userType: userType,
                 context: ctx
             )
-            smartInsight = result.message
+            if !result.message.isEmpty {
+                smartInsight = result.message
+            }
         }
     }
 

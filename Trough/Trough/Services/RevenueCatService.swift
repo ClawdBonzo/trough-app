@@ -31,7 +31,11 @@ final class RevenueCatService {
         }
         #endif
         Purchases.logLevel = .warn
-        Purchases.configure(withAPIKey: apiKey)
+        Purchases.configure(
+            with: Configuration.Builder(withAPIKey: apiKey)
+                .with(storeKitVersion: .storeKit2)
+                .build()
+        )
         isConfigured = true
     }
 
