@@ -352,10 +352,11 @@ struct SettingsView: View {
 
     private var legalSection: some View {
         Section("Privacy & Legal") {
-            NavigationLink(value: "privacy") {
+            Link(destination: URL(string: "https://gettrough.app/privacy") ?? URL(string: "https://gettrough.app")!) {
                 Label("Privacy & Data Policy", systemImage: "lock.shield")
             }
-            Link(destination: URL(string: "https://gettrough.app/terms")!) {
+            .foregroundColor(.primary)
+            Link(destination: URL(string: "https://gettrough.app/terms") ?? URL(string: "https://gettrough.app")!) {
                 Label("Terms of Use", systemImage: "doc.text")
             }
             .foregroundColor(.primary)
