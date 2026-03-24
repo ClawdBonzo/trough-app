@@ -8,7 +8,7 @@ struct PeptidesView: View {
     @StateObject private var vm: PeptidesViewModel
 
     init() {
-        let id = UUID(uuidString: UserDefaults.standard.string(forKey: "userIDString") ?? "") ?? UUID()
+        let id = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
         _vm = StateObject(wrappedValue: PeptidesViewModel(
             modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
             userID: id

@@ -22,7 +22,7 @@ struct DailyCheckinView: View {
         }
         .environmentObject(vm)
         .onAppear {
-            let uid = UUID(uuidString: userIDString) ?? UUID()
+            let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
             vm.setup(context: modelContext, userID: uid)
         }
     }

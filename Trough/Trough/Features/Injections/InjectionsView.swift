@@ -52,7 +52,7 @@ struct InjectionsView: View {
                 LogInjectionSheet(vm: vm)
             }
             .onAppear {
-                let uid = UUID(uuidString: userIDString) ?? UUID()
+                let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
                 vm.setup(context: modelContext, userID: uid)
             }
             .alert("Error", isPresented: Binding(

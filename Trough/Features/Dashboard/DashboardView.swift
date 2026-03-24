@@ -194,7 +194,7 @@ struct DashboardView: View {
                 .foregroundColor(AppColors.textSecondary)
             HStack(spacing: 12) {
                 Button("Load Sample Data") {
-                    let userID = UUID(uuidString: userIDString) ?? UUID()
+                    let userID = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
                     SampleDataService.insertSampleData(context: modelContext, userID: userID)
                     showSampleDataBanner = false
                     vm.load()

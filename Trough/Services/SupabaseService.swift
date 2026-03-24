@@ -89,6 +89,21 @@ final class SupabaseService {
         client.auth.currentUser?.id.uuidString
     }
 
+    /// FIXED: Centralized user UUID for all record creation.
+    /// Priority: 1) Live Supabase auth session  2) Stored AppStorage value  3) nil (should not create records)
+    static var resolvedUserUUID: UUID? {
+        if let authID = shared.client.auth.currentUser?.id {
+            // Also update AppStorage so it stays in sync
+            UserDefaults.standard.set(authID.uuidString, forKey: "userIDString")
+            return authID
+        }
+        if let stored = UserDefaults.standard.string(forKey: "userIDString"),
+           let uuid = UUID(uuidString: stored) {
+            return uuid
+        }
+        return nil
+    }
+
     // MARK: - Generic Upsert / Fetch
 
     /// Upserts an array of `Encodable` rows into a named table.
