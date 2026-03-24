@@ -93,9 +93,7 @@ struct ProFeaturesSheet: View {
                         // CTA
                         Button {
                             dismiss()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                onStartTrial()
-                            }
+                            onStartTrial()
                         } label: {
                             Text("Start Free Trial")
                                 .font(.headline)
