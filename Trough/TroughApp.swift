@@ -56,6 +56,12 @@ struct TroughApp: App {
 
         // Wire up SyncEngine with the shared container's context
         SyncEngine.shared.modelContext = container.mainContext
+
+        // FIXED: sync userIDString with real Supabase auth ID on every launch
+        if let realID = SupabaseService.shared.currentUserID {
+            UserDefaults.standard.set(realID, forKey: "userIDString")
+        }
+
         // Auto-trigger sync on launch (will silently skip if not authenticated)
         Task { SyncEngine.shared.triggerSync() }
 
