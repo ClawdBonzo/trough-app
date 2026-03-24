@@ -230,6 +230,8 @@ final class OnboardingViewModel: ObservableObject {
     }
 
     func advance() {
+        // Dismiss keyboard before advancing to prevent it persisting on next screen
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         let nextIndex: Int
         switch stepIndex {
         case 0:  nextIndex = 1                                      // audience → importData

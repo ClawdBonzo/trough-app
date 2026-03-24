@@ -513,12 +513,13 @@ final class DashboardViewModel: ObservableObject {
     // MARK: Personal Best
 
     private func loadPersonalBest() {
+        // protocolScore is a computed property — cannot sort by it in SwiftData.
+        // Instead, fetch all check-ins sorted by date and compute max in-memory.
         guard let modelContext else { return }
-        // Fetch ALL check-ins to find true all-time best, not just the 42-day window
-        let allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.protocolScore, order: .reverse)])
+        var allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.date, order: .reverse)])
         let allCheckins = (try? modelContext.fetch(allDesc)) ?? []
         guard !allCheckins.isEmpty else { return }
-        let maxEver = allCheckins.first?.protocolScore ?? 0
+        let maxEver = allCheckins.map(\.protocolScore).max() ?? 0
         personalBestScore = maxEver
         // Current score equals or exceeds all-time high (need at least 3 check-ins to be meaningful)
         isPersonalBest = protocolScore > 0 && protocolScore >= maxEver && allCheckins.count >= 3
