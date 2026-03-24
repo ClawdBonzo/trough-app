@@ -85,6 +85,36 @@ final class DashboardViewModel: ObservableObject {
     // MARK: User type
     @Published var userType: String = "trt"
 
+    // MARK: Greeting & Insight
+    @Published var greetingText: String = ""
+    @Published var cycleDay: Int? = nil
+    @Published var smartInsight: String? = nil
+
+    // MARK: Injection compliance
+    @Published var injectionsMadeThisMonth: Int = 0
+    @Published var injectionsExpectedThisMonth: Int = 0
+
+    // MARK: Supplement compliance
+    @Published var supplementCompliancePct: Double = 0
+
+    // MARK: Weight trend
+    @Published var weightTrendDelta: Double? = nil  // lbs change over 30d
+    @Published var latestWeightLbs: Double? = nil
+
+    // MARK: Personal best
+    @Published var isPersonalBest: Bool = false
+    @Published var personalBestScore: Double = 0
+
+    // MARK: Forecast
+    @Published var forecastText: String? = nil
+
+    // MARK: Weekly comparison (current vs prior 7-day)
+    @Published var energyDelta: Double = 0
+    @Published var moodDelta: Double = 0
+    @Published var libidoDelta: Double = 0
+    @Published var sleepDelta: Double = 0
+    @Published var clarityDelta: Double = 0
+
     // MARK: Loading state
     @Published var isLoading = true
 
@@ -117,6 +147,13 @@ final class DashboardViewModel: ObservableObject {
         loadTrendChart()
         loadQuickStats()
         loadGLP1Correlation()
+        loadGreeting()
+        loadInjectionCompliance()
+        loadSupplementCompliance()
+        loadWeightTrend()
+        loadPersonalBest()
+        loadForecast()
+        loadWeeklyComparison()
         if userType == "natural" { loadBodyComposition() }
         isSyncing = SyncEngine.shared.isSyncing
         isLoading = false
@@ -312,8 +349,7 @@ final class DashboardViewModel: ObservableObject {
         morningWoodPct30d = mwCheckins.isEmpty ? 0
             : Double(mwCheckins.filter { $0.morningWood == true }.count) / Double(mwCheckins.count) * 100
 
-        let suppCheckins = last7.filter { $0.supplementsTaken != nil && !(($0.supplementsTaken ?? "").isEmpty) }
-        supplementAdherence7d = last7.isEmpty ? 0 : Double(suppCheckins.count) / Double(last7.count) * 100
+        // supplementAdherence7d removed — use supplementCompliancePct instead (computed in loadSupplementCompliance)
     }
 
     // MARK: GLP-1 weight correlation
@@ -396,6 +432,133 @@ final class DashboardViewModel: ObservableObject {
         SyncEngine.shared.triggerSync()
     }
 
+    // MARK: Greeting
+
+    private func loadGreeting() {
+        let hour = Calendar.current.component(.hour, from: .now)
+        let name = UserDefaults.standard.string(forKey: "userName") ?? ""
+        let prefix: String
+        switch hour {
+        case 0..<12:  prefix = "Good morning"
+        case 12..<17: prefix = "Good afternoon"
+        default:      prefix = "Good evening"
+        }
+        greetingText = name.isEmpty ? prefix : "\(prefix), \(name)"
+
+        // Cycle day (days since last injection)
+        if daysSinceLastInjection > 0, let proto = activeProtocol {
+            cycleDay = (daysSinceLastInjection % proto.frequencyDays) + 1
+        }
+
+        // Smart insight from InsightEngine
+        if let checkin = todayCheckin ?? recentCheckins.first {
+            let ctx = InsightContext(
+                recentCheckins: Array(recentCheckins.prefix(30)),
+                recentInjections: [],
+                activeProtocol: activeProtocol,
+                streak: streak
+            )
+            let result = InsightEngine.shared.generateInsight(
+                for: checkin,
+                userType: userType,
+                context: ctx
+            )
+            smartInsight = result.message
+        }
+    }
+
+    // MARK: Injection Compliance
+
+    private func loadInjectionCompliance() {
+        guard let modelContext, let proto = activeProtocol else { return }
+        let cal = Calendar.current
+        let now = Date.now
+        let startOfMonth = cal.date(from: cal.dateComponents([.year, .month], from: now)) ?? now
+
+        let pred = #Predicate<SDInjection> { $0.injectedAt >= startOfMonth && !$0.isSampleData }
+        let injs = (try? modelContext.fetch(FetchDescriptor<SDInjection>(predicate: pred))) ?? []
+        injectionsMadeThisMonth = injs.count
+
+        let dayOfMonth = cal.component(.day, from: now)
+        injectionsExpectedThisMonth = max(1, dayOfMonth / max(1, proto.frequencyDays))
+    }
+
+    // MARK: Supplement Compliance
+
+    private func loadSupplementCompliance() {
+        let last7 = Array(recentCheckins.prefix(7))
+        guard !last7.isEmpty else { supplementCompliancePct = 0; return }
+        let taken = last7.filter { $0.supplementsTaken != nil && !($0.supplementsTaken ?? "").isEmpty }
+        supplementCompliancePct = Double(taken.count) / Double(last7.count) * 100
+    }
+
+    // MARK: Weight Trend
+
+    private func loadWeightTrend() {
+        let last30 = Array(recentCheckins.prefix(30))
+        let weights = last30.compactMap(\.bodyWeightKg)
+        if let latest = weights.first {
+            latestWeightLbs = latest / 0.453592
+        }
+        if weights.count >= 7 {
+            let recent = weights.prefix(7).reduce(0, +) / Double(weights.prefix(7).count)
+            let older = weights.suffix(7).reduce(0, +) / Double(weights.suffix(7).count)
+            weightTrendDelta = (recent - older) / 0.453592  // convert kg delta to lbs
+        }
+    }
+
+    // MARK: Personal Best
+
+    private func loadPersonalBest() {
+        guard let modelContext else { return }
+        // Fetch ALL check-ins to find true all-time best, not just the 42-day window
+        let allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.protocolScore, order: .reverse)])
+        let allCheckins = (try? modelContext.fetch(allDesc)) ?? []
+        guard !allCheckins.isEmpty else { return }
+        let maxEver = allCheckins.first?.protocolScore ?? 0
+        personalBestScore = maxEver
+        // Current score equals or exceeds all-time high (need at least 3 check-ins to be meaningful)
+        isPersonalBest = protocolScore > 0 && protocolScore >= maxEver && allCheckins.count >= 3
+    }
+
+    // MARK: Forecast
+
+    private func loadForecast() {
+        guard let proto = activeProtocol else { forecastText = nil; return }
+        let nextCycleDay = ((daysSinceLastInjection + 1) % max(1, proto.frequencyDays)) + 1
+        let daysUntilInjection = max(0, proto.frequencyDays - daysSinceLastInjection)
+
+        if daysUntilInjection == 0 {
+            forecastText = "Injection day today — energy should peak in 24–48 hours."
+        } else if daysUntilInjection == 1 {
+            forecastText = "Injection due tomorrow. You're at the trough — some fatigue is normal."
+        } else if nextCycleDay >= 5 && nextCycleDay <= 6 {
+            forecastText = "Day \(nextCycleDay) tomorrow — energy typically dips. Stay ahead of it."
+        } else if nextCycleDay <= 3 {
+            forecastText = "Day \(nextCycleDay) tomorrow — levels should be strong post-injection."
+        } else {
+            forecastText = "Next injection in \(daysUntilInjection) days. Levels are tapering gradually."
+        }
+    }
+
+    // MARK: Weekly Comparison
+
+    private func loadWeeklyComparison() {
+        let last7 = Array(recentCheckins.prefix(7))
+        let prior7 = Array(recentCheckins.dropFirst(7).prefix(7))
+        guard !last7.isEmpty, !prior7.isEmpty else { return }
+
+        func avg(_ checkins: [SDCheckin], _ kp: KeyPath<SDCheckin, Double>) -> Double {
+            checkins.map { $0[keyPath: kp] }.reduce(0, +) / Double(checkins.count)
+        }
+
+        energyDelta  = avg(last7, \.energyScore) - avg(prior7, \.energyScore)
+        moodDelta    = avg(last7, \.moodScore) - avg(prior7, \.moodScore)
+        libidoDelta  = avg(last7, \.libidoScore) - avg(prior7, \.libidoScore)
+        sleepDelta   = avg(last7, \.sleepQualityScore) - avg(prior7, \.sleepQualityScore)
+        clarityDelta = avg(last7, \.mentalClarityScore) - avg(prior7, \.mentalClarityScore)
+    }
+
     // MARK: - Static helpers
 
     static func interpret(_ score: Double) -> String {
@@ -409,9 +572,11 @@ final class DashboardViewModel: ObservableObject {
 
     static func color(for score: Double) -> Color {
         switch score {
-        case 70...:   return .green
-        case 40..<70: return Color(hex: "#F39C12")   // amber
-        default:      return AppColors.accent          // red
+        case 91...:   return Color(hex: "#FFD700")     // gold
+        case 76..<91: return .green
+        case 61..<76: return Color(hex: "#F1C40F")     // yellow
+        case 41..<61: return Color(hex: "#F39C12")     // orange
+        default:      return AppColors.accent           // red
         }
     }
 

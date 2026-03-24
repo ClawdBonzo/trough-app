@@ -129,17 +129,23 @@ struct AuthView: View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
-            VStack(spacing: 32) {
-                VStack(spacing: 8) {
+            VStack(spacing: 24) {
+                VStack(spacing: 12) {
+                    Image("AppIcon-Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .clipShape(RoundedRectangle(cornerRadius: 22))
+
                     Text("TROUGH")
-                        .font(.system(size: 40, weight: .black, design: .rounded))
+                        .font(.system(size: 36, weight: .black, design: .rounded))
                         .foregroundColor(AppColors.accent)
 
                     Text("TRT & Hormone Tracker")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                .padding(.top, 60)
+                .padding(.top, 50)
 
                 VStack(spacing: 16) {
                     TextField("Email", text: $email)
