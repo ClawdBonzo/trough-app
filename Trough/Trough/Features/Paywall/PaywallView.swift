@@ -15,6 +15,10 @@ struct PaywallView: View {
     @State private var isRestoring = false
     @State private var errorMessage: String? = nil
 
+    // BULLETPROOF SUCCESS FLAG (eliminates race condition with RevenueCat + dismiss)
+    @State private var purchaseSuccess = false
+    @State private var restoreSuccess = false
+
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
             $0.storeProduct.productIdentifier == "trough_pro_monthly"
@@ -63,6 +67,13 @@ struct PaywallView: View {
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
             AnalyticsService.paywallShown()
+        }
+        // BULLETPROOF: dismiss only after the view is fully settled
+        .onChange(of: purchaseSuccess) { _, newValue in
+            if newValue { dismiss() }
+        }
+        .onChange(of: restoreSuccess) { _, newValue in
+            if newValue { dismiss() }
         }
     }
 
@@ -249,7 +260,7 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: Actions
+    // MARK: Actions — BULLETPROOF VERSION
 
     @MainActor
     private func doPurchase(package: Package) async {
@@ -258,11 +269,11 @@ struct PaywallView: View {
         do {
             _ = try await RevenueCatService.shared.purchase(package: package)
             await subscriptionManager.refresh()
+
             if subscriptionManager.isSubscribed {
                 AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
-                isPurchasing = false
-                dismiss()
-                return  // CRITICAL: don't touch @State after dismiss
+                purchaseSuccess = true   // triggers .onChange dismiss
+                return
             }
         } catch {
             if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
@@ -281,10 +292,10 @@ struct PaywallView: View {
         do {
             _ = try await RevenueCatService.shared.restorePurchases()
             await subscriptionManager.refresh()
+
             if subscriptionManager.isSubscribed {
-                isRestoring = false
-                dismiss()
-                return  // CRITICAL: don't touch @State after dismiss
+                restoreSuccess = true   // triggers .onChange dismiss
+                return
             }
         } catch {
             if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
@@ -299,6 +310,53 @@ struct PaywallView: View {
 
 // MARK: - FeatureRow
 
+// MARK: - LockedCard
+
+struct LockedCard: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+    var onInfo: (() -> Void)? = nil
+    var action: (() -> Void)? = nil
+
+    init(icon: String, title: String, subtitle: String, onInfo: (() -> Void)? = nil, action: @escaping () -> Void) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+        self.onInfo = onInfo
+        self.action = action
+    }
+
+    var body: some View {
+        Button {
+            action?()
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(AppColors.accent.opacity(0.6))
+                    .frame(width: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                Image(systemName: "lock.fill")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(16)
+            .background(AppColors.card)
+            .cornerRadius(14)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 struct FeatureRow: View {
     let icon: String
     let text: String
@@ -307,74 +365,12 @@ struct FeatureRow: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .foregroundColor(AppColors.accent)
-                .frame(width: 22)
+                .frame(width: 24)
             Text(text)
                 .font(.subheadline)
                 .foregroundColor(.white)
-        }
-    }
-}
-
-// MARK: - LockedCard
-
-/// Drop-in replacement for a paid card. Shows a lock overlay with soft CTA.
-struct LockedCard: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-    var onInfo: (() -> Void)? = nil
-    var onUnlock: () -> Void
-
-    var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(.secondary)
-                .frame(width: 32)
-
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 6) {
-                    Image(systemName: "lock.fill")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(title)
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                    if let onInfo {
-                        Button { onInfo() } label: {
-                            Image(systemName: "info.circle")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundColor(.secondary.opacity(0.7))
-            }
-
+                .fixedSize(horizontal: false, vertical: true)
             Spacer()
-
-            Button {
-                onUnlock()
-            } label: {
-                Text("Start Free Trial")
-                    .font(.caption.bold())
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 7)
-                    .background(AppColors.softCTA)
-                    .clipShape(Capsule())
-            }
-            .buttonStyle(.plain)
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
-        )
     }
 }
