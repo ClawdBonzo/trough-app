@@ -35,7 +35,14 @@ final class SyncEngine: ObservableObject {
 
     func triggerSync() {
         guard !isSyncing else { return }
-        guard SupabaseService.shared.currentUserID != nil else { return }
+
+        if SupabaseService.shared.currentUserID == nil {
+            print("[SyncEngine] No authenticated user — sync skipped")
+            ToastManager.shared.show("Sign in to enable cloud sync", type: .error)
+            return
+        }
+
+        print("[SyncEngine] Starting sync for user: \(SupabaseService.shared.currentUserID ?? "?")")
         isSyncing = true
         retryTask?.cancel()
         retryTask = Task {
@@ -58,9 +65,9 @@ final class SyncEngine: ObservableObject {
             } catch {
                 retryAttempt += 1
                 if retryAttempt > Self.maxRetries {
-                    print("[SyncEngine] All \(Self.maxRetries) retries exhausted. Last error: \(error)")
+                    print("[SyncEngine] Sync failed permanently: \(error)")
                     await MainActor.run {
-                        ToastManager.shared.show("Sync failed — your data is saved locally", type: .error)
+                        ToastManager.shared.show("Sync failed: \(error.localizedDescription)\nData is safe locally.", type: .error)
                     }
                     isSyncing = false
                     return

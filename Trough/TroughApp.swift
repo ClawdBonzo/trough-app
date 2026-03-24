@@ -56,6 +56,8 @@ struct TroughApp: App {
 
         // Wire up SyncEngine with the shared container's context
         SyncEngine.shared.modelContext = container.mainContext
+        // Auto-trigger sync on launch (will silently skip if not authenticated)
+        Task { SyncEngine.shared.triggerSync() }
 
         let isTF = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         if isTF {
