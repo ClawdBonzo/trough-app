@@ -5,15 +5,15 @@ import Charts
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncEngine: SyncEngine
-    @StateObject private var vm = DashboardViewModel()
-    @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @EnvironmentObject private var toastManager: ToastManager
-    @State private var showCheckin = false
-    @State private var showWeeklyReport = false
-    @State private var showPaywall = false
-    @State private var showSampleDataBanner = false
-    @State private var showProFeatures = false
-    @State private var showTrialEndedSheet = false
+    @StateObject var vm = DashboardViewModel()
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
+    @EnvironmentObject var toastManager: ToastManager
+    @State var showCheckin = false
+    @State var showWeeklyReport = false
+    @State var showPaywall = false
+    @State var showSampleDataBanner = false
+    @State var showProFeatures = false
+    @State var showTrialEndedSheet = false
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("hasShownTrialEndedScreen") private var hasShownTrialEndedScreen = false
@@ -29,6 +29,9 @@ struct DashboardView: View {
                 } else {
                 ScrollView {
                     VStack(spacing: 16) {
+                        // Greeting + cycle day
+                        greetingHeader
+
                         if showSampleDataBanner { sampleDataBanner }
                         if subscriptionManager.showTrialExpiryWarning {
                             trialExpiryBanner
@@ -36,13 +39,38 @@ struct DashboardView: View {
                         if subscriptionManager.showGracePeriodWarning {
                             gracePeriodBanner
                         }
+
+                        // Personal best banner
+                        if vm.isPersonalBest {
+                            personalBestBanner
+                        }
+
+                        // Smart insight card
+                        if let insight = vm.smartInsight {
+                            smartInsightCard(insight)
+                        }
+
                         protocolScoreHero
                         if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
                             activeProtocolCard
                         }
+
+                        // Check-in CTA with pulse if not done today
                         checkinCTACard
+
+                        // Injection + supplement compliance side by side
+                        if vm.activeProtocol != nil {
+                            complianceRow
+                        }
+
+                        // Weight trend sparkline
+                        if vm.latestWeightLbs != nil {
+                            weightTrendCard
+                        }
+
                         streakCard
-                        // PK Curve / Body Composition — blurred preview for free users
+
+                        // PK Curve / Body Composition
                         if subscriptionManager.isSubscribed {
                             if userType == "trt" {
                                 pkCurveCard
@@ -64,20 +92,27 @@ struct DashboardView: View {
                                 ) { showPaywall = true }
                             }
                         }
+
                         // GLP-1 weight correlation (paid only)
                         if subscriptionManager.isSubscribed && vm.hasGLP1Data {
                             glp1CorrelationCard
                         }
-                        // 7-Day Trends — always show (3 days free, full history paid)
+
+                        // 7-Day Trends bar chart
                         trendChartCard
                         quickStatsCard
+
+                        // Tomorrow's forecast
+                        if let forecast = vm.forecastText {
+                            forecastCard(forecast)
+                        }
                     }
                     .padding()
                 }
                 } // end else isLoading
             }
             .navigationTitle("Dashboard")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if syncEngine.isSyncing {
@@ -363,7 +398,13 @@ struct DashboardView: View {
             DisclaimerBanner(type: .protocolScore)
         }
         .padding(16)
-        .background(AppColors.card)
+        .background(
+            LinearGradient(
+                colors: [AppColors.card, AppColors.card.opacity(0.85)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
         .cornerRadius(20)
         .shadow(color: vm.scoreColor.opacity(0.2), radius: 12)
     }
@@ -565,9 +606,9 @@ struct DashboardView: View {
         let cal = Calendar.current
         return [
             PKInjectionInput(compoundName: "Testosterone Cypionate", doseAmountMg: 100,
-                             injectedAt: cal.date(byAdding: .day, value: -8, to: now)!, route: "intramuscular"),
+                             injectedAt: cal.date(byAdding: .day, value: -8, to: now) ?? now, route: "intramuscular"),
             PKInjectionInput(compoundName: "Testosterone Cypionate", doseAmountMg: 100,
-                             injectedAt: cal.date(byAdding: .day, value: -4, to: now)!, route: "intramuscular"),
+                             injectedAt: cal.date(byAdding: .day, value: -4, to: now) ?? now, route: "intramuscular"),
             PKInjectionInput(compoundName: "Testosterone Cypionate", doseAmountMg: 100,
                              injectedAt: now, route: "intramuscular"),
         ]
@@ -817,7 +858,7 @@ struct DashboardView: View {
         if subscriptionManager.isSubscribed {
             return vm.metricSeries
         }
-        let cutoff = Calendar.current.date(byAdding: .day, value: -3, to: .now)!.startOfDay
+        let cutoff = (Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now).startOfDay
         return vm.metricSeries.map { series in
             var copy = series
             copy.dataPoints = series.dataPoints.filter { $0.date >= cutoff }
@@ -952,13 +993,15 @@ struct DashboardView: View {
                     emoji: "⚡️",
                     label: "Avg Energy",
                     value: String(format: "%.1f", vm.avgEnergy7d),
-                    subtitle: "/ 5"
+                    subtitle: "/ 5",
+                    delta: vm.energyDelta
                 )
                 QuickStatTile(
                     emoji: "🔥",
                     label: "Avg Libido",
                     value: String(format: "%.1f", vm.avgLibido7d),
-                    subtitle: "/ 5"
+                    subtitle: "/ 5",
+                    delta: vm.libidoDelta
                 )
                 QuickStatTile(
                     emoji: "🌅",
@@ -970,7 +1013,7 @@ struct DashboardView: View {
                     QuickStatTile(
                         emoji: "💊",
                         label: "Supplements",
-                        value: String(format: "%.0f%%", vm.supplementAdherence7d),
+                        value: String(format: "%.0f%%", vm.supplementCompliancePct),
                         subtitle: "adherence"
                     )
                 } else {
@@ -1046,6 +1089,185 @@ struct MiniBadge: View {
         formatter.dateFormat = "E"
         return String(formatter.string(from: date).prefix(2))
     }
+
+}
+
+// MARK: - New Dashboard Cards
+
+extension DashboardView {
+
+    var greetingHeader: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(vm.greetingText)
+                .font(.title2.bold())
+                .foregroundColor(.white)
+            if let day = vm.cycleDay, let proto = vm.activeProtocol {
+                Text("Day \(day) of \(proto.frequencyDays) · \(proto.compoundName)")
+                    .font(.subheadline)
+                    .foregroundColor(AppColors.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: - Smart Insight Card
+
+    private func smartInsightCard(_ message: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "brain.head.profile")
+                .font(.title3)
+                .foregroundColor(AppColors.accent)
+            Text(message)
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .lineLimit(3)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: [AppColors.card, AppColors.card.opacity(0.7)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .cornerRadius(16)
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.2), lineWidth: 1))
+    }
+
+    // MARK: - Personal Best Banner
+
+    var personalBestBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "trophy.fill")
+                .font(.title3)
+                .foregroundColor(Color(hex: "#FFD700"))
+            Text("New personal best: \(Int(vm.personalBestScore))")
+                .font(.subheadline.bold())
+                .foregroundColor(Color(hex: "#FFD700"))
+            Spacer()
+        }
+        .padding()
+        .background(Color(hex: "#FFD700").opacity(0.1))
+        .cornerRadius(12)
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(hex: "#FFD700").opacity(0.3), lineWidth: 1))
+    }
+
+    // MARK: - Compliance Row (injection + supplement side by side)
+
+    var complianceRow: some View {
+        HStack(spacing: 12) {
+            // Injection compliance
+            VStack(spacing: 8) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.white.opacity(0.1), lineWidth: 6)
+                    Circle()
+                        .trim(from: 0, to: vm.injectionsExpectedThisMonth > 0
+                              ? min(1.0, Double(vm.injectionsMadeThisMonth) / Double(vm.injectionsExpectedThisMonth))
+                              : 0)
+                        .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                    Text("\(vm.injectionsMadeThisMonth)/\(vm.injectionsExpectedThisMonth)")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 56, height: 56)
+                Text("Injections")
+                    .font(.caption)
+                    .foregroundColor(AppColors.textSecondary)
+                Text("this month")
+                    .font(.caption2)
+                    .foregroundColor(AppColors.textSecondary.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+            .cornerRadius(16)
+
+            // Supplement compliance
+            VStack(spacing: 8) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.white.opacity(0.1), lineWidth: 6)
+                    Circle()
+                        .trim(from: 0, to: vm.supplementCompliancePct / 100)
+                        .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                    Text("\(Int(vm.supplementCompliancePct))%")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 56, height: 56)
+                Text("Supplements")
+                    .font(.caption)
+                    .foregroundColor(AppColors.textSecondary)
+                Text("this week")
+                    .font(.caption2)
+                    .foregroundColor(AppColors.textSecondary.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+            .cornerRadius(16)
+        }
+    }
+
+    // MARK: - Weight Trend Card
+
+    var weightTrendCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Weight")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Spacer()
+                if let delta = vm.weightTrendDelta {
+                    HStack(spacing: 4) {
+                        Image(systemName: delta >= 0 ? "arrow.up.right" : "arrow.down.right")
+                            .font(.caption.bold())
+                        Text(String(format: "%+.1f lbs", delta))
+                            .font(.subheadline.bold())
+                    }
+                    .foregroundColor(delta <= 0 ? .green : Color(hex: "#F39C12"))
+                }
+            }
+            if let weight = vm.latestWeightLbs {
+                Text(String(format: "%.1f lbs", weight))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                Text("30-day trend")
+                    .font(.caption)
+                    .foregroundColor(AppColors.textSecondary)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+        .cornerRadius(16)
+    }
+
+    // MARK: - Forecast Card
+
+    func forecastCard(_ text: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "sparkles")
+                .font(.title3)
+                .foregroundColor(Color(hex: "#F1C40F"))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Tomorrow's Forecast")
+                    .font(.caption.bold())
+                    .foregroundColor(AppColors.textSecondary)
+                Text(text)
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.7)], startPoint: .topLeading, endPoint: .bottomTrailing))
+        .cornerRadius(16)
+    }
 }
 
 // MARK: - Quick Stat Tile
@@ -1055,6 +1277,7 @@ struct QuickStatTile: View {
     let label: String
     let value: String
     let subtitle: String
+    var delta: Double? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -1062,6 +1285,15 @@ struct QuickStatTile: View {
                 Text(emoji)
                     .font(.title3)
                 Spacer()
+                if let d = delta, abs(d) >= 0.1 {
+                    HStack(spacing: 2) {
+                        Image(systemName: d >= 0 ? "arrow.up.right" : "arrow.down.right")
+                            .font(.caption2.bold())
+                        Text(String(format: "%+.1f", d))
+                            .font(.caption2.bold())
+                    }
+                    .foregroundColor(d >= 0 ? .green : AppColors.accent)
+                }
             }
             Text(value)
                 .font(.system(size: 22, weight: .bold, design: .rounded))
