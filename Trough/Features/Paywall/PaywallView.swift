@@ -222,13 +222,17 @@ struct PaywallView: View {
             }
             .buttonStyle(.plain)
 
-            Link("Privacy Policy", destination: URL(string: "https://gettrough.app/privacy")!)
-                .font(.caption)
-                .foregroundColor(.secondary)
+            if let privacyURL = URL(string: "https://gettrough.app/privacy") {
+                Link("Privacy Policy", destination: privacyURL)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
-            Link("Terms of Use", destination: URL(string: "https://gettrough.app/terms")!)
-                .font(.caption)
-                .foregroundColor(.secondary)
+            if let termsURL = URL(string: "https://gettrough.app/terms") {
+                Link("Terms of Use", destination: termsURL)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
         }
     }
 
@@ -247,6 +251,7 @@ struct PaywallView: View {
 
     // MARK: Actions
 
+    @MainActor
     private func doPurchase(package: Package) async {
         isPurchasing = true
         errorMessage = nil
@@ -257,12 +262,15 @@ struct PaywallView: View {
                 AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
                 dismiss()
             }
+        } catch let error as NSError where error.code == 1 {
+            // User cancelled — silent, no error message
         } catch {
             errorMessage = error.localizedDescription
         }
         isPurchasing = false
     }
 
+    @MainActor
     private func doRestore() async {
         isRestoring = true
         errorMessage = nil
