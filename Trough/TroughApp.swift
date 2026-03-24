@@ -2,21 +2,22 @@ import SwiftUI
 import SwiftData
 import AppTrackingTransparency
 
-// RevenueCat API key loaded from Secrets (Info.plist via Secrets.xcconfig).
-// SECURITY: Never hardcode API keys in source code.
-// NOTE: TestFlight runs in sandbox — use production key everywhere
-// (RevenueCat handles sandbox detection automatically with StoreKit 2).
+// RevenueCat API key loaded from Secrets.
+// TestFlight = sandbox environment = MUST use production key (NOT test key).
+// RevenueCat production keys work in BOTH sandbox and production.
+// The test_ key is ONLY for StoreKit Testing in Xcode (local simulator).
+//
+// The previous crash was RevenueCat's internal assertion
+// (checkForSimulatedStoreAPIKeyInRelease) which fires when using a
+// test_ key in a Release build. Using the production key fixes this.
 private var rcAPIKey: String {
     #if DEBUG
+    // Debug builds: use test key for Xcode StoreKit Testing
     return Secrets.revenueCatTestKey
     #else
+    // Release builds (TestFlight + App Store): ALWAYS production key
     return Secrets.revenueCatAPIKey
     #endif
-}
-
-/// True when running via TestFlight (sandbox environment with Release build).
-private var isTestFlight: Bool {
-    Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
 }
 
 @main
@@ -56,8 +57,9 @@ struct TroughApp: App {
         // Wire up SyncEngine with the shared container's context
         SyncEngine.shared.modelContext = container.mainContext
 
-        if isTestFlight {
-            print("[TroughApp] Running in TestFlight sandbox — using production key with sandbox receipts")
+        let isTF = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        if isTF {
+            print("[TroughApp] Running in TestFlight sandbox — production key + DangerousSettings enabled")
         }
         RevenueCatService.configure(apiKey: rcAPIKey)
         AnalyticsService.configure()
