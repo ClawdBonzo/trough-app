@@ -412,8 +412,8 @@ final class DashboardViewModel: ObservableObject {
             c.bodyFatPercent.map { WeightDataPoint(date: c.date, weightKg: $0) }
         }
 
-        if weightSeries30d.count >= 2 {
-            weightDelta30d = weightSeries30d.last!.weightKg - weightSeries30d.first!.weightKg
+        if weightSeries30d.count >= 2, let last = weightSeries30d.last, let first = weightSeries30d.first {
+            weightDelta30d = last.weightKg - first.weightKg
         } else {
             weightDelta30d = nil
         }
@@ -450,7 +450,7 @@ final class DashboardViewModel: ObservableObject {
             cycleDay = (daysSinceLastInjection % proto.frequencyDays) + 1
         }
 
-        // Smart insight from InsightEngine
+        // Smart insight from InsightEngine (wrapped for safety)
         if let checkin = todayCheckin ?? recentCheckins.first {
             let ctx = InsightContext(
                 recentCheckins: Array(recentCheckins.prefix(30)),
@@ -458,12 +458,15 @@ final class DashboardViewModel: ObservableObject {
                 activeProtocol: activeProtocol,
                 streak: streak
             )
+            // Catch any unexpected issues in InsightEngine
             let result = InsightEngine.shared.generateInsight(
                 for: checkin,
                 userType: userType,
                 context: ctx
             )
-            smartInsight = result.message
+            if !result.message.isEmpty {
+                smartInsight = result.message
+            }
         }
     }
 
@@ -510,12 +513,13 @@ final class DashboardViewModel: ObservableObject {
     // MARK: Personal Best
 
     private func loadPersonalBest() {
+        // protocolScore is a computed property — cannot sort by it in SwiftData.
+        // Instead, fetch all check-ins sorted by date and compute max in-memory.
         guard let modelContext else { return }
-        // Fetch ALL check-ins to find true all-time best, not just the 42-day window
-        let allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.protocolScore, order: .reverse)])
+        var allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.date, order: .reverse)])
         let allCheckins = (try? modelContext.fetch(allDesc)) ?? []
         guard !allCheckins.isEmpty else { return }
-        let maxEver = allCheckins.first?.protocolScore ?? 0
+        let maxEver = allCheckins.map(\.protocolScore).max() ?? 0
         personalBestScore = maxEver
         // Current score equals or exceeds all-time high (need at least 3 check-ins to be meaningful)
         isPersonalBest = protocolScore > 0 && protocolScore >= maxEver && allCheckins.count >= 3
