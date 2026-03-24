@@ -260,13 +260,14 @@ struct PaywallView: View {
             await subscriptionManager.refresh()
             if subscriptionManager.isSubscribed {
                 AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
+                isPurchasing = false
                 dismiss()
+                return  // CRITICAL: don't touch @State after dismiss
             }
         } catch {
             let nsError = error as NSError
-            // RevenueCat userCancelled = code 1 — user tapped outside, silent
             if nsError.code != 1 {
-                errorMessage = error.localizedDescription
+                await MainActor.run { errorMessage = error.localizedDescription }
             }
         }
         isPurchasing = false
@@ -279,11 +280,15 @@ struct PaywallView: View {
         do {
             _ = try await RevenueCatService.shared.restorePurchases()
             await subscriptionManager.refresh()
-            if subscriptionManager.isSubscribed { dismiss() }
+            if subscriptionManager.isSubscribed {
+                isRestoring = false
+                dismiss()
+                return  // CRITICAL: don't touch @State after dismiss
+            }
         } catch {
             let nsError = error as NSError
             if nsError.code != 1 {
-                errorMessage = error.localizedDescription
+                await MainActor.run { errorMessage = error.localizedDescription }
             }
         }
         isRestoring = false
