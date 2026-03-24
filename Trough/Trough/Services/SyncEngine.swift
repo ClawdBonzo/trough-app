@@ -58,6 +58,10 @@ final class SyncEngine: ObservableObject {
             } catch {
                 retryAttempt += 1
                 if retryAttempt > Self.maxRetries {
+                    print("[SyncEngine] All \(Self.maxRetries) retries exhausted. Last error: \(error)")
+                    await MainActor.run {
+                        ToastManager.shared.show("Sync failed — your data is saved locally", type: .error)
+                    }
                     isSyncing = false
                     return
                 }

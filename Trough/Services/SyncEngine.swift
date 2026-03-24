@@ -12,6 +12,7 @@ import Combine
 ///   - Conflict resolution: last-write-wins on updated_at.
 ///     Both versions are logged to SDSyncConflict before resolution.
 ///   - Retries use exponential backoff (max 5 attempts).
+@MainActor
 final class SyncEngine: ObservableObject {
     static let shared = SyncEngine()
 
@@ -32,7 +33,6 @@ final class SyncEngine: ObservableObject {
 
     // MARK: - Public API
 
-    @MainActor
     func triggerSync() {
         guard !isSyncing else { return }
         guard SupabaseService.shared.currentUserID != nil else { return }
@@ -50,17 +50,19 @@ final class SyncEngine: ObservableObject {
         while retryAttempt <= Self.maxRetries {
             do {
                 try await performFullSync()
-                await MainActor.run {
-                    self.isSyncing = false
-                    self.lastSyncedAt = .now
-                    self.retryAttempt = 0
-                    self.pendingCount = 0
-                }
+                isSyncing = false
+                lastSyncedAt = .now
+                retryAttempt = 0
+                pendingCount = 0
                 return
             } catch {
                 retryAttempt += 1
                 if retryAttempt > Self.maxRetries {
-                    await MainActor.run { self.isSyncing = false }
+                    print("[SyncEngine] All \(Self.maxRetries) retries exhausted. Last error: \(error)")
+                    await MainActor.run {
+                        ToastManager.shared.show("Sync failed — your data is saved locally", type: .error)
+                    }
+                    isSyncing = false
                     return
                 }
                 let delay = Self.baseRetryDelay * pow(2.0, Double(retryAttempt - 1))

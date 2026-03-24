@@ -2,16 +2,15 @@ import SwiftUI
 import SwiftData
 import AppTrackingTransparency
 
-// RevenueCat API key.
-// Debug builds: test key (simulator test store, no real StoreKit).
-// Release builds (TestFlight / App Store): set REVENUECAT_API_KEY in the
-//   scheme environment or replace the empty string with your production key.
-//   Using a test_ key in a Release build triggers a fatalError inside the SDK.
-#if DEBUG
-private let rcAPIKey = "test_krkCfgwjlVogQCiaTwYBUsECELI"
-#else
-private let rcAPIKey = "appl_ZMwqfCGdTmCpCuEoWQTSeNmGYae"
-#endif
+// RevenueCat API key loaded from Secrets (Info.plist via Secrets.xcconfig).
+// SECURITY: Never hardcode API keys in source code.
+private var rcAPIKey: String {
+    #if DEBUG
+    return Secrets.revenueCatTestKey
+    #else
+    return Secrets.revenueCatAPIKey
+    #endif
+}
 
 @main
 struct TroughApp: App {
