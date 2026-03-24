@@ -4,12 +4,19 @@ import AppTrackingTransparency
 
 // RevenueCat API key loaded from Secrets (Info.plist via Secrets.xcconfig).
 // SECURITY: Never hardcode API keys in source code.
+// NOTE: TestFlight runs in sandbox — use production key everywhere
+// (RevenueCat handles sandbox detection automatically with StoreKit 2).
 private var rcAPIKey: String {
     #if DEBUG
     return Secrets.revenueCatTestKey
     #else
     return Secrets.revenueCatAPIKey
     #endif
+}
+
+/// True when running via TestFlight (sandbox environment with Release build).
+private var isTestFlight: Bool {
+    Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
 }
 
 @main
@@ -49,6 +56,9 @@ struct TroughApp: App {
         // Wire up SyncEngine with the shared container's context
         SyncEngine.shared.modelContext = container.mainContext
 
+        if isTestFlight {
+            print("[TroughApp] Running in TestFlight sandbox — using production key with sandbox receipts")
+        }
         RevenueCatService.configure(apiKey: rcAPIKey)
         AnalyticsService.configure()
     }
