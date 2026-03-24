@@ -17,6 +17,10 @@ struct DashboardView: View {
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("hasShownTrialEndedScreen") private var hasShownTrialEndedScreen = false
+    @AppStorage("hasShownSupplementBanner") private var hasShownSupplementBanner = false
+    @State private var showSupplementBanner = false
+    @State private var navigateToInjections = false
+    @State private var navigateToSupplements = false
 
     var body: some View {
         NavigationStack {
@@ -61,6 +65,11 @@ struct DashboardView: View {
                         // Injection + supplement compliance side by side
                         if vm.activeProtocol != nil {
                             complianceRow
+                        }
+
+                        // NEW: One-time supplement setup banner (post-subscription)
+                        if subscriptionManager.isSubscribed && vm.supplementCount == 0 && !hasShownSupplementBanner {
+                            supplementSetupBanner
                         }
 
                         // Weight trend sparkline
@@ -1157,60 +1166,118 @@ extension DashboardView {
 
     var complianceRow: some View {
         HStack(spacing: 12) {
-            // Injection compliance
-            VStack(spacing: 8) {
-                ZStack {
-                    Circle()
-                        .stroke(Color.white.opacity(0.1), lineWidth: 6)
-                    Circle()
-                        .trim(from: 0, to: vm.injectionsExpectedThisMonth > 0
-                              ? min(1.0, Double(vm.injectionsMadeThisMonth) / Double(vm.injectionsExpectedThisMonth))
-                              : 0)
-                        .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                    Text("\(vm.injectionsMadeThisMonth)/\(vm.injectionsExpectedThisMonth)")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+            // NEW: Injection compliance — tappable, navigates to Injections
+            NavigationLink(destination: InjectionsView()) {
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.white.opacity(0.1), lineWidth: 6)
+                        Circle()
+                            .trim(from: 0, to: vm.injectionsExpectedThisMonth > 0
+                                  ? min(1.0, Double(vm.injectionsMadeThisMonth) / Double(vm.injectionsExpectedThisMonth))
+                                  : 0)
+                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                            .rotationEffect(.degrees(-90))
+                        Text("\(vm.injectionsMadeThisMonth)/\(vm.injectionsExpectedThisMonth)")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 56, height: 56)
+                    Text("Injections")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                    Text("this month")
+                        .font(.caption2)
+                        .foregroundColor(AppColors.textSecondary.opacity(0.7))
                 }
-                .frame(width: 56, height: 56)
-                Text("Injections")
-                    .font(.caption)
-                    .foregroundColor(AppColors.textSecondary)
-                Text("this month")
-                    .font(.caption2)
-                    .foregroundColor(AppColors.textSecondary.opacity(0.7))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+                .cornerRadius(16)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-            .cornerRadius(16)
+            .buttonStyle(.plain)
+            .accessibilityLabel("Injections this month")
+            .accessibilityHint("Tap to view and log injections")
 
-            // Supplement compliance
-            VStack(spacing: 8) {
-                ZStack {
-                    Circle()
-                        .stroke(Color.white.opacity(0.1), lineWidth: 6)
-                    Circle()
-                        .trim(from: 0, to: vm.supplementCompliancePct / 100)
-                        .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                    Text("\(Int(vm.supplementCompliancePct))%")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+            // NEW: Supplement compliance — tappable, navigates to Settings > Supplements
+            NavigationLink(destination: SettingsView()) {
+                VStack(spacing: 8) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.white.opacity(0.1), lineWidth: 6)
+                        Circle()
+                            .trim(from: 0, to: vm.supplementCompliancePct / 100)
+                            .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                            .rotationEffect(.degrees(-90))
+                        if vm.supplementCompliancePct == 0 && vm.supplementCount == 0 {
+                            // NEW: Show + icon when no supplements configured
+                            Image(systemName: "plus")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(AppColors.textSecondary)
+                        } else {
+                            Text("\(Int(vm.supplementCompliancePct))%")
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .frame(width: 56, height: 56)
+                    Text("Supplements")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                    Text(vm.supplementCount == 0 ? "tap to add" : "this week")
+                        .font(.caption2)
+                        .foregroundColor(AppColors.textSecondary.opacity(0.7))
                 }
-                .frame(width: 56, height: 56)
-                Text("Supplements")
-                    .font(.caption)
-                    .foregroundColor(AppColors.textSecondary)
-                Text("this week")
-                    .font(.caption2)
-                    .foregroundColor(AppColors.textSecondary.opacity(0.7))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+                .cornerRadius(16)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-            .cornerRadius(16)
+            .buttonStyle(.plain)
+            .accessibilityLabel("Supplements this week")
+            .accessibilityHint(vm.supplementCount == 0 ? "Tap to add supplements" : "Tap to manage supplements")
         }
+    }
+
+    // MARK: - Supplement Setup Banner (one-time, post-subscription)
+
+    var supplementSetupBanner: some View {
+        NavigationLink(destination: SettingsView()) {
+            HStack(spacing: 12) {
+                Image(systemName: "pills.fill")
+                    .font(.title3)
+                    .foregroundColor(AppColors.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Track your supplements")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Text("See correlations with your Protocol Score")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                }
+                Spacer()
+                Button {
+                    hasShownSupplementBanner = true
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(AppColors.accent.opacity(0.3), lineWidth: 1)
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Set up supplement tracking")
+        .accessibilityHint("Tap to add supplements and see correlations with your Protocol Score")
     }
 
     // MARK: - Weight Trend Card

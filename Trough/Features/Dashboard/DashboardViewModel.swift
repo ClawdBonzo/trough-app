@@ -96,6 +96,7 @@ final class DashboardViewModel: ObservableObject {
 
     // MARK: Supplement compliance
     @Published var supplementCompliancePct: Double = 0
+    @Published var supplementCount: Int = 0  // NEW: total configured supplements
 
     // MARK: Weight trend
     @Published var weightTrendDelta: Double? = nil  // lbs change over 30d
@@ -492,6 +493,12 @@ final class DashboardViewModel: ObservableObject {
     // MARK: Supplement Compliance
 
     private func loadSupplementCompliance() {
+        // NEW: count configured supplements
+        if let ctx = modelContext {
+            let desc = FetchDescriptor<SDSupplementConfig>()
+            supplementCount = (try? ctx.fetchCount(desc)) ?? 0
+        }
+
         let last7 = Array(recentCheckins.prefix(7))
         guard !last7.isEmpty else { supplementCompliancePct = 0; return }
         let taken = last7.filter { $0.supplementsTaken != nil && !($0.supplementsTaken ?? "").isEmpty }
