@@ -229,7 +229,11 @@ final class OnboardingViewModel: ObservableObject {
         return Int(((weighted - 1.0) / 4.0) * 100)
     }
 
+    @Published var isAdvancing = false  // FIXED: prevent double-tap during animation
+
     func advance() {
+        guard !isAdvancing else { return }
+        isAdvancing = true
         // Dismiss keyboard before advancing to prevent it persisting on next screen
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         let nextIndex: Int
@@ -251,6 +255,10 @@ final class OnboardingViewModel: ObservableObject {
         default: nextIndex = stepIndex
         }
         withAnimation(.easeInOut(duration: 0.3)) { stepIndex = nextIndex }
+        // Re-enable after animation completes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+            self?.isAdvancing = false
+        }
     }
 
     func back() {
@@ -552,7 +560,7 @@ struct OnboardingView: View {
                     FirstCheckinStep(vm: vm).tag(6)
                     HealthKitStep(vm: vm).tag(7)
                     RemindersStep(vm: vm, onDone: {
-                        let uid = UUID(uuidString: userIDString) ?? UUID()
+                        let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
                         vm.save(userID: uid)
                         showTrialPaywall = true
                     }).tag(8)
@@ -907,16 +915,19 @@ private struct AudienceStep: View {
                     ) { vm.userType = "natural" }
                 }
 
-                Button("Continue") { vm.advance() }
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(AppColors.accent)
-                    .foregroundColor(.white)
-                    .cornerRadius(14)
+                Button(action: { vm.advance() }) {
+                    Text("Continue")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppColors.accent)
+                        .foregroundColor(.white)
+                        .cornerRadius(14)
+                }
+                .buttonStyle(.plain)  // FIXED: prevent SwiftUI button debounce
+                .contentShape(Rectangle())  // FIXED: ensure full tap area
             }
             .padding(28)
-            Spacer()
         }
     }
 }

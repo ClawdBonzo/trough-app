@@ -20,18 +20,24 @@ final class InjectionsViewModel: ObservableObject {
     @Published var formNotes: String = ""
     @Published var editingInjection: SDInjection?
 
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext?
     private let syncEngine = SyncEngine.shared
-    let userID: UUID
+    private(set) var userID: UUID = UUID()
 
-    init(modelContext: ModelContext, userID: UUID) {
-        self.modelContext = modelContext
-        self.userID = userID
+    init() {}
+
+    // MARK: - Setup
+
+    func setup(context: ModelContext, userID: UUID) {
+        self.modelContext = context
+        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
+        load()
     }
 
     // MARK: - Load
 
     func load() {
+        guard let modelContext else { return }
         let pred = #Predicate<SDInjection> { !$0.isSampleData }
         let desc = FetchDescriptor<SDInjection>(
             predicate: pred,
@@ -101,6 +107,7 @@ final class InjectionsViewModel: ObservableObject {
     }
 
     func saveForm() {
+        guard let modelContext else { return }
         guard let dose = Double(formDoseMg), dose > 0 else {
             errorMessage = "Please enter a valid dose."
             return
@@ -142,6 +149,7 @@ final class InjectionsViewModel: ObservableObject {
     }
 
     func delete(_ injection: SDInjection) {
+        guard let modelContext else { return }
         modelContext.delete(injection)
         try? modelContext.save()
         load()

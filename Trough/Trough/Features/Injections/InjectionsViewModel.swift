@@ -30,7 +30,7 @@ final class InjectionsViewModel: ObservableObject {
 
     func setup(context: ModelContext, userID: UUID) {
         self.modelContext = context
-        self.userID = userID
+        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
         load()
     }
 
