@@ -22,10 +22,18 @@
 	<string>7</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>$(SUPABASE_ANON_KEY)</string>
+	<key>REVENUECAT_API_KEY</key>
+	<string>$(REVENUECAT_API_KEY)</string>
+	<key>REVENUECAT_TEST_KEY</key>
+	<string>$(REVENUECAT_TEST_KEY)</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Trough reads your HRV, sleep, and activity data to correlate with your hormone protocol.</string>
+	<string>Trough reads your heart rate variability (HRV), resting heart rate, sleep duration and stages, daily step count, and body weight to calculate your daily Protocol Score, track recovery trends, and correlate wellness metrics with your TRT or hormone protocol. Your health data stays on-device and is never shared with third parties.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Trough may write workout data.</string>
+	<string>Trough may log body weight entries you record during daily check-ins back to Apple Health so your data stays consistent across apps.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

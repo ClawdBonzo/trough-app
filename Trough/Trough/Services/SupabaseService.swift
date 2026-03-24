@@ -11,11 +11,26 @@ final class SupabaseService {
 
     let client: SupabaseClient
 
+    // SECURITY: Credentials loaded from Info.plist (set via Secrets.xcconfig).
+    // Never hardcode API keys in source code.
+    // RLS AUDIT REMINDER: Verify that all Supabase tables (checkins, injections,
+    // bloodwork, peptide_logs, protocols, users) have Row Level Security policies
+    // enforcing auth.uid() == user_id. Also verify Storage bucket policies.
     private init() {
-        client = SupabaseClient(
-            supabaseURL: URL(string: "https://bwvbmfukxjdteqegcmth.supabase.co")!,
-            supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3dmJtZnVreGpkdGVxZWdjbXRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMjAwNDIsImV4cCI6MjA4OTY5NjA0Mn0.G-0UD4UwfxIrBX_5HDYOLX_XTK4BcZh7r6ifr3g3nyU"
-        )
+        let urlString = Secrets.supabaseURL
+        let anonKey = Secrets.supabaseAnonKey
+
+        guard let url = URL(string: urlString), !anonKey.isEmpty else {
+            // Fallback: if xcconfig not set, app runs in offline-only mode
+            print("[Supabase] WARNING: Missing SUPABASE_URL or SUPABASE_ANON_KEY in Info.plist. Running offline-only.")
+            client = SupabaseClient(
+                supabaseURL: URL(string: "https://placeholder.supabase.co")!,
+                supabaseKey: "placeholder"
+            )
+            return
+        }
+
+        client = SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
     }
 
     // MARK: - Auth

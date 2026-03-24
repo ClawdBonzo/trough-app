@@ -2,5 +2,8 @@ build/
 fastlane/AuthKey_*.p8
 vendor/
 .bundle/
-vendor/
-.bundle/
+
+# Secrets — never commit real API keys
+Trough/Secrets.xcconfig
+Secrets.xcconfig
+*.p8
