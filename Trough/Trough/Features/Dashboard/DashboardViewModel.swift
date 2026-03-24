@@ -138,7 +138,10 @@ final class DashboardViewModel: ObservableObject {
     // MARK: - Load
 
     func load() {
-        guard modelContext != nil else { return }
+        guard modelContext != nil else {
+            isLoading = false
+            return
+        }
         isLoading = true
         loadCheckins()
         loadStreak()
@@ -510,19 +513,49 @@ final class DashboardViewModel: ObservableObject {
         }
     }
 
-    // MARK: Personal Best
+    // MARK: - Personal Best (CRASH FIXED)
 
     private func loadPersonalBest() {
-        // protocolScore is a computed property — cannot sort by it in SwiftData.
-        // Instead, fetch all check-ins sorted by date and compute max in-memory.
-        guard let modelContext else { return }
-        var allDesc = FetchDescriptor<SDCheckin>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        let allCheckins = (try? modelContext.fetch(allDesc)) ?? []
-        guard !allCheckins.isEmpty else { return }
-        let maxEver = allCheckins.map(\.protocolScore).max() ?? 0
-        personalBestScore = maxEver
-        // Current score equals or exceeds all-time high (need at least 3 check-ins to be meaningful)
-        isPersonalBest = protocolScore > 0 && protocolScore >= maxEver && allCheckins.count >= 3
+        guard let modelContext else {
+            isPersonalBest = false
+            personalBestScore = 0
+            return
+        }
+
+        do {
+            let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+
+            // Fetch recent check-ins — sort ONLY by stored date property
+            let recentDescriptor = FetchDescriptor<SDCheckin>(
+                predicate: #Predicate { $0.date >= sevenDaysAgo },
+                sortBy: [SortDescriptor(\.date, order: .reverse)]
+            )
+            let recentCheckins = try modelContext.fetch(recentDescriptor)
+
+            guard let latestScore = recentCheckins.first?.protocolScore else {
+                isPersonalBest = false
+                personalBestScore = 0
+                return
+            }
+
+            // Compare against previous period (last 30 days before the recent week)
+            let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+            let pastDescriptor = FetchDescriptor<SDCheckin>(
+                predicate: #Predicate { $0.date >= thirtyDaysAgo && $0.date < sevenDaysAgo },
+                sortBy: [SortDescriptor(\.date, order: .reverse)]
+            )
+            let pastCheckins = try modelContext.fetch(pastDescriptor)
+
+            let previousBest = pastCheckins.map { $0.protocolScore }.max() ?? 0
+
+            isPersonalBest = latestScore > previousBest + 5.0
+            personalBestScore = latestScore
+
+        } catch {
+            print("[DashboardViewModel] loadPersonalBest failed: \(error)")
+            isPersonalBest = false
+            personalBestScore = 0
+        }
     }
 
     // MARK: Forecast
