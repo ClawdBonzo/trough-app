@@ -34,6 +34,7 @@
 		SC001BUILDFILE00000000 /* SupplementConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SC001FILEREF0000000000 /* SupplementConfigView.swift */; };
 		49404BD7AACB46A89F40B508 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E8486E1336492ABD4254F6 /* Extensions.swift */; };
 		CB53E9065E874F1DAA776FB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0242BF1CC804F9D95D006A8 /* Assets.xcassets */; };
+		PRIV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */; };
 		41DE374EBFEA44AC9FCA09E1 /* TroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */; };
 		E21215AE43A749D59D368CC2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9677675ECF484DEFBE2D9507 /* Supabase */; };
 		A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = EC01114F50764DA4AF3BF092 /* PostHog */; };
@@ -77,6 +78,7 @@
 		E49BFE36059E4003B02441B5 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
 		SEC00112233445566778899BB /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		98E8DD8413C64082A81BB49A /* DisclaimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerService.swift; sourceTree = "<group>"; };
 		8663BF9EA184443DA308FD0E /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				2B8F16387807402AA8FF9181 /* AppColors.swift */,
 				F0242BF1CC804F9D95D006A8 /* Assets.xcassets */,
 				577D31A90D4A49AF8077E3ED /* Info.plist */,
+				PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */,
 				9053DE7CB84C490CACD976F8 /* Models */,
 				169FEFB61B33444FAEBADF4D /* Services */,
 				6DFCB169D7F04A06A55631AA /* Features */,
@@ -436,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB53E9065E874F1DAA776FB7 /* Assets.xcassets in Resources */,
+				PRIV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
