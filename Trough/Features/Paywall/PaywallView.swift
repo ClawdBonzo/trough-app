@@ -251,50 +251,42 @@ struct PaywallView: View {
 
     // MARK: Actions
 
+    @MainActor
     private func doPurchase(package: Package) async {
-        await MainActor.run { isPurchasing = true; errorMessage = nil }
+        isPurchasing = true
+        errorMessage = nil
         do {
             _ = try await RevenueCatService.shared.purchase(package: package)
             await subscriptionManager.refresh()
-            await MainActor.run {
-                if subscriptionManager.isSubscribed {
-                    AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
-                    isPurchasing = false
-                    dismiss()
-                    return
-                }
-                isPurchasing = false
+            if subscriptionManager.isSubscribed {
+                AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
+                dismiss()
             }
-        } catch let error as NSError where error.code == 1 {
-            // User cancelled — silent
-            await MainActor.run { isPurchasing = false }
         } catch {
-            await MainActor.run {
+            let nsError = error as NSError
+            // RevenueCat userCancelled = code 1 — user tapped outside, silent
+            if nsError.code != 1 {
                 errorMessage = error.localizedDescription
-                isPurchasing = false
             }
         }
+        isPurchasing = false
     }
 
+    @MainActor
     private func doRestore() async {
-        await MainActor.run { isRestoring = true; errorMessage = nil }
+        isRestoring = true
+        errorMessage = nil
         do {
             _ = try await RevenueCatService.shared.restorePurchases()
             await subscriptionManager.refresh()
-            await MainActor.run {
-                if subscriptionManager.isSubscribed {
-                    isRestoring = false
-                    dismiss()
-                    return
-                }
-                isRestoring = false
-            }
+            if subscriptionManager.isSubscribed { dismiss() }
         } catch {
-            await MainActor.run {
+            let nsError = error as NSError
+            if nsError.code != 1 {
                 errorMessage = error.localizedDescription
-                isRestoring = false
             }
         }
+        isRestoring = false
     }
 }
 
