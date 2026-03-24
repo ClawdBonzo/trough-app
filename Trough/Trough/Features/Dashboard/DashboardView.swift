@@ -860,6 +860,14 @@ struct DashboardView: View {
                             )
                             .foregroundStyle(series.color)
                             .interpolationMethod(.catmullRom)
+
+                            // Show dots so single data points are visible
+                            PointMark(
+                                x: .value("Date", pt.date),
+                                y: .value("Score", pt.value)
+                            )
+                            .foregroundStyle(series.color)
+                            .symbolSize(series.dataPoints.count == 1 ? 60 : 20)
                         }
                     }
                 }
