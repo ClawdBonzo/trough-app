@@ -212,8 +212,8 @@ struct PeptidesView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(AppColors.accent)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 32)
-        .frame(maxHeight: .infinity)
     }
 
     // MARK: - Helpers

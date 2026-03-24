@@ -137,33 +137,33 @@ struct PKCurveView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: 2.0)) { value in
+            AxisMarks(values: .stride(by: 7.0)) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
                     .foregroundStyle(Color.white.opacity(0.08))
                 if let d = value.as(Double.self) {
                     AxisValueLabel {
                         Text(dayLabel(d))
-                            .font(.system(size: 10))
+                            .font(.system(size: 11))
                             .foregroundColor(.secondary)
                     }
                 }
             }
         }
         .chartYAxis {
-            AxisMarks { value in
+            AxisMarks(values: .automatic(desiredCount: 4)) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
                     .foregroundStyle(Color.white.opacity(0.08))
                 AxisValueLabel {
                     if let v = value.as(Double.self) {
-                        Text("\(Int(v))")
-                            .font(.system(size: 10))
+                        Text(v >= 1000 ? "\(Int(v / 1000))k" : "\(Int(v))")
+                            .font(.system(size: 11))
                             .foregroundColor(.secondary)
                     }
                 }
             }
         }
         .chartYScale(domain: 0...(combined.map(\.upperBand).max() ?? 1000))
-        .frame(height: 200)
+        .frame(height: 220)
         .chartBackground { _ in AppColors.background }
     }
 
