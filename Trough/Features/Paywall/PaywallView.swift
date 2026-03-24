@@ -265,10 +265,11 @@ struct PaywallView: View {
                 return  // CRITICAL: don't touch @State after dismiss
             }
         } catch {
-            let nsError = error as NSError
-            if nsError.code != 1 {
-                await MainActor.run { errorMessage = error.localizedDescription }
+            if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
+                isPurchasing = false
+                return
             }
+            errorMessage = error.localizedDescription
         }
         isPurchasing = false
     }
@@ -286,10 +287,11 @@ struct PaywallView: View {
                 return  // CRITICAL: don't touch @State after dismiss
             }
         } catch {
-            let nsError = error as NSError
-            if nsError.code != 1 {
-                await MainActor.run { errorMessage = error.localizedDescription }
+            if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
+                isRestoring = false
+                return
             }
+            errorMessage = error.localizedDescription
         }
         isRestoring = false
     }
