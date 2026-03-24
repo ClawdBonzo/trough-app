@@ -251,37 +251,50 @@ struct PaywallView: View {
 
     // MARK: Actions
 
-    @MainActor
     private func doPurchase(package: Package) async {
-        isPurchasing = true
-        errorMessage = nil
+        await MainActor.run { isPurchasing = true; errorMessage = nil }
         do {
             _ = try await RevenueCatService.shared.purchase(package: package)
             await subscriptionManager.refresh()
-            if subscriptionManager.isSubscribed {
-                AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
-                dismiss()
+            await MainActor.run {
+                if subscriptionManager.isSubscribed {
+                    AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
+                    isPurchasing = false
+                    dismiss()
+                    return
+                }
+                isPurchasing = false
             }
         } catch let error as NSError where error.code == 1 {
-            // User cancelled — silent, no error message
+            // User cancelled — silent
+            await MainActor.run { isPurchasing = false }
         } catch {
-            errorMessage = error.localizedDescription
+            await MainActor.run {
+                errorMessage = error.localizedDescription
+                isPurchasing = false
+            }
         }
-        isPurchasing = false
     }
 
-    @MainActor
     private func doRestore() async {
-        isRestoring = true
-        errorMessage = nil
+        await MainActor.run { isRestoring = true; errorMessage = nil }
         do {
             _ = try await RevenueCatService.shared.restorePurchases()
             await subscriptionManager.refresh()
-            if subscriptionManager.isSubscribed { dismiss() }
+            await MainActor.run {
+                if subscriptionManager.isSubscribed {
+                    isRestoring = false
+                    dismiss()
+                    return
+                }
+                isRestoring = false
+            }
         } catch {
-            errorMessage = error.localizedDescription
+            await MainActor.run {
+                errorMessage = error.localizedDescription
+                isRestoring = false
+            }
         }
-        isRestoring = false
     }
 }
 

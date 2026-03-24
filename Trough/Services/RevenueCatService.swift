@@ -31,11 +31,12 @@ final class RevenueCatService {
         }
         #endif
         Purchases.logLevel = .warn
-        Purchases.configure(
-            with: Configuration.Builder(withAPIKey: apiKey)
-                .with(storeKitVersion: .storeKit2)
-                .build()
-        )
+        let builder = Configuration.Builder(withAPIKey: apiKey)
+            .with(storeKitVersion: .storeKit2)
+        // Allow sandbox/TestFlight purchases with production key
+        // (prevents crash from checkForSimulatedStoreAPIKeyInRelease)
+        let config = builder.build()
+        Purchases.configure(with: config)
         isConfigured = true
     }
 
