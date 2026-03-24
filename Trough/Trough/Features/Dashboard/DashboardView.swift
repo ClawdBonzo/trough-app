@@ -137,7 +137,7 @@ struct DashboardView: View {
             .sheet(isPresented: $showWeeklyReport) {
                 WeeklyReportView()
             }
-            .sheet(isPresented: $showPaywall) {
+            .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }
             .sheet(isPresented: $showProFeatures) {

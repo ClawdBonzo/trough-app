@@ -108,7 +108,7 @@ struct MoreView: View {
                 .listStyle(.insetGrouped)
             }
             .navigationTitle("More")
-            .sheet(isPresented: $showPaywall) {
+            .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }
         }

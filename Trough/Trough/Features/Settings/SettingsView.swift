@@ -51,7 +51,7 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .sheet(isPresented: $vm.showingAddProtocol) { ProtocolFormView(vm: vm) }
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
-            .sheet(isPresented: $showPaywall) { PaywallView() }
+            .fullScreenCover(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showCSVImport) { CSVImportView() }
             .onAppear { vm.load() }
             .navigationDestination(for: String.self) { dest in
