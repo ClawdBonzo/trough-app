@@ -31,11 +31,13 @@ final class RevenueCatService {
         }
         #endif
         Purchases.logLevel = .warn
-        let builder = Configuration.Builder(withAPIKey: apiKey)
+        // StoreKit 2 + DangerousSettings to prevent sandbox receipt
+        // validation crash (checkForSimulatedStoreAPIKeyInRelease)
+        // on TestFlight builds where production key + sandbox receipts coexist.
+        let config = Configuration.Builder(withAPIKey: apiKey)
             .with(storeKitVersion: .storeKit2)
-        // Allow sandbox/TestFlight purchases with production key
-        // (prevents crash from checkForSimulatedStoreAPIKeyInRelease)
-        let config = builder.build()
+            .with(dangerousSettings: DangerousSettings(autoSyncPurchases: true))
+            .build()
         Purchases.configure(with: config)
         isConfigured = true
     }
@@ -60,7 +62,9 @@ final class RevenueCatService {
             throw NSError(domain: "RevenueCat", code: -1,
                           userInfo: [NSLocalizedDescriptionKey: "Purchases not configured"])
         }
+        print("[RevenueCat] Starting purchase for \(package.storeProduct.productIdentifier)")
         let result = try await Purchases.shared.purchase(package: package)
+        print("[RevenueCat] Purchase completed, userCancelled=\(result.userCancelled)")
         return result.customerInfo
     }
 
