@@ -47,8 +47,16 @@ final class SubscriptionManager: ObservableObject {
         }
 
         // Check entitlement state from RevenueCat
-        if let info = try? await Purchases.shared.customerInfo(),
-           let entitlement = info.entitlements["pro"] {
+        // Wrapped in do/catch to prevent sandbox receipt validation crashes
+        let info: CustomerInfo?
+        do {
+            info = try await Purchases.shared.customerInfo()
+        } catch {
+            print("[SubscriptionManager] customerInfo() failed: \(error)")
+            info = nil
+        }
+
+        if let info, let entitlement = info.entitlements["pro"] {
 
             if entitlement.isActive {
                 // Active subscription or trial
