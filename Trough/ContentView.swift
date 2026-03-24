@@ -124,6 +124,7 @@ struct AuthView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @AppStorage("isAuthenticated") private var isAuthenticated = false
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString  // FIXED: will be overwritten with real Supabase ID on login
 
     var body: some View {
         ZStack {
@@ -220,6 +221,10 @@ struct AuthView: View {
                 try await SupabaseService.shared.signUp(email: email, password: password)
             } else {
                 try await SupabaseService.shared.signIn(email: email, password: password)
+            }
+            // FIXED: use real Supabase auth user ID for all records
+            if let realID = SupabaseService.shared.currentUserID {
+                userIDString = realID
             }
             isAuthenticated = true
         } catch {

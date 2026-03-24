@@ -101,7 +101,8 @@ final class DailyCheckinViewModel: ObservableObject {
         morningWood           = checkin.morningWood
         workoutToday          = checkin.workoutToday
         trainingPerformanceScore = checkin.trainingPerformanceScore ?? 3
-        bodyWeightInput       = checkin.bodyWeightKg.map { String(format: "%.1f", $0) } ?? ""
+        // FIXED: convert stored kg to display units
+        bodyWeightInput       = checkin.bodyWeightKg.map { String(format: "%.1f", usesMetricWeight ? $0 : $0 * 2.20462) } ?? ""
         bodyFatInput          = checkin.bodyFatPercent.map { String(format: "%.1f", $0) } ?? ""
         supplementsTaken      = Set(
             (checkin.supplementsTaken ?? "")
@@ -146,14 +147,18 @@ final class DailyCheckinViewModel: ObservableObject {
         desc.fetchLimit = 1
         if let yesterdayCheckin = try? ctx.fetch(desc).first,
            let kg = yesterdayCheckin.bodyWeightKg {
-            bodyWeightInput = String(format: "%.1f", kg)
+            // FIXED: convert stored kg to display units
+            let displayValue = usesMetricWeight ? kg : kg * 2.20462
+            bodyWeightInput = String(format: "%.1f", displayValue)
         }
     }
 
     private func prefillHealthKit() async {
         guard bodyWeightInput.isEmpty else { return }
         if let kg = try? await HealthKitService.shared.latestBodyWeightKg() {
-            bodyWeightInput = String(format: "%.1f", kg)
+            // FIXED: convert kg to lbs for US locale display
+            let displayValue = usesMetricWeight ? kg : kg * 2.20462
+            bodyWeightInput = String(format: "%.1f", displayValue)
         }
     }
 
@@ -170,7 +175,9 @@ final class DailyCheckinViewModel: ObservableObject {
     /// Called from BinaryTapsView — saves to SwiftData then navigates to completion.
     func save() {
         guard let ctx = modelContext else { return }
-        let bwKg    = Double(bodyWeightInput)
+        // FIXED: convert lbs input to kg for storage if US locale
+        let rawWeight = Double(bodyWeightInput)
+        let bwKg = rawWeight.map { usesMetricWeight ? $0 : $0 / 2.20462 }
         let bfPct   = Double(bodyFatInput)
         let suppStr = supplementsTaken.sorted().joined(separator: ",")
         let mwScore: Double = morningWood == true ? 5 : morningWood == false ? 1 : 3
