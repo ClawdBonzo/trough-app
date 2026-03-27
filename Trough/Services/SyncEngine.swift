@@ -81,6 +81,10 @@ final class SyncEngine: ObservableObject {
     private func performFullSync() async throws {
         guard let ctx = modelContext else { return }
 
+        // Fix any local records whose userID doesn't match the authenticated user.
+        // This happens when records are created before sign-in or with a stale UUID.
+        migrateUserIDs(ctx: ctx)
+
         try await pushCheckins(ctx: ctx)
         try await pushInjections(ctx: ctx)
         try await pushProtocols(ctx: ctx)
@@ -92,6 +96,54 @@ final class SyncEngine: ObservableObject {
         try await pullInjections(ctx: ctx)
         try await pullProtocols(ctx: ctx)
         try await pullPeptideLogs(ctx: ctx)
+    }
+
+    // MARK: - Migrate stale user IDs
+
+    /// Rewrites all non-sample local records whose userID doesn't match the current
+    /// authenticated user. This fixes RLS violations caused by records created before
+    /// sign-in or with a stale/random UUID.
+    private func migrateUserIDs(ctx: ModelContext) {
+        guard let authID = SupabaseService.shared.client.auth.currentUser?.id else { return }
+
+        if let checkins = try? ctx.fetch(FetchDescriptor<SDCheckin>()) {
+            for r in checkins where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDCheckin \(r.id) userID → \(authID)")
+            }
+        }
+        if let injections = try? ctx.fetch(FetchDescriptor<SDInjection>()) {
+            for r in injections where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDInjection \(r.id) userID → \(authID)")
+            }
+        }
+        if let protocols = try? ctx.fetch(FetchDescriptor<SDProtocol>()) {
+            for r in protocols where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDProtocol \(r.id) userID → \(authID)")
+            }
+        }
+        if let logs = try? ctx.fetch(FetchDescriptor<SDPeptideLog>()) {
+            for r in logs where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDPeptideLog \(r.id) userID → \(authID)")
+            }
+        }
+        if let results = try? ctx.fetch(FetchDescriptor<SDBloodwork>()) {
+            for r in results where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDBloodwork \(r.id) userID → \(authID)")
+            }
+        }
+        if let configs = try? ctx.fetch(FetchDescriptor<SDSupplementConfig>()) {
+            for r in configs where !r.isSampleData && r.userID != authID {
+                r.userID = authID
+                print("[SyncEngine] Migrated SDSupplementConfig \(r.id) userID → \(authID)")
+            }
+        }
+
+        try? ctx.save()
     }
 
     // MARK: - Push (local → remote)
