@@ -81,12 +81,14 @@ final class PeptidesViewModel: ObservableObject {
         formCompoundSelection == "Custom" ? formCustomName : formCompoundSelection
     }
 
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext!
     private let syncEngine = SyncEngine.shared
-    let userID: UUID
+    private(set) var userID: UUID = UUID()
 
-    init(modelContext: ModelContext, userID: UUID) {
-        self.modelContext = modelContext
+    init() {}
+
+    func setup(context: ModelContext, userID: UUID) {
+        self.modelContext = context
         self.userID = userID
     }
 

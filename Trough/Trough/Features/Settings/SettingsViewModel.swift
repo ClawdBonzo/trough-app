@@ -48,12 +48,14 @@ final class SettingsViewModel: ObservableObject {
     ]
     static let presetNames: [String] = presets.map(\.name) + ["Custom"]
 
-    private let modelContext: ModelContext
+    private var modelContext: ModelContext!
     private let syncEngine = SyncEngine.shared
-    let userID: UUID
+    private(set) var userID: UUID = UUID()
 
-    init(modelContext: ModelContext, userID: UUID) {
-        self.modelContext = modelContext
+    init() {}
+
+    func setup(context: ModelContext, userID: UUID) {
+        self.modelContext = context
         self.userID = userID
     }
 
@@ -208,6 +210,9 @@ final class SettingsViewModel: ObservableObject {
         do {
             try await SupabaseService.shared.signOut()
             UserDefaults.standard.set(false, forKey: "isAuthenticated")
+            UserDefaults.standard.set(false, forKey: "onboardingCompleted")
+            UserDefaults.standard.set(false, forKey: "hkPermissionRequested")
+            UserDefaults.standard.removeObject(forKey: "userIDString")
         } catch {
             errorMessage = error.localizedDescription
         }

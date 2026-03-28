@@ -9,18 +9,10 @@ struct SettingsView: View {
     @AppStorage("trackBodyWeight") private var trackBodyWeight = true
     @EnvironmentObject private var syncEngine: SyncEngine
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @StateObject private var vm: SettingsViewModel
+    @StateObject private var vm = SettingsViewModel()
     @State private var showProFeatures = false
     @State private var showPaywall = false
     @State private var showCSVImport = false
-
-    init() {
-        let id = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
-        _vm = StateObject(wrappedValue: SettingsViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
-        ))
-    }
 
     var body: some View {
         NavigationStack {
@@ -53,7 +45,11 @@ struct SettingsView: View {
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
             .fullScreenCover(isPresented: $showPaywall) { PaywallView() }
             .sheet(isPresented: $showCSVImport) { CSVImportView() }
-            .onAppear { vm.load() }
+            .onAppear {
+                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                vm.setup(context: modelContext, userID: uid)
+                vm.load()
+            }
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
             }

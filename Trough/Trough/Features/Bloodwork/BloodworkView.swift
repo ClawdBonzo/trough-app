@@ -6,18 +6,10 @@ import SwiftData
 struct BloodworkView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
-    @StateObject private var vm: BloodworkViewModel
+    @StateObject private var vm = BloodworkViewModel()
 
     enum Tab { case results, trends }
     @State private var selectedTab: Tab = .results
-
-    init() {
-        let id = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
-        _vm = StateObject(wrappedValue: BloodworkViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
-        ))
-    }
 
     var body: some View {
         NavigationStack {
@@ -55,7 +47,11 @@ struct BloodworkView: View {
             .sheet(isPresented: $vm.showingEntrySheet, onDismiss: { vm.load() }) {
                 BloodworkEntryView(vm: vm)
             }
-            .onAppear { vm.load() }
+            .onAppear {
+                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                vm.setup(context: modelContext, userID: uid)
+                vm.load()
+            }
         }
     }
 

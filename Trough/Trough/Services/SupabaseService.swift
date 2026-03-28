@@ -203,6 +203,7 @@ struct RemoteCheckin: Codable {
     let libidoScore: Double
     let sleepQualityScore: Double
     let morningWoodScore: Double
+    let mentalClarityScore: Double?
     let bodyWeightKg: Double?
     let restingHR: Double?
     let sleepHours: Double?
@@ -212,16 +213,17 @@ struct RemoteCheckin: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, date, notes, symptoms
-        case userID           = "user_id"
-        case energyScore      = "energy_score"
-        case moodScore        = "mood_score"
-        case libidoScore      = "libido_score"
-        case sleepQualityScore = "sleep_quality_score"
-        case morningWoodScore = "morning_wood_score"
-        case bodyWeightKg     = "body_weight_kg"
-        case restingHR        = "resting_hr"
-        case sleepHours       = "sleep_hours"
-        case updatedAt        = "updated_at"
+        case userID              = "user_id"
+        case energyScore         = "energy_score"
+        case moodScore           = "mood_score"
+        case libidoScore         = "libido_score"
+        case sleepQualityScore   = "sleep_quality_score"
+        case morningWoodScore    = "morning_wood_score"
+        case mentalClarityScore  = "mental_clarity_score"
+        case bodyWeightKg        = "body_weight_kg"
+        case restingHR           = "resting_hr"
+        case sleepHours          = "sleep_hours"
+        case updatedAt           = "updated_at"
     }
 }
 

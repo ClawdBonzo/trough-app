@@ -5,15 +5,7 @@ import SwiftData
 
 struct PeptidesView: View {
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var vm: PeptidesViewModel
-
-    init() {
-        let id = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
-        _vm = StateObject(wrappedValue: PeptidesViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
-        ))
-    }
+    @StateObject private var vm = PeptidesViewModel()
 
     var body: some View {
         NavigationStack {
@@ -44,7 +36,11 @@ struct PeptidesView: View {
             .sheet(isPresented: $vm.showingLogSheet) {
                 PeptideLogView(vm: vm)
             }
-            .onAppear { vm.load() }
+            .onAppear {
+                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                vm.setup(context: modelContext, userID: uid)
+                vm.load()
+            }
         }
     }
 

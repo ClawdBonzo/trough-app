@@ -161,6 +161,7 @@ final class SyncEngine: ObservableObject {
                 libidoScore: c.libidoScore,
                 sleepQualityScore: c.sleepQualityScore,
                 morningWoodScore: c.morningWoodScore,
+                mentalClarityScore: c.mentalClarityScore,
                 bodyWeightKg: c.bodyWeightKg,
                 restingHR: c.restingHR,
                 sleepHours: c.sleepHours,
@@ -293,17 +294,18 @@ final class SyncEngine: ObservableObject {
                                 localUpdatedAt: local.updatedAt, remote: r,
                                 resolution: "remote_wins", ctx: ctx)
                 }
-                local.energyScore       = r.energyScore
-                local.moodScore         = r.moodScore
-                local.libidoScore       = r.libidoScore
-                local.sleepQualityScore = r.sleepQualityScore
-                local.morningWoodScore  = r.morningWoodScore
-                local.bodyWeightKg      = r.bodyWeightKg
-                local.restingHR         = r.restingHR
-                local.sleepHours        = r.sleepHours
-                local.notes             = r.notes
-                local.symptoms          = r.symptoms
-                local.updatedAt         = remoteDate
+                local.energyScore        = r.energyScore
+                local.moodScore          = r.moodScore
+                local.libidoScore        = r.libidoScore
+                local.sleepQualityScore  = r.sleepQualityScore
+                local.morningWoodScore   = r.morningWoodScore
+                local.mentalClarityScore = r.mentalClarityScore ?? local.mentalClarityScore
+                local.bodyWeightKg       = r.bodyWeightKg
+                local.restingHR          = r.restingHR
+                local.sleepHours         = r.sleepHours
+                local.notes              = r.notes
+                local.symptoms           = r.symptoms
+                local.updatedAt          = remoteDate
             } else {
                 ctx.insert(SDCheckin(
                     id: id, userID: uid,
@@ -343,13 +345,14 @@ final class SyncEngine: ObservableObject {
                                 localUpdatedAt: local.updatedAt, remote: r,
                                 resolution: "remote_wins", ctx: ctx)
                 }
-                local.injectedAt    = ISO8601DateFormatter().date(from: r.injectedAt) ?? local.injectedAt
-                local.compoundName  = r.compoundName
-                local.doseAmountMg  = r.doseAmountMg
-                local.volumeMl      = r.volumeMl
-                local.injectionSite = r.injectionSite
-                local.notes         = r.notes
-                local.updatedAt     = remoteDate
+                local.injectedAt     = ISO8601DateFormatter().date(from: r.injectedAt) ?? local.injectedAt
+                local.compoundName   = r.compoundName
+                local.doseAmountMg   = r.doseAmountMg
+                local.volumeMl       = r.volumeMl
+                local.injectionSite  = r.injectionSite
+                local.batchLotNumber = r.batchLotNumber
+                local.notes          = r.notes
+                local.updatedAt      = remoteDate
             } else {
                 ctx.insert(SDInjection(
                     id: id, userID: uid,
@@ -387,6 +390,8 @@ final class SyncEngine: ObservableObject {
                 local.frequencyDays        = r.frequencyDays
                 local.concentrationMgPerMl = r.concentrationMgPerMl
                 local.isActive             = r.isActive
+                local.startDate            = ISO8601DateFormatter().date(from: r.startDate) ?? local.startDate
+                local.endDate              = r.endDate.flatMap { ISO8601DateFormatter().date(from: $0) }
                 local.notes                = r.notes
                 local.updatedAt            = remoteDate
             } else {
@@ -426,6 +431,7 @@ final class SyncEngine: ObservableObject {
                 local.doseMcg               = r.doseMcg
                 local.routeOfAdministration = r.routeOfAdministration
                 local.injectionSite         = r.injectionSite
+                local.batchLotNumber        = r.batchLotNumber
                 local.notes                 = r.notes
                 local.updatedAt             = remoteDate
             } else {
