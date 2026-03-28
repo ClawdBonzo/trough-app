@@ -1,4 +1,5 @@
 import SwiftUI
+import AuthenticationServices
 
 struct ContentView: View {
     @AppStorage("isAuthenticated")       private var isAuthenticated       = false
@@ -123,91 +124,194 @@ struct AuthView: View {
     @State private var isSignUp = false
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var confirmationPending = false
+    @StateObject private var appleCoordinator = AppleSignInCoordinator()
+    @StateObject private var googleCoordinator = GoogleSignInCoordinator()
     @AppStorage("isAuthenticated") private var isAuthenticated = false
-    @AppStorage("userIDString") private var userIDString = UUID().uuidString  // FIXED: will be overwritten with real Supabase ID on login
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
 
     var body: some View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
-            VStack(spacing: 24) {
-                VStack(spacing: 12) {
-                    Image("AppIcon-Logo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .clipShape(RoundedRectangle(cornerRadius: 22))
+            ScrollView {
+                VStack(spacing: 24) {
+                    VStack(spacing: 12) {
+                        Image("AppIcon-Logo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 22))
 
-                    Text("TROUGH")
-                        .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(AppColors.accent)
-
-                    Text("TRT & Hormone Tracker")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.top, 50)
-
-                VStack(spacing: 16) {
-                    TextField("Email", text: $email)
-                        .textContentType(.emailAddress)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .padding()
-                        .background(AppColors.card)
-                        .cornerRadius(12)
-
-                    SecureField("Password", text: $password)
-                        .textContentType(isSignUp ? .newPassword : .password)
-                        .padding()
-                        .background(AppColors.card)
-                        .cornerRadius(12)
-
-                    if let error = errorMessage {
-                        Text(error)
-                            .font(.caption)
+                        Text("TROUGH")
+                            .font(.system(size: 36, weight: .black, design: .rounded))
                             .foregroundColor(AppColors.accent)
-                            .multilineTextAlignment(.center)
-                    }
-                }
 
-                VStack(spacing: 12) {
-                    Button {
-                        Task { await authenticate() }
-                    } label: {
-                        HStack {
-                            if isLoading {
-                                ProgressView()
-                                    .tint(.white)
-                            } else {
-                                Text(isSignUp ? "Create Account" : "Sign In")
+                        Text("TRT & Hormone Tracker")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 50)
+
+                    // MARK: - Social sign-in buttons
+                    VStack(spacing: 12) {
+                        SignInWithAppleButton(.signIn) { request in
+                            request.requestedScopes = [.email, .fullName]
+                        } onCompletion: { result in
+                            Task { await handleAppleSignIn(result) }
+                        }
+                        .signInWithAppleButtonStyle(.white)
+                        .frame(height: 50)
+                        .cornerRadius(12)
+
+                        Button {
+                            Task { await handleGoogleSignIn() }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "g.circle.fill")
+                                    .font(.title2)
+                                Text("Sign in with Google")
                                     .fontWeight(.semibold)
                             }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(.white)
+                            .foregroundColor(.black)
+                            .cornerRadius(12)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.accent)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .disabled(isLoading)
                     }
-                    .disabled(isLoading)
 
-                    Button {
-                        isSignUp.toggle()
-                        errorMessage = nil
-                    } label: {
-                        Text(isSignUp ? "Already have an account? Sign In" : "New here? Create Account")
+                    // Divider
+                    HStack {
+                        Rectangle().frame(height: 1).foregroundColor(AppColors.card)
+                        Text("or")
                             .font(.caption)
                             .foregroundColor(AppColors.textSecondary)
+                        Rectangle().frame(height: 1).foregroundColor(AppColors.card)
                     }
 
-                }
+                    // MARK: - Email/password
+                    VStack(spacing: 16) {
+                        TextField("Email", text: $email)
+                            .textContentType(.emailAddress)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .padding()
+                            .background(AppColors.card)
+                            .cornerRadius(12)
 
-                Spacer()
+                        SecureField("Password", text: $password)
+                            .textContentType(isSignUp ? .newPassword : .password)
+                            .padding()
+                            .background(AppColors.card)
+                            .cornerRadius(12)
+
+                        if let error = errorMessage {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(AppColors.accent)
+                                .multilineTextAlignment(.center)
+                        }
+
+                        if confirmationPending {
+                            HStack(spacing: 8) {
+                                Image(systemName: "envelope.badge.fill")
+                                    .foregroundColor(.green)
+                                Text("Check your email to confirm your account, then sign in below.")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
+                            .padding()
+                            .background(AppColors.card)
+                            .cornerRadius(12)
+                        }
+                    }
+
+                    VStack(spacing: 12) {
+                        Button {
+                            Task { await authenticate() }
+                        } label: {
+                            HStack {
+                                if isLoading {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Text(isSignUp ? "Create Account" : "Sign In")
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.accent)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                        }
+                        .disabled(isLoading)
+
+                        Button {
+                            isSignUp.toggle()
+                            errorMessage = nil
+                        } label: {
+                            Text(isSignUp ? "Already have an account? Sign In" : "New here? Create Account")
+                                .font(.caption)
+                                .foregroundColor(AppColors.textSecondary)
+                        }
+                    }
+
+                    Spacer(minLength: 40)
+                }
+                .padding(.horizontal, 24)
             }
-            .padding(.horizontal, 24)
         }
     }
+
+    // MARK: - Apple Sign In
+
+    private func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            guard case .success(let authorization) = result,
+                  let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                  let tokenData = credential.identityToken,
+                  let idToken = String(data: tokenData, encoding: .utf8) else {
+                throw AppleSignInError.missingToken
+            }
+            try await SupabaseService.shared.signInWithApple(idToken: idToken)
+            if let realID = SupabaseService.shared.currentUserID {
+                userIDString = realID
+            }
+            isAuthenticated = true
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+
+    // MARK: - Google Sign In
+
+    private func handleGoogleSignIn() async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            try await googleCoordinator.signIn()
+            if let realID = SupabaseService.shared.currentUserID {
+                userIDString = realID
+            }
+            isAuthenticated = true
+        } catch {
+            // User cancelled the web flow — not an error
+            if (error as? ASWebAuthenticationSessionError)?.code == .canceledLogin {
+                isLoading = false
+                return
+            }
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+
+    // MARK: - Email/password
 
     private func authenticate() async {
         guard !email.isEmpty, !password.isEmpty else {
@@ -216,13 +320,19 @@ struct AuthView: View {
         }
         isLoading = true
         errorMessage = nil
+        confirmationPending = false
         do {
             if isSignUp {
-                try await SupabaseService.shared.signUp(email: email, password: password)
+                let hasSession = try await SupabaseService.shared.signUp(email: email, password: password)
+                if !hasSession {
+                    confirmationPending = true
+                    isSignUp = false
+                    isLoading = false
+                    return
+                }
             } else {
                 try await SupabaseService.shared.signIn(email: email, password: password)
             }
-            // FIXED: use real Supabase auth user ID for all records
             if let realID = SupabaseService.shared.currentUserID {
                 userIDString = realID
             }

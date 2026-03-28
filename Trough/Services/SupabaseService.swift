@@ -36,19 +36,40 @@ final class SupabaseService {
     // MARK: - Auth
 
     /// Creates a new user account and inserts a row in the `users` table.
-    func signUp(email: String, password: String) async throws {
+    /// Returns `true` if a valid session was established (email already confirmed or confirmation not required).
+    /// Returns `false` if the user must confirm their email before signing in.
+    @discardableResult
+    func signUp(email: String, password: String) async throws -> Bool {
         let response = try await client.auth.signUp(email: email, password: password)
+
+        // If email confirmation is required, Supabase creates the user but
+        // does NOT issue a valid session. auth.uid() will be null in RLS,
+        // so we must NOT sync or enter the app until the user confirms.
+        guard response.session != nil else {
+            print("[Supabase] signUp: email confirmation pending — no session yet")
+            return false
+        }
+
         let uid = response.user.id.uuidString
         // Create users row — table must have RLS policy allowing insert for auth.uid()
         try await client
             .from("users")
             .insert(["id": uid, "email": email])
             .execute()
+        return true
     }
 
-    /// Signs in an existing user.
+    /// Signs in an existing user. Also ensures a `users` table row exists
+    /// (needed when email confirmation was pending during signUp).
     func signIn(email: String, password: String) async throws {
         try await client.auth.signIn(email: email, password: password)
+        // Upsert users row so it exists even if signUp skipped it (email confirmation flow)
+        if let uid = client.auth.currentUser?.id.uuidString {
+            try? await client
+                .from("users")
+                .upsert(["id": uid, "email": email], onConflict: "id")
+                .execute()
+        }
     }
 
     /// Signs in (or signs up) with an Apple ID token obtained from ASAuthorization.
