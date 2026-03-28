@@ -155,14 +155,22 @@ struct AuthView: View {
 
                     // MARK: - Social sign-in buttons
                     VStack(spacing: 12) {
-                        SignInWithAppleButton(.signIn) { request in
-                            request.requestedScopes = [.email, .fullName]
-                        } onCompletion: { result in
-                            Task { await handleAppleSignIn(result) }
+                        Button {
+                            Task { await handleAppleSignIn() }
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "apple.logo")
+                                    .font(.title2)
+                                Text("Sign in with Apple")
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(.white)
+                            .foregroundColor(.black)
+                            .cornerRadius(12)
                         }
-                        .signInWithAppleButtonStyle(.white)
-                        .frame(height: 50)
-                        .cornerRadius(12)
+                        .disabled(isLoading)
 
                         Button {
                             Task { await handleGoogleSignIn() }
@@ -268,33 +276,22 @@ struct AuthView: View {
 
     // MARK: - Apple Sign In
 
-    private func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) async {
+    private func handleAppleSignIn() async {
         isLoading = true
         errorMessage = nil
         do {
-            let authorization: ASAuthorization
-            switch result {
-            case .success(let auth):
-                authorization = auth
-            case .failure(let error):
-                // User cancelled — not an error worth showing
-                if (error as? ASAuthorizationError)?.code == .canceled {
-                    isLoading = false
-                    return
-                }
-                throw error
-            }
-            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
-                  let tokenData = credential.identityToken,
-                  let idToken = String(data: tokenData, encoding: .utf8) else {
-                throw AppleSignInError.missingToken
-            }
+            let idToken = try await appleCoordinator.signIn()
             try await SupabaseService.shared.signInWithApple(idToken: idToken)
             if let realID = SupabaseService.shared.currentUserID {
                 userIDString = realID
             }
             isAuthenticated = true
         } catch {
+            // User cancelled — not an error worth showing
+            if (error as? ASAuthorizationError)?.code == .canceled {
+                isLoading = false
+                return
+            }
             errorMessage = error.localizedDescription
         }
         isLoading = false
