@@ -272,8 +272,19 @@ struct AuthView: View {
         isLoading = true
         errorMessage = nil
         do {
-            guard case .success(let authorization) = result,
-                  let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+            let authorization: ASAuthorization
+            switch result {
+            case .success(let auth):
+                authorization = auth
+            case .failure(let error):
+                // User cancelled — not an error worth showing
+                if (error as? ASAuthorizationError)?.code == .canceled {
+                    isLoading = false
+                    return
+                }
+                throw error
+            }
+            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
                   let tokenData = credential.identityToken,
                   let idToken = String(data: tokenData, encoding: .utf8) else {
                 throw AppleSignInError.missingToken
