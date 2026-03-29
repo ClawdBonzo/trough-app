@@ -1713,6 +1713,7 @@ private struct MetricSlider: View {
 private struct HealthKitStep: View {
     @ObservedObject var vm: OnboardingViewModel
     @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
+    @State private var alreadyDetermined = false
 
     var body: some View {
         StepContainer(
@@ -1730,9 +1731,22 @@ private struct HealthKitStep: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.top, 8)
+
+                    if alreadyDetermined {
+                        Button {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            Text("HealthKit permissions already set. Tap to open Settings.")
+                                .font(.caption)
+                                .foregroundColor(AppColors.accent)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
                 }
             },
-            primaryLabel: "Enable HealthKit",
+            primaryLabel: alreadyDetermined ? "Continue" : "Enable HealthKit",
             onPrimary: {
                 Task {
                     try? await HealthKitService.shared.requestPermissions()
@@ -1743,6 +1757,10 @@ private struct HealthKitStep: View {
             showBack: true,
             onBack: { vm.back() }
         )
+        .onAppear {
+            let status = HealthKitService.shared.authorizationStatus
+            alreadyDetermined = (status != .notDetermined)
+        }
     }
 }
 
