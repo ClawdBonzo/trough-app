@@ -70,6 +70,19 @@ struct TroughApp: App {
                 .preferredColorScheme(.dark)
                 .task { await subscriptionManager.refresh() }
                 .task { await requestATTIfNeeded() }
+                .onOpenURL { url in
+                    Task {
+                        try? await SupabaseService.shared.client.auth.handle(url)
+                        // After handling the deep link (e.g. email confirmation),
+                        // check if we now have a valid session and sign the user in.
+                        if SupabaseService.shared.currentUserID != nil {
+                            UserDefaults.standard.set(true, forKey: "isAuthenticated")
+                            if let uid = SupabaseService.shared.currentUserID {
+                                UserDefaults.standard.set(uid, forKey: "userIDString")
+                            }
+                        }
+                    }
+                }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {

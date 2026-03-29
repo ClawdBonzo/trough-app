@@ -30,7 +30,11 @@ final class SupabaseService {
             return
         }
 
-        client = SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
+        client = SupabaseClient(
+            supabaseURL: url,
+            supabaseKey: anonKey,
+            options: .init(auth: .init(redirectToURL: URL(string: "app.trough.ios://auth-callback")))
+        )
     }
 
     // MARK: - Auth
