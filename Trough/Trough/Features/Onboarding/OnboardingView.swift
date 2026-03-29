@@ -353,7 +353,6 @@ final class OnboardingViewModel: ObservableObject {
         }
 
         try? ctx.save()
-        SyncEngine.shared.triggerSync()
 
         // NOTE: Do NOT set onboardingCompleted here.
         // It must be set AFTER the trial prompt screen is shown/dismissed,

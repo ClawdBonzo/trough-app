@@ -7,7 +7,6 @@ struct SettingsView: View {
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("userType") private var userType = "trt"
     @AppStorage("trackBodyWeight") private var trackBodyWeight = true
-    @EnvironmentObject private var syncEngine: SyncEngine
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var vm = SettingsViewModel()
     @State private var showProFeatures = false
@@ -25,10 +24,6 @@ struct SettingsView: View {
                         trackingSection
                     }
                     importSection
-                    syncSection
-                    if !vm.syncConflicts.filter({ !$0.isReviewed }).isEmpty {
-                        conflictsSection
-                    }
                     if !subscriptionManager.isSubscribed {
                         proSection
                     }
@@ -115,61 +110,6 @@ struct SettingsView: View {
         Section("Tracking Preferences") {
             Toggle("Track Body Weight", isOn: $trackBodyWeight)
                 .tint(AppColors.accent)
-        }
-        .listRowBackground(AppColors.card)
-    }
-
-    private var syncSection: some View {
-        Section("Sync") {
-            HStack {
-                Text("Last synced")
-                Spacer()
-                if let last = syncEngine.lastSyncedAt {
-                    Text(last.mediumString)
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                } else {
-                    Text("Never")
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
-            }
-            Button {
-                syncEngine.triggerSync()
-            } label: {
-                HStack {
-                    Text("Sync Now")
-                    Spacer()
-                    if syncEngine.isSyncing {
-                        ProgressView().tint(AppColors.accent)
-                    }
-                }
-            }
-            .foregroundColor(AppColors.accent)
-        }
-        .listRowBackground(AppColors.card)
-    }
-
-    private var conflictsSection: some View {
-        Section("Sync Conflicts") {
-            ForEach(vm.syncConflicts.filter { !$0.isReviewed }, id: \.id) { c in
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text(c.tableName.capitalized)
-                            .font(.subheadline.bold())
-                        Spacer()
-                        Text(c.resolution.replacingOccurrences(of: "_", with: " "))
-                            .font(.caption)
-                            .foregroundColor(AppColors.accent)
-                    }
-                    Text("Auto-resolved \(c.resolvedAt.mediumString)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Button("Dismiss") { vm.markConflictReviewed(c) }
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
         }
         .listRowBackground(AppColors.card)
     }

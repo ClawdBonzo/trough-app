@@ -23,7 +23,6 @@ private var rcAPIKey: String {
 @main
 struct TroughApp: App {
     let container: ModelContainer
-    @StateObject private var syncEngine = SyncEngine.shared
     @StateObject private var subscriptionManager = SubscriptionManager.shared
     @StateObject private var toastManager = ToastManager.shared
     @Environment(\.scenePhase) private var scenePhase
@@ -54,17 +53,6 @@ struct TroughApp: App {
             }
         }
 
-        // Wire up SyncEngine with the shared container's context
-        SyncEngine.shared.modelContext = container.mainContext
-
-        // FIXED: sync userIDString with real Supabase auth ID on every launch
-        if let realID = SupabaseService.shared.currentUserID {
-            UserDefaults.standard.set(realID, forKey: "userIDString")
-        }
-
-        // Auto-trigger sync on launch (will silently skip if not authenticated)
-        Task { SyncEngine.shared.triggerSync() }
-
         let isTF = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         if isTF {
             print("[TroughApp] Running in TestFlight sandbox — production key + DangerousSettings enabled")
@@ -77,7 +65,6 @@ struct TroughApp: App {
         WindowGroup {
             ContentView()
                 .modelContainer(container)
-                .environmentObject(syncEngine)
                 .environmentObject(subscriptionManager)
                 .environmentObject(toastManager)
                 .preferredColorScheme(.dark)

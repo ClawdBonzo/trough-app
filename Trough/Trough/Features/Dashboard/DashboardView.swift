@@ -4,7 +4,6 @@ import Charts
 
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var syncEngine: SyncEngine
     @StateObject var vm = DashboardViewModel()
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @EnvironmentObject var toastManager: ToastManager
@@ -122,19 +121,6 @@ struct DashboardView: View {
             }
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if syncEngine.isSyncing {
-                        ProgressView().tint(AppColors.accent)
-                    } else {
-                        Button { vm.triggerSync() } label: {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .foregroundColor(AppColors.accent)
-                        }
-                        .accessibilityLabel("Sync data")
-                    }
-                }
-            }
             .onAppear {
                 vm.setModelContext(modelContext)
                 vm.load()

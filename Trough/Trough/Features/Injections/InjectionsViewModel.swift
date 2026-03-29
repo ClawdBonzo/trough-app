@@ -21,7 +21,6 @@ final class InjectionsViewModel: ObservableObject {
     @Published var editingInjection: SDInjection?
 
     private var modelContext: ModelContext?
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     init() {}
@@ -142,7 +141,6 @@ final class InjectionsViewModel: ObservableObject {
             try modelContext.save()
             showingLogSheet = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -153,6 +151,5 @@ final class InjectionsViewModel: ObservableObject {
         modelContext.delete(injection)
         try? modelContext.save()
         load()
-        syncEngine.triggerSync()
     }
 }

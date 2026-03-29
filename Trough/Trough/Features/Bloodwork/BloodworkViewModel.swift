@@ -142,7 +142,6 @@ final class BloodworkViewModel: ObservableObject {
     // MARK: Private
 
     private var modelContext: ModelContext!
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     init() {}
@@ -255,7 +254,6 @@ final class BloodworkViewModel: ObservableObject {
             try modelContext.save()
             showingEntrySheet = false
             load()
-            syncEngine.triggerSync()
 
             // Upload photo in background if present
             if let photoData = pendingPhotoData {

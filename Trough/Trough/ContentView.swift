@@ -1,5 +1,4 @@
 import SwiftUI
-import AuthenticationServices
 
 struct ContentView: View {
     @AppStorage("isAuthenticated")       private var isAuthenticated       = false
@@ -125,8 +124,6 @@ struct AuthView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var confirmationPending = false
-    @StateObject private var appleCoordinator = AppleSignInCoordinator()
-    @StateObject private var googleCoordinator = GoogleSignInCoordinator()
     @AppStorage("isAuthenticated") private var isAuthenticated = false
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
 
@@ -152,52 +149,6 @@ struct AuthView: View {
                             .foregroundColor(.secondary)
                     }
                     .padding(.top, 50)
-
-                    // MARK: - Social sign-in buttons
-                    VStack(spacing: 12) {
-                        Button {
-                            Task { await handleAppleSignIn() }
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "apple.logo")
-                                    .font(.title2)
-                                Text("Sign in with Apple")
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(.white)
-                            .foregroundColor(.black)
-                            .cornerRadius(12)
-                        }
-                        .disabled(isLoading)
-
-                        Button {
-                            Task { await handleGoogleSignIn() }
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "g.circle.fill")
-                                    .font(.title2)
-                                Text("Sign in with Google")
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(.white)
-                            .foregroundColor(.black)
-                            .cornerRadius(12)
-                        }
-                        .disabled(isLoading)
-                    }
-
-                    // Divider
-                    HStack {
-                        Rectangle().frame(height: 1).foregroundColor(AppColors.card)
-                        Text("or")
-                            .font(.caption)
-                            .foregroundColor(AppColors.textSecondary)
-                        Rectangle().frame(height: 1).foregroundColor(AppColors.card)
-                    }
 
                     // MARK: - Email/password
                     VStack(spacing: 16) {
@@ -272,51 +223,6 @@ struct AuthView: View {
                 .padding(.horizontal, 24)
             }
         }
-    }
-
-    // MARK: - Apple Sign In
-
-    private func handleAppleSignIn() async {
-        isLoading = true
-        errorMessage = nil
-        do {
-            let idToken = try await appleCoordinator.signIn()
-            try await SupabaseService.shared.signInWithApple(idToken: idToken)
-            if let realID = SupabaseService.shared.currentUserID {
-                userIDString = realID
-            }
-            isAuthenticated = true
-        } catch {
-            // User cancelled — not an error worth showing
-            if (error as? ASAuthorizationError)?.code == .canceled {
-                isLoading = false
-                return
-            }
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
-    }
-
-    // MARK: - Google Sign In
-
-    private func handleGoogleSignIn() async {
-        isLoading = true
-        errorMessage = nil
-        do {
-            try await googleCoordinator.signIn()
-            if let realID = SupabaseService.shared.currentUserID {
-                userIDString = realID
-            }
-            isAuthenticated = true
-        } catch {
-            // User cancelled the web flow — not an error
-            if (error as? ASWebAuthenticationSessionError)?.code == .canceledLogin {
-                isLoading = false
-                return
-            }
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
     }
 
     // MARK: - Email/password

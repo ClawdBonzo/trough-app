@@ -181,7 +181,6 @@ final class CSVImportViewModel: ObservableObject {
             progress = 1.0
         }
 
-        SyncEngine.shared.triggerSync()
         step = .report
     }
 

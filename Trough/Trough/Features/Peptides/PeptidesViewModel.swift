@@ -82,7 +82,6 @@ final class PeptidesViewModel: ObservableObject {
     }
 
     private var modelContext: ModelContext!
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     init() {}
@@ -191,7 +190,6 @@ final class PeptidesViewModel: ObservableObject {
             try modelContext.save()
             showingLogSheet = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }

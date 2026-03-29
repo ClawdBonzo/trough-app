@@ -245,8 +245,6 @@ final class DailyCheckinViewModel: ObservableObject {
             }
         }
 
-        SyncEngine.shared.triggerSync()
-
         // Analytics
         let dayInCycle = cycleInfo?.day
         AnalyticsService.checkinCompleted(dayInCycle: dayInCycle)

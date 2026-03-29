@@ -49,7 +49,6 @@ final class SettingsViewModel: ObservableObject {
     static let presetNames: [String] = presets.map(\.name) + ["Custom"]
 
     private var modelContext: ModelContext!
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     init() {}
@@ -114,7 +113,6 @@ final class SettingsViewModel: ObservableObject {
             try modelContext.save()
             showingAddProtocol = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -163,7 +161,6 @@ final class SettingsViewModel: ObservableObject {
             try modelContext.save()
             showingAddSupplement = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }

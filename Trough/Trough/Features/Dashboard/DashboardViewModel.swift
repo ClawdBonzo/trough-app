@@ -159,7 +159,6 @@ final class DashboardViewModel: ObservableObject {
         loadForecast()
         loadWeeklyComparison()
         if userType == "natural" { loadBodyComposition() }
-        isSyncing = SyncEngine.shared.isSyncing
         isLoading = false
     }
 
@@ -428,12 +427,6 @@ final class DashboardViewModel: ObservableObject {
     func toggleMetric(id: String) {
         guard let i = metricSeries.firstIndex(where: { $0.id == id }) else { return }
         metricSeries[i].isVisible.toggle()
-    }
-
-    // MARK: Sync
-
-    func triggerSync() {
-        SyncEngine.shared.triggerSync()
     }
 
     // MARK: Greeting
