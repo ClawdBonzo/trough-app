@@ -66,6 +66,7 @@
 		PL009 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PL010 /* PrivacyPolicyView.swift */; };
 		CSV001 /* CSVImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV002 /* CSVImportService.swift */; };
 		CSV003 /* CSVImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV004 /* CSVImportView.swift */; };
+		L10N001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = L10N002 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +129,10 @@
 		SC001FILEREF0000000000 /* SupplementConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementConfigView.swift; sourceTree = "<group>"; };
 		CSV002 /* CSVImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportService.swift; sourceTree = "<group>"; };
 		CSV004 /* CSVImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportView.swift; sourceTree = "<group>"; };
+		L10N003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		L10N004 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		L10N005 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		L10N006 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +184,7 @@
 				F0242BF1CC804F9D95D006A8 /* Assets.xcassets */,
 				577D31A90D4A49AF8077E3ED /* Info.plist */,
 				PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */,
+				L10N002 /* Localizable.strings */,
 				9053DE7CB84C490CACD976F8 /* Models */,
 				169FEFB61B33444FAEBADF4D /* Services */,
 				6DFCB169D7F04A06A55631AA /* Features */,
@@ -355,6 +361,20 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXVariantGroup section */
+		L10N002 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				L10N003 /* en */,
+				L10N004 /* en-GB */,
+				L10N005 /* en-CA */,
+				L10N006 /* en-AU */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin PBXNativeTarget section */
 		42B4F737C4F34E529CC017E5 /* Trough */ = {
 			isa = PBXNativeTarget;
@@ -418,6 +438,9 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"en-GB",
+				"en-CA",
+				"en-AU",
 				Base,
 			);
 			mainGroup = 2D6C384FF21A40698B048A4C;
@@ -443,6 +466,7 @@
 			files = (
 				CB53E9065E874F1DAA776FB7 /* Assets.xcassets in Resources */,
 				PRIV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */,
+				L10N001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,7 +595,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -594,7 +618,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -615,7 +639,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -632,7 +656,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;

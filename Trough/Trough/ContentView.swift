@@ -27,22 +27,22 @@ struct MainTabView: View {
         TabView {
             DashboardView()
                 .tabItem {
-                    Label("Home", systemImage: "house.fill")
+                    Label(NSLocalizedString("tab.home", comment: ""), systemImage: "house.fill")
                 }
 
             DailyCheckinView()
                 .tabItem {
-                    Label("Log", systemImage: "checkmark.circle.fill")
+                    Label(NSLocalizedString("tab.log", comment: ""), systemImage: "checkmark.circle.fill")
                 }
 
             InjectionsView()
                 .tabItem {
-                    Label("Injections", systemImage: "syringe.fill")
+                    Label(NSLocalizedString("tab.injections", comment: ""), systemImage: "syringe.fill")
                 }
 
             MoreView()
                 .tabItem {
-                    Label("More", systemImage: "ellipsis.circle.fill")
+                    Label(NSLocalizedString("tab.more", comment: ""), systemImage: "ellipsis.circle.fill")
                 }
         }
         .tint(AppColors.accent)

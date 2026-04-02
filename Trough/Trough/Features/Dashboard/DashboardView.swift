@@ -72,7 +72,7 @@ struct DashboardView: View {
                         }
 
                         // Weight trend sparkline
-                        if vm.latestWeightLbs != nil {
+                        if vm.latestWeightDisplay != nil {
                             weightTrendCard
                         }
 
@@ -732,7 +732,7 @@ struct DashboardView: View {
                 Spacer()
                 if let delta = vm.weightDelta30d {
                     let isDown = delta <= 0
-                    Text(String(format: "%+.0f lbs", delta / 0.453592))
+                    Text(String(format: "%+.0f %@", Locale.usesMetricWeight ? delta : delta / 0.453592, Locale.weightUnit))
                         .font(.caption.bold())
                         .foregroundColor(isDown ? .green : AppColors.accent)
                         .padding(.horizontal, 8)
@@ -754,7 +754,7 @@ struct DashboardView: View {
                     ForEach(vm.weightSeries30d) { pt in
                         LineMark(
                             x: .value("Date", pt.date),
-                            y: .value("lbs", pt.weightKg / 0.453592)
+                            y: .value(Locale.weightUnit, Locale.usesMetricWeight ? pt.weightKg : pt.weightKg / 0.453592)
                         )
                         .foregroundStyle(AppColors.accent.opacity(0.35))
                         .interpolationMethod(.catmullRom)
@@ -762,7 +762,7 @@ struct DashboardView: View {
                     ForEach(vm.weightMovingAvg) { pt in
                         LineMark(
                             x: .value("Date", pt.date),
-                            y: .value("lbs", pt.weightKg / 0.453592)
+                            y: .value(Locale.weightUnit, Locale.usesMetricWeight ? pt.weightKg : pt.weightKg / 0.453592)
                         )
                         .foregroundStyle(AppColors.accent)
                         .lineStyle(StrokeStyle(lineWidth: 2))
@@ -790,12 +790,12 @@ struct DashboardView: View {
                 // Stats row
                 if let latest = vm.weightSeries30d.last {
                     HStack(spacing: 20) {
-                        StatRow(label: "Current", value: String(format: "%.0f lbs", latest.weightKg / 0.453592))
+                        StatRow(label: NSLocalizedString("dashboard.weight.current", comment: ""), value: String(format: "%.0f %@", Locale.usesMetricWeight ? latest.weightKg : latest.weightKg / 0.453592, Locale.weightUnit))
                         if let bf = vm.bodyFatSeries.last {
                             StatRow(label: "Body Fat", value: String(format: "%.1f%%", bf.weightKg))
                         }
                         if let delta = vm.weightDelta30d, abs(delta) > 0.05 {
-                            StatRow(label: "30d Change", value: String(format: "%+.0f lbs", delta / 0.453592))
+                            StatRow(label: NSLocalizedString("dashboard.weight.30dChange", comment: ""), value: String(format: "%+.0f %@", Locale.usesMetricWeight ? delta : delta / 0.453592, Locale.weightUnit))
                         }
                     }
                 }
@@ -1279,14 +1279,14 @@ extension DashboardView {
                     HStack(spacing: 4) {
                         Image(systemName: delta >= 0 ? "arrow.up.right" : "arrow.down.right")
                             .font(.caption.bold())
-                        Text(String(format: "%+.1f lbs", delta))
+                        Text(String(format: "%+.1f %@", delta, Locale.weightUnit))
                             .font(.subheadline.bold())
                     }
                     .foregroundColor(delta <= 0 ? .green : Color(hex: "#F39C12"))
                 }
             }
-            if let weight = vm.latestWeightLbs {
-                Text(String(format: "%.1f lbs", weight))
+            if let weight = vm.latestWeightDisplay {
+                Text(String(format: "%.1f %@", weight, Locale.weightUnit))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                 Text("30-day trend")

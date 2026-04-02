@@ -62,6 +62,20 @@ extension Double {
     }
 }
 
+// MARK: - Locale-Aware Helpers
+
+extension Locale {
+    /// True if the device locale uses metric for body weight (non-US).
+    static var usesMetricWeight: Bool {
+        Locale.current.measurementSystem != .us
+    }
+
+    /// The appropriate weight unit label for the current locale.
+    static var weightUnit: String {
+        usesMetricWeight ? NSLocalizedString("unit.kg", comment: "") : NSLocalizedString("unit.lbs", comment: "")
+    }
+}
+
 // MARK: - String Helpers
 
 extension String {

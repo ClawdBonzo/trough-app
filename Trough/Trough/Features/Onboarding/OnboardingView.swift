@@ -331,7 +331,7 @@ final class OnboardingViewModel: ObservableObject {
             mentalClarityScore: firstCheckinClarity
         )
         if let weight = Double(bodyWeightLbs), weight > 0 {
-            checkin.bodyWeightKg = weight * 0.453592 // lbs to kg
+            checkin.bodyWeightKg = Locale.usesMetricWeight ? weight : weight * 0.453592
         }
         if let bf = Double(bodyFatPercent), bf > 0 {
             checkin.bodyFatPercent = bf
@@ -1627,11 +1627,11 @@ private struct FirstCheckinStep: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack {
-                                    TextField("185", text: $vm.bodyWeightLbs)
+                                    TextField(Locale.usesMetricWeight ? "84" : "185", text: $vm.bodyWeightLbs)
                                         .keyboardType(.decimalPad)
                                         .font(.title3.bold())
                                         .foregroundColor(.white)
-                                    Text("lbs")
+                                    Text(Locale.weightUnit)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }

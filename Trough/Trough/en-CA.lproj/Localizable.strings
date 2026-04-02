@@ -1,0 +1,83 @@
+/* Trough — English (Canada) Localizable Strings */
+
+/* Navigation & Tab Bar */
+"tab.home" = "Home";
+"tab.log" = "Log";
+"tab.injections" = "Injections";
+"tab.more" = "More";
+
+/* Dashboard */
+"dashboard.protocolScore" = "Protocol Score";
+"dashboard.estimatedBloodLevel" = "Estimated Blood Level";
+"dashboard.pkCurve.empty" = "Log an injection to see your PK curve";
+"dashboard.weight.current" = "Current";
+"dashboard.weight.30dChange" = "30d Change";
+"dashboard.weight.bodyFat" = "Body Fat";
+"dashboard.weight.30dTrend" = "30-day trend";
+"dashboard.weeklyReport" = "Weekly Report";
+
+/* Daily Check-in */
+"checkin.title" = "How are you today?";
+"checkin.wellnessMetrics" = "Wellness Metrics";
+"checkin.bodyMetrics" = "Body Metrics";
+"checkin.next" = "Next";
+"checkin.saveCheckin" = "Save Check-in";
+"checkin.morningWood" = "Morning Wood?";
+"checkin.workout" = "Workout today?";
+"checkin.supplementsTaken" = "Supplements taken today?";
+"checkin.weight" = "Weight (%@)";
+
+/* Injections */
+"injections.title" = "Injections";
+"injections.logFirst" = "Log your first injection";
+"injections.today" = "Today";
+"injections.yesterday" = "Yesterday";
+
+/* Bloodwork */
+"bloodwork.title" = "Bloodwork";
+"bloodwork.noRecords" = "No bloodwork recorded";
+"bloodwork.logFirst" = "Log your first panel to start tracking trends.";
+"bloodwork.results" = "Results";
+"bloodwork.trends" = "Trends";
+
+/* Peptides */
+"peptides.title" = "Adjuncts & Peptides";
+"peptides.trackYourStack" = "Track Your Stack";
+
+/* Settings */
+"settings.title" = "Settings";
+"settings.activeProtocol" = "Active Protocol";
+"settings.noActiveProtocol" = "No active protocol";
+"settings.setNewProtocol" = "Set New Protocol";
+"settings.signOut" = "Sign Out";
+"settings.deleteAccount" = "Delete Account";
+"settings.deleteAccount.title" = "Delete Account?";
+"settings.deleteAccount.message" = "This will permanently delete your account and all your data. This action cannot be undone.";
+"settings.deleteAccount.confirm" = "Delete Everything";
+"settings.recommend" = "Recommend Trough to a Friend";
+
+/* Onboarding */
+"onboarding.whatBringsYou" = "What brings you here?";
+"onboarding.startTrial" = "Start 14-Day Free Trial";
+
+/* Paywall */
+"paywall.title" = "TROUGH PRO";
+"paywall.subtitle" = "Everything. Free for 14 days.";
+"paywall.startTrial" = "Start Free Trial";
+"paywall.restorePurchases" = "Restore Purchases";
+"paywall.privacyPolicy" = "Privacy Policy";
+"paywall.termsOfUse" = "Terms of Use";
+
+/* Disclaimers */
+"disclaimer.medical" = "Not medical advice. Consult your healthcare provider.";
+
+/* Units — Canada uses metric */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+
+/* Common */
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.today" = "Today";
+"common.yesterday" = "Yesterday";

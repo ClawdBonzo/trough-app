@@ -98,9 +98,9 @@ final class DashboardViewModel: ObservableObject {
     @Published var supplementCompliancePct: Double = 0
     @Published var supplementCount: Int = 0  // NEW: total configured supplements
 
-    // MARK: Weight trend
-    @Published var weightTrendDelta: Double? = nil  // lbs change over 30d
-    @Published var latestWeightLbs: Double? = nil
+    // MARK: Weight trend (locale-aware display values)
+    @Published var weightTrendDelta: Double? = nil
+    @Published var latestWeightDisplay: Double? = nil
 
     // MARK: Personal best
     @Published var isPersonalBest: Bool = false
@@ -503,13 +503,15 @@ final class DashboardViewModel: ObservableObject {
     private func loadWeightTrend() {
         let last30 = Array(recentCheckins.prefix(30))
         let weights = last30.compactMap(\.bodyWeightKg)
+        let useMetric = Locale.usesMetricWeight
         if let latest = weights.first {
-            latestWeightLbs = latest / 0.453592
+            latestWeightDisplay = useMetric ? latest : latest / 0.453592
         }
         if weights.count >= 7 {
             let recent = weights.prefix(7).reduce(0, +) / Double(weights.prefix(7).count)
             let older = weights.suffix(7).reduce(0, +) / Double(weights.suffix(7).count)
-            weightTrendDelta = (recent - older) / 0.453592  // convert kg delta to lbs
+            let delta = recent - older
+            weightTrendDelta = useMetric ? delta : delta / 0.453592
         }
     }
 

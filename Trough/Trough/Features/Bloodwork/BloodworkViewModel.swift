@@ -91,35 +91,70 @@ final class BloodworkViewModel: ObservableObject {
 
     // MARK: Marker definitions
 
-    static let sections: [MarkerSection] = [
-        MarkerSection(title: "Core", defs: [
-            MarkerDef(name: "Total Testosterone",  unit: "ng/dL",  rangeLow: 300,  rangeHigh: 1000),
-            MarkerDef(name: "Free Testosterone",   unit: "pg/mL",  rangeLow: 8.7,  rangeHigh: 25.1),
-            MarkerDef(name: "Estradiol (E2)",       unit: "pg/mL",  rangeLow: 7.6,  rangeHigh: 42.6),
-            MarkerDef(name: "SHBG",                unit: "nmol/L", rangeLow: 16.5, rangeHigh: 55.9),
-            MarkerDef(name: "Hematocrit",          unit: "%",      rangeLow: 38.3, rangeHigh: 50.9),
-            MarkerDef(name: "Hemoglobin",          unit: "g/dL",   rangeLow: 13.2, rangeHigh: 17.1),
-            MarkerDef(name: "PSA",                 unit: "ng/mL",  rangeLow: 0.0,  rangeHigh: 4.0),
-        ]),
-        MarkerSection(title: "Hormones", defs: [
-            MarkerDef(name: "LH",           unit: "IU/L",   rangeLow: 1.7,  rangeHigh: 8.6),
-            MarkerDef(name: "FSH",          unit: "IU/L",   rangeLow: 1.5,  rangeHigh: 12.4),
-            MarkerDef(name: "Prolactin",    unit: "ng/mL",  rangeLow: 2.0,  rangeHigh: 18.0),
-            MarkerDef(name: "DHEA-S",       unit: "μg/dL",  rangeLow: 88.0, rangeHigh: 483.0),
-            MarkerDef(name: "Cortisol (AM)",unit: "μg/dL",  rangeLow: 6.2,  rangeHigh: 19.4),
-            MarkerDef(name: "TSH",          unit: "mIU/L",  rangeLow: 0.4,  rangeHigh: 4.0),
-        ]),
-        MarkerSection(title: "Lipids", defs: [
-            MarkerDef(name: "Total Cholesterol", unit: "mg/dL", rangeLow: 0.0,  rangeHigh: 200.0),
-            MarkerDef(name: "LDL",               unit: "mg/dL", rangeLow: 0.0,  rangeHigh: 100.0),
-            MarkerDef(name: "HDL",               unit: "mg/dL", rangeLow: 40.0, rangeHigh: 120.0),
-            MarkerDef(name: "Triglycerides",     unit: "mg/dL", rangeLow: 0.0,  rangeHigh: 150.0),
-        ]),
-        MarkerSection(title: "Liver", defs: [
-            MarkerDef(name: "ALT", unit: "U/L", rangeLow: 7.0,  rangeHigh: 56.0),
-            MarkerDef(name: "AST", unit: "U/L", rangeLow: 10.0, rangeHigh: 40.0),
-        ]),
-    ]
+    /// Returns true if the device locale uses SI/metric lab units (UK, AU, CA, NZ, etc.)
+    private static var usesMetricLabs: Bool {
+        let region = Locale.current.region?.identifier ?? "US"
+        return ["GB", "AU", "CA", "NZ", "IE", "ZA", "IN"].contains(region)
+    }
+
+    static var sections: [MarkerSection] {
+        let metric = usesMetricLabs
+        return [
+            MarkerSection(title: "Core", defs: [
+                // UK/AU/CA labs report testosterone in nmol/L; US in ng/dL
+                metric
+                    ? MarkerDef(name: "Total Testosterone", unit: "nmol/L", rangeLow: 10.4, rangeHigh: 34.7)
+                    : MarkerDef(name: "Total Testosterone", unit: "ng/dL",  rangeLow: 300,  rangeHigh: 1000),
+                metric
+                    ? MarkerDef(name: "Free Testosterone",  unit: "pmol/L", rangeLow: 170,  rangeHigh: 700)
+                    : MarkerDef(name: "Free Testosterone",  unit: "pg/mL",  rangeLow: 8.7,  rangeHigh: 25.1),
+                metric
+                    ? MarkerDef(name: "Estradiol (E2)",     unit: "pmol/L", rangeLow: 28,   rangeHigh: 156)
+                    : MarkerDef(name: "Estradiol (E2)",     unit: "pg/mL",  rangeLow: 7.6,  rangeHigh: 42.6),
+                MarkerDef(name: "SHBG",                     unit: "nmol/L", rangeLow: 16.5, rangeHigh: 55.9),
+                // Hematocrit: UK upper limit slightly stricter per NHS guidelines
+                metric
+                    ? MarkerDef(name: "Hematocrit",         unit: "%",      rangeLow: 38.0, rangeHigh: 49.0)
+                    : MarkerDef(name: "Hematocrit",         unit: "%",      rangeLow: 38.3, rangeHigh: 50.9),
+                metric
+                    ? MarkerDef(name: "Haemoglobin",        unit: "g/L",    rangeLow: 130,  rangeHigh: 170)
+                    : MarkerDef(name: "Hemoglobin",         unit: "g/dL",   rangeLow: 13.2, rangeHigh: 17.1),
+                // PSA: UK/AU use same threshold but different spelling context
+                MarkerDef(name: "PSA",                      unit: "ng/mL",  rangeLow: 0.0,  rangeHigh: 4.0),
+            ]),
+            MarkerSection(title: "Hormones", defs: [
+                MarkerDef(name: "LH",            unit: "IU/L",   rangeLow: 1.7,  rangeHigh: 8.6),
+                MarkerDef(name: "FSH",           unit: "IU/L",   rangeLow: 1.5,  rangeHigh: 12.4),
+                MarkerDef(name: "Prolactin",     unit: "mIU/L",  rangeLow: 86,   rangeHigh: 324),
+                metric
+                    ? MarkerDef(name: "DHEA-S",  unit: "μmol/L", rangeLow: 2.4,  rangeHigh: 13.1)
+                    : MarkerDef(name: "DHEA-S",  unit: "μg/dL",  rangeLow: 88.0, rangeHigh: 483.0),
+                metric
+                    ? MarkerDef(name: "Cortisol (AM)", unit: "nmol/L", rangeLow: 171, rangeHigh: 536)
+                    : MarkerDef(name: "Cortisol (AM)", unit: "μg/dL",  rangeLow: 6.2, rangeHigh: 19.4),
+                MarkerDef(name: "TSH",           unit: "mIU/L",  rangeLow: 0.4,  rangeHigh: 4.0),
+            ]),
+            MarkerSection(title: "Lipids", defs: [
+                // UK/AU/CA labs report cholesterol in mmol/L
+                metric
+                    ? MarkerDef(name: "Total Cholesterol", unit: "mmol/L", rangeLow: 0.0, rangeHigh: 5.0)
+                    : MarkerDef(name: "Total Cholesterol", unit: "mg/dL",  rangeLow: 0.0, rangeHigh: 200.0),
+                metric
+                    ? MarkerDef(name: "LDL",               unit: "mmol/L", rangeLow: 0.0, rangeHigh: 3.0)
+                    : MarkerDef(name: "LDL",               unit: "mg/dL",  rangeLow: 0.0, rangeHigh: 100.0),
+                metric
+                    ? MarkerDef(name: "HDL",               unit: "mmol/L", rangeLow: 1.0, rangeHigh: 3.1)
+                    : MarkerDef(name: "HDL",               unit: "mg/dL",  rangeLow: 40.0, rangeHigh: 120.0),
+                metric
+                    ? MarkerDef(name: "Triglycerides",     unit: "mmol/L", rangeLow: 0.0, rangeHigh: 1.7)
+                    : MarkerDef(name: "Triglycerides",     unit: "mg/dL",  rangeLow: 0.0, rangeHigh: 150.0),
+            ]),
+            MarkerSection(title: "Liver", defs: [
+                MarkerDef(name: "ALT", unit: "U/L", rangeLow: 7.0,  rangeHigh: 56.0),
+                MarkerDef(name: "AST", unit: "U/L", rangeLow: 10.0, rangeHigh: 40.0),
+            ]),
+        ]
+    }
 
     // MARK: Trend data
 
