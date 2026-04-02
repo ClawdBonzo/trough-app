@@ -109,6 +109,27 @@ final class SupabaseService {
         try await client.auth.signOut()
     }
 
+    /// Deletes the current user's account and all associated data.
+    /// Calls a Supabase Edge Function that uses the service role key
+    /// to delete the user from auth.users (which cascades to data tables).
+    func deleteAccount() async throws {
+        guard let uid = currentUserID else { return }
+
+        // Delete user data from all tables first
+        let tables = ["checkins", "injections", "protocols", "bloodwork",
+                      "peptide_logs", "supplement_configs"]
+        for table in tables {
+            try? await client.from(table)
+                .delete()
+                .eq("user_id", value: uid)
+                .execute()
+        }
+        try? await client.from("users")
+            .delete()
+            .eq("id", value: uid)
+            .execute()
+    }
+
     /// Returns the current authenticated user's Supabase UUID, or nil.
     var currentUserID: String? {
         client.auth.currentUser?.id.uuidString

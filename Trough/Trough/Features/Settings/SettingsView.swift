@@ -12,6 +12,8 @@ struct SettingsView: View {
     @State private var showProFeatures = false
     @State private var showPaywall = false
     @State private var showCSVImport = false
+    @State private var showDeleteConfirmation = false
+    @State private var isDeletingAccount = false
 
     var body: some View {
         NavigationStack {
@@ -62,7 +64,7 @@ struct SettingsView: View {
     // MARK: - Sections
 
     private var protocolSection: some View {
-        Section("Active Protocol") {
+        Section(NSLocalizedString("settings.activeProtocol", comment: "")) {
             if let proto = vm.currentProtocol {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(proto.name)
@@ -75,10 +77,10 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
             } else {
-                Text("No active protocol")
+                Text(NSLocalizedString("settings.noActiveProtocol", comment: ""))
                     .foregroundColor(.secondary)
             }
-            Button("Set New Protocol") {
+            Button(NSLocalizedString("settings.setNewProtocol", comment: "")) {
                 vm.showingAddProtocol = true
             }
             .foregroundColor(AppColors.accent)
@@ -116,10 +118,38 @@ struct SettingsView: View {
 
     private var accountSection: some View {
         Section("Account") {
-            Button("Sign Out", role: .destructive) {
+            Button(NSLocalizedString("settings.signOut", comment: ""), role: .destructive) {
                 Task { await vm.signOut() }
             }
-            .accessibilityLabel("Sign out of your account")
+
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                HStack {
+                    if isDeletingAccount {
+                        ProgressView()
+                            .tint(AppColors.accent)
+                        Text("Deleting...")
+                            .foregroundColor(AppColors.accent)
+                    } else {
+                        Text(NSLocalizedString("settings.deleteAccount", comment: ""))
+                            .foregroundColor(AppColors.accent)
+                    }
+                }
+            }
+            .disabled(isDeletingAccount)
+            .alert(NSLocalizedString("settings.deleteAccount.title", comment: ""), isPresented: $showDeleteConfirmation) {
+                Button(NSLocalizedString("common.cancel", comment: ""), role: .cancel) {}
+                Button(NSLocalizedString("settings.deleteAccount.confirm", comment: ""), role: .destructive) {
+                    Task {
+                        isDeletingAccount = true
+                        await vm.deleteAccount(modelContext: modelContext)
+                        isDeletingAccount = false
+                    }
+                }
+            } message: {
+                Text(NSLocalizedString("settings.deleteAccount.message", comment: ""))
+            }
         }
         .listRowBackground(AppColors.card)
     }
