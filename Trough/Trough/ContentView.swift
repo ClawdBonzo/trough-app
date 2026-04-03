@@ -10,8 +10,9 @@ struct ContentView: View {
             if !isAuthenticated {
                 AuthView()
             } else if !onboardingCompleted {
-                // Onboarding includes: protocol setup → compounds → first check-in → HealthKit → trial prompt
-                OnboardingView()
+                OnboardingView(onComplete: {
+                    onboardingCompleted = true
+                })
             } else {
                 MainTabView()
             }

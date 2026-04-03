@@ -89,9 +89,13 @@ struct PaywallView: View {
                 .font(.system(size: 32, weight: .black, design: .rounded))
                 .foregroundColor(.white)
 
-            Text("Everything. Free for 14 days.")
+            Text("Go from 42 → 85 Protocol Score.")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
+
+            Text("Everything. Free for 14 days.")
+                .font(.caption)
+                .foregroundColor(.secondary.opacity(0.7))
         }
     }
 

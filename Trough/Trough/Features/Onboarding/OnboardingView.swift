@@ -521,19 +521,43 @@ final class OnboardingViewModel: ObservableObject {
     }
 }
 
+// MARK: - Onboarding Phase
+
+/// Commitment-hook screens shown before the setup flow.
+enum OnboardingPhase: Int, CaseIterable {
+    case splash = 0
+    case diagnosticQuiz
+    case scoreReveal
+    case projectedImprovement
+    case personalizationLoader
+    case setup   // handoff to the existing step-indexed setup flow
+}
+
 // MARK: - OnboardingView
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
-    @AppStorage("onboardingCompleted") private var onboardingCompleted = false
     @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
     @State private var showTrialPaywall = false
+    @State private var phase: OnboardingPhase = .splash
+
+    let onComplete: () -> Void
 
     @StateObject private var vm: OnboardingViewModel
 
-    init() {
+    init(onComplete: @escaping () -> Void) {
+        self.onComplete = onComplete
         _vm = StateObject(wrappedValue: OnboardingViewModel())
+    }
+
+    /// Total progress steps: 5 hook screens + 9 setup steps = 14
+    private var totalSteps: Int { 14 }
+    private var currentProgress: Int {
+        if phase == .setup {
+            return 5 + vm.stepIndex
+        }
+        return phase.rawValue
     }
 
     var body: some View {
@@ -541,38 +565,104 @@ struct OnboardingView: View {
             AppColors.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Progress bar
-                if vm.stepIndex > 0 {
-                    ProgressBar(current: vm.stepIndex, total: 8)
+                // Progress bar (hidden on splash)
+                if phase != .splash {
+                    ProgressBar(current: currentProgress, total: totalSteps)
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
                 }
 
-                // Step content via TabView
-                TabView(selection: $vm.stepIndex) {
-                    AudienceStep(vm: vm).tag(0)
-                    ImportDataStep(vm: vm).tag(1)
-                    ProtocolSetupStep(vm: vm).tag(2)
-                    CompoundSelectStep(vm: vm).tag(3)
-                    CompoundDosesStep(vm: vm).tag(4)
-                    LastInjectionStep(vm: vm).tag(5)
-                    FirstCheckinStep(vm: vm).tag(6)
-                    HealthKitStep(vm: vm).tag(7)
-                    RemindersStep(vm: vm, onDone: {
-                        let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
-                        vm.save(userID: uid)
-                        showTrialPaywall = true
-                    }).tag(8)
+                // Phase content
+                switch phase {
+                case .splash:
+                    SplashWaveView(
+                        onContinue: { advancePhase() },
+                        onSkip: { skipToSetup() }
+                    )
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+
+                case .diagnosticQuiz:
+                    DiagnosticQuizView(
+                        energy: $vm.firstCheckinEnergy,
+                        mood: $vm.firstCheckinMood,
+                        libido: $vm.firstCheckinLibido,
+                        sleep: $vm.firstCheckinSleep,
+                        clarity: $vm.firstCheckinClarity,
+                        onContinue: { advancePhase() },
+                        onSkip: { skipToSetup() }
+                    )
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+
+                case .scoreReveal:
+                    ScoreRevealView(
+                        score: vm.firstProtocolScore,
+                        onContinue: { advancePhase() },
+                        onSkip: { skipToSetup() }
+                    )
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+
+                case .projectedImprovement:
+                    ProjectedImprovementView(
+                        currentScore: vm.firstProtocolScore,
+                        onContinue: { advancePhase() },
+                        onSkip: { skipToSetup() }
+                    )
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+
+                case .personalizationLoader:
+                    PersonalizationLoaderView(
+                        onComplete: { advancePhase() },
+                        onSkip: { skipToSetup() }
+                    )
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+
+                case .setup:
+                    setupFlow
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
         .onAppear { vm.setup(context: modelContext) }
         .fullScreenCover(isPresented: $showTrialPaywall) {
             OnboardingTrialView(firstScore: vm.firstProtocolScore) {
-                onboardingCompleted = true
+                onComplete()
             }
         }
+    }
+
+    // MARK: - Setup flow (existing steps)
+
+    private var setupFlow: some View {
+        TabView(selection: $vm.stepIndex) {
+            AudienceStep(vm: vm).tag(0)
+            ImportDataStep(vm: vm).tag(1)
+            ProtocolSetupStep(vm: vm).tag(2)
+            CompoundSelectStep(vm: vm).tag(3)
+            CompoundDosesStep(vm: vm).tag(4)
+            LastInjectionStep(vm: vm).tag(5)
+            FirstCheckinStep(vm: vm).tag(6)
+            HealthKitStep(vm: vm).tag(7)
+            RemindersStep(vm: vm, onDone: {
+                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                vm.save(userID: uid)
+                showTrialPaywall = true
+            }).tag(8)
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+    }
+
+    // MARK: - Phase navigation
+
+    private func advancePhase() {
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            if let next = OnboardingPhase(rawValue: phase.rawValue + 1) {
+                phase = next
+            }
+        }
+    }
+
+    private func skipToSetup() {
+        onComplete()
     }
 }
 
@@ -633,7 +723,7 @@ private struct OnboardingTrialView: View {
                             .font(.system(size: 24, weight: .black, design: .rounded))
                             .foregroundColor(.white)
 
-                        Text("Start your free trial to unlock full insights.")
+                        Text("Unlock full insights and track your progress to 85+.")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
