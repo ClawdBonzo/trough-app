@@ -633,22 +633,35 @@ final class DashboardViewModel: ObservableObject {
     // MARK: - Review Prompt
 
     /// Call this after check-in or milestone to potentially prompt for App Store review.
+    /// Apple throttles SKStoreReviewController to ~3 prompts per 365 days regardless,
+    /// so we prompt early and often at positive moments.
     func checkReviewPrompt() {
-        let hasPrompted = UserDefaults.standard.bool(forKey: "hasPromptedReview")
-        guard !hasPrompted else { return }
+        let lastPromptDate = UserDefaults.standard.object(forKey: "lastReviewPromptDate") as? Date
+        let promptCount = UserDefaults.standard.integer(forKey: "reviewPromptCount")
 
-        // Trigger at positive moments: score ≥ 75, streak at 14+, or score improving
+        // Cooldown: don't re-prompt within 30 days
+        if let last = lastPromptDate, Date.now.timeIntervalSince(last) < 30 * 86400 {
+            return
+        }
+
+        // Prompt on 2nd check-in (first real return to app)
+        // OR score >= 50 (feeling okay — not just the miserable users)
+        // OR any streak >= 3
+        // OR score improved since last check-in
         let shouldPrompt: Bool
-        if streak >= 14 {
+        if streak >= 2 {
             shouldPrompt = true
-        } else if protocolScore >= 75 {
+        } else if protocolScore >= 50 {
             shouldPrompt = true
+        } else if trend > 0 {
+            shouldPrompt = true  // score is improving
         } else {
             shouldPrompt = false
         }
 
         if shouldPrompt {
-            UserDefaults.standard.set(true, forKey: "hasPromptedReview")
+            UserDefaults.standard.set(Date.now, forKey: "lastReviewPromptDate")
+            UserDefaults.standard.set(promptCount + 1, forKey: "reviewPromptCount")
             requestAppReview()
         }
     }

@@ -165,6 +165,10 @@ struct DashboardView: View {
             .onChange(of: showCheckin) { _, dismissed in
                 if !dismissed { vm.checkReviewPrompt() }
             }
+            .onAppear {
+                // Prompt for review on first dashboard load after onboarding
+                vm.checkReviewPrompt()
+            }
         }
     }
 
