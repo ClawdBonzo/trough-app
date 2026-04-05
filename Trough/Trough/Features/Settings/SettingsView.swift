@@ -37,7 +37,7 @@ struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Settings")
+            .navigationTitle(NSLocalizedString("settings.title", comment: ""))
             .sheet(isPresented: $vm.showingAddProtocol) { ProtocolFormView(vm: vm) }
             .sheet(isPresented: $showProFeatures) { ProFeaturesSheet { showPaywall = true } }
             .fullScreenCover(isPresented: $showPaywall) { PaywallView() }
@@ -50,11 +50,11 @@ struct SettingsView: View {
             .navigationDestination(for: String.self) { dest in
                 if dest == "privacy" { PrivacyPolicyView() }
             }
-            .alert("Error", isPresented: Binding(
+            .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
                 get: { vm.errorMessage != nil },
                 set: { if !$0 { vm.errorMessage = nil } }
             )) {
-                Button("OK", role: .cancel) {}
+                Button(NSLocalizedString("common.ok", comment: ""), role: .cancel) {}
             } message: {
                 Text(vm.errorMessage ?? "")
             }
@@ -89,16 +89,16 @@ struct SettingsView: View {
     }
 
     private var supplementsSection: some View {
-        Section("Supplements") {
+        Section(NSLocalizedString("settings.supplements", comment: "")) {
             NavigationLink {
                 SupplementConfigView(vm: vm)
             } label: {
                 HStack {
-                    Label("Manage Supplements", systemImage: "pills.fill")
+                    Label(NSLocalizedString("settings.manageSupplements", comment: ""), systemImage: "pills.fill")
                     Spacer()
                     let activeCount = vm.allSupplements.filter(\.isActive).count
                     if activeCount > 0 {
-                        Text("\(activeCount) active")
+                        Text(String(format: NSLocalizedString("settings.activeCount", comment: ""), activeCount))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -109,15 +109,15 @@ struct SettingsView: View {
     }
 
     private var trackingSection: some View {
-        Section("Tracking Preferences") {
-            Toggle("Track Body Weight", isOn: $trackBodyWeight)
+        Section(NSLocalizedString("settings.trackingPreferences", comment: "")) {
+            Toggle(NSLocalizedString("settings.trackBodyWeight", comment: ""), isOn: $trackBodyWeight)
                 .tint(AppColors.accent)
         }
         .listRowBackground(AppColors.card)
     }
 
     private var accountSection: some View {
-        Section("Account") {
+        Section(NSLocalizedString("settings.account", comment: "")) {
             Button(NSLocalizedString("settings.signOut", comment: ""), role: .destructive) {
                 Task { await vm.signOut() }
             }
@@ -129,7 +129,7 @@ struct SettingsView: View {
                     if isDeletingAccount {
                         ProgressView()
                             .tint(AppColors.accent)
-                        Text("Deleting...")
+                        Text(NSLocalizedString("settings.deleting", comment: ""))
                             .foregroundColor(AppColors.accent)
                     } else {
                         Text(NSLocalizedString("settings.deleteAccount", comment: ""))
@@ -158,7 +158,7 @@ struct SettingsView: View {
         Section {
             Button { showProFeatures = true } label: {
                 HStack {
-                    Label("What You Get With Pro", systemImage: "star.fill")
+                    Label(NSLocalizedString("settings.pro.whatYouGet", comment: ""), systemImage: "star.fill")
                         .foregroundColor(AppColors.softCTA)
                     Spacer()
                     Image(systemName: "chevron.right")
@@ -168,7 +168,7 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
             Button { showPaywall = true } label: {
-                Text("Start Free Trial")
+                Text(NSLocalizedString("settings.pro.startTrial", comment: ""))
                     .font(.subheadline.bold())
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -183,12 +183,12 @@ struct SettingsView: View {
     }
 
     private var importSection: some View {
-        Section("Data Import") {
+        Section(NSLocalizedString("settings.dataImport", comment: "")) {
             Button {
                 showCSVImport = true
             } label: {
                 HStack {
-                    Label("Import from Spreadsheet", systemImage: "doc.text")
+                    Label(NSLocalizedString("settings.importSpreadsheet", comment: ""), systemImage: "doc.text")
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.caption)
@@ -201,8 +201,8 @@ struct SettingsView: View {
     }
 
     private var remindersSection: some View {
-        Section("Reminders") {
-            Toggle("Daily check-in reminder", isOn: Binding(
+        Section(NSLocalizedString("settings.reminders", comment: "")) {
+            Toggle(NSLocalizedString("settings.dailyReminder", comment: ""), isOn: Binding(
                 get: { UserDefaults.standard.bool(forKey: "reminderEnabled") },
                 set: { enabled in
                     UserDefaults.standard.set(enabled, forKey: "reminderEnabled")
@@ -216,7 +216,7 @@ struct SettingsView: View {
             .tint(AppColors.accent)
 
             if UserDefaults.standard.bool(forKey: "reminderEnabled") {
-                DatePicker("Reminder time", selection: Binding(
+                DatePicker(NSLocalizedString("settings.reminderTime", comment: ""), selection: Binding(
                     get: {
                         var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
                         comps.hour = UserDefaults.standard.integer(forKey: "reminderHour")
@@ -243,7 +243,7 @@ struct SettingsView: View {
                             Text(compound.supplementName)
                                 .font(.subheadline)
                             Spacer()
-                            Text("Every \(compound.frequencyDays)d")
+                            Text(String(format: NSLocalizedString("settings.everyNDays", comment: ""), compound.frequencyDays))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -261,8 +261,8 @@ struct SettingsView: View {
 
         // Daily check-in
         let content = UNMutableNotificationContent()
-        content.title = "Time to check in"
-        content.body = "Log your energy, mood, and wellness for today."
+        content.title = NSLocalizedString("notification.checkin.title", comment: "")
+        content.body = NSLocalizedString("notification.checkin.body", comment: "")
         content.sound = .default
         var comps = DateComponents()
         comps.hour = hour
@@ -273,8 +273,8 @@ struct SettingsView: View {
         // Per-compound reminders
         for compound in vm.supplements.filter({ $0.isActive }) {
             let compContent = UNMutableNotificationContent()
-            compContent.title = "\(compound.supplementName) dose"
-            compContent.body = "Time for your \(compound.supplementName) dose."
+            compContent.title = String(format: NSLocalizedString("notification.compound.title", comment: ""), compound.supplementName)
+            compContent.body = String(format: NSLocalizedString("notification.compound.body", comment: ""), compound.supplementName)
             compContent.sound = .default
 
             if compound.frequencyDays == 1 {
@@ -307,23 +307,23 @@ struct SettingsView: View {
         Section {
             ShareLink(
                 item: URL(string: "https://apps.apple.com/app/id6760955550")!,
-                subject: Text("Check out Trough"),
-                message: Text("I've been using Trough to track my TRT protocol — it's really well done.")
+                subject: Text(NSLocalizedString("settings.recommend.subject", comment: "")),
+                message: Text(NSLocalizedString("settings.recommend.message", comment: ""))
             ) {
-                Label("Recommend Trough to a Friend", systemImage: "heart.fill")
+                Label(NSLocalizedString("settings.recommend", comment: ""), systemImage: "heart.fill")
                     .foregroundColor(AppColors.accent)
             }
         }
     }
 
     private var legalSection: some View {
-        Section("Privacy & Legal") {
+        Section(NSLocalizedString("settings.privacyLegal", comment: "")) {
             Link(destination: URL(string: "https://gettrough.app/privacy") ?? URL(string: "https://gettrough.app")!) {
-                Label("Privacy & Data Policy", systemImage: "lock.shield")
+                Label(NSLocalizedString("settings.privacyPolicy", comment: ""), systemImage: "lock.shield")
             }
             .foregroundColor(.primary)
             Link(destination: URL(string: "https://gettrough.app/terms") ?? URL(string: "https://gettrough.app")!) {
-                Label("Terms of Use", systemImage: "doc.text")
+                Label(NSLocalizedString("settings.termsOfUse", comment: ""), systemImage: "doc.text")
             }
             .foregroundColor(.primary)
         }
@@ -348,8 +348,8 @@ struct ProtocolFormView: View {
                 AppColors.background.ignoresSafeArea()
                 Form {
                     Section {
-                        TextField("Protocol Name (e.g. Test Cyp 150mg E7D)", text: $vm.formProtoName)
-                        Picker("Compound", selection: $vm.formCompound) {
+                        TextField(NSLocalizedString("protocol.namePlaceholder", comment: ""), text: $vm.formProtoName)
+                        Picker(NSLocalizedString("common.compound", comment: ""), selection: $vm.formCompound) {
                             ForEach(compounds, id: \.self) { Text($0) }
                         }
                     }
@@ -357,28 +357,28 @@ struct ProtocolFormView: View {
 
                     Section {
                         HStack {
-                            TextField("Dose", text: $vm.formDoseMg).keyboardType(.decimalPad)
-                            Text("mg").foregroundColor(.secondary)
+                            TextField(NSLocalizedString("common.dose", comment: ""), text: $vm.formDoseMg).keyboardType(.decimalPad)
+                            Text(NSLocalizedString("common.mg", comment: "")).foregroundColor(.secondary)
                         }
                         HStack {
-                            TextField("Frequency", text: $vm.formFrequencyDays).keyboardType(.numberPad)
-                            Text("days").foregroundColor(.secondary)
+                            TextField(NSLocalizedString("protocol.frequency", comment: ""), text: $vm.formFrequencyDays).keyboardType(.numberPad)
+                            Text(NSLocalizedString("unit.days", comment: "")).foregroundColor(.secondary)
                         }
                         HStack {
-                            TextField("Concentration", text: $vm.formConcentration).keyboardType(.decimalPad)
-                            Text("mg/mL").foregroundColor(.secondary)
+                            TextField(NSLocalizedString("protocol.concentration", comment: ""), text: $vm.formConcentration).keyboardType(.decimalPad)
+                            Text(NSLocalizedString("protocol.mgPerMl", comment: "")).foregroundColor(.secondary)
                         }
                     }
                     .listRowBackground(AppColors.card)
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("New Protocol")
+            .navigationTitle(NSLocalizedString("protocol.newTitle", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button(NSLocalizedString("common.cancel", comment: "")) { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { vm.saveProtocol() }
+                    Button(NSLocalizedString("common.save", comment: "")) { vm.saveProtocol() }
                         .foregroundColor(AppColors.accent)
                 }
             }

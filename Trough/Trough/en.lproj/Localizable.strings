@@ -1,83 +1,637 @@
 /* Trough — Base English (en) Localizable Strings */
 
-/* Navigation & Tab Bar */
+/* ═══════════════════════════════════════════════════════════════
+   Navigation & Tab Bar
+   ═══════════════════════════════════════════════════════════════ */
 "tab.home" = "Home";
 "tab.log" = "Log";
 "tab.injections" = "Injections";
 "tab.more" = "More";
 
-/* Dashboard */
+/* ═══════════════════════════════════════════════════════════════
+   Common / Shared
+   ═══════════════════════════════════════════════════════════════ */
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.done" = "Done";
+"common.next" = "Next";
+"common.back" = "Back";
+"common.skip" = "Skip";
+"common.continue" = "Continue";
+"common.ok" = "OK";
+"common.error" = "Error";
+"common.today" = "Today";
+"common.yesterday" = "Yesterday";
+"common.add" = "Add";
+"common.edit" = "Edit";
+"common.remove" = "Remove";
+"common.notes" = "Notes";
+"common.custom" = "Custom";
+"common.dose" = "Dose";
+"common.compound" = "Compound";
+"common.mg" = "mg";
+
+/* Units */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+"unit.perMonth" = "per month";
+"unit.perYear" = "per year";
+"unit.days" = "days";
+"unit.daysAgo" = "%dd ago";
+
+/* ═══════════════════════════════════════════════════════════════
+   Auth
+   ═══════════════════════════════════════════════════════════════ */
+"auth.appName" = "TROUGH";
+"auth.tagline" = "TRT & Hormone Tracker";
+"auth.email" = "Email";
+"auth.password" = "Password";
+"auth.createAccount" = "Create Account";
+"auth.signIn" = "Sign In";
+"auth.switchToSignIn" = "Already have an account? Sign In";
+"auth.switchToSignUp" = "New here? Create Account";
+"auth.enterCredentials" = "Please enter email and password.";
+"auth.confirmEmail" = "Check your email to confirm your account, then sign in below.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Splash / Onboarding Hook
+   ═══════════════════════════════════════════════════════════════ */
+"splash.headline" = "Track your protocol.\nOwn your data.";
+"splash.cta" = "Let's Dial You In";
+
+"quiz.title" = "How are you feeling?";
+"quiz.subtitle" = "Rate each area on a scale of 1–5.\nWe'll calculate your baseline Protocol Score.";
+"quiz.energy" = "Energy";
+"quiz.mood" = "Mood";
+"quiz.libido" = "Libido";
+"quiz.sleepQuality" = "Sleep Quality";
+"quiz.mentalClarity" = "Mental Clarity";
+"quiz.cta" = "See My Score";
+
+"scoreReveal.protocolScore" = "Protocol Score";
+"scoreReveal.cta" = "See Your Projected Improvement";
+"scoreReveal.dialedIn" = "Dialed in";
+"scoreReveal.steady" = "Steady";
+"scoreReveal.trendingDown" = "Trending down";
+"scoreReveal.offBaseline" = "Off baseline";
+"scoreReveal.encourage.high" = "Strong baseline. Let's keep it there.";
+"scoreReveal.encourage.mid" = "Solid foundation. Room to optimize.";
+"scoreReveal.encourage.low" = "There's upside here. Let's find it.";
+"scoreReveal.encourage.veryLow" = "We've got work to do — and that's the point.";
+
+"projected.title" = "Your 7-Day Outlook";
+"projected.subtitle" = "With consistent tracking, users see real improvement in the first week.";
+"projected.today" = "Today";
+"projected.day7" = "Day 7";
+"projected.now" = "Now";
+"projected.cta" = "Build My Plan";
+
+"loader.step1" = "Analyzing your baseline…";
+"loader.step2" = "Calibrating PK model…";
+"loader.step3" = "Building your protocol…";
+"loader.step4" = "Setting up tracking…";
+"loader.step5" = "Finalizing your plan…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding Setup
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.whatBringsYou" = "What brings you here?";
+"onboarding.personalizeExperience" = "This helps us personalize your experience.";
+"onboarding.imOnTRT" = "I'm on TRT";
+"onboarding.trtSubtitle" = "Track protocols, injections, and blood levels";
+"onboarding.naturalTitle" = "Optimizing naturally";
+"onboarding.naturalSubtitle" = "Track wellness, training, and supplements";
+
+"onboarding.haveData" = "Have existing data?";
+"onboarding.importSubtitle" = "Import your tracking spreadsheet — we'll auto-map your columns.";
+"onboarding.importSpreadsheet" = "Import from spreadsheet";
+"onboarding.importCSV" = "CSV, TSV — auto-detects columns & dates";
+"onboarding.startFresh" = "Start fresh";
+"onboarding.startFreshGuide" = "We'll guide you through setup";
+"onboarding.skipStartFresh" = "Skip — start fresh";
+
+"onboarding.yourProtocol" = "Your protocol";
+"onboarding.protocolSubtitle" = "We'll use this to track your blood levels and schedule.";
+"onboarding.primaryCompound" = "Primary Compound";
+"onboarding.frequency" = "Frequency";
+"onboarding.injectionDays" = "Injection days";
+"onboarding.addSecondary" = "Add secondary compound";
+"onboarding.addCompound" = "Add compound";
+"onboarding.addAnother" = "+ Add another";
+"onboarding.secondaryCompound" = "Secondary Compound";
+"onboarding.concentration" = "Concentration";
+
+"onboarding.whatElse" = "What else are you taking?";
+"onboarding.tapAllApply" = "Tap all that apply. You can always add more later.";
+"onboarding.addCustomCompound" = "Add custom compound";
+"onboarding.compoundName" = "Compound name";
+"onboarding.selected" = "%d selected";
+"onboarding.setDoses" = "Set your doses";
+"onboarding.dosesSubtitle" = "We pre-filled typical doses and schedules — adjust as needed.";
+"onboarding.schedule" = "Schedule";
+"onboarding.dosesReminder" = "We'll send reminders based on each compound's schedule.";
+
+"onboarding.lastInjection" = "Last injection";
+"onboarding.lastInjectionSubtitle" = "We'll start your PK curve from this date.";
+"onboarding.dateAndTime" = "Date & time";
+
+"onboarding.howFeeling" = "How are you feeling?";
+"onboarding.firstCheckinSubtitle" = "Your first check-in. This creates your Protocol Score.";
+"onboarding.bodyMetrics" = "BODY METRICS";
+"onboarding.weight" = "Weight";
+"onboarding.bodyFat" = "Body Fat";
+"onboarding.protocolScoreLabel" = "Protocol Score";
+"onboarding.outOf100" = "/ 100";
+
+"onboarding.superchargeHK" = "Supercharge with HealthKit";
+"onboarding.hkSubtitle" = "Automatically track sleep, steps, and heart rate variability.";
+"onboarding.hkSleep" = "Sleep";
+"onboarding.hkSleepDesc" = "Auto-log sleep duration & quality";
+"onboarding.hkSteps" = "Steps";
+"onboarding.hkStepsDesc" = "Daily activity without manual entry";
+"onboarding.hkHRV" = "HRV";
+"onboarding.hkHRVDesc" = "Heart rate variability for recovery insights";
+"onboarding.hkWeight" = "Body Weight";
+"onboarding.hkWeightDesc" = "Sync from your smart scale";
+"onboarding.hkPrivacy" = "Your data stays on-device. We never share it.";
+"onboarding.enableHK" = "Enable HealthKit";
+"onboarding.hkAlreadySet" = "HealthKit permissions already set. Tap to open Settings.";
+
+"onboarding.reminders" = "Reminders";
+"onboarding.remindersSubtitle" = "Get a nudge to log check-ins, injections, or peptides.";
+"onboarding.enableReminders" = "Enable reminders";
+"onboarding.sameTimeAll" = "Same time for all";
+"onboarding.perCompound" = "Per compound";
+"onboarding.reminderFrequency" = "Frequency";
+"onboarding.reminderTime" = "Reminder time";
+"onboarding.selectDays" = "Select days";
+"onboarding.dailyCheckin" = "Daily check-in";
+"onboarding.changeInSettings" = "You can always change this in Settings.";
+"onboarding.getStarted" = "Get started";
+
+"onboarding.startTrial" = "Start 14-Day Free Trial";
+"onboarding.trialSubtitle" = "Unlock full insights and track your progress to 85+.";
+"onboarding.noCharge" = "No charge for 14 days. Cancel anytime in Settings → Subscriptions.";
+"onboarding.maybeLater" = "Maybe later";
+
+/* Frequency labels */
+"freq.daily" = "Daily";
+"freq.everyOtherDay" = "Every other day";
+"freq.every3Days" = "Every 3 days";
+"freq.twiceWeekly" = "Twice weekly";
+"freq.weekly" = "Weekly";
+"freq.biweekly" = "Biweekly";
+"freq.monthly" = "Monthly";
+"freq.customDays" = "Custom days";
+"freq.e1d" = "Every day (E1D)";
+"freq.e2d" = "Every 2 days";
+"freq.e3d" = "Every 3 days";
+"freq.e3.5d" = "Twice weekly (E3.5D)";
+"freq.e7d" = "Weekly (E7D)";
+"freq.e14d" = "Biweekly (E14D)";
+"freq.twiceWeekMonThu" = "Twice a week (Mon, Thu)";
+"freq.threeTimesWeek" = "Three times a week";
+
+/* ═══════════════════════════════════════════════════════════════
+   Dashboard
+   ═══════════════════════════════════════════════════════════════ */
+"dashboard.title" = "Dashboard";
+"dashboard.noDataTitle" = "👋 No data yet";
+"dashboard.noDataSubtitle" = "Load sample data to explore the app, or start your first check-in.";
+"dashboard.loadSampleData" = "Load Sample Data";
+"dashboard.startCheckin" = "Start Check-in";
+"dashboard.activeProtocol" = "Active Protocol";
+"dashboard.overdue" = "OVERDUE";
+"dashboard.nextIn" = "Next in %dd";
 "dashboard.protocolScore" = "Protocol Score";
+"dashboard.7dayAvg" = "7-day avg";
+"dashboard.prior7day" = "Prior 7-day";
+"dashboard.logToday" = "Log today";
+"dashboard.dailyCheckin" = "Daily Check-in";
+"dashboard.tapToLog" = "Tap to log how you feel today";
+"dashboard.todaysCheckin" = "Today's Check-in";
+"dashboard.checkinStreak" = "Check-in Streak";
 "dashboard.estimatedBloodLevel" = "Estimated Blood Level";
 "dashboard.pkCurve.empty" = "Log an injection to see your PK curve";
+"dashboard.seeBloodLevels" = "See your real blood levels";
+"dashboard.pkCurveDesc" = "Personalized PK curve based on your protocol";
+"dashboard.startFreeTrial" = "Start Free Trial";
+"dashboard.fertilityActive" = "Fertility Mode Active";
+"dashboard.hcgStarted" = "hCG started %dw ago";
+"dashboard.protocol" = "Protocol";
+"dashboard.glp1Weight" = "GLP-1 Weight Tracking";
+"dashboard.energyStable" = "Energy stable";
+"dashboard.glp1Working" = "GLP-1 + weight trending down + stable energy = protocol working well";
+"dashboard.bodyComp" = "Body Composition";
+"dashboard.logWeightHint" = "Log body weight in your daily check-in";
+"dashboard.weeklyReport" = "Weekly\nReport";
 "dashboard.weight.current" = "Current";
 "dashboard.weight.30dChange" = "30d Change";
 "dashboard.weight.bodyFat" = "Body Fat";
 "dashboard.weight.30dTrend" = "30-day trend";
-"dashboard.weeklyReport" = "Weekly Report";
 
-/* Daily Check-in */
+/* Dashboard - additional keys */
+"dashboard.sampleData.title" = "👋 No data yet";
+"dashboard.sampleData.subtitle" = "Load sample data to explore the app, or start your first check-in.";
+"dashboard.sampleData.load" = "Load Sample Data";
+"dashboard.sampleData.startCheckin" = "Start Check-in";
+"dashboard.checkin.title" = "Daily Check-in";
+"dashboard.checkin.cta" = "Check in now";
+"dashboard.checkin.done" = "Today's Check-in";
+"dashboard.streak" = "Check-in Streak";
+"dashboard.streak.days" = "days";
+"dashboard.personalBest" = "🏆 New Personal Best!";
+"dashboard.personalBest.subtitle" = "Your Protocol Score hit a new high.";
+"dashboard.weightTrend" = "Weight";
+"dashboard.weightTrend.30day" = "30-day trend";
+"dashboard.pkCurve" = "Estimated PK Curve";
+"dashboard.pkCurve.subtitle" = "See your estimated testosterone levels";
+"dashboard.fertility" = "Fertility Support";
+"dashboard.fertility.hcgStarted" = "hCG started";
+"dashboard.fertility.protocol" = "Protocol";
+"dashboard.glp1" = "GLP-1 & Weight";
+"dashboard.glp1.energyStable" = "Energy stable";
+"dashboard.glp1.workingWell" = "GLP-1 + weight trending down + stable energy = protocol working well";
+"dashboard.bodyComposition" = "Body Composition";
+"dashboard.bodyComposition.subtitle" = "Track weight & body fat trends";
+"dashboard.bodyComposition.logWeight" = "Log body weight in your daily check-in";
+"dashboard.bodyComposition.bodyFat" = "Body Fat";
+"dashboard.bodyComposition.bodyFatPct" = "Body Fat %";
+"dashboard.forecast" = "Tomorrow's Forecast";
+"dashboard.quickStats" = "Quick Stats";
+"dashboard.totalCheckins" = "Total Check-ins";
+"dashboard.quickStats.avgEnergy" = "Avg Energy";
+"dashboard.quickStats.avgLibido" = "Avg Libido";
+"dashboard.quickStats.morningWood" = "Morning Wood";
+"dashboard.quickStats.30d" = "30d";
+"dashboard.quickStats.nextInjection" = "Next Injection";
+"dashboard.quickStats.overdue" = "Overdue";
+"dashboard.quickStats.onTrack" = "On Track";
+"dashboard.quickStats.adherence" = "Adherence";
+"dashboard.trendChart" = "7-Day Trends";
+"dashboard.trendChart.empty" = "Check in daily to see trends";
+"dashboard.trendChart.upsell" = "See full 7-day trends with Pro";
+"dashboard.trendChart.3days" = "3 days";
+"dashboard.cycleDay" = "Day %d of %d · %@";
+"dashboard.compliance.injections" = "Injections";
+"dashboard.compliance.thisMonth" = "This month";
+"dashboard.compliance.supplements" = "Supplements";
+"dashboard.compliance.tapToAdd" = "Tap to add";
+"dashboard.compliance.thisWeek" = "This week";
+"dashboard.supplementSetup.title" = "Set Up Your Stack";
+"dashboard.supplementSetup.subtitle" = "Add supplements to track daily adherence.";
+
+/* Trial / billing */
+"dashboard.trial.ended" = "Your trial has ended";
+"dashboard.trial.endsIn" = "Trial ends in %d day(s)";
+"dashboard.trial.subscribe" = "Subscribe to keep all your data and features.";
+"dashboard.trial.subscribeButton" = "Subscribe";
+"dashboard.trial.accomplished" = "Look what you accomplished";
+"dashboard.trial.freeForever" = "Free forever";
+"dashboard.trial.freeFeatures" = "Protocol Score, daily check-ins, HealthKit sync, and basic insights";
+"dashboard.trial.withPro" = "With Pro";
+"dashboard.trial.proFeatures" = "PK curves, bloodwork tracking, weekly reports, peptide tracking, and more";
+"dashboard.trial.subscribePro" = "Subscribe to Trough Pro";
+"dashboard.trial.continueFree" = "Continue with Free";
+"dashboard.trial.dataSafe" = "Your data is safe — upgrade anytime.";
+"dashboard.grace.title" = "Payment issue";
+"dashboard.grace.subtitle" = "We'll retry billing — your access continues for %d more day(s).";
+
+/* Greetings */
+"greeting.morning" = "Good morning";
+"greeting.afternoon" = "Good afternoon";
+"greeting.evening" = "Good evening";
+
+/* Milestones */
+"milestone.7" = "🔥 One week! Top 30% of TRT trackers";
+"milestone.14" = "🔥🔥 Two weeks! Top 15% of TRT trackers";
+"milestone.30" = "🔥🔥🔥 One month! Top 5% of TRT trackers";
+"milestone.60" = "🔥🔥🔥🔥 Two months! Top 2% — you're elite";
+"milestone.90" = "🔥🔥🔥🔥🔥 Three months! Top 1% — legend";
+
+/* Forecast */
+"forecast.injectionToday" = "Injection day today — energy should peak in 24–48 hours.";
+"forecast.injectionTomorrow" = "Injection due tomorrow. You're at the trough — some fatigue is normal.";
+"forecast.dip" = "Day %d tomorrow — energy typically dips. Stay ahead of it.";
+"forecast.strong" = "Day %d tomorrow — levels should be strong post-injection.";
+"forecast.tapering" = "Next injection in %d days. Levels are tapering gradually.";
+
+/* PK Curve */
+"pk.overdue" = "Overdue by %dd";
+"pk.peak" = "Peak";
+"pk.trough" = "Trough";
+"pk.now" = "Now";
+
+/* ═══════════════════════════════════════════════════════════════
+   Daily Check-in
+   ═══════════════════════════════════════════════════════════════ */
 "checkin.title" = "How are you today?";
+"checkin.dayOf" = "Day %d of %d";
+"checkin.protocolScore" = "Protocol Score";
 "checkin.wellnessMetrics" = "Wellness Metrics";
+"checkin.energy" = "Energy";
+"checkin.mood" = "Mood";
+"checkin.libido" = "Libido";
+"checkin.sleepQuality" = "Sleep Quality";
+"checkin.mentalClarity" = "Mental Clarity";
 "checkin.bodyMetrics" = "Body Metrics";
+"checkin.weight" = "Weight (%@)";
+"checkin.bodyFat" = "Body Fat %%";
+"checkin.optional" = "Optional";
 "checkin.next" = "Next";
 "checkin.saveCheckin" = "Save Check-in";
-"checkin.morningWood" = "Morning Wood?";
-"checkin.workout" = "Workout today?";
-"checkin.supplementsTaken" = "Supplements taken today?";
-"checkin.weight" = "Weight (%@)";
+"checkin.saved" = "Saved";
+"checkin.injectionCycle" = "Injection Cycle";
+"checkin.noData" = "No data";
 
-/* Injections */
+/* Binary taps */
+"checkin.quickQuestions" = "Quick Questions";
+"checkin.morningWood" = "Morning Wood?";
+"checkin.yes" = "Yes ✓";
+"checkin.no" = "No ✗";
+"checkin.workout" = "Workout today?";
+"checkin.trainingPerformance" = "Training Performance";
+"checkin.performance" = "Performance";
+"checkin.aiSideEffects" = "AI Side Effects";
+"checkin.aiSideEffectsDesc" = "Helps detect if your AI dose is crashing estrogen.";
+"checkin.jointPain" = "Joint pain";
+"checkin.noIssues" = "No issues";
+"checkin.glp1Check" = "GLP-1 Check";
+"checkin.nausea" = "Nausea";
+"checkin.noNausea" = "No nausea";
+"checkin.supplementsTaken" = "Supplements taken today?";
+
+/* Completion */
+"checkin.hrv" = "HRV";
+"checkin.sleep" = "Sleep";
+"checkin.steps" = "Steps";
+"checkin.restingHR" = "Resting HR";
+
+/* ═══════════════════════════════════════════════════════════════
+   Injections
+   ═══════════════════════════════════════════════════════════════ */
 "injections.title" = "Injections";
+"injections.logNew" = "Log new injection";
 "injections.logFirst" = "Log your first injection";
+"injections.logFirstSubtitle" = "Tap + to record a dose. Trough tracks your cycle and suggests injection sites.";
+"injections.logInjection" = "Log Injection";
+"injections.editInjection" = "Edit Injection";
 "injections.today" = "Today";
 "injections.yesterday" = "Yesterday";
+"injections.dateTime" = "Date & Time";
+"injections.when" = "When";
+"injections.injectionSite" = "Injection Site";
+"injections.notesOptional" = "Notes (optional)";
+"injections.notesPlaceholder" = "Any notes about this injection…";
 
-/* Bloodwork */
+/* ═══════════════════════════════════════════════════════════════
+   Bloodwork
+   ═══════════════════════════════════════════════════════════════ */
 "bloodwork.title" = "Bloodwork";
-"bloodwork.noRecords" = "No bloodwork recorded";
-"bloodwork.logFirst" = "Log your first panel to start tracking trends.";
 "bloodwork.results" = "Results";
 "bloodwork.trends" = "Trends";
+"bloodwork.noRecords" = "No bloodwork recorded";
+"bloodwork.logFirst" = "Log your first panel to start tracking trends.";
+"bloodwork.addResults" = "Add Results";
+"bloodwork.addBloodwork" = "Add Bloodwork";
+"bloodwork.editBloodwork" = "Edit Bloodwork";
+"bloodwork.panelInfo" = "Panel Info";
+"bloodwork.drawDate" = "Draw Date";
+"bloodwork.labName" = "Lab Name (optional)";
+"bloodwork.photo" = "Photo";
+"bloodwork.chooseLibrary" = "Choose from Library";
+"bloodwork.takePhoto" = "Take Photo";
+"bloodwork.photoUnavailable" = "Photo unavailable";
+"bloodwork.notesPlaceholder" = "Notes for your doctor about this panel...";
+"bloodwork.refRange" = "Your Lab's Reference Range";
+"bloodwork.editRefRange" = "Edit reference range";
+"bloodwork.markers" = "%d markers";
+"bloodwork.view" = "View";
 
-/* Peptides */
+/* ═══════════════════════════════════════════════════════════════
+   Peptides / Adjuncts
+   ═══════════════════════════════════════════════════════════════ */
 "peptides.title" = "Adjuncts & Peptides";
 "peptides.trackYourStack" = "Track Your Stack";
+"peptides.trackSubtitle" = "Log adjuncts and peptide doses to\ntrack your stack and spot patterns.";
+"peptides.logFirstDose" = "Log First Dose";
+"peptides.glp1Weight" = "GLP-1 / Weight Management";
+"peptides.weightTracking" = "Weight tracking";
+"peptides.aiAncillary" = "AI / Ancillary";
+"peptides.peptides" = "Peptides";
+"peptides.activeCompounds" = "Active Compounds";
+"peptides.e2Correlation" = "E2 correlation";
+"peptides.log" = "Log";
+"peptides.dosesTotal" = "%d dose(s) total";
+"peptides.logDose" = "Log Dose";
+"peptides.editLog" = "Edit Log";
+"peptides.adjunctPeptide" = "Adjunct / Peptide";
+"peptides.amount" = "Amount";
+"peptides.unit" = "Unit";
+"peptides.route" = "Route";
+"peptides.injectionSite" = "Injection Site";
+"peptides.details" = "Details";
+"peptides.batchLot" = "Batch / Lot #";
+"peptides.compoundName" = "Compound name";
+"peptides.dateTime" = "Date & Time";
 
-/* Settings */
+/* ═══════════════════════════════════════════════════════════════
+   Settings
+   ═══════════════════════════════════════════════════════════════ */
 "settings.title" = "Settings";
 "settings.activeProtocol" = "Active Protocol";
 "settings.noActiveProtocol" = "No active protocol";
 "settings.setNewProtocol" = "Set New Protocol";
+"settings.supplements" = "Supplements";
+"settings.manageSupplements" = "Manage Supplements";
+"settings.active" = "%d active";
+"settings.trackingPrefs" = "Tracking Preferences";
+"settings.trackBodyWeight" = "Track Body Weight";
+"settings.dataImport" = "Data Import";
+"settings.importSpreadsheet" = "Import from Spreadsheet";
+"settings.reminders" = "Reminders";
+"settings.account" = "Account";
 "settings.signOut" = "Sign Out";
 "settings.deleteAccount" = "Delete Account";
 "settings.deleteAccount.title" = "Delete Account?";
 "settings.deleteAccount.message" = "This will permanently delete your account and all your data. This action cannot be undone.";
 "settings.deleteAccount.confirm" = "Delete Everything";
+"settings.deleting" = "Deleting...";
 "settings.recommend" = "Recommend Trough to a Friend";
+"settings.shareSubject" = "Check out Trough";
+"settings.shareBody" = "I've been using Trough to track my TRT protocol — it's really well done.";
+"settings.privacyPolicy" = "Privacy & Data Policy";
+"settings.termsOfUse" = "Terms of Use";
+"settings.proFeatures" = "What You Get With Pro";
 
-/* Onboarding */
-"onboarding.whatBringsYou" = "What brings you here?";
-"onboarding.startTrial" = "Start 14-Day Free Trial";
+/* New Protocol */
+"settings.newProtocol" = "New Protocol";
+"settings.protocolName" = "Protocol Name (e.g. Test Cyp 150mg E7D)";
 
-/* Paywall */
+/* Supplements */
+"supplements.title" = "Supplements";
+"supplements.yourStack" = "Your Stack";
+"supplements.noSupplements" = "No supplements yet";
+"supplements.addHint" = "Add your stack to track daily adherence in your check-in.";
+"supplements.addSupplement" = "Add Supplement";
+"supplements.name" = "Name";
+"supplements.amount" = "Amount";
+"supplements.every" = "Every";
+"supplements.preset" = "Preset";
+"supplements.doseFrequency" = "Dose & Frequency";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall
+   ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
+"paywall.heroSubtitle" = "Go from 42 → 85 Protocol Score.";
 "paywall.subtitle" = "Everything. Free for 14 days.";
+"paywall.monthly" = "Monthly";
+"paywall.annual" = "Annual";
+"paywall.save40" = "Save 40%";
 "paywall.startTrial" = "Start Free Trial";
-"paywall.restorePurchases" = "Restore Purchases";
-"paywall.privacyPolicy" = "Privacy Policy";
-"paywall.termsOfUse" = "Terms of Use";
+"paywall.startTrialFull" = "Start Free Trial — 14 days free, then %@";
+"paywall.restorePurchases" = "Restore";
+"paywall.privacyPolicy" = "Privacy";
+"paywall.termsOfUse" = "Terms";
 
-/* Disclaimers */
+/* Pro features */
+"pro.title" = "What You Get With Pro";
+"pro.trialIncluded" = "14-day free trial included";
+"pro.pkCurves" = "PK Curves";
+"pro.pkCurvesDesc" = "See your estimated blood levels with confidence bands and multi-ester stacking";
+"pro.trendHistory" = "Full Trend History";
+"pro.trendHistoryDesc" = "Unlimited energy, mood, libido, and sleep trend charts (free shows 3 days)";
+"pro.bloodwork" = "Bloodwork Tracking";
+"pro.bloodworkDesc" = "Log labs, track trends over time, set custom reference ranges";
+"pro.reports" = "Weekly Reports & Export";
+"pro.reportsDesc" = "PDF and CSV export with doctor notes — perfect for clinic visits";
+"pro.peptides" = "Adjuncts & Peptides";
+"pro.peptidesDesc" = "Track AI compounds, peptides, and GLP-1 agonists with E2 correlation";
+"pro.siteRotation" = "Injection Site Rotation";
+"pro.siteRotationDesc" = "Visual rotation map to prevent scar tissue buildup";
+"pro.reminders" = "Injection Reminders";
+"pro.remindersDesc" = "Never miss a pin day — smart reminders based on your protocol";
+"pro.alwaysFree" = "Always Free";
+"pro.alwaysFreeDesc" = "Protocol Score, daily check-ins, HealthKit sync, and basic insights";
+
+/* Paywall feature list */
+"paywall.feat.history" = "Unlimited history & Protocol Score trends";
+"paywall.feat.pk" = "PK curves with confidence bands";
+"paywall.feat.bloodwork" = "Bloodwork tracking & trend charts";
+"paywall.feat.reports" = "Weekly reports & CSV/PDF export";
+"paywall.feat.peptides" = "Peptide & GLP-1 tracking";
+"paywall.feat.siteMap" = "Injection site rotation map";
+"paywall.feat.reminders" = "Injection reminders & calendar";
+"paywall.feat.healthkit" = "HealthKit auto-sync (always free)";
+
+/* ═══════════════════════════════════════════════════════════════
+   HealthKit Permission
+   ═══════════════════════════════════════════════════════════════ */
+"hk.title" = "Connect Health";
+"hk.subtitle" = "Trough reads your biometrics to find patterns in your hormone protocol.";
+"hk.hrv" = "HRV";
+"hk.hrvDesc" = "Heart rate variability — stress & recovery signal";
+"hk.sleep" = "Sleep";
+"hk.sleepDesc" = "Core, Deep & REM stages from last night";
+"hk.stepsEnergy" = "Steps & Energy";
+"hk.stepsEnergyDesc" = "Daily movement to correlate with protocol";
+"hk.restingHR" = "Resting HR";
+"hk.restingHRDesc" = "Cardiovascular baseline over time";
+"hk.privacy" = "Read-only. We never sell your health data.";
+"hk.allow" = "Allow Access";
+"hk.notNow" = "Not Now";
+"hk.denied" = "Health access denied";
+"hk.deniedDesc" = "Tap to open Settings and enable Health access.";
+"hk.permissionError" = "Could not request permissions. You can enable Health access in Settings.";
+"hk.noData" = "No data available";
+
+/* ═══════════════════════════════════════════════════════════════
+   Privacy Policy
+   ═══════════════════════════════════════════════════════════════ */
+"privacy.title" = "Privacy & Data";
+"privacy.dataYours" = "Your Data Stays Yours";
+"privacy.dataYoursDesc" = "All your check-ins, injections, and protocol data are stored locally on your device first. Sync to our servers happens only while you're online and only to back up your data.";
+"privacy.hkPrivacy" = "HealthKit Data Never Leaves Your Device";
+"privacy.hkPrivacyDesc" = "HRV, sleep, steps, and resting HR are read from HealthKit to auto-fill your check-in. This data is never transmitted to our servers and never shared with third parties.";
+"privacy.photos" = "Bloodwork Photos";
+"privacy.photosDesc" = "Lab result photos are uploaded to secure, encrypted Supabase Storage with row-level security. Only you can access your photos — no Trough employee or third party can view them.";
+"privacy.sync" = "Encrypted Sync";
+"privacy.syncDesc" = "When syncing to our servers, all data is transmitted over HTTPS. Your account is secured via Supabase Auth. We store only the data required to provide the service.";
+"privacy.noSell" = "We Don't Sell Your Data";
+"privacy.noSellDesc" = "Your health data is never sold, rented, or shared with advertisers. We use privacy-focused analytics (PostHog) solely to understand feature usage and improve the app. No personal health data is included in analytics events.";
+"privacy.deletion" = "Data Deletion";
+"privacy.deletionDesc" = "You can delete your account and all associated data at any time by contacting support@gettrough.app. Deletion is permanent and irreversible.";
+"privacy.fullPolicy" = "Full Policy & Terms";
+
+/* ═══════════════════════════════════════════════════════════════
+   Disclaimers
+   ═══════════════════════════════════════════════════════════════ */
 "disclaimer.medical" = "Not medical advice. Consult your healthcare provider.";
+"disclaimer.standard" = "This information is for personal tracking only and does not constitute medical advice. Consult a licensed healthcare provider before making any changes to your protocol.";
+"disclaimer.bloodwork" = "Lab values shown are for reference. Normal ranges vary by lab and individual. Always discuss your results with your prescribing physician.";
+"disclaimer.pkCurve" = "Pharmacokinetic curves are estimates based on population averages. Individual absorption and metabolism vary significantly. This is not a substitute for regular bloodwork monitoring.";
+"disclaimer.protocolScore" = "Protocol score reflects your self-reported wellness metrics. It is not a clinical measurement and should not guide medical decisions.";
+"disclaimer.insight" = "Insights are generated from your personal tracking data only. They are observational patterns, not medical diagnoses or advice.";
+"disclaimer.weeklyReport" = "This report summarizes your self-reported data. It is not a clinical document and should not be used to guide medical decisions. Always consult your prescribing physician.";
+"disclaimer.supplement" = "Supplement information is for personal tracking only. Consult a qualified healthcare provider before starting any new supplement.";
+"disclaimer.fertility" = "Fertility recovery estimates are based on published averages. Individual timelines vary significantly. Always consult a reproductive endocrinologist.";
 
-/* Units */
-"unit.lbs" = "lbs";
-"unit.kg" = "kg";
+/* ═══════════════════════════════════════════════════════════════
+   Weekly Report
+   ═══════════════════════════════════════════════════════════════ */
+"report.title" = "Weekly Report";
+"report.notEnoughData" = "Not enough data yet";
+"report.notEnoughDataDesc" = "Check in for 7 consecutive days to unlock your weekly report.";
+"report.share" = "Share Report";
 
-/* Common */
-"common.cancel" = "Cancel";
-"common.save" = "Save";
-"common.delete" = "Delete";
-"common.today" = "Today";
-"common.yesterday" = "Yesterday";
+/* ═══════════════════════════════════════════════════════════════
+   CSV Import
+   ═══════════════════════════════════════════════════════════════ */
+"import.dailyCheckins" = "Daily Check-ins";
+"import.bloodwork" = "Bloodwork";
+"import.both" = "Both";
+"import.chooseFile" = "Choose File";
+"import.import" = "Import";
+"import.date" = "Date";
+"import.labName" = "Lab Name";
+
+/* ═══════════════════════════════════════════════════════════════
+   Frequency Labels
+   ═══════════════════════════════════════════════════════════════ */
+"frequency.daily" = "Daily";
+"frequency.everyOtherDay" = "Every other day";
+"frequency.every3Days" = "Every 3 days";
+"frequency.weekly" = "Weekly";
+"frequency.every2Weeks" = "Every 2 weeks";
+"frequency.everyNDays" = "Every %d days";
+
+/* ═══════════════════════════════════════════════════════════════
+   Notifications
+   ═══════════════════════════════════════════════════════════════ */
+"notification.checkinTitle" = "Daily Check-in";
+"notification.checkinBody" = "How are you feeling today? Log your daily check-in.";
+"notification.compoundDoseTitle" = "%@ Reminder";
+"notification.compoundDoseBody" = "Time for your %@ dose (%@).";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.featurePK" = "Live PK curves";
+"paywall.featureHistory" = "Full trend history";
+"paywall.featureBloodwork" = "Bloodwork tracking";
+"paywall.featureReports" = "Weekly reports";
+"paywall.featureAI" = "AI-powered insights";
+"paywall.featurePeptides" = "Peptide tracking";
+"paywall.perMonth" = "per month";
+"paywall.perYear" = "per year";
+"paywall.privacy" = "Privacy";
+"paywall.terms" = "Terms";
+"paywall.restore" = "Restore";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.trtInjection" = "TRT Injection";
+"onboarding.selected" = "%d selected";

@@ -13,10 +13,10 @@ struct CompletionView: View {
     @State private var hkValues: HKSnapshot? = nil
 
     private let healthItems: [(icon: String, label: String, keyPath: KeyPath<HKSnapshot, String>)] = [
-        ("waveform.path.ecg",  "HRV",       \.hrv),
-        ("moon.zzz.fill",      "Sleep",     \.sleep),
-        ("figure.walk",        "Steps",     \.steps),
-        ("heart.fill",         "Resting HR", \.hr),
+        ("waveform.path.ecg",  NSLocalizedString("completion.hrv", comment: ""),       \.hrv),
+        ("moon.zzz.fill",      NSLocalizedString("completion.sleep", comment: ""),     \.sleep),
+        ("figure.walk",        NSLocalizedString("completion.steps", comment: ""),     \.steps),
+        ("heart.fill",         NSLocalizedString("completion.restingHR", comment: ""), \.hr),
     ]
 
     var body: some View {
@@ -29,10 +29,10 @@ struct CompletionView: View {
                 // Cycle day badge
                 if let info = vm.cycleInfo {
                     VStack(spacing: 4) {
-                        Text("Day \(info.day) of \(info.totalDays)")
+                        Text(String(format: NSLocalizedString("completion.cycleDay", comment: ""), info.day, info.totalDays))
                             .font(.system(size: 18, weight: .bold))
                             .foregroundColor(AppColors.accent)
-                        Text("Injection Cycle")
+                        Text(NSLocalizedString("completion.injectionCycle", comment: ""))
                             .font(.caption)
                             .foregroundColor(.secondary)
 
@@ -57,7 +57,7 @@ struct CompletionView: View {
                                 if let snap = hkValues {
                                     let val = snap[keyPath: item.keyPath]
                                     if val == "–" {
-                                        Text("No data")
+                                        Text(NSLocalizedString("completion.noData", comment: ""))
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     } else {
@@ -127,7 +127,7 @@ struct CompletionView: View {
                 Spacer()
             }
         }
-        .navigationTitle("Saved")
+        .navigationTitle(NSLocalizedString("completion.title", comment: ""))
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .task {

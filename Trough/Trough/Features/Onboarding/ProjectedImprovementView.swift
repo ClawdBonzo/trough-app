@@ -36,12 +36,12 @@ struct ProjectedImprovementView: View {
 
                 // Header
                 VStack(spacing: 8) {
-                    Text("Your 7-Day Outlook")
+                    Text(NSLocalizedString("projected.title", comment: ""))
                         .font(.system(size: 28, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                         .opacity(appeared ? 1 : 0)
 
-                    Text("With consistent tracking, users see real improvement in the first week.")
+                    Text(NSLocalizedString("projected.subtitle", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(AppColors.textSecondary)
                         .multilineTextAlignment(.center)
@@ -53,11 +53,11 @@ struct ProjectedImprovementView: View {
 
                 // Score change badge
                 HStack(spacing: 16) {
-                    scoreBadge(label: "Today", value: currentScore, color: DashboardViewModel.color(for: Double(currentScore)))
+                    scoreBadge(label: NSLocalizedString("projected.today", comment: ""), value: currentScore, color: DashboardViewModel.color(for: Double(currentScore)))
                     Image(systemName: "arrow.right")
                         .font(.title3.bold())
                         .foregroundColor(AppColors.textSecondary)
-                    scoreBadge(label: "Day 7", value: targetScore, color: DashboardViewModel.color(for: Double(targetScore)))
+                    scoreBadge(label: NSLocalizedString("projected.day7", comment: ""), value: targetScore, color: DashboardViewModel.color(for: Double(targetScore)))
                 }
                 .opacity(appeared ? 1 : 0)
                 .scaleEffect(appeared ? 1 : 0.9)
@@ -72,7 +72,7 @@ struct ProjectedImprovementView: View {
                 // Day labels
                 HStack {
                     ForEach(0..<7, id: \.self) { day in
-                        Text(day == 0 ? "Now" : "D\(day + 1)")
+                        Text(day == 0 ? NSLocalizedString("projected.now", comment: "") : "D\(day + 1)")
                             .font(.caption2)
                             .foregroundColor(AppColors.textSecondary)
                         if day < 6 { Spacer() }
@@ -92,7 +92,7 @@ struct ProjectedImprovementView: View {
                 // CTA
                 VStack(spacing: 12) {
                     Button(action: onContinue) {
-                        Text("Build My Plan")
+                        Text(NSLocalizedString("projected.cta", comment: ""))
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -102,7 +102,7 @@ struct ProjectedImprovementView: View {
                     }
 
                     Button(action: onSkip) {
-                        Text("Skip")
+                        Text(NSLocalizedString("common.skip", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(AppColors.textSecondary)
                     }

@@ -85,15 +85,15 @@ struct PaywallView: View {
                 .font(.system(size: 40))
                 .foregroundColor(AppColors.accent)
 
-            Text("TROUGH PRO")
+            Text(NSLocalizedString("paywall.title", comment: ""))
                 .font(.system(size: 32, weight: .black, design: .rounded))
                 .foregroundColor(.white)
 
-            Text("Go from 42 → 85 Protocol Score.")
+            Text(NSLocalizedString("paywall.subtitle", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
-            Text("Everything. Free for 14 days.")
+            Text(NSLocalizedString("paywall.trialLine", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary.opacity(0.7))
         }
@@ -103,14 +103,14 @@ struct PaywallView: View {
 
     private var featureList: some View {
         VStack(alignment: .leading, spacing: 14) {
-            FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Unlimited history & Protocol Score trends")
-            FeatureRow(icon: "waveform.path.ecg",         text: "PK curves with confidence bands")
-            FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & trend charts")
-            FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & CSV/PDF export")
-            FeatureRow(icon: "pills.fill",                text: "Peptide & GLP-1 tracking")
-            FeatureRow(icon: "figure.walk.circle",        text: "Injection site rotation map")
-            FeatureRow(icon: "bell.badge.fill",           text: "Injection reminders & calendar")
-            FeatureRow(icon: "heart.text.square.fill",    text: "HealthKit auto-sync (always free)")
+            FeatureRow(icon: "chart.line.uptrend.xyaxis", text: NSLocalizedString("paywall.feature.history", comment: ""))
+            FeatureRow(icon: "waveform.path.ecg",         text: NSLocalizedString("paywall.feature.pk", comment: ""))
+            FeatureRow(icon: "drop.fill",                 text: NSLocalizedString("paywall.feature.bloodwork", comment: ""))
+            FeatureRow(icon: "chart.bar.doc.horizontal",  text: NSLocalizedString("paywall.feature.reports", comment: ""))
+            FeatureRow(icon: "pills.fill",                text: NSLocalizedString("paywall.feature.peptides", comment: ""))
+            FeatureRow(icon: "figure.walk.circle",        text: NSLocalizedString("paywall.feature.sites", comment: ""))
+            FeatureRow(icon: "bell.badge.fill",           text: NSLocalizedString("paywall.feature.reminders", comment: ""))
+            FeatureRow(icon: "heart.text.square.fill",    text: NSLocalizedString("paywall.feature.healthkit", comment: ""))
                 .opacity(0.6)
         }
         .padding(18)
@@ -124,15 +124,15 @@ struct PaywallView: View {
         HStack(spacing: 0) {
             billingOption(
                 cycle: .monthly,
-                title: "Monthly",
+                title: NSLocalizedString("paywall.monthly", comment: ""),
                 price: monthlyPackage.map { $0.storeProduct.localizedPriceString + "/mo" } ?? "$6.99/mo",
                 badge: nil
             )
             billingOption(
                 cycle: .annual,
-                title: "Annual",
+                title: NSLocalizedString("paywall.annual", comment: ""),
                 price: annualPackage.map { $0.storeProduct.localizedPriceString + "/yr" } ?? "$49.99/yr",
-                badge: "Save 40%"
+                badge: NSLocalizedString("paywall.save40", comment: "")
             )
         }
         .background(AppColors.card)
@@ -229,7 +229,7 @@ struct PaywallView: View {
                     if isRestoring {
                         ProgressView().tint(.secondary)
                     } else {
-                        Text("Restore Purchases")
+                        Text(NSLocalizedString("paywall.restore", comment: ""))
                     }
                 }
                 .font(.caption)
@@ -238,13 +238,13 @@ struct PaywallView: View {
             .buttonStyle(.plain)
 
             if let privacyURL = URL(string: "https://gettrough.app/privacy") {
-                Link("Privacy Policy", destination: privacyURL)
+                Link(NSLocalizedString("paywall.privacy", comment: ""), destination: privacyURL)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
 
             if let termsURL = URL(string: "https://gettrough.app/terms") {
-                Link("Terms of Use", destination: termsURL)
+                Link(NSLocalizedString("paywall.terms", comment: ""), destination: termsURL)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -253,11 +253,11 @@ struct PaywallView: View {
 
     private var disclaimerText: some View {
         VStack(spacing: 6) {
-            Text("Cancel anytime in Settings → Subscriptions.")
+            Text(NSLocalizedString("paywall.cancelAnytime", comment: ""))
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            Text("No charge during your 14-day free trial. Subscription auto-renews after trial unless cancelled at least 24 hours before the end of the trial period.")
+            Text(NSLocalizedString("paywall.trialDisclaimer", comment: ""))
                 .font(.caption2)
                 .foregroundColor(.secondary.opacity(0.5))
                 .multilineTextAlignment(.center)

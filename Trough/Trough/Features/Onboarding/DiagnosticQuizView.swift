@@ -32,13 +32,13 @@ struct DiagnosticQuizView: View {
                     VStack(spacing: 28) {
                         // Header
                         VStack(spacing: 8) {
-                            Text("How are you feeling?")
+                            Text(NSLocalizedString("quiz.title", comment: ""))
                                 .font(.system(size: 28, weight: .black, design: .rounded))
                                 .foregroundColor(.white)
                                 .opacity(appeared ? 1 : 0)
                                 .offset(y: appeared ? 0 : 15)
 
-                            Text("Rate each area on a scale of 1–5.\nWe'll calculate your baseline Protocol Score.")
+                            Text(NSLocalizedString("quiz.subtitle", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(AppColors.textSecondary)
                                 .multilineTextAlignment(.center)
@@ -66,7 +66,7 @@ struct DiagnosticQuizView: View {
                 // Bottom CTA
                 VStack(spacing: 12) {
                     Button(action: onContinue) {
-                        Text("See My Score")
+                        Text(NSLocalizedString("quiz.cta", comment: ""))
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -76,7 +76,7 @@ struct DiagnosticQuizView: View {
                     }
 
                     Button(action: onSkip) {
-                        Text("Skip")
+                        Text(NSLocalizedString("common.skip", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(AppColors.textSecondary)
                     }

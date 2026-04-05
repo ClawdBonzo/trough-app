@@ -38,7 +38,7 @@ struct BinaryTapsView: View {
                 .padding()
             }
         }
-        .navigationTitle("Quick Questions")
+        .navigationTitle(NSLocalizedString("checkin.quickQuestions", comment: ""))
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(false)
     }
@@ -47,18 +47,18 @@ struct BinaryTapsView: View {
 
     private var morningWoodRow: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Morning Wood?")
+            Text(NSLocalizedString("checkin.morningWood", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
             HStack(spacing: 12) {
                 BinaryButton(
-                    label: "Yes ✓",
+                    label: NSLocalizedString("checkin.yes", comment: ""),
                     isSelected: vm.morningWood == true,
                     activeColor: yesGreen
                 ) { vm.morningWood = true }
 
                 BinaryButton(
-                    label: "No ✗",
+                    label: NSLocalizedString("checkin.no", comment: ""),
                     isSelected: vm.morningWood == false,
                     activeColor: noGrey
                 ) { vm.morningWood = false }
@@ -71,18 +71,18 @@ struct BinaryTapsView: View {
 
     private var workoutRow: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Workout today?")
+            Text(NSLocalizedString("checkin.workout", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
             HStack(spacing: 12) {
                 BinaryButton(
-                    label: "Yes ✓",
+                    label: NSLocalizedString("checkin.yes", comment: ""),
                     isSelected: vm.workoutToday == true,
                     activeColor: yesGreen
                 ) { vm.workoutToday = true }
 
                 BinaryButton(
-                    label: "No ✗",
+                    label: NSLocalizedString("checkin.no", comment: ""),
                     isSelected: vm.workoutToday == false,
                     activeColor: noGrey
                 ) { vm.workoutToday = false }
@@ -95,12 +95,12 @@ struct BinaryTapsView: View {
 
     private var trainingPerformanceCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Training Performance")
+            Text(NSLocalizedString("checkin.trainingPerformance", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
             HapticSlider(
                 emoji: "🏋️",
-                label: "Performance",
+                label: NSLocalizedString("checkin.performance", comment: ""),
                 value: $vm.trainingPerformanceScore
             )
         }
@@ -115,23 +115,23 @@ struct BinaryTapsView: View {
             HStack {
                 Image(systemName: "shield.lefthalf.filled")
                     .foregroundColor(.orange)
-                Text("AI Side Effects")
+                Text(NSLocalizedString("checkin.aiSideEffects", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
             }
-            Text("Helps detect if your AI dose is crashing estrogen.")
+            Text(NSLocalizedString("checkin.aiHelp", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
                 BinaryButton(
-                    label: "Joint pain",
+                    label: NSLocalizedString("checkin.jointPain", comment: ""),
                     isSelected: vm.hasJointPain == true,
                     activeColor: .orange
                 ) { vm.hasJointPain = (vm.hasJointPain == true) ? nil : true }
 
                 BinaryButton(
-                    label: "No issues",
+                    label: NSLocalizedString("checkin.noIssues", comment: ""),
                     isSelected: vm.hasJointPain == false,
                     activeColor: yesGreen
                 ) { vm.hasJointPain = (vm.hasJointPain == false) ? nil : false }
@@ -148,20 +148,20 @@ struct BinaryTapsView: View {
             HStack {
                 Image(systemName: "scalemass")
                     .foregroundColor(.green)
-                Text("GLP-1 Check")
+                Text(NSLocalizedString("checkin.glp1Check", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
             }
 
             HStack(spacing: 12) {
                 BinaryButton(
-                    label: "Nausea",
+                    label: NSLocalizedString("checkin.nausea", comment: ""),
                     isSelected: vm.hasNausea == true,
                     activeColor: .orange
                 ) { vm.hasNausea = (vm.hasNausea == true) ? nil : true }
 
                 BinaryButton(
-                    label: "No nausea",
+                    label: NSLocalizedString("checkin.noNausea", comment: ""),
                     isSelected: vm.hasNausea == false,
                     activeColor: yesGreen
                 ) { vm.hasNausea = (vm.hasNausea == false) ? nil : false }
@@ -175,7 +175,7 @@ struct BinaryTapsView: View {
 
     private var supplementsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Supplements taken today?")
+            Text(NSLocalizedString("checkin.supplementsTaken", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
 
@@ -209,7 +209,7 @@ struct BinaryTapsView: View {
     private var saveButton: some View {
         Button { vm.save() } label: {
             HStack {
-                Text("Save Check-in")
+                Text(NSLocalizedString("checkin.saveCheckin", comment: ""))
                     .fontWeight(.semibold)
                 Image(systemName: "checkmark")
             }

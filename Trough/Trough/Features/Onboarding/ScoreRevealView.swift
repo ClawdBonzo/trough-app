@@ -23,10 +23,10 @@ struct ScoreRevealView: View {
 
     private var encouragement: String {
         switch score {
-        case 80...: return "Strong baseline. Let's keep it there."
-        case 60..<80: return "Solid foundation. Room to optimize."
-        case 40..<60: return "There's upside here. Let's find it."
-        default: return "We've got work to do — and that's the point."
+        case 80...: return NSLocalizedString("scoreReveal.encourage.high", comment: "")
+        case 60..<80: return NSLocalizedString("scoreReveal.encourage.mid", comment: "")
+        case 40..<60: return NSLocalizedString("scoreReveal.encourage.low", comment: "")
+        default: return NSLocalizedString("scoreReveal.encourage.veryLow", comment: "")
         }
     }
 
@@ -62,7 +62,7 @@ struct ScoreRevealView: View {
                             .monospacedDigit()
                             .contentTransition(.numericText(countsDown: false))
 
-                        Text("Protocol Score")
+                        Text(NSLocalizedString("scoreReveal.protocolScore", comment: ""))
                             .font(.caption)
                             .foregroundColor(AppColors.textSecondary)
                     }
@@ -92,7 +92,7 @@ struct ScoreRevealView: View {
                 // CTA
                 VStack(spacing: 12) {
                     Button(action: onContinue) {
-                        Text("See Your Projected Improvement")
+                        Text(NSLocalizedString("scoreReveal.cta", comment: ""))
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -102,7 +102,7 @@ struct ScoreRevealView: View {
                     }
 
                     Button(action: onSkip) {
-                        Text("Skip")
+                        Text(NSLocalizedString("common.skip", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(AppColors.textSecondary)
                     }

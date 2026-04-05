@@ -55,7 +55,7 @@ struct SplashWaveView: View {
                         .opacity(appeared ? 1.0 : 0)
                         .offset(y: appeared ? 0 : 10)
 
-                    Text("Track your protocol.\nOwn your data.")
+                    Text(NSLocalizedString("splash.headline", comment: ""))
                         .font(.title3)
                         .foregroundColor(AppColors.textSecondary)
                         .multilineTextAlignment(.center)
@@ -68,7 +68,7 @@ struct SplashWaveView: View {
                 // CTA
                 VStack(spacing: 16) {
                     Button(action: onContinue) {
-                        Text("Let's Dial You In")
+                        Text(NSLocalizedString("splash.cta", comment: ""))
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -80,7 +80,7 @@ struct SplashWaveView: View {
                     .offset(y: appeared ? 0 : 20)
 
                     Button(action: onSkip) {
-                        Text("Skip")
+                        Text(NSLocalizedString("common.skip", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(AppColors.textSecondary)
                     }

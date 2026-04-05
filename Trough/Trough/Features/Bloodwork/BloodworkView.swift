@@ -19,8 +19,8 @@ struct BloodworkView: View {
                 VStack(spacing: 0) {
                     // Segmented tab control
                     Picker("View", selection: $selectedTab) {
-                        Text("Results").tag(Tab.results)
-                        Text("Trends").tag(Tab.trends)
+                        Text(NSLocalizedString("bloodwork.results", comment: "")).tag(Tab.results)
+                        Text(NSLocalizedString("bloodwork.trends", comment: "")).tag(Tab.trends)
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
@@ -35,7 +35,7 @@ struct BloodworkView: View {
                     }
                 }
             }
-            .navigationTitle("Bloodwork")
+            .navigationTitle(NSLocalizedString("bloodwork.title", comment: ""))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { vm.prepareAddForm() } label: {
@@ -81,15 +81,15 @@ struct BloodworkView: View {
             Image(systemName: "drop.fill")
                 .font(.system(size: 48))
                 .foregroundColor(AppColors.accent.opacity(0.5))
-            Text("No bloodwork recorded")
+            Text(NSLocalizedString("bloodwork.empty.title", comment: ""))
                 .font(.headline)
                 .foregroundColor(.secondary)
-            Text("Log your first panel to start tracking trends.")
+            Text(NSLocalizedString("bloodwork.empty.subtitle", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
-            Button("Add Results") { vm.prepareAddForm() }
+            Button(NSLocalizedString("bloodwork.empty.cta", comment: "")) { vm.prepareAddForm() }
                 .buttonStyle(.borderedProminent)
                 .tint(AppColors.accent)
         }
@@ -134,7 +134,7 @@ struct BloodworkRowView: View {
                     }
                 }
             } else {
-                Text("\(bloodwork.markers.count) markers")
+                Text(String(format: NSLocalizedString("bloodwork.markers", comment: ""), bloodwork.markers.count))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -180,7 +180,7 @@ struct BloodworkDetailView: View {
                                     .scaledToFit()
                                     .cornerRadius(10)
                             case .failure:
-                                Label("Photo unavailable", systemImage: "photo.slash")
+                                Label(NSLocalizedString("bloodwork.photoUnavailable", comment: ""), systemImage: "photo.slash")
                                     .foregroundColor(.secondary)
                             default:
                                 ProgressView()
@@ -203,7 +203,7 @@ struct BloodworkDetailView: View {
 
                 // Notes
                 if let notes = bloodwork.notes, !notes.isEmpty {
-                    Section("Notes") {
+                    Section(NSLocalizedString("bloodwork.notes", comment: "")) {
                         Text(notes)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
@@ -227,7 +227,7 @@ struct BloodworkDetailView: View {
                 Button {
                     vm.prepareEditForm(bloodwork)
                 } label: {
-                    Text("Edit")
+                    Text(NSLocalizedString("common.edit", comment: ""))
                         .foregroundColor(AppColors.accent)
                 }
             }

@@ -18,10 +18,10 @@ struct ProFeaturesSheet: View {
                             Image(systemName: "star.fill")
                                 .font(.system(size: 36))
                                 .foregroundColor(AppColors.softCTA)
-                            Text("What You Get With Pro")
+                            Text(NSLocalizedString("pro.title", comment: ""))
                                 .font(.title2.bold())
                                 .foregroundColor(.white)
-                            Text("14-day free trial included")
+                            Text(NSLocalizedString("pro.trialIncluded", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -31,38 +31,38 @@ struct ProFeaturesSheet: View {
                         VStack(alignment: .leading, spacing: 16) {
                             ProFeatureItem(
                                 icon: "waveform.path.ecg",
-                                title: "PK Curves",
-                                detail: "See your estimated blood levels with confidence bands and multi-ester stacking"
+                                title: NSLocalizedString("pro.pkCurves", comment: ""),
+                                detail: NSLocalizedString("pro.pkCurvesDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "chart.line.uptrend.xyaxis",
-                                title: "Full Trend History",
-                                detail: "Unlimited energy, mood, libido, and sleep trend charts (free shows 3 days)"
+                                title: NSLocalizedString("pro.trendHistory", comment: ""),
+                                detail: NSLocalizedString("pro.trendHistoryDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "drop.fill",
-                                title: "Bloodwork Tracking",
-                                detail: "Log labs, track trends over time, set custom reference ranges"
+                                title: NSLocalizedString("pro.bloodwork", comment: ""),
+                                detail: NSLocalizedString("pro.bloodworkDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "chart.bar.doc.horizontal",
-                                title: "Weekly Reports & Export",
-                                detail: "PDF and CSV export with doctor notes — perfect for clinic visits"
+                                title: NSLocalizedString("pro.reports", comment: ""),
+                                detail: NSLocalizedString("pro.reportsDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "pills.fill",
-                                title: "Adjuncts & Peptides",
-                                detail: "Track AI compounds, peptides, and GLP-1 agonists with E2 correlation"
+                                title: NSLocalizedString("pro.peptides", comment: ""),
+                                detail: NSLocalizedString("pro.peptidesDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "figure.walk.circle",
-                                title: "Injection Site Rotation",
-                                detail: "Visual rotation map to prevent scar tissue buildup"
+                                title: NSLocalizedString("pro.siteRotation", comment: ""),
+                                detail: NSLocalizedString("pro.siteRotationDesc", comment: "")
                             )
                             ProFeatureItem(
                                 icon: "bell.badge.fill",
-                                title: "Injection Reminders",
-                                detail: "Never miss a pin day — smart reminders based on your protocol"
+                                title: NSLocalizedString("pro.reminders", comment: ""),
+                                detail: NSLocalizedString("pro.remindersDesc", comment: "")
                             )
                         }
                         .padding(16)
@@ -74,10 +74,10 @@ struct ProFeaturesSheet: View {
                             Image(systemName: "heart.text.square.fill")
                                 .foregroundColor(.green)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Always Free")
+                                Text(NSLocalizedString("pro.alwaysFree", comment: ""))
                                     .font(.subheadline.bold())
                                     .foregroundColor(.white)
-                                Text("Protocol Score, daily check-ins, HealthKit sync, and basic insights")
+                                Text(NSLocalizedString("pro.alwaysFreeDesc", comment: ""))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -95,7 +95,7 @@ struct ProFeaturesSheet: View {
                             dismiss()
                             onStartTrial()
                         } label: {
-                            Text("Start Free Trial")
+                            Text(NSLocalizedString("paywall.startTrial", comment: ""))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)

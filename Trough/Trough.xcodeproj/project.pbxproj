@@ -442,6 +442,9 @@
 				"en-GB",
 				"en-CA",
 				"en-AU",
+				es,
+				"pt-BR",
+				de,
 				Base,
 			);
 			mainGroup = 2D6C384FF21A40698B048A4C /* Trough */;

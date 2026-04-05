@@ -21,7 +21,7 @@ struct SupplementConfigView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
         }
-        .navigationTitle("Supplements")
+        .navigationTitle(NSLocalizedString("supplements.title", comment: ""))
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $vm.showingAddSupplement) {
             SupplementAddSheet(vm: vm)
@@ -37,10 +37,10 @@ struct SupplementConfigView: View {
                 Image(systemName: "pills.circle")
                     .font(.system(size: 40))
                     .foregroundColor(AppColors.accent.opacity(0.4))
-                Text("No supplements yet")
+                Text(NSLocalizedString("supplements.noSupplements", comment: ""))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                Text("Add your stack to track daily adherence in your check-in.")
+                Text(NSLocalizedString("supplements.addHint", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -52,7 +52,7 @@ struct SupplementConfigView: View {
     }
 
     private var stackSection: some View {
-        Section("Your Stack") {
+        Section(NSLocalizedString("supplements.yourStack", comment: "")) {
             ForEach(vm.allSupplements, id: \.id) { s in
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
@@ -86,7 +86,7 @@ struct SupplementConfigView: View {
                 vm.prepareAddSupplementForm()
                 vm.showingAddSupplement = true
             } label: {
-                Label("Add Supplement", systemImage: "plus.circle.fill")
+                Label(NSLocalizedString("supplements.addSupplement", comment: ""), systemImage: "plus.circle.fill")
                     .foregroundColor(AppColors.accent)
             }
         }
@@ -107,7 +107,7 @@ struct SupplementConfigView: View {
         let doseStr = s.doseAmount.truncatingRemainder(dividingBy: 1) == 0
             ? String(format: "%.0f", s.doseAmount)
             : String(format: "%.4g", s.doseAmount)
-        let freqStr = s.frequencyDays == 1 ? "daily" : "every \(s.frequencyDays)d"
+        let freqStr = s.frequencyDays == 1 ? NSLocalizedString("freq.daily", comment: "") : String(format: NSLocalizedString("unit.daysAgo", comment: ""), s.frequencyDays)
         return "\(doseStr) \(s.doseUnit) · \(freqStr)"
     }
 }
@@ -128,22 +128,22 @@ struct SupplementAddSheet: View {
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Add Supplement")
+            .navigationTitle(NSLocalizedString("supplements.addSupplement", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(NSLocalizedString("common.cancel", comment: "")) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") { vm.saveSupplement() }
+                    Button(NSLocalizedString("common.add", comment: "")) { vm.saveSupplement() }
                         .foregroundColor(AppColors.accent)
                 }
             }
-            .alert("Error", isPresented: Binding(
+            .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
                 get: { vm.errorMessage != nil },
                 set: { if !$0 { vm.errorMessage = nil } }
             )) {
-                Button("OK", role: .cancel) {}
+                Button(NSLocalizedString("common.ok", comment: ""), role: .cancel) {}
             } message: {
                 Text(vm.errorMessage ?? "")
             }
@@ -151,8 +151,8 @@ struct SupplementAddSheet: View {
     }
 
     private var presetSection: some View {
-        Section("Supplement") {
-            Picker("Preset", selection: $vm.formPresetName) {
+        Section(NSLocalizedString("supplements.title", comment: "")) {
+            Picker(NSLocalizedString("supplements.preset", comment: ""), selection: $vm.formPresetName) {
                 ForEach(SettingsViewModel.presetNames, id: \.self) { Text($0) }
             }
             .pickerStyle(.menu)
@@ -161,7 +161,7 @@ struct SupplementAddSheet: View {
             }
 
             if vm.formPresetName == "Custom" {
-                TextField("Name", text: $vm.formSupplName)
+                TextField(NSLocalizedString("supplements.name", comment: ""), text: $vm.formSupplName)
                     .autocorrectionDisabled()
             }
         }
@@ -169,19 +169,19 @@ struct SupplementAddSheet: View {
     }
 
     private var doseSection: some View {
-        Section("Dose & Frequency") {
+        Section(NSLocalizedString("supplements.doseFrequency", comment: "")) {
             HStack {
-                TextField("Amount", text: $vm.formSupplDose)
+                TextField(NSLocalizedString("supplements.amount", comment: ""), text: $vm.formSupplDose)
                     .keyboardType(.decimalPad)
-                Picker("Unit", selection: $vm.formSupplUnit) {
+                Picker(NSLocalizedString("peptides.unit", comment: ""), selection: $vm.formSupplUnit) {
                     ForEach(["mg", "mcg", "g", "IU"], id: \.self) { Text($0) }
                 }
                 .pickerStyle(.menu)
             }
             HStack {
-                TextField("Every", text: $vm.formSupplFreq)
+                TextField(NSLocalizedString("supplements.every", comment: ""), text: $vm.formSupplFreq)
                     .keyboardType(.numberPad)
-                Text("days").foregroundColor(.secondary)
+                Text(NSLocalizedString("unit.days", comment: "")).foregroundColor(.secondary)
             }
         }
         .listRowBackground(AppColors.card)

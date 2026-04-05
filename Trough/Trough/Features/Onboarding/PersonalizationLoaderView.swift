@@ -12,11 +12,11 @@ struct PersonalizationLoaderView: View {
     @State private var barScales: [CGFloat] = Array(repeating: 0, count: 5)
 
     private let steps = [
-        "Analyzing your baseline…",
-        "Calibrating PK model…",
-        "Building your protocol…",
-        "Setting up tracking…",
-        "Finalizing your plan…",
+        NSLocalizedString("loader.step1", comment: ""),
+        NSLocalizedString("loader.step2", comment: ""),
+        NSLocalizedString("loader.step3", comment: ""),
+        NSLocalizedString("loader.step4", comment: ""),
+        NSLocalizedString("loader.step5", comment: ""),
     ]
 
     var body: some View {
@@ -67,7 +67,7 @@ struct PersonalizationLoaderView: View {
 
                 // Skip
                 Button(action: onSkip) {
-                    Text("Skip")
+                    Text(NSLocalizedString("common.skip", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(AppColors.textSecondary)
                 }

@@ -94,8 +94,8 @@ struct DashboardView: View {
                             } else {
                                 LockedCard(
                                     icon: "scalemass",
-                                    title: "Body Composition",
-                                    subtitle: "Track weight & body fat trends",
+                                    title: NSLocalizedString("dashboard.bodyComposition", comment: ""),
+                                    subtitle: NSLocalizedString("dashboard.bodyComposition.subtitle", comment: ""),
                                     onInfo: { showProFeatures = true }
                                 ) { showPaywall = true }
                             }
@@ -119,7 +119,7 @@ struct DashboardView: View {
                 }
                 } // end else isLoading
             }
-            .navigationTitle("Dashboard")
+            .navigationTitle(NSLocalizedString("dashboard.title", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 vm.setModelContext(modelContext)
@@ -176,14 +176,14 @@ struct DashboardView: View {
 
     private var sampleDataBanner: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("👋 No data yet")
+            Text(NSLocalizedString("dashboard.sampleData.title", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
-            Text("Load sample data to explore the app, or start your first check-in.")
+            Text(NSLocalizedString("dashboard.sampleData.subtitle", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(AppColors.textSecondary)
             HStack(spacing: 12) {
-                Button("Load Sample Data") {
+                Button(NSLocalizedString("dashboard.sampleData.load", comment: "")) {
                     let userID = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
                     SampleDataService.insertSampleData(context: modelContext, userID: userID)
                     showSampleDataBanner = false
@@ -193,7 +193,7 @@ struct DashboardView: View {
                 .foregroundColor(AppColors.accent)
                 .accessibilityLabel("Load sample check-in and injection data")
 
-                Button("Start Check-in") { showCheckin = true }
+                Button(NSLocalizedString("dashboard.sampleData.startCheckin", comment: "")) { showCheckin = true }
                     .font(.subheadline.bold())
                     .foregroundColor(.white)
                     .accessibilityLabel("Open daily check-in")
@@ -214,15 +214,15 @@ struct DashboardView: View {
                 .font(.title3)
                 .foregroundColor(.orange)
             VStack(alignment: .leading, spacing: 2) {
-                Text(days <= 0 ? "Your trial has ended" : "Trial ends in \(days) day\(days == 1 ? "" : "s")")
+                Text(days <= 0 ? NSLocalizedString("dashboard.trial.ended", comment: "") : String(format: NSLocalizedString("dashboard.trial.endsIn", comment: ""), days))
                     .font(.subheadline.bold())
                     .foregroundColor(.white)
-                Text("Subscribe to keep all your data and features.")
+                Text(NSLocalizedString("dashboard.trial.subscribe", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             Spacer()
-            Button("Subscribe") { showPaywall = true }
+            Button(NSLocalizedString("dashboard.trial.subscribeButton", comment: "")) { showPaywall = true }
                 .font(.caption.bold())
                 .foregroundColor(.white)
                 .padding(.horizontal, 12)
@@ -245,10 +245,10 @@ struct DashboardView: View {
                 .font(.title3)
                 .foregroundColor(.yellow)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Payment issue")
+                Text(NSLocalizedString("dashboard.grace.title", comment: ""))
                     .font(.subheadline.bold())
                     .foregroundColor(.white)
-                Text("We'll retry billing — your access continues for \(days) more day\(days == 1 ? "" : "s").")
+                Text(String(format: NSLocalizedString("dashboard.grace.subtitle", comment: ""), days))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -267,7 +267,7 @@ struct DashboardView: View {
             HStack {
                 Image(systemName: "list.bullet.clipboard")
                     .foregroundColor(AppColors.accent)
-                Text("Active Protocol")
+                Text(NSLocalizedString("dashboard.activeProtocol", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
@@ -282,7 +282,7 @@ struct DashboardView: View {
                         .foregroundColor(.white)
                     Spacer()
                     if vm.injectionOverdueDays > 0 {
-                        Text("OVERDUE")
+                        Text(NSLocalizedString("dashboard.overdue", comment: ""))
                             .font(.caption2.bold())
                             .foregroundColor(.white)
                             .padding(.horizontal, 6)
@@ -290,7 +290,7 @@ struct DashboardView: View {
                             .background(AppColors.accent)
                             .cornerRadius(4)
                     } else {
-                        Text("Next in \(max(0, (vm.activeProtocol?.frequencyDays ?? 7) - vm.daysSinceLastInjection))d")
+                        Text(String(format: NSLocalizedString("dashboard.nextIn", comment: ""), max(0, (vm.activeProtocol?.frequencyDays ?? 7) - vm.daysSinceLastInjection)))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -361,7 +361,7 @@ struct DashboardView: View {
         VStack(spacing: 16) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Protocol Score")
+                    Text(NSLocalizedString("dashboard.protocolScore", comment: ""))
                         .font(.headline)
                         .foregroundColor(.secondary)
                     Text(vm.interpretation)
@@ -379,13 +379,13 @@ struct DashboardView: View {
                     .frame(width: 120, height: 120)
 
                 VStack(alignment: .leading, spacing: 12) {
-                    StatRow(label: "7-day avg", value: String(format: "%.0f", vm.sevenDayAvg))
-                    StatRow(label: "Prior 7-day", value: String(format: "%.0f", vm.priorSevenDayAvg))
+                    StatRow(label: NSLocalizedString("dashboard.7dayAvg", comment: ""), value: String(format: "%.0f", vm.sevenDayAvg))
+                    StatRow(label: NSLocalizedString("dashboard.prior7day", comment: ""), value: String(format: "%.0f", vm.priorSevenDayAvg))
                     if vm.recentCheckins.isEmpty {
                         Button {
                             showCheckin = true
                         } label: {
-                            Label("Log today", systemImage: "plus.circle.fill")
+                            Label(NSLocalizedString("dashboard.logToday", comment: ""), systemImage: "plus.circle.fill")
                                 .font(.subheadline.bold())
                                 .foregroundColor(AppColors.accent)
                         }
@@ -431,10 +431,10 @@ struct DashboardView: View {
                 Button { showCheckin = true } label: {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Daily Check-in")
+                            Text(NSLocalizedString("dashboard.checkin.title", comment: ""))
                                 .font(.headline)
                                 .foregroundColor(.white)
-                            Text("Tap to log how you feel today")
+                            Text(NSLocalizedString("dashboard.checkin.cta", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -459,7 +459,7 @@ struct DashboardView: View {
     private var recentBadgesCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Today's Check-in")
+                Text(NSLocalizedString("dashboard.checkin.done", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
@@ -510,14 +510,14 @@ struct DashboardView: View {
     private var streakCardContent: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Check-in Streak")
+                Text(NSLocalizedString("dashboard.streak", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text("\(vm.streak)")
                         .font(.system(size: 36, weight: .black, design: .rounded))
                         .foregroundColor(vm.streak > 0 ? AppColors.accent : .secondary)
-                    Text("days")
+                    Text(NSLocalizedString("dashboard.streak.days", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -535,7 +535,7 @@ struct DashboardView: View {
                           : "lock.fill")
                         .font(.title2)
                         .foregroundColor(subscriptionManager.isSubscribed ? AppColors.accent : .secondary)
-                    Text("Weekly\nReport")
+                    Text(NSLocalizedString("dashboard.weeklyReport", comment: ""))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -563,15 +563,15 @@ struct DashboardView: View {
                 Image(systemName: "waveform.path.ecg")
                     .font(.system(size: 28))
                     .foregroundColor(.white)
-                Text("See your real blood levels")
+                Text(NSLocalizedString("dashboard.pkCurve.subtitle", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
-                Text("Personalized PK curve based on your protocol")
+                Text(NSLocalizedString("dashboard.pkCurve", comment: ""))
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
                 Button { showPaywall = true } label: {
-                    Text("Start Free Trial")
+                    Text(NSLocalizedString("dashboard.startFreeTrial", comment: ""))
                         .font(.subheadline.bold())
                         .foregroundColor(.white)
                         .padding(.horizontal, 24)
@@ -640,7 +640,7 @@ struct DashboardView: View {
                     .font(.title2)
                     .foregroundColor(.green)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Fertility Mode Active")
+                    Text(NSLocalizedString("dashboard.fertility", comment: ""))
                         .font(.headline)
                         .foregroundColor(.white)
                     if let estimate = vm.fertilityEstimate {
@@ -655,8 +655,8 @@ struct DashboardView: View {
             if let startDate = vm.hcgStartDate {
                 let weeks = max(0, Int(Date.now.timeIntervalSince(startDate) / (7 * 86400)))
                 HStack(spacing: 16) {
-                    StatRow(label: "hCG started", value: "\(weeks)w ago")
-                    StatRow(label: "Protocol", value: vm.hcgProtocol?.name ?? "hCG")
+                    StatRow(label: NSLocalizedString("dashboard.fertility.hcgStarted", comment: ""), value: "\(weeks)w ago")
+                    StatRow(label: NSLocalizedString("dashboard.fertility.protocol", comment: ""), value: vm.hcgProtocol?.name ?? "hCG")
                 }
             }
 
@@ -680,7 +680,7 @@ struct DashboardView: View {
                     .font(.title2)
                     .foregroundColor(.green)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("GLP-1 Weight Tracking")
+                    Text(NSLocalizedString("dashboard.glp1", comment: ""))
                         .font(.headline)
                         .foregroundColor(.white)
                     if let change = vm.glp1WeeklyWeightChange {
@@ -694,7 +694,7 @@ struct DashboardView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "bolt.fill")
                             .font(.caption2)
-                        Text("Energy stable")
+                        Text(NSLocalizedString("dashboard.glp1.energyStable", comment: ""))
                             .font(.caption2)
                     }
                     .foregroundColor(.green)
@@ -706,7 +706,7 @@ struct DashboardView: View {
             }
 
             if let change = vm.glp1WeeklyWeightChange, change < 0, vm.glp1EnergyStable {
-                Text("GLP-1 + weight trending down + stable energy = protocol working well")
+                Text(NSLocalizedString("dashboard.glp1.workingWell", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(10)
@@ -730,7 +730,7 @@ struct DashboardView: View {
     private var bodyCompositionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Body Composition")
+                Text(NSLocalizedString("dashboard.bodyComposition", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
@@ -747,7 +747,7 @@ struct DashboardView: View {
             }
 
             if vm.weightSeries30d.isEmpty {
-                Text("Log body weight in your daily check-in")
+                Text(NSLocalizedString("dashboard.bodyComposition.logWeight", comment: ""))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, minHeight: 80)
@@ -796,7 +796,7 @@ struct DashboardView: View {
                     HStack(spacing: 20) {
                         StatRow(label: NSLocalizedString("dashboard.weight.current", comment: ""), value: String(format: "%.0f %@", Locale.usesMetricWeight ? latest.weightKg : latest.weightKg / 0.453592, Locale.weightUnit))
                         if let bf = vm.bodyFatSeries.last {
-                            StatRow(label: "Body Fat", value: String(format: "%.1f%%", bf.weightKg))
+                            StatRow(label: NSLocalizedString("dashboard.bodyComposition.bodyFat", comment: ""), value: String(format: "%.1f%%", bf.weightKg))
                         }
                         if let delta = vm.weightDelta30d, abs(delta) > 0.05 {
                             StatRow(label: NSLocalizedString("dashboard.weight.30dChange", comment: ""), value: String(format: "%+.0f %@", Locale.usesMetricWeight ? delta : delta / 0.453592, Locale.weightUnit))
@@ -810,7 +810,7 @@ struct DashboardView: View {
                         .background(Color.white.opacity(0.08))
                         .padding(.top, 4)
 
-                    Text("Body Fat %")
+                    Text(NSLocalizedString("dashboard.bodyComposition.bodyFatPct", comment: ""))
                         .font(.caption2)
                         .foregroundColor(.secondary)
 
@@ -868,12 +868,12 @@ struct DashboardView: View {
     private var trendChartCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(subscriptionManager.isSubscribed ? "7-Day Trends" : "Recent Trends")
+                Text(NSLocalizedString("dashboard.trendChart", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
                 if !subscriptionManager.isSubscribed {
-                    Text("3 days")
+                    Text(NSLocalizedString("dashboard.trendChart.3days", comment: ""))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 8)
@@ -884,7 +884,7 @@ struct DashboardView: View {
             }
 
             if visibleMetricSeries.isEmpty || visibleMetricSeries.allSatisfy({ $0.dataPoints.isEmpty }) {
-                Text("Check in daily to see your trends")
+                Text(NSLocalizedString("dashboard.trendChart.empty", comment: ""))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, minHeight: 80)
@@ -939,7 +939,7 @@ struct DashboardView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.caption2)
-                            Text("See full 7-day history with Pro")
+                            Text(NSLocalizedString("dashboard.trendChart.upsell", comment: ""))
                                 .font(.caption)
                         }
                         .foregroundColor(AppColors.softCTA)
@@ -983,43 +983,43 @@ struct DashboardView: View {
 
     private var quickStatsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("7-Day Summary")
+            Text(NSLocalizedString("dashboard.quickStats", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 QuickStatTile(
                     emoji: "⚡️",
-                    label: "Avg Energy",
+                    label: NSLocalizedString("dashboard.quickStats.avgEnergy", comment: ""),
                     value: String(format: "%.1f", vm.avgEnergy7d),
                     subtitle: "/ 5",
                     delta: vm.energyDelta
                 )
                 QuickStatTile(
                     emoji: "🔥",
-                    label: "Avg Libido",
+                    label: NSLocalizedString("dashboard.quickStats.avgLibido", comment: ""),
                     value: String(format: "%.1f", vm.avgLibido7d),
                     subtitle: "/ 5",
                     delta: vm.libidoDelta
                 )
                 QuickStatTile(
                     emoji: "🌅",
-                    label: "Morning Wood",
+                    label: NSLocalizedString("dashboard.quickStats.morningWood", comment: ""),
                     value: String(format: "%.0f%%", vm.morningWoodPct30d),
-                    subtitle: "30d"
+                    subtitle: NSLocalizedString("dashboard.quickStats.30d", comment: "")
                 )
                 if userType == "natural" {
                     QuickStatTile(
                         emoji: "💊",
-                        label: "Supplements",
+                        label: NSLocalizedString("dashboard.compliance.supplements", comment: ""),
                         value: String(format: "%.0f%%", vm.supplementCompliancePct),
-                        subtitle: "adherence"
+                        subtitle: NSLocalizedString("dashboard.quickStats.adherence", comment: "")
                     )
                 } else {
                     QuickStatTile(
                         emoji: "💉",
-                        label: "Next Injection",
-                        value: vm.injectionOverdueDays > 0 ? "Overdue" : "On track",
+                        label: NSLocalizedString("dashboard.quickStats.nextInjection", comment: ""),
+                        value: vm.injectionOverdueDays > 0 ? NSLocalizedString("dashboard.quickStats.overdue", comment: "") : NSLocalizedString("dashboard.quickStats.onTrack", comment: ""),
                         subtitle: vm.injectionOverdueDays > 0 ? "\(vm.injectionOverdueDays)d late" : ""
                     )
                 }
@@ -1101,7 +1101,7 @@ extension DashboardView {
                 .font(.title2.bold())
                 .foregroundColor(.white)
             if let day = vm.cycleDay, let proto = vm.activeProtocol {
-                Text("Day \(day) of \(proto.frequencyDays) · \(proto.compoundName)")
+                Text(String(format: NSLocalizedString("dashboard.cycleDay", comment: ""), day, proto.frequencyDays, proto.compoundName))
                     .font(.subheadline)
                     .foregroundColor(AppColors.textSecondary)
             }
@@ -1141,7 +1141,7 @@ extension DashboardView {
             Image(systemName: "trophy.fill")
                 .font(.title3)
                 .foregroundColor(Color(hex: "#FFD700"))
-            Text("New personal best: \(Int(vm.personalBestScore))")
+            Text(NSLocalizedString("dashboard.personalBest", comment: ""))
                 .font(.subheadline.bold())
                 .foregroundColor(Color(hex: "#FFD700"))
             Spacer()
@@ -1173,10 +1173,10 @@ extension DashboardView {
                             .foregroundColor(.white)
                     }
                     .frame(width: 56, height: 56)
-                    Text("Injections")
+                    Text(NSLocalizedString("dashboard.compliance.injections", comment: ""))
                         .font(.caption)
                         .foregroundColor(AppColors.textSecondary)
-                    Text("this month")
+                    Text(NSLocalizedString("dashboard.compliance.thisMonth", comment: ""))
                         .font(.caption2)
                         .foregroundColor(AppColors.textSecondary.opacity(0.7))
                 }
@@ -1211,10 +1211,10 @@ extension DashboardView {
                         }
                     }
                     .frame(width: 56, height: 56)
-                    Text("Supplements")
+                    Text(NSLocalizedString("dashboard.compliance.supplements", comment: ""))
                         .font(.caption)
                         .foregroundColor(AppColors.textSecondary)
-                    Text(vm.supplementCount == 0 ? "tap to add" : "this week")
+                    Text(vm.supplementCount == 0 ? NSLocalizedString("dashboard.compliance.tapToAdd", comment: "") : NSLocalizedString("dashboard.compliance.thisWeek", comment: ""))
                         .font(.caption2)
                         .foregroundColor(AppColors.textSecondary.opacity(0.7))
                 }
@@ -1238,10 +1238,10 @@ extension DashboardView {
                     .font(.title3)
                     .foregroundColor(AppColors.accent)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Track your supplements")
+                    Text(NSLocalizedString("dashboard.supplementSetup.title", comment: ""))
                         .font(.subheadline.bold())
                         .foregroundColor(.white)
-                    Text("See correlations with your Protocol Score")
+                    Text(NSLocalizedString("dashboard.supplementSetup.subtitle", comment: ""))
                         .font(.caption)
                         .foregroundColor(AppColors.textSecondary)
                 }
@@ -1275,7 +1275,7 @@ extension DashboardView {
     var weightTrendCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Weight")
+                Text(NSLocalizedString("dashboard.weightTrend", comment: ""))
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
@@ -1293,7 +1293,7 @@ extension DashboardView {
                 Text(String(format: "%.1f %@", weight, Locale.weightUnit))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
-                Text("30-day trend")
+                Text(NSLocalizedString("dashboard.weightTrend.30day", comment: ""))
                     .font(.caption)
                     .foregroundColor(AppColors.textSecondary)
             }
@@ -1312,7 +1312,7 @@ extension DashboardView {
                 .font(.title3)
                 .foregroundColor(Color(hex: "#F1C40F"))
             VStack(alignment: .leading, spacing: 2) {
-                Text("Tomorrow's Forecast")
+                Text(NSLocalizedString("dashboard.forecast", comment: ""))
                     .font(.caption.bold())
                     .foregroundColor(AppColors.textSecondary)
                 Text(text)
@@ -1454,45 +1454,45 @@ struct TrialEndedView: View {
                         .font(.system(size: 60))
                         .foregroundColor(AppColors.accent)
 
-                    Text("Your trial has ended")
+                    Text(NSLocalizedString("dashboard.trial.ended", comment: ""))
                         .font(.system(size: 28, weight: .black, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("Here's what you accomplished:")
+                    Text(NSLocalizedString("dashboard.trial.accomplished", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
                 // Accomplishment stats
                 HStack(spacing: 16) {
-                    StatBubble(value: "\(totalCheckins)", label: "Check-ins")
+                    StatBubble(value: "\(totalCheckins)", label: NSLocalizedString("dashboard.totalCheckins", comment: ""))
                     if streak > 0 {
-                        StatBubble(value: "\(streak)d", label: "Streak")
+                        StatBubble(value: "\(streak)d", label: NSLocalizedString("dashboard.streak", comment: ""))
                     }
                     if let score = latestScore {
-                        StatBubble(value: "\(score)", label: "Protocol\nScore")
+                        StatBubble(value: "\(score)", label: NSLocalizedString("dashboard.protocolScore", comment: ""))
                     }
                 }
 
                 // What you keep vs what you lose
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("FREE FOREVER")
+                    Text(NSLocalizedString("dashboard.trial.freeForever", comment: ""))
                         .font(.caption.bold())
                         .foregroundColor(.green)
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill").foregroundColor(.green).font(.caption)
-                        Text("Daily check-in, Protocol Score, streak, HealthKit sync")
+                        Text(NSLocalizedString("dashboard.trial.freeFeatures", comment: ""))
                             .font(.caption).foregroundColor(.secondary)
                     }
 
                     Divider().background(Color.white.opacity(0.1))
 
-                    Text("WITH PRO")
+                    Text(NSLocalizedString("dashboard.trial.withPro", comment: ""))
                         .font(.caption.bold())
                         .foregroundColor(AppColors.accent)
                     HStack(spacing: 8) {
                         Image(systemName: "lock.fill").foregroundColor(AppColors.accent).font(.caption)
-                        Text("PK curves, bloodwork trends, weekly reports, AI insights, GLP-1 analytics")
+                        Text(NSLocalizedString("dashboard.trial.proFeatures", comment: ""))
                             .font(.caption).foregroundColor(.secondary)
                     }
                 }
@@ -1505,7 +1505,7 @@ struct TrialEndedView: View {
                 // CTAs
                 VStack(spacing: 14) {
                     Button(action: onSubscribe) {
-                        Text("Subscribe to Pro")
+                        Text(NSLocalizedString("dashboard.trial.subscribePro", comment: ""))
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
@@ -1516,12 +1516,12 @@ struct TrialEndedView: View {
                     .buttonStyle(.plain)
 
                     Button(action: onContinueFree) {
-                        Text("Continue with Free")
+                        Text(NSLocalizedString("dashboard.trial.continueFree", comment: ""))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
 
-                    Text("Your data is safe. Upgrade anytime to unlock everything.")
+                    Text(NSLocalizedString("dashboard.trial.dataSafe", comment: ""))
                         .font(.caption2)
                         .foregroundColor(.secondary.opacity(0.6))
                         .multilineTextAlignment(.center)

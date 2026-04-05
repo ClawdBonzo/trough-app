@@ -9,10 +9,10 @@ struct HealthKitPermissionView: View {
     @State private var errorMessage: String?
 
     private let dataPoints: [(icon: String, title: String, detail: String)] = [
-        ("waveform.path.ecg.rectangle.fill", "HRV",          "Heart rate variability — stress & recovery signal"),
-        ("bed.double.fill",                  "Sleep",         "Core, Deep & REM stages from last night"),
-        ("figure.walk",                      "Steps & Energy","Daily movement to correlate with protocol"),
-        ("heart.fill",                       "Resting HR",    "Cardiovascular baseline over time"),
+        ("waveform.path.ecg.rectangle.fill", NSLocalizedString("hk.hrv", comment: ""),          NSLocalizedString("hk.hrvDesc", comment: "")),
+        ("bed.double.fill",                  NSLocalizedString("hk.sleep", comment: ""),         NSLocalizedString("hk.sleepDesc", comment: "")),
+        ("figure.walk",                      NSLocalizedString("hk.stepsEnergy", comment: ""),         NSLocalizedString("hk.stepsEnergyDesc", comment: "")),
+        ("heart.fill",                       NSLocalizedString("hk.restingHR", comment: ""),     NSLocalizedString("hk.restingHRDesc", comment: "")),
     ]
 
     var body: some View {
@@ -34,10 +34,10 @@ struct HealthKitPermissionView: View {
                     }
 
                     VStack(spacing: 8) {
-                        Text("Connect Health")
+                        Text(NSLocalizedString("hk.title", comment: ""))
                             .font(.system(size: 28, weight: .black, design: .rounded))
                             .foregroundColor(.white)
-                        Text("Trough reads your biometrics to find patterns in your hormone protocol.")
+                        Text(NSLocalizedString("hk.subtitle", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -82,7 +82,7 @@ struct HealthKitPermissionView: View {
                 Spacer().frame(height: 16)
 
                 // Privacy note
-                Label("Read-only. We never sell your health data.", systemImage: "lock.shield.fill")
+                Label(NSLocalizedString("hk.privacy", comment: ""), systemImage: "lock.shield.fill")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .padding(.bottom, 12)
@@ -106,7 +106,7 @@ struct HealthKitPermissionView: View {
                             do {
                                 try await HealthKitService.shared.requestPermissions()
                             } catch {
-                                errorMessage = "Could not request permissions. You can enable Health access in Settings."
+                                errorMessage = NSLocalizedString("hk.permissionError", comment: "")
                             }
                             isRequesting = false
                             hkPermissionRequested = true
@@ -116,7 +116,7 @@ struct HealthKitPermissionView: View {
                             if isRequesting {
                                 ProgressView().tint(.white)
                             } else {
-                                Text("Allow Access")
+                                Text(NSLocalizedString("hk.allow", comment: ""))
                                     .font(.headline)
                             }
                         }
@@ -128,7 +128,7 @@ struct HealthKitPermissionView: View {
                     }
                     .disabled(isRequesting)
 
-                    Button("Not Now") {
+                    Button(NSLocalizedString("hk.notNow", comment: "")) {
                         hkPermissionRequested = true
                     }
                     .font(.subheadline)
@@ -155,10 +155,10 @@ struct HealthKitDeniedBanner: View {
                 Image(systemName: "heart.slash.fill")
                     .foregroundColor(AppColors.accent)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Health access denied")
+                    Text(NSLocalizedString("hk.denied", comment: ""))
                         .font(.caption.bold())
                         .foregroundColor(.white)
-                    Text("Tap to open Settings and enable Health access.")
+                    Text(NSLocalizedString("hk.deniedDesc", comment: ""))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -185,7 +185,7 @@ struct HealthKitNoDataView: View {
     let label: String
 
     var body: some View {
-        Text("No data available")
+        Text(NSLocalizedString("hk.noData", comment: ""))
             .font(.caption)
             .foregroundColor(.secondary.opacity(0.6))
     }

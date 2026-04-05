@@ -65,7 +65,7 @@ private struct MetricsScreenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Done") {
+                Button(NSLocalizedString("common.done", comment: "")) {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .fontWeight(.semibold)
@@ -78,7 +78,7 @@ private struct MetricsScreenView: View {
 
     private var headerSection: some View {
         VStack(spacing: 6) {
-            Text("How are you today?")
+            Text(NSLocalizedString("checkin.title", comment: ""))
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +89,7 @@ private struct MetricsScreenView: View {
                     .foregroundColor(.secondary)
 
                 if let info = vm.cycleInfo {
-                    Text("Day \(info.day) of \(info.totalDays)")
+                    Text(String(format: NSLocalizedString("checkin.cycleDay", comment: ""), info.day, info.totalDays))
                         .font(.subheadline.bold())
                         .foregroundColor(AppColors.accent)
                 }
@@ -103,7 +103,7 @@ private struct MetricsScreenView: View {
     private var scorePreview: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Protocol Score")
+                Text(NSLocalizedString("checkin.protocolScore", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Text(String(format: "%.0f", vm.currentScore))
@@ -123,15 +123,15 @@ private struct MetricsScreenView: View {
 
     private var slidersCard: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Wellness Metrics")
+            Text(NSLocalizedString("checkin.wellnessMetrics", comment: ""))
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            HapticSlider(emoji: "⚡️", label: "Energy",        value: $vm.energyScore)
-            HapticSlider(emoji: "😌", label: "Mood",          value: $vm.moodScore)
-            HapticSlider(emoji: "🔥", label: "Libido",        value: $vm.libidoScore)
-            HapticSlider(emoji: "🌙", label: "Sleep Quality", value: $vm.sleepQualityScore)
-            HapticSlider(emoji: "🧠", label: "Mental Clarity",value: $vm.mentalClarityScore)
+            HapticSlider(emoji: "⚡️", label: NSLocalizedString("checkin.energy", comment: ""),        value: $vm.energyScore)
+            HapticSlider(emoji: "😌", label: NSLocalizedString("checkin.mood", comment: ""),          value: $vm.moodScore)
+            HapticSlider(emoji: "🔥", label: NSLocalizedString("checkin.libido", comment: ""),        value: $vm.libidoScore)
+            HapticSlider(emoji: "🌙", label: NSLocalizedString("checkin.sleepQuality", comment: ""), value: $vm.sleepQualityScore)
+            HapticSlider(emoji: "🧠", label: NSLocalizedString("checkin.mentalClarity", comment: ""),value: $vm.mentalClarityScore)
         }
         .cardStyle()
     }
@@ -140,13 +140,13 @@ private struct MetricsScreenView: View {
 
     private var naturalExtrasCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Body Metrics")
+            Text(NSLocalizedString("checkin.bodyMetrics", comment: ""))
                 .font(.headline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Weight (\(vm.usesMetricWeight ? "kg" : "lbs"))")
+                    Text(vm.usesMetricWeight ? NSLocalizedString("checkin.weight.kg", comment: "") : NSLocalizedString("checkin.weight.lbs", comment: ""))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     TextField(vm.usesMetricWeight ? "e.g. 82.5" : "e.g. 182", text: $vm.bodyWeightInput)
@@ -158,10 +158,10 @@ private struct MetricsScreenView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Body Fat %")
+                    Text(NSLocalizedString("checkin.bodyFat", comment: ""))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    TextField("Optional", text: $vm.bodyFatInput)
+                    TextField(NSLocalizedString("checkin.optional", comment: ""), text: $vm.bodyFatInput)
                         .keyboardType(.decimalPad)
                         .padding(10)
                         .background(AppColors.background)
@@ -180,7 +180,7 @@ private struct MetricsScreenView: View {
             vm.navigationPath = [.binaryTaps]
         } label: {
             HStack {
-                Text("Next")
+                Text(NSLocalizedString("common.next", comment: ""))
                     .fontWeight(.semibold)
                 Image(systemName: "arrow.right")
             }

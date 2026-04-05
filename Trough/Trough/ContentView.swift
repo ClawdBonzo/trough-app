@@ -64,17 +64,17 @@ struct MoreView: View {
                 List {
                     if subscriptionManager.isSubscribed {
                         NavigationLink(destination: BloodworkView()) {
-                            Label("Bloodwork", systemImage: "drop.fill")
+                            Label(NSLocalizedString("more.bloodwork", comment: ""), systemImage: "drop.fill")
                         }
                         NavigationLink(destination: PeptidesView()) {
-                            Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                            Label(NSLocalizedString("more.peptides", comment: ""), systemImage: "pills.fill")
                         }
                     } else {
                         Button {
                             showPaywall = true
                         } label: {
                             HStack {
-                                Label("Bloodwork", systemImage: "drop.fill")
+                                Label(NSLocalizedString("more.bloodwork", comment: ""), systemImage: "drop.fill")
                                 Spacer()
                                 Image(systemName: "lock.fill")
                                     .font(.caption)
@@ -88,13 +88,13 @@ struct MoreView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack {
-                                    Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                                    Label(NSLocalizedString("more.peptides", comment: ""), systemImage: "pills.fill")
                                     Spacer()
                                     Image(systemName: "lock.fill")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
-                                Text("Track GLP-1, BPC-157 & more")
+                                Text(NSLocalizedString("more.peptides.subtitle", comment: ""))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -102,13 +102,13 @@ struct MoreView: View {
                         .foregroundColor(.primary)
                     }
                     NavigationLink(destination: SettingsView()) {
-                        Label("Settings", systemImage: "gear")
+                        Label(NSLocalizedString("more.settings", comment: ""), systemImage: "gear")
                     }
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle("More")
+            .navigationTitle(NSLocalizedString("more.title", comment: ""))
             .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }
@@ -141,11 +141,11 @@ struct AuthView: View {
                             .frame(width: 100, height: 100)
                             .clipShape(RoundedRectangle(cornerRadius: 22))
 
-                        Text("TROUGH")
+                        Text(NSLocalizedString("auth.appName", comment: ""))
                             .font(.system(size: 36, weight: .black, design: .rounded))
                             .foregroundColor(AppColors.accent)
 
-                        Text("TRT & Hormone Tracker")
+                        Text(NSLocalizedString("auth.tagline", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -153,7 +153,7 @@ struct AuthView: View {
 
                     // MARK: - Email/password
                     VStack(spacing: 16) {
-                        TextField("Email", text: $email)
+                        TextField(NSLocalizedString("auth.email", comment: ""), text: $email)
                             .textContentType(.emailAddress)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
@@ -161,7 +161,7 @@ struct AuthView: View {
                             .background(AppColors.card)
                             .cornerRadius(12)
 
-                        SecureField("Password", text: $password)
+                        SecureField(NSLocalizedString("auth.password", comment: ""), text: $password)
                             .textContentType(isSignUp ? .newPassword : .password)
                             .padding()
                             .background(AppColors.card)
@@ -178,7 +178,7 @@ struct AuthView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "envelope.badge.fill")
                                     .foregroundColor(.green)
-                                Text("Check your email to confirm your account, then sign in below.")
+                                Text(NSLocalizedString("auth.confirmEmail", comment: ""))
                                     .font(.caption)
                                     .foregroundColor(.white)
                             }
@@ -197,7 +197,7 @@ struct AuthView: View {
                                     ProgressView()
                                         .tint(.white)
                                 } else {
-                                    Text(isSignUp ? "Create Account" : "Sign In")
+                                    Text(isSignUp ? NSLocalizedString("auth.createAccount", comment: "") : NSLocalizedString("auth.signIn", comment: ""))
                                         .fontWeight(.semibold)
                                 }
                             }
@@ -213,7 +213,7 @@ struct AuthView: View {
                             isSignUp.toggle()
                             errorMessage = nil
                         } label: {
-                            Text(isSignUp ? "Already have an account? Sign In" : "New here? Create Account")
+                            Text(isSignUp ? NSLocalizedString("auth.switchToSignIn", comment: "") : NSLocalizedString("auth.switchToSignUp", comment: ""))
                                 .font(.caption)
                                 .foregroundColor(AppColors.textSecondary)
                         }
@@ -230,7 +230,7 @@ struct AuthView: View {
 
     private func authenticate() async {
         guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = "Please enter email and password."
+            errorMessage = NSLocalizedString("auth.emptyFields", comment: "")
             return
         }
         isLoading = true

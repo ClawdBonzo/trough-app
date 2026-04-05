@@ -30,9 +30,9 @@ struct PeptidesView: View {
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 28)
-                .accessibilityLabel("Log new dose")
+                .accessibilityLabel(NSLocalizedString("peptides.logDose", comment: ""))
             }
-            .navigationTitle("Adjuncts & Peptides")
+            .navigationTitle(NSLocalizedString("peptides.title", comment: ""))
             .sheet(isPresented: $vm.showingLogSheet) {
                 PeptideLogView(vm: vm)
             }
@@ -79,17 +79,17 @@ struct PeptidesView: View {
         VStack(alignment: .leading, spacing: 16) {
             if !glp1Compounds.isEmpty {
                 compoundScrollSection(
-                    title: "GLP-1 / Weight Management",
+                    title: NSLocalizedString("peptides.glp1Weight", comment: ""),
                     compounds: glp1Compounds,
                     showE2Badge: false,
-                    badgeText: "Weight tracking",
+                    badgeText: NSLocalizedString("peptides.weightTracking", comment: ""),
                     badgeColor: .green
                 )
             }
 
             if !aiCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "AI / Ancillary",
+                    title: NSLocalizedString("peptides.aiAncillary", comment: ""),
                     compounds: aiCompounds,
                     showE2Badge: true
                 )
@@ -97,7 +97,7 @@ struct PeptidesView: View {
 
             if !peptideCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "Peptides",
+                    title: NSLocalizedString("peptides.peptides", comment: ""),
                     compounds: peptideCompounds,
                     showE2Badge: false
                 )
@@ -105,7 +105,7 @@ struct PeptidesView: View {
 
             if glp1Compounds.isEmpty && aiCompounds.isEmpty && peptideCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "Active Compounds",
+                    title: NSLocalizedString("peptides.activeCompounds", comment: ""),
                     compounds: vm.activeCompounds,
                     showE2Badge: false
                 )
@@ -127,7 +127,7 @@ struct PeptidesView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                 if showE2Badge {
-                    Text("E2 correlation")
+                    Text(NSLocalizedString("peptides.e2Correlation", comment: ""))
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundColor(AppColors.accent)
                         .padding(.horizontal, 8)
@@ -164,7 +164,7 @@ struct PeptidesView: View {
 
     private var timelineSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Log")
+            Text(NSLocalizedString("peptides.log", comment: ""))
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding(.horizontal)
@@ -197,14 +197,14 @@ struct PeptidesView: View {
             Image(systemName: "pills.circle")
                 .font(.system(size: 64))
                 .foregroundColor(AppColors.accent.opacity(0.4))
-            Text("Track Your Stack")
+            Text(NSLocalizedString("peptides.trackYourStack", comment: ""))
                 .font(.title3.bold())
                 .foregroundColor(.white)
-            Text("Log adjuncts and peptide doses to\ntrack your stack and spot patterns.")
+            Text(NSLocalizedString("peptides.trackSubtitle", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            Button("Log First Dose") { vm.prepareAddForm() }
+            Button(NSLocalizedString("peptides.logFirstDose", comment: "")) { vm.prepareAddForm() }
                 .buttonStyle(.borderedProminent)
                 .tint(AppColors.accent)
         }
@@ -216,8 +216,8 @@ struct PeptidesView: View {
 
     private func dateHeader(_ date: Date) -> String {
         let cal = Calendar.current
-        if cal.isDateInToday(date) { return "Today" }
-        if cal.isDateInYesterday(date) { return "Yesterday" }
+        if cal.isDateInToday(date) { return NSLocalizedString("common.today", comment: "") }
+        if cal.isDateInYesterday(date) { return NSLocalizedString("common.yesterday", comment: "") }
         let fmt = DateFormatter()
         fmt.dateFormat = "MMM d"
         return fmt.string(from: date)
@@ -268,10 +268,10 @@ private struct CompoundCard: View {
                 .foregroundColor(AppColors.accent)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(daysSince == 0 ? "Today" : "\(daysSince)d ago")
+                Text(daysSince == 0 ? NSLocalizedString("common.today", comment: "") : String(format: NSLocalizedString("unit.daysAgo", comment: ""), daysSince))
                     .font(.caption)
                     .foregroundColor(recencyColor)
-                Text("\(compound.doseCount) dose\(compound.doseCount == 1 ? "" : "s") total")
+                Text(String(format: NSLocalizedString("peptides.dosesTotal", comment: ""), compound.doseCount))
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
