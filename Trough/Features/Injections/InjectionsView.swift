@@ -6,6 +6,7 @@ import SwiftData
 struct InjectionsView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
     @StateObject private var vm = InjectionsViewModel()
 
     var body: some View {
@@ -54,6 +55,7 @@ struct InjectionsView: View {
             .onAppear {
                 let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
                 vm.setup(context: modelContext, userID: uid)
+                vm.gamificationVM = gamificationVM
             }
             .alert("Error", isPresented: Binding(
                 get: { vm.errorMessage != nil },

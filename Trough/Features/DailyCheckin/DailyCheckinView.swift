@@ -7,6 +7,7 @@ struct DailyCheckinView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("userType") private var userType = "trt"
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
 
     @StateObject private var vm = DailyCheckinViewModel()
 
@@ -24,6 +25,7 @@ struct DailyCheckinView: View {
         .onAppear {
             let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
             vm.setup(context: modelContext, userID: uid)
+            vm.gamificationVM = gamificationVM
         }
     }
 }

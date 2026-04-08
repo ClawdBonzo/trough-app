@@ -24,6 +24,22 @@ extension Date {
         formatted(date: .abbreviated, time: .omitted)
     }
 
+    /// Returns the last moment of the day (23:59:59) in the current calendar.
+    var endOfDay: Date {
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfDay) ?? self
+    }
+
+    /// Returns the end of the current week (Sunday at 23:59:59).
+    var endOfWeek: Date {
+        let cal = Calendar.current
+        let components = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
+        let startOfWeek = cal.date(from: components) ?? self
+        return cal.date(byAdding: .day, value: 7, to: startOfWeek)?.addingTimeInterval(-1) ?? self
+    }
+
     /// Days between self and another date (positive = self is later).
     func daysSince(_ other: Date) -> Int {
         Calendar.current.dateComponents([.day], from: other.startOfDay, to: startOfDay).day ?? 0

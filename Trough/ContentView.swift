@@ -23,6 +23,10 @@ struct ContentView: View {
 // MARK: - Main Tab View
 
 struct MainTabView: View {
+    @Environment(\.modelContext) private var modelContext
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @StateObject private var gamificationVM = GamificationViewModel()
+
     var body: some View {
         TabView {
             DashboardView()
@@ -40,6 +44,18 @@ struct MainTabView: View {
                     Label("Injections", systemImage: "syringe.fill")
                 }
 
+            NavigationStack {
+                ZStack {
+                    AppColors.background.ignoresSafeArea()
+                    GamificationHomeView(viewModel: gamificationVM)
+                }
+                .navigationTitle("Achievements")
+                .navigationBarTitleDisplayMode(.large)
+            }
+            .tabItem {
+                Label("Achievements", systemImage: "star.fill")
+            }
+
             MoreView()
                 .tabItem {
                     Label("More", systemImage: "ellipsis.circle.fill")
@@ -47,6 +63,21 @@ struct MainTabView: View {
         }
         .tint(AppColors.accent)
         .background(AppColors.background)
+        .environmentObject(gamificationVM)
+        .onAppear {
+            let uid = UUID(uuidString: userIDString) ?? UUID()
+            gamificationVM.setup(context: modelContext, userID: uid)
+            QuestService.seedIfNeeded(context: modelContext, userID: uid)
+            BadgeService.seedIfNeeded(context: modelContext, userID: uid)
+        }
+        .fullScreenCover(isPresented: $gamificationVM.showCelebration) {
+            if let event = gamificationVM.pendingCelebration {
+                LevelUpCelebrationView(event: event) {
+                    gamificationVM.showCelebration = false
+                    gamificationVM.pendingCelebration = nil
+                }
+            }
+        }
     }
 }
 
@@ -54,6 +85,7 @@ struct MainTabView: View {
 
 struct MoreView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
     @State private var showPaywall = false
 
     var body: some View {
@@ -61,6 +93,29 @@ struct MoreView: View {
             ZStack {
                 AppColors.background.ignoresSafeArea()
                 List {
+                    // Achievements (always accessible)
+                    Section {
+                        NavigationLink(destination:
+                            ZStack {
+                                AppColors.background.ignoresSafeArea()
+                                GamificationHomeView(viewModel: gamificationVM)
+                            }
+                            .navigationTitle("Achievements")
+                        ) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Achievements")
+                                    Text("Level \(gamificationVM.currentLevel) · \(gamificationVM.levelName)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.yellow)
+                            }
+                        }
+                    }
+
                     if subscriptionManager.isSubscribed {
                         NavigationLink(destination: BloodworkView()) {
                             Label("Bloodwork", systemImage: "drop.fill")

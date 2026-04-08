@@ -8,6 +8,7 @@ struct DashboardView: View {
     @StateObject var vm = DashboardViewModel()
     @EnvironmentObject var subscriptionManager: SubscriptionManager
     @EnvironmentObject var toastManager: ToastManager
+    @EnvironmentObject var gamificationVM: GamificationViewModel
     @State var showCheckin = false
     @State var showWeeklyReport = false
     @State var showPaywall = false
@@ -78,6 +79,9 @@ struct DashboardView: View {
                         }
 
                         streakCard
+
+                        // Gamification progress card
+                        GamificationHomeView(viewModel: gamificationVM)
 
                         // PK Curve / Body Composition
                         if subscriptionManager.isSubscribed {
