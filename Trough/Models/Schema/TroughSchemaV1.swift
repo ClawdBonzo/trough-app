@@ -17,6 +17,11 @@ enum TroughSchemaV1: VersionedSchema {
             SDPeptideLog.self,
             SDSupplementConfig.self,
             SDSyncConflict.self,
+            SDGamificationState.self,
+            SDQuest.self,
+            SDBadge.self,
+            SDStreakState.self,
+            SDLevelUpEvent.self,
         ]
     }
 
@@ -482,14 +487,225 @@ enum TroughSchemaV1: VersionedSchema {
     }
 }
 
+    // MARK: SDGamificationState
+
+    /// User's overall gamification progress (XP, levels, badges).
+    @Model
+    final class SDGamificationState {
+        @Attribute(.unique) var id: UUID
+        var userID: UUID
+        var currentXP: Int                 // total XP earned (never decreases)
+        var currentLevel: Int              // derived from currentXP, 1-11
+        var totalBadgesUnlocked: Int       // count of unlocked badges
+        var createdAt: Date
+        var updatedAt: Date
+
+        init(
+            id: UUID = .init(),
+            userID: UUID,
+            currentXP: Int = 0,
+            currentLevel: Int = 1,
+            totalBadgesUnlocked: Int = 0,
+            createdAt: Date = .now,
+            updatedAt: Date = .now
+        ) {
+            self.id = id
+            self.userID = userID
+            self.currentXP = currentXP
+            self.currentLevel = currentLevel
+            self.totalBadgesUnlocked = totalBadgesUnlocked
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+        }
+    }
+
+    // MARK: SDQuest
+
+    /// Daily/weekly quests that reward XP upon completion.
+    @Model
+    final class SDQuest {
+        @Attribute(.unique) var id: UUID
+        var userID: UUID
+        var questID: String                // unique identifier: "log_checkin_daily", "bloodwork_weekly", etc.
+        var questType: String              // e.g., "log_checkin", "complete_bloodwork", "inject_on_schedule"
+        var frequency: String              // "daily" or "weekly"
+        var title: String                  // e.g., "Log Today's Check-in"
+        var description: String            // e.g., "Complete your daily wellness check-in"
+        var xpReward: Int                  // XP granted on completion
+        var isCompleted: Bool              // true = quest already completed
+        var completedDate: Date?           // when the quest was completed
+        var dueDate: Date                  // end of day (daily) or end of week (weekly)
+        var createdAt: Date
+        var updatedAt: Date
+
+        init(
+            id: UUID = .init(),
+            userID: UUID,
+            questID: String,
+            questType: String,
+            frequency: String,
+            title: String,
+            description: String,
+            xpReward: Int,
+            isCompleted: Bool = false,
+            completedDate: Date? = nil,
+            dueDate: Date = Date().endOfDay,
+            createdAt: Date = .now,
+            updatedAt: Date = .now
+        ) {
+            self.id = id
+            self.userID = userID
+            self.questID = questID
+            self.questType = questType
+            self.frequency = frequency
+            self.title = title
+            self.description = description
+            self.xpReward = xpReward
+            self.isCompleted = isCompleted
+            self.completedDate = completedDate
+            self.dueDate = dueDate
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+        }
+    }
+
+    // MARK: SDBadge
+
+    /// Achievement badges earned through milestones and goals.
+    @Model
+    final class SDBadge {
+        @Attribute(.unique) var id: UUID
+        var userID: UUID
+        var badgeID: String                // unique: "testosterone_peak", "consistency_king", "level_10", etc.
+        var name: String                   // "Testosterone Peak"
+        var description: String            // unlock condition description
+        var iconEmoji: String              // 🧬, 👑, 📊, 🔥, ⭐, 🏆, ✅, 💊, 💉
+        var unlockedDate: Date?            // nil = not yet unlocked
+        var xpRequired: Int?               // for level-based badges (e.g., 360 XP for Level 5)
+        var createdAt: Date
+        var updatedAt: Date
+
+        init(
+            id: UUID = .init(),
+            userID: UUID,
+            badgeID: String,
+            name: String,
+            description: String,
+            iconEmoji: String,
+            unlockedDate: Date? = nil,
+            xpRequired: Int? = nil,
+            createdAt: Date = .now,
+            updatedAt: Date = .now
+        ) {
+            self.id = id
+            self.userID = userID
+            self.badgeID = badgeID
+            self.name = name
+            self.description = description
+            self.iconEmoji = iconEmoji
+            self.unlockedDate = unlockedDate
+            self.xpRequired = xpRequired
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+        }
+    }
+
+    // MARK: SDStreakState
+
+    /// Unified streak tracking (check-in, injection, supplement adherence) with flame visual state.
+    @Model
+    final class SDStreakState {
+        @Attribute(.unique) var id: UUID
+        var userID: UUID
+        var streakType: String             // "checkin", "injection", "supplement_compliance"
+        var currentCount: Int              // current consecutive days
+        var bestCount: Int                 // personal best
+        var lastCompletedDate: Date?       // to detect breaks
+        var flameLevel: Int                // 0-5: no flame, small, medium, large, mega, inferno
+        var createdAt: Date
+        var updatedAt: Date
+
+        init(
+            id: UUID = .init(),
+            userID: UUID,
+            streakType: String,
+            currentCount: Int = 0,
+            bestCount: Int = 0,
+            lastCompletedDate: Date? = nil,
+            flameLevel: Int = 0,
+            createdAt: Date = .now,
+            updatedAt: Date = .now
+        ) {
+            self.id = id
+            self.userID = userID
+            self.streakType = streakType
+            self.currentCount = currentCount
+            self.bestCount = bestCount
+            self.lastCompletedDate = lastCompletedDate
+            self.flameLevel = flameLevel
+            self.createdAt = createdAt
+            self.updatedAt = updatedAt
+        }
+    }
+
+    // MARK: SDLevelUpEvent
+
+    /// Temporary event queue for celebration modals (level-up, badge unlock, etc.).
+    @Model
+    final class SDLevelUpEvent {
+        @Attribute(.unique) var id: UUID
+        var userID: UUID
+        var eventType: String              // "level_up", "badge_unlock", "quest_completed", "streak_milestone"
+        var level: Int?                    // if level_up
+        var levelName: String?             // if level_up, e.g., "DRIVEN"
+        var badgeName: String?             // if badge_unlock
+        var badgeEmoji: String?            // if badge_unlock
+        var streakType: String?            // if streak_milestone
+        var streakDays: Int?               // if streak_milestone
+        var xpGained: Int                  // for display
+        var createdAt: Date
+
+        init(
+            id: UUID = .init(),
+            userID: UUID,
+            eventType: String,
+            level: Int? = nil,
+            levelName: String? = nil,
+            badgeName: String? = nil,
+            badgeEmoji: String? = nil,
+            streakType: String? = nil,
+            streakDays: Int? = nil,
+            xpGained: Int = 0,
+            createdAt: Date = .now
+        ) {
+            self.id = id
+            self.userID = userID
+            self.eventType = eventType
+            self.level = level
+            self.levelName = levelName
+            self.badgeName = badgeName
+            self.badgeEmoji = badgeEmoji
+            self.streakType = streakType
+            self.streakDays = streakDays
+            self.xpGained = xpGained
+            self.createdAt = createdAt
+        }
+    }
+}
+
 // MARK: - Convenience Typealiases
 
-typealias SDUser             = TroughSchemaV1.SDUser
-typealias SDProtocol         = TroughSchemaV1.SDProtocol
-typealias SDInjection        = TroughSchemaV1.SDInjection
-typealias SDCheckin          = TroughSchemaV1.SDCheckin
-typealias SDBloodwork        = TroughSchemaV1.SDBloodwork
-typealias SDBloodworkMarker  = TroughSchemaV1.SDBloodworkMarker
-typealias SDPeptideLog       = TroughSchemaV1.SDPeptideLog
-typealias SDSupplementConfig = TroughSchemaV1.SDSupplementConfig
-typealias SDSyncConflict     = TroughSchemaV1.SDSyncConflict
+typealias SDUser                = TroughSchemaV1.SDUser
+typealias SDProtocol            = TroughSchemaV1.SDProtocol
+typealias SDInjection           = TroughSchemaV1.SDInjection
+typealias SDCheckin             = TroughSchemaV1.SDCheckin
+typealias SDBloodwork           = TroughSchemaV1.SDBloodwork
+typealias SDBloodworkMarker     = TroughSchemaV1.SDBloodworkMarker
+typealias SDPeptideLog          = TroughSchemaV1.SDPeptideLog
+typealias SDSupplementConfig    = TroughSchemaV1.SDSupplementConfig
+typealias SDSyncConflict        = TroughSchemaV1.SDSyncConflict
+typealias SDGamificationState   = TroughSchemaV1.SDGamificationState
+typealias SDQuest              = TroughSchemaV1.SDQuest
+typealias SDBadge              = TroughSchemaV1.SDBadge
+typealias SDStreakState        = TroughSchemaV1.SDStreakState
+typealias SDLevelUpEvent       = TroughSchemaV1.SDLevelUpEvent
