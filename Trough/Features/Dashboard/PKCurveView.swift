@@ -13,12 +13,31 @@ struct PKCurveView: View {
 
     private var engine: PKCurveEngine { PKCurveEngine.shared }
 
+    // MARK: Memoized curve data — only recomputes when curve inputs change,
+    // not on every render (e.g. showBands toggle no longer forces recomputation).
+    @State private var cachedData: PKCurveData?
+
+    /// A lightweight signature of the inputs that affect curve shape.
+    private var curveSignature: String {
+        "\(protocols.count)|\(injections.count)|\(absorptionDelay)"
+    }
+
     private var data: PKCurveData {
-        engine.computeMultiCompoundCurve(
+        cachedData ?? engine.computeMultiCompoundCurve(
             protocols: protocols,
             injections: injections,
             includeAbsorptionDelay: absorptionDelay
         )
+    }
+
+    // Summary text used for the chart's accessibility label
+    private var chartAccessibilityDescription: String {
+        let d = data
+        guard !d.combinedPoints.isEmpty else { return "No PK curve data available." }
+        let peak = Int(d.combinedPoints.map(\.level).max() ?? 0)
+        let trough = Int(d.combinedPoints.filter { $0.time > 0 }.map(\.level).min() ?? 0)
+        let compounds = d.curves.map(\.compound).joined(separator: ", ")
+        return "Estimated blood level chart for \(compounds). Peak approximately \(peak) ng/dL, trough approximately \(trough) ng/dL."
     }
 
     var body: some View {
@@ -33,7 +52,15 @@ struct PKCurveView: View {
             }
             DisclaimerBanner(type: .pkCurve)
         }
-        // No repeatForever animation — it causes visible layout shift
+        // Compute curve on first appear and whenever relevant inputs change.
+        // Using .task(id:) so recomputation is off the hot path / cancellable.
+        .task(id: curveSignature) {
+            cachedData = engine.computeMultiCompoundCurve(
+                protocols: protocols,
+                injections: injections,
+                includeAbsorptionDelay: absorptionDelay
+            )
+        }
     }
 
     // MARK: Header
@@ -165,6 +192,8 @@ struct PKCurveView: View {
         .chartYScale(domain: 0...(combined.map(\.upperBand).max() ?? 1000))
         .frame(height: 220)
         .chartBackground { _ in AppColors.background }
+        .accessibilityLabel(chartAccessibilityDescription)
+        .accessibilityHint("Estimated testosterone blood level over time. Values are simulated, not medical advice.")
     }
 
     // MARK: Legend

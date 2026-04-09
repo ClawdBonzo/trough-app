@@ -64,7 +64,9 @@ struct MainTabView: View {
         .tint(AppColors.accent)
         .background(AppColors.background)
         .environmentObject(gamificationVM)
-        .onAppear {
+        .task {
+            // Run gamification setup off the initial render pass so it doesn't
+            // block the first frame. Task is automatically cancelled on disappear.
             let uid = UUID(uuidString: userIDString) ?? UUID()
             gamificationVM.setup(context: modelContext, userID: uid)
             QuestService.seedIfNeeded(context: modelContext, userID: uid)

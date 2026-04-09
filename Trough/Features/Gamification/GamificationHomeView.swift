@@ -2,49 +2,46 @@ import SwiftUI
 
 struct GamificationHomeView: View {
     @ObservedObject var viewModel: GamificationViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showQuestSheet = false
     @State private var showBadgesSheet = false
 
     var body: some View {
         VStack(spacing: 20) {
-            // MARK: - Level Hero Section
+            // MARK: Level Hero
             HStack(spacing: 20) {
-                // Level circle with XP progress
                 VStack(spacing: 8) {
                     ZStack {
-                        // Background circle
                         Circle()
-                            .fill(Color(#colorLiteral(red: 0.086, green: 0.131, blue: 0.243, alpha: 1)))
+                            .fill(AppColors.card)
                             .frame(width: 100, height: 100)
 
-                        // Progress ring
                         Circle()
                             .trim(from: 0, to: viewModel.levelProgressPercent)
-                            .stroke(
-                                Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)),
-                                style: StrokeStyle(lineWidth: 6, lineCap: .round)
-                            )
+                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                             .frame(width: 100, height: 100)
                             .rotationEffect(.degrees(-90))
-                            .animation(.easeInOut(duration: 0.5), value: viewModel.levelProgressPercent)
+                            .animation(
+                                reduceMotion ? nil : .easeInOut(duration: 0.5),
+                                value: viewModel.levelProgressPercent
+                            )
 
-                        // Level text
                         VStack(spacing: 2) {
                             Text(String(viewModel.currentLevel))
-                                .font(.system(size: 28, weight: .bold, design: .default))
+                                .font(.system(size: 28, weight: .bold))
                                 .foregroundColor(.white)
                             Text("\(Int(viewModel.levelProgressPercent * 100))%")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
                     }
+                    .accessibilityLabel("Level \(viewModel.currentLevel), \(Int(viewModel.levelProgressPercent * 100)) percent progress")
 
                     Text("Level")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
-                // Level info
                 VStack(alignment: .leading, spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(viewModel.levelName)
@@ -55,30 +52,31 @@ struct GamificationHomeView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    // XP Progress bar
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(viewModel.xpUntilNextLevel) XP until level \(viewModel.currentLevel + 1)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
                         ProgressView(value: viewModel.levelProgressPercent)
-                            .tint(Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)))
+                            .tint(AppColors.accent)
                             .frame(height: 6)
+                            .accessibilityLabel("\(Int(viewModel.levelProgressPercent * 100)) percent to next level")
                     }
                 }
 
                 Spacer()
             }
             .padding(16)
-            .background(Color(#colorLiteral(red: 0.087, green: 0.130, blue: 0.241, alpha: 1)))
+            .background(AppColors.card)
             .cornerRadius(12)
 
-            // MARK: - Streaks Section
+            // MARK: Streaks
             if !viewModel.streakStates.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("🔥 Your Streaks")
+                    Text("Your Streaks")
                         .font(.headline)
                         .foregroundColor(.white)
+                        .accessibilityAddTraits(.isHeader)
 
                     VStack(spacing: 8) {
                         ForEach(Array(viewModel.streakStates.values), id: \.streakType) { streak in
@@ -97,33 +95,37 @@ struct GamificationHomeView: View {
                                 HStack(spacing: 4) {
                                     Text("\(streak.currentCount)")
                                         .font(.title3.bold())
-                                        .foregroundColor(Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)))
-
-                                    flameEmoji(streak.flameLevel)
+                                        .foregroundColor(AppColors.accent)
+                                    Text(flameMark(streak.flameLevel))
                                         .font(.title2)
+                                        .accessibilityHidden(true)
                                 }
                             }
                             .padding(12)
-                            .background(Color(#colorLiteral(red: 0.087, green: 0.130, blue: 0.241, alpha: 1)))
+                            .background(AppColors.card)
                             .cornerRadius(8)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("\(streakTypeLabel(streak.streakType)): \(streak.currentCount) days, best \(streak.bestCount)")
                         }
                     }
                 }
             }
 
-            // MARK: - Quests Preview
+            // MARK: Quests Preview
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Text("⚔️ Daily Quests")
+                    Text("Daily Quests")
                         .font(.headline)
                         .foregroundColor(.white)
+                        .accessibilityAddTraits(.isHeader)
 
                     Spacer()
 
-                    let completed = viewModel.activeQuests.filter { $0.isCompleted }.count
+                    let completed = viewModel.activeQuests.filter(\.isCompleted).count
                     Text("\(completed)/\(viewModel.activeQuests.count)")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .accessibilityLabel("\(completed) of \(viewModel.activeQuests.count) quests completed")
                 }
 
                 if viewModel.activeQuests.isEmpty {
@@ -151,17 +153,20 @@ struct GamificationHomeView: View {
                                 HStack(spacing: 8) {
                                     Text("+\(quest.xpReward) XP")
                                         .font(.caption.bold())
-                                        .foregroundColor(Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)))
+                                        .foregroundColor(AppColors.accent)
 
                                     if quest.isCompleted {
                                         Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(Color(#colorLiteral(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)))
+                                            .foregroundColor(.green)
+                                            .accessibilityLabel("Completed")
                                     }
                                 }
                             }
                             .padding(10)
-                            .background(Color(#colorLiteral(red: 0.087, green: 0.130, blue: 0.241, alpha: 1)))
+                            .background(AppColors.card)
                             .cornerRadius(8)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("\(quest.title). \(quest.xpReward) XP. \(quest.isCompleted ? "Completed." : "Incomplete.")")
                         }
                     }
 
@@ -169,27 +174,30 @@ struct GamificationHomeView: View {
                         Button(action: { showQuestSheet = true }) {
                             Text("View all quests →")
                                 .font(.caption.bold())
-                                .foregroundColor(Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)))
+                                .foregroundColor(AppColors.accent)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(10)
                         }
+                        .accessibilityLabel("View all \(viewModel.activeQuests.count) quests")
                     }
                 }
             }
 
-            // MARK: - Badges Preview
+            // MARK: Badges Preview
             if !viewModel.allBadges.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("🏆 Badges")
+                        Text("Badges")
                             .font(.headline)
                             .foregroundColor(.white)
+                            .accessibilityAddTraits(.isHeader)
 
                         Spacer()
 
                         Text("\(viewModel.unlockedBadges.count)/\(viewModel.allBadges.count)")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .accessibilityLabel("\(viewModel.unlockedBadges.count) of \(viewModel.allBadges.count) badges unlocked")
                     }
 
                     HStack(spacing: 8) {
@@ -198,8 +206,9 @@ struct GamificationHomeView: View {
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
                                 .padding(12)
-                                .background(Color(#colorLiteral(red: 0.087, green: 0.130, blue: 0.241, alpha: 1)))
+                                .background(AppColors.card)
                                 .cornerRadius(8)
+                                .accessibilityLabel(badge.name)
                         }
 
                         if viewModel.allBadges.count > viewModel.unlockedBadges.count {
@@ -213,9 +222,10 @@ struct GamificationHomeView: View {
                                 .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity)
                                 .padding(12)
-                                .background(Color(#colorLiteral(red: 0.087, green: 0.130, blue: 0.241, alpha: 1)))
+                                .background(AppColors.card)
                                 .cornerRadius(8)
                             }
+                            .accessibilityLabel("\(viewModel.allBadges.count - viewModel.unlockedBadges.count) more badges to unlock")
                         }
                     }
 
@@ -223,10 +233,11 @@ struct GamificationHomeView: View {
                         Button(action: { showBadgesSheet = true }) {
                             Text("View all badges →")
                                 .font(.caption.bold())
-                                .foregroundColor(Color(#colorLiteral(red: 0.914, green: 0.271, blue: 0.376, alpha: 1)))
+                                .foregroundColor(AppColors.accent)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(10)
                         }
+                        .accessibilityLabel("View all \(viewModel.allBadges.count) badges")
                     }
                 }
             }
@@ -242,30 +253,22 @@ struct GamificationHomeView: View {
         }
     }
 
-    // MARK: - Helper Functions
+    // MARK: Helpers
 
     private func streakTypeLabel(_ type: String) -> String {
         switch type {
-        case "checkin": return "Check-in Streak"
-        case "injection": return "Injection Streak"
+        case "checkin":              return "Check-in Streak"
+        case "injection":            return "Injection Streak"
         case "supplement_compliance": return "Supplement Streak"
-        default: return type
+        default:                     return type.capitalized
         }
     }
 
-    private func flameEmoji(_ level: Int) -> Text {
-        switch level {
-        case 0: return Text("")
-        case 1: return Text("🔥")
-        case 2: return Text("🔥🔥")
-        case 3: return Text("🔥🔥🔥")
-        case 4: return Text("🔥🔥🔥🔥")
-        case 5: return Text("🔥🔥🔥🔥🔥")
-        default: return Text("🔥")
-        }
+    private func flameMark(_ level: Int) -> String {
+        String(repeating: "🔥", count: max(0, min(level, 5)))
     }
 }
 
 #Preview {
-    Text("Preview not available")
+    Text("Preview unavailable in this context")
 }
