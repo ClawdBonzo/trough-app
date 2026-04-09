@@ -595,13 +595,13 @@ private struct OnboardingTrialView: View {
 
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "trough_pro_monthly"
+            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.monthly"
         }
     }
 
     private var annualPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "trough_pro_annual"
+            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.yearly"
         }
     }
 
@@ -735,7 +735,7 @@ private struct OnboardingTrialView: View {
                                 .foregroundColor(.secondary)
                         }
 
-                        Text("No charge for 14 days. Cancel anytime.")
+                        Text("3-day free trial, then auto-renews. Cancel anytime.")
                             .font(.caption2)
                             .foregroundColor(.secondary.opacity(0.5))
 

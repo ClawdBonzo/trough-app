@@ -21,7 +21,7 @@ struct ProFeaturesSheet: View {
                             Text("What You Get With Pro")
                                 .font(.title2.bold())
                                 .foregroundColor(.white)
-                            Text("14-day free trial included")
+                            Text("3-day free trial on Monthly & Yearly")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
