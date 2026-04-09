@@ -577,7 +577,7 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - Onboarding Trial Prompt (full-screen)
+// MARK: - Onboarding Trial Prompt (full-screen, no scroll)
 
 private struct OnboardingTrialView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
@@ -585,6 +585,9 @@ private struct OnboardingTrialView: View {
     @State private var isPurchasing = false
     @State private var errorMessage: String?
     @State private var selectedPlan: PlanType = .annual
+    @State private var scoreAppeared = false
+    @State private var contentAppeared = false
+
     let firstScore: Int
     let onContinue: () -> Void
 
@@ -607,31 +610,40 @@ private struct OnboardingTrialView: View {
     }
 
     var body: some View {
-        ZStack {
-            AppColors.background.ignoresSafeArea()
+        GeometryReader { geo in
+            ZStack {
+                AppColors.background.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 24) {
-                    Spacer().frame(height: 20)
+                RadialGradient(
+                    colors: [AppColors.accent.opacity(0.15), Color.clear],
+                    center: .top,
+                    startRadius: 0,
+                    endRadius: geo.size.height * 0.6
+                )
+                .ignoresSafeArea()
 
-                    // Hero — show their first Protocol Score
-                    VStack(spacing: 10) {
+                VStack(spacing: 0) {
+                    Spacer(minLength: 0)
+
+                    // MARK: Score hero
+                    VStack(spacing: 8) {
                         ZStack {
                             Circle()
-                                .stroke(Color.white.opacity(0.1), lineWidth: 8)
-                                .frame(width: 100, height: 100)
+                                .stroke(Color.white.opacity(0.08), lineWidth: 10)
+                                .frame(width: 90, height: 90)
                             Circle()
-                                .trim(from: 0, to: CGFloat(firstScore) / 100.0)
-                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                                .frame(width: 100, height: 100)
+                                .trim(from: 0, to: scoreAppeared ? CGFloat(firstScore) / 100.0 : 0)
+                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: 90, height: 90)
                                 .rotationEffect(.degrees(-90))
+                                .animation(.spring(response: 1.0, dampingFraction: 0.7).delay(0.2), value: scoreAppeared)
                             Text("\(firstScore)")
-                                .font(.system(size: 36, weight: .black, design: .rounded))
+                                .font(.system(size: 30, weight: .black, design: .rounded))
                                 .foregroundColor(.white)
                         }
 
                         Text("Your Protocol Score")
-                            .font(.system(size: 24, weight: .black, design: .rounded))
+                            .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundColor(.white)
 
                         Text("Start your free trial to unlock full insights.")
@@ -639,86 +651,53 @@ private struct OnboardingTrialView: View {
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
+                    .scaleEffect(scoreAppeared ? 1 : 0.8)
+                    .opacity(scoreAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.55, dampingFraction: 0.72), value: scoreAppeared)
 
-                    // What's included
-                    VStack(alignment: .leading, spacing: 10) {
-                        FeatureRow(icon: "waveform.path.ecg",        text: "PK curves with confidence bands")
-                        FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Full history & trend analysis")
-                        FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & custom ranges")
-                        FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & PDF export")
-                        FeatureRow(icon: "brain.head.profile",        text: "AI-powered insights & correlations")
-                        FeatureRow(icon: "pills.fill",                text: "GLP-1 & peptide analytics")
+                    Spacer(minLength: 0)
+
+                    // MARK: Feature grid
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                        TrialFeatureCell(icon: "waveform.path.ecg",         text: "PK Curves")
+                        TrialFeatureCell(icon: "drop.fill",                  text: "Bloodwork")
+                        TrialFeatureCell(icon: "chart.line.uptrend.xyaxis",  text: "Full History")
+                        TrialFeatureCell(icon: "chart.bar.doc.horizontal",   text: "Weekly Reports")
+                        TrialFeatureCell(icon: "brain.head.profile",         text: "AI Insights")
+                        TrialFeatureCell(icon: "pills.fill",                 text: "GLP-1 & Peptides")
                     }
-                    .padding(16)
-                    .background(AppColors.card)
-                    .cornerRadius(16)
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 16)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.25), value: contentAppeared)
 
-                    // Plan selector
-                    HStack(spacing: 12) {
-                        // Monthly
-                        Button {
-                            selectedPlan = .monthly
-                        } label: {
-                            VStack(spacing: 6) {
-                                Text("Monthly")
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
-                                Text(monthlyPackage?.localizedPriceString ?? "$6.99")
-                                    .font(.title3.bold())
-                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
-                                Text("per month")
-                                    .font(.caption2)
-                                    .foregroundColor(selectedPlan == .monthly ? .white.opacity(0.7) : .secondary.opacity(0.6))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(selectedPlan == .monthly ? AppColors.card : AppColors.card.opacity(0.4))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(selectedPlan == .monthly ? AppColors.accent : Color.clear, lineWidth: 2)
-                            )
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
+                    Spacer(minLength: 0)
 
-                        // Annual
-                        Button {
-                            selectedPlan = .annual
-                        } label: {
-                            VStack(spacing: 6) {
-                                HStack(spacing: 4) {
-                                    Text("Annual")
-                                        .font(.subheadline.bold())
-                                    Text("Save 40%")
-                                        .font(.caption2.bold())
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(AppColors.accent)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(4)
-                                }
-                                .foregroundColor(selectedPlan == .annual ? .white : .secondary)
-                                Text(annualPackage?.localizedPriceString ?? "$49.99")
-                                    .font(.title3.bold())
-                                    .foregroundColor(selectedPlan == .annual ? .white : .secondary)
-                                Text("per year")
-                                    .font(.caption2)
-                                    .foregroundColor(selectedPlan == .annual ? .white.opacity(0.7) : .secondary.opacity(0.6))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(selectedPlan == .annual ? AppColors.card : AppColors.card.opacity(0.4))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(selectedPlan == .annual ? AppColors.accent : Color.clear, lineWidth: 2)
-                            )
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
+                    // MARK: Plan selector
+                    HStack(spacing: 10) {
+                        trialPlanButton(
+                            plan: .monthly,
+                            title: "Monthly",
+                            price: monthlyPackage?.localizedPriceString ?? "$6.99",
+                            period: "per month",
+                            badge: nil
+                        )
+                        trialPlanButton(
+                            plan: .annual,
+                            title: "Annual",
+                            price: annualPackage?.localizedPriceString ?? "$49.99",
+                            period: "per year",
+                            badge: "SAVE 40%"
+                        )
                     }
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.35), value: contentAppeared)
 
-                    // CTA
-                    VStack(spacing: 12) {
+                    Spacer(minLength: 0)
+
+                    // MARK: CTA
+                    VStack(spacing: 10) {
                         Button {
                             guard let pkg = selectedPackage else {
                                 onContinue()
@@ -750,24 +729,21 @@ private struct OnboardingTrialView: View {
                                 .multilineTextAlignment(.center)
                         }
 
-                        Button {
-                            onContinue()
-                        } label: {
+                        Button { onContinue() } label: {
                             Text("Maybe later")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
 
-                        Text("No charge for 14 days. Cancel anytime in Settings → Subscriptions.")
+                        Text("No charge for 14 days. Cancel anytime.")
                             .font(.caption2)
-                            .foregroundColor(.secondary.opacity(0.6))
-                            .multilineTextAlignment(.center)
+                            .foregroundColor(.secondary.opacity(0.5))
 
                         HStack(spacing: 20) {
                             Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
                             Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
                             Button("Restore") {
                                 Task {
                                     _ = try? await RevenueCatService.shared.restorePurchases()
@@ -775,17 +751,70 @@ private struct OnboardingTrialView: View {
                                     if subscriptionManager.isSubscribed { onContinue() }
                                 }
                             }
-                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                            .font(.caption2).foregroundColor(.secondary.opacity(0.4))
                         }
                     }
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.45), value: contentAppeared)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 20)
             }
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
         }
+        .onAppear {
+            scoreAppeared = true
+            contentAppeared = true
+        }
+    }
+
+    @ViewBuilder
+    private func trialPlanButton(
+        plan: PlanType,
+        title: String,
+        price: String,
+        period: String,
+        badge: String?
+    ) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                selectedPlan = plan
+            }
+        } label: {
+            VStack(spacing: 4) {
+                HStack(spacing: 4) {
+                    Text(title)
+                        .font(.subheadline.bold())
+                        .foregroundColor(selectedPlan == plan ? .white : .secondary)
+                    if let badge {
+                        Text(badge)
+                            .font(.system(size: 8, weight: .black))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(AppColors.accent)
+                            .clipShape(Capsule())
+                    }
+                }
+                Text(price)
+                    .font(.title3.bold())
+                    .foregroundColor(selectedPlan == plan ? .white : .secondary)
+                Text(period)
+                    .font(.caption2)
+                    .foregroundColor(selectedPlan == plan ? .white.opacity(0.6) : .secondary.opacity(0.5))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(AppColors.card)
+            .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(selectedPlan == plan ? AppColors.accent : Color.clear, lineWidth: 2)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func startTrial(package: Package) async {
@@ -796,13 +825,35 @@ private struct OnboardingTrialView: View {
             await subscriptionManager.refresh()
             onContinue()
         } catch {
-            if (error as NSError).code == 1 { // user cancelled
-                // Don't show error — they can tap "Maybe later"
-            } else {
+            if (error as NSError).code != 1 {
                 errorMessage = error.localizedDescription
             }
         }
         isPurchasing = false
+    }
+}
+
+// MARK: - TrialFeatureCell
+
+private struct TrialFeatureCell: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(AppColors.accent)
+                .frame(width: 18)
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.white)
+            Spacer()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .background(AppColors.card)
+        .cornerRadius(11)
     }
 }
 
@@ -877,57 +928,155 @@ private struct StepContainer<Content: View>: View {
     }
 }
 
-// MARK: - Step 0: Audience
+// MARK: - Step 0: Audience (premium animated splash)
 
 private struct AudienceStep: View {
     @ObservedObject var vm: OnboardingViewModel
 
+    @State private var logoScale: CGFloat = 0.4
+    @State private var logoOpacity: Double = 0
+    @State private var glowOpacity: Double = 0
+    @State private var titleOffset: CGFloat = 24
+    @State private var titleOpacity: Double = 0
+    @State private var subtitleOpacity: Double = 0
+    @State private var button1Offset: CGFloat = 30
+    @State private var button1Opacity: Double = 0
+    @State private var button2Offset: CGFloat = 30
+    @State private var button2Opacity: Double = 0
+    @State private var ctaOpacity: Double = 0
+    @State private var ctaOffset: CGFloat = 20
+    @State private var pulsing = false
+
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            VStack(spacing: 32) {
-                VStack(spacing: 8) {
-                    Text("TROUGH")
-                        .font(.system(size: 40, weight: .black, design: .rounded))
-                        .foregroundColor(AppColors.accent)
-                    Text("What brings you here?")
-                        .font(.title2.bold())
-                        .foregroundColor(.white)
-                    Text("This helps us personalize your experience.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
+        GeometryReader { geo in
+            ZStack {
+                // Ambient glow behind logo
+                RadialGradient(
+                    colors: [AppColors.accent.opacity(0.22), Color.clear],
+                    center: UnitPoint(x: 0.5, y: 0.28),
+                    startRadius: 0,
+                    endRadius: geo.size.width * 0.55
+                )
+                .opacity(glowOpacity)
+                .ignoresSafeArea()
 
-                VStack(spacing: 14) {
-                    AudienceButton(
-                        title: "I'm on TRT",
-                        subtitle: "Track protocols, injections, and blood levels",
-                        icon: "syringe.fill",
-                        isSelected: vm.userType == "trt"
-                    ) { vm.userType = "trt" }
+                VStack(spacing: 0) {
+                    Spacer()
 
-                    AudienceButton(
-                        title: "Optimizing naturally",
-                        subtitle: "Track wellness, training, and supplements",
-                        icon: "figure.run",
-                        isSelected: vm.userType == "natural"
-                    ) { vm.userType = "natural" }
-                }
+                    // MARK: Logo — single source of truth
+                    ZStack {
+                        Circle()
+                            .fill(AppColors.accent.opacity(0.12))
+                            .frame(width: 92, height: 92)
+                            .scaleEffect(pulsing ? 1.12 : 1.0)
+                            .animation(
+                                .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
+                                value: pulsing
+                            )
 
-                Button(action: { vm.advance() }) {
-                    Text("Continue")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.accent)
-                        .foregroundColor(.white)
-                        .cornerRadius(14)
+                        Image("AppIcon-Logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 72, height: 72)
+                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+                    .scaleEffect(logoScale)
+                    .opacity(logoOpacity)
+
+                    // MARK: Title — no duplicate text logo
+                    VStack(spacing: 6) {
+                        Text("What brings you here?")
+                            .font(.system(size: 26, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                        Text("This helps us personalize your experience.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 22)
+                    .offset(y: titleOffset)
+                    .opacity(titleOpacity)
+
+                    // MARK: Choices
+                    VStack(spacing: 14) {
+                        AudienceButton(
+                            title: "I'm on TRT",
+                            subtitle: "Track protocols, injections, and blood levels",
+                            icon: "syringe.fill",
+                            isSelected: vm.userType == "trt"
+                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "trt" } }
+                        .offset(y: button1Offset)
+                        .opacity(button1Opacity)
+
+                        AudienceButton(
+                            title: "Optimizing naturally",
+                            subtitle: "Track wellness, training, and supplements",
+                            icon: "figure.run",
+                            isSelected: vm.userType == "natural"
+                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "natural" } }
+                        .offset(y: button2Offset)
+                        .opacity(button2Opacity)
+                    }
+                    .padding(.top, 26)
+
+                    // MARK: CTA
+                    Button(action: { vm.advance() }) {
+                        Text("Continue")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.accent)
+                            .foregroundColor(.white)
+                            .cornerRadius(14)
+                    }
+                    .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .padding(.top, 28)
+                    .offset(y: ctaOffset)
+                    .opacity(ctaOpacity)
+
+                    Spacer()
                 }
-                .buttonStyle(.plain)  // FIXED: prevent SwiftUI button debounce
-                .contentShape(Rectangle())  // FIXED: ensure full tap area
+                .padding(.horizontal, 28)
             }
-            .padding(28)
+        }
+        .onAppear { runEntranceAnimation() }
+    }
+
+    private func runEntranceAnimation() {
+        // Logo: spring scale in
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.65).delay(0.05)) {
+            logoScale = 1.0
+            logoOpacity = 1.0
+        }
+        // Glow fade in
+        withAnimation(.easeIn(duration: 0.8).delay(0.1)) {
+            glowOpacity = 1.0
+        }
+        // Start pulse loop
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            pulsing = true
+        }
+        // Title slide up
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.25)) {
+            titleOffset = 0
+            titleOpacity = 1.0
+            subtitleOpacity = 1.0
+        }
+        // Button 1
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.72).delay(0.38)) {
+            button1Offset = 0
+            button1Opacity = 1.0
+        }
+        // Button 2
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.72).delay(0.48)) {
+            button2Offset = 0
+            button2Opacity = 1.0
+        }
+        // CTA
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.75).delay(0.58)) {
+            ctaOffset = 0
+            ctaOpacity = 1.0
         }
     }
 }

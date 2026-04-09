@@ -15,9 +15,11 @@ struct PaywallView: View {
     @State private var isRestoring = false
     @State private var errorMessage: String? = nil
 
-    // BULLETPROOF SUCCESS FLAG (eliminates race condition with RevenueCat + dismiss)
     @State private var purchaseSuccess = false
     @State private var restoreSuccess = false
+
+    // Entrance animation
+    @State private var appeared = false
 
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
@@ -48,27 +50,173 @@ struct PaywallView: View {
     }
 
     var body: some View {
-        ZStack {
-            AppColors.background.ignoresSafeArea()
+        GeometryReader { geo in
+            ZStack {
+                AppColors.background.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 28) {
-                    headerSection
-                    featureList
-                    billingToggle
-                    ctaButton
-                    footerLinks
-                    disclaimerText
+                // Subtle radial glow behind content
+                RadialGradient(
+                    colors: [AppColors.accent.opacity(0.18), Color.clear],
+                    center: .top,
+                    startRadius: 0,
+                    endRadius: geo.size.height * 0.55
+                )
+                .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    // MARK: Close button
+                    HStack {
+                        Spacer()
+                        Button { dismiss() } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.secondary)
+                                .padding(8)
+                                .background(Color.white.opacity(0.07))
+                                .clipShape(Circle())
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+
+                    Spacer(minLength: 0)
+
+                    // MARK: Header
+                    VStack(spacing: 6) {
+                        Text("TROUGH PRO")
+                            .font(.system(size: 28, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                            .scaleEffect(appeared ? 1 : 0.85)
+                            .opacity(appeared ? 1 : 0)
+
+                        Text("Everything you need. Free for 14 days.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .opacity(appeared ? 1 : 0)
+                    }
+                    .padding(.bottom, 16)
+
+                    // MARK: Feature grid — 2 columns, compact
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        CompactFeatureCell(icon: "waveform.path.ecg",        text: "PK Curves")
+                        CompactFeatureCell(icon: "drop.fill",                text: "Bloodwork")
+                        CompactFeatureCell(icon: "chart.line.uptrend.xyaxis",text: "Full History")
+                        CompactFeatureCell(icon: "chart.bar.doc.horizontal", text: "Weekly Reports")
+                        CompactFeatureCell(icon: "pills.fill",               text: "Peptides & GLP-1")
+                        CompactFeatureCell(icon: "bell.badge.fill",          text: "Reminders")
+                    }
+                    .padding(.horizontal, 20)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 12)
+
+                    Spacer(minLength: 0)
+
+                    // MARK: Billing toggle
+                    HStack(spacing: 10) {
+                        billingOption(
+                            cycle: .monthly,
+                            title: "Monthly",
+                            price: monthlyPackage.map { $0.storeProduct.localizedPriceString + "/mo" } ?? "$6.99/mo",
+                            badge: nil
+                        )
+                        billingOption(
+                            cycle: .annual,
+                            title: "Annual",
+                            price: annualPackage.map { $0.storeProduct.localizedPriceString + "/yr" } ?? "$49.99/yr",
+                            badge: "SAVE 40%"
+                        )
+                    }
+                    .padding(.horizontal, 20)
+                    .opacity(appeared ? 1 : 0)
+
+                    Spacer(minLength: 0)
+
+                    // MARK: CTA
+                    VStack(spacing: 8) {
+                        Button {
+                            guard let pkg = activePackage else { return }
+                            Task { await doPurchase(package: pkg) }
+                        } label: {
+                            Group {
+                                if isPurchasing {
+                                    ProgressView().tint(.white)
+                                } else {
+                                    Text(ctaLabel)
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.center)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(AppColors.accent)
+                            .cornerRadius(16)
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(isPurchasing || isRestoring || activePackage == nil)
+                        .scaleEffect(appeared ? 1 : 0.96)
+                        .opacity(appeared ? 1 : 0)
+
+                        if let error = errorMessage {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(AppColors.accent)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+
+                    // MARK: Footer
+                    VStack(spacing: 6) {
+                        HStack(spacing: 20) {
+                            Button {
+                                Task { await doRestore() }
+                            } label: {
+                                Group {
+                                    if isRestoring {
+                                        ProgressView().tint(.secondary)
+                                    } else {
+                                        Text("Restore")
+                                    }
+                                }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            }
+                            .buttonStyle(.plain)
+
+                            if let privacyURL = URL(string: "https://gettrough.app/privacy") {
+                                Link("Privacy", destination: privacyURL)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            if let termsURL = URL(string: "https://gettrough.app/terms") {
+                                Link("Terms", destination: termsURL)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+
+                        Text("Cancel anytime. No charge during 14-day trial.")
+                            .font(.caption2)
+                            .foregroundColor(.secondary.opacity(0.5))
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 8)
+                    .padding(.bottom, 16)
+                    .opacity(appeared ? 1 : 0)
                 }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 32)
             }
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
             AnalyticsService.paywallShown()
         }
-        // BULLETPROOF: dismiss only after the view is fully settled
+        .onAppear {
+            withAnimation(.spring(response: 0.55, dampingFraction: 0.75).delay(0.05)) {
+                appeared = true
+            }
+        }
         .onChange(of: purchaseSuccess) { _, newValue in
             if newValue { dismiss() }
         }
@@ -77,67 +225,7 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: Header
-
-    private var headerSection: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "lock.open.fill")
-                .font(.system(size: 40))
-                .foregroundColor(AppColors.accent)
-
-            Text("TROUGH PRO")
-                .font(.system(size: 32, weight: .black, design: .rounded))
-                .foregroundColor(.white)
-
-            Text("Everything. Free for 14 days.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-    }
-
-    // MARK: Feature list
-
-    private var featureList: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            FeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Unlimited history & Protocol Score trends")
-            FeatureRow(icon: "waveform.path.ecg",         text: "PK curves with confidence bands")
-            FeatureRow(icon: "drop.fill",                 text: "Bloodwork tracking & trend charts")
-            FeatureRow(icon: "chart.bar.doc.horizontal",  text: "Weekly reports & CSV/PDF export")
-            FeatureRow(icon: "pills.fill",                text: "Peptide & GLP-1 tracking")
-            FeatureRow(icon: "figure.walk.circle",        text: "Injection site rotation map")
-            FeatureRow(icon: "bell.badge.fill",           text: "Injection reminders & calendar")
-            FeatureRow(icon: "heart.text.square.fill",    text: "HealthKit auto-sync (always free)")
-                .opacity(0.6)
-        }
-        .padding(18)
-        .background(AppColors.card)
-        .cornerRadius(16)
-    }
-
-    // MARK: Billing toggle
-
-    private var billingToggle: some View {
-        HStack(spacing: 0) {
-            billingOption(
-                cycle: .monthly,
-                title: "Monthly",
-                price: monthlyPackage.map { $0.storeProduct.localizedPriceString + "/mo" } ?? "$6.99/mo",
-                badge: nil
-            )
-            billingOption(
-                cycle: .annual,
-                title: "Annual",
-                price: annualPackage.map { $0.storeProduct.localizedPriceString + "/yr" } ?? "$49.99/yr",
-                badge: "Save 40%"
-            )
-        }
-        .background(AppColors.card)
-        .cornerRadius(14)
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-        )
-    }
+    // MARK: Billing option
 
     private func billingOption(
         cycle: BillingCycle,
@@ -146,7 +234,7 @@ struct PaywallView: View {
         badge: String?
     ) -> some View {
         Button {
-            withAnimation(.easeInOut(duration: 0.2)) { selected = cycle }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { selected = cycle }
         } label: {
             VStack(spacing: 4) {
                 HStack(spacing: 6) {
@@ -155,9 +243,9 @@ struct PaywallView: View {
                         .foregroundColor(selected == cycle ? .white : .secondary)
                     if let badge {
                         Text(badge)
-                            .font(.caption2.bold())
+                            .font(.system(size: 9, weight: .black))
                             .foregroundColor(.white)
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 5)
                             .padding(.vertical, 2)
                             .background(AppColors.accent)
                             .clipShape(Capsule())
@@ -171,96 +259,19 @@ struct PaywallView: View {
             .padding(.vertical, 14)
             .background(
                 selected == cycle
-                    ? AppColors.accent.opacity(0.12)
-                    : Color.clear
+                    ? AppColors.accent.opacity(0.14)
+                    : AppColors.card
             )
             .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(selected == cycle ? AppColors.accent.opacity(0.6) : Color.clear, lineWidth: 1.5)
+            )
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: CTA
-
-    private var ctaButton: some View {
-        VStack(spacing: 10) {
-            Button {
-                guard let pkg = activePackage else { return }
-                Task { await doPurchase(package: pkg) }
-            } label: {
-                Group {
-                    if isPurchasing {
-                        ProgressView().tint(.white)
-                    } else {
-                        Text(ctaLabel)
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 18)
-                .background(AppColors.accent)
-                .cornerRadius(16)
-            }
-            .buttonStyle(.plain)
-            .disabled(isPurchasing || isRestoring || activePackage == nil)
-
-            if let error = errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundColor(AppColors.accent)
-                    .multilineTextAlignment(.center)
-            }
-        }
-    }
-
-    // MARK: Footer
-
-    private var footerLinks: some View {
-        HStack(spacing: 24) {
-            Button {
-                Task { await doRestore() }
-            } label: {
-                Group {
-                    if isRestoring {
-                        ProgressView().tint(.secondary)
-                    } else {
-                        Text("Restore Purchases")
-                    }
-                }
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            .buttonStyle(.plain)
-
-            if let privacyURL = URL(string: "https://gettrough.app/privacy") {
-                Link("Privacy Policy", destination: privacyURL)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            if let termsURL = URL(string: "https://gettrough.app/terms") {
-                Link("Terms of Use", destination: termsURL)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-
-    private var disclaimerText: some View {
-        VStack(spacing: 6) {
-            Text("Cancel anytime in Settings → Subscriptions.")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-            Text("No charge during your 14-day free trial. Subscription auto-renews after trial unless cancelled at least 24 hours before the end of the trial period.")
-                .font(.caption2)
-                .foregroundColor(.secondary.opacity(0.5))
-                .multilineTextAlignment(.center)
-        }
-    }
-
-    // MARK: Actions — BULLETPROOF VERSION
+    // MARK: Actions
 
     @MainActor
     private func doPurchase(package: Package) async {
@@ -269,14 +280,13 @@ struct PaywallView: View {
         do {
             _ = try await RevenueCatService.shared.purchase(package: package)
             await subscriptionManager.refresh()
-
             if subscriptionManager.isSubscribed {
                 AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
-                purchaseSuccess = true   // triggers .onChange dismiss
+                purchaseSuccess = true
                 return
             }
         } catch {
-            if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
+            if (error as NSError).code == 1 {
                 isPurchasing = false
                 return
             }
@@ -292,13 +302,12 @@ struct PaywallView: View {
         do {
             _ = try await RevenueCatService.shared.restorePurchases()
             await subscriptionManager.refresh()
-
             if subscriptionManager.isSubscribed {
-                restoreSuccess = true   // triggers .onChange dismiss
+                restoreSuccess = true
                 return
             }
         } catch {
-            if (error as NSError).code == 1 /* RevenueCat userCancelled */ {
+            if (error as NSError).code == 1 {
                 isRestoring = false
                 return
             }
@@ -308,7 +317,29 @@ struct PaywallView: View {
     }
 }
 
-// MARK: - FeatureRow
+// MARK: - CompactFeatureCell
+
+private struct CompactFeatureCell: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(AppColors.accent)
+                .frame(width: 20)
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.white)
+            Spacer()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(AppColors.card)
+        .cornerRadius(12)
+    }
+}
 
 // MARK: - LockedCard
 
@@ -356,6 +387,8 @@ struct LockedCard: View {
         .buttonStyle(.plain)
     }
 }
+
+// MARK: - FeatureRow
 
 struct FeatureRow: View {
     let icon: String
