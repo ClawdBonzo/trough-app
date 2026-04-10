@@ -28,6 +28,23 @@ extension Date {
     func daysSince(_ other: Date) -> Int {
         Calendar.current.dateComponents([.day], from: other.startOfDay, to: startOfDay).day ?? 0
     }
+
+    /// End of the current day (23:59:59).
+    var endOfDay: Date {
+        var comps = DateComponents()
+        comps.day = 1
+        comps.second = -1
+        return Calendar.current.date(byAdding: comps, to: startOfDay) ?? self
+    }
+
+    /// End of the current week (Sunday 23:59:59 or Saturday, depending on locale).
+    var endOfWeek: Date {
+        let cal = Calendar.current
+        guard let weekInterval = cal.dateInterval(of: .weekOfYear, for: self) else { return self }
+        var comps = DateComponents()
+        comps.second = -1
+        return cal.date(byAdding: comps, to: weekInterval.end) ?? weekInterval.end
+    }
 }
 
 // MARK: - View Modifiers

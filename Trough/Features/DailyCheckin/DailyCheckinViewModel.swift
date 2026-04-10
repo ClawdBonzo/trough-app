@@ -78,7 +78,7 @@ final class DailyCheckinViewModel: ObservableObject {
 
     func setup(context: ModelContext, userID: UUID) {
         self.modelContext = context
-        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
+        self.userID = userID
         loadExisting()
         loadCycleInfo()
         loadSupplements()
@@ -257,7 +257,6 @@ final class DailyCheckinViewModel: ObservableObject {
             }
         }
 
-        SyncEngine.shared.triggerSync()
 
         // Analytics
         let dayInCycle = cycleInfo?.day

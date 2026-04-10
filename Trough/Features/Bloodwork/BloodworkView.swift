@@ -48,7 +48,7 @@ struct BloodworkView: View {
                 BloodworkEntryView(vm: vm)
             }
             .onAppear {
-                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
                 vm.load()
             }

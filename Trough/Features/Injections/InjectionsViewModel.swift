@@ -21,7 +21,6 @@ final class InjectionsViewModel: ObservableObject {
     @Published var editingInjection: SDInjection?
 
     private var modelContext: ModelContext?
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     /// Injected by the parent view — used to award XP and update streaks on injection save.
@@ -33,7 +32,7 @@ final class InjectionsViewModel: ObservableObject {
 
     func setup(context: ModelContext, userID: UUID) {
         self.modelContext = context
-        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
+        self.userID = userID
         load()
     }
 
@@ -145,7 +144,6 @@ final class InjectionsViewModel: ObservableObject {
             try modelContext.save()
             showingLogSheet = false
             load()
-            syncEngine.triggerSync()
 
             // Gamification: only award XP for new injections (not edits)
             if editingInjection == nil, let gvm = gamificationVM {
@@ -163,6 +161,5 @@ final class InjectionsViewModel: ObservableObject {
         modelContext.delete(injection)
         try? modelContext.save()
         load()
-        syncEngine.triggerSync()
     }
 }

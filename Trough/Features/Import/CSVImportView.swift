@@ -181,7 +181,6 @@ final class CSVImportViewModel: ObservableObject {
             progress = 1.0
         }
 
-        SyncEngine.shared.triggerSync()
         step = .report
     }
 
@@ -226,7 +225,8 @@ struct CSVImportView: View {
     private var onComplete: (() -> Void)?
 
     init(onComplete: (() -> Void)? = nil) {
-        let id = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
+        let idString = UserDefaults.standard.string(forKey: "userIDString") ?? ""
+        let id = UUID(uuidString: idString) ?? UUID()
         _vm = StateObject(wrappedValue: CSVImportViewModel(
             modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
             userID: id

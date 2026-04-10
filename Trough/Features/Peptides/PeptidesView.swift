@@ -5,6 +5,7 @@ import SwiftData
 
 struct PeptidesView: View {
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @StateObject private var vm = PeptidesViewModel()
 
     var body: some View {
@@ -37,7 +38,7 @@ struct PeptidesView: View {
                 PeptideLogView(vm: vm)
             }
             .onAppear {
-                let uid = SupabaseService.resolvedUserUUID ?? UUID()
+                let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
                 vm.load()
             }

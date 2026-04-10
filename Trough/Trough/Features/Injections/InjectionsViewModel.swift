@@ -23,13 +23,16 @@ final class InjectionsViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private(set) var userID: UUID = UUID()
 
+    /// Injected by the parent view — used to award XP and update streaks on injection save.
+    weak var gamificationVM: GamificationViewModel?
+
     init() {}
 
     // MARK: - Setup
 
     func setup(context: ModelContext, userID: UUID) {
         self.modelContext = context
-        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
+        self.userID = userID
         load()
     }
 
@@ -141,6 +144,13 @@ final class InjectionsViewModel: ObservableObject {
             try modelContext.save()
             showingLogSheet = false
             load()
+
+            // Gamification: only award XP for new injections (not edits)
+            if editingInjection == nil, let gvm = gamificationVM {
+                gvm.awardXP(15, reason: "injection_logged")
+                gvm.updateStreak(type: "injection")
+                gvm.completeQuest(QuestService.weeklyInjectionQuestID())
+            }
         } catch {
             errorMessage = error.localizedDescription
         }

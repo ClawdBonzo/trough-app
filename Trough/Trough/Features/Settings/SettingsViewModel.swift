@@ -8,7 +8,6 @@ final class SettingsViewModel: ObservableObject {
     @Published var allSupplements: [SDSupplementConfig] = []    // all (for SupplementConfigView)
     @Published var showingAddProtocol = false
     @Published var showingAddSupplement = false
-    @Published var syncConflicts: [SDSyncConflict] = []
     @Published var isSyncing = false
     @Published var errorMessage: String?
 
@@ -75,11 +74,6 @@ final class SettingsViewModel: ObservableObject {
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
         )
         allSupplements = (try? modelContext.fetch(allSupplDesc)) ?? []
-
-        let conflictDesc = FetchDescriptor<SDSyncConflict>(
-            sortBy: [SortDescriptor(\.resolvedAt, order: .reverse)]
-        )
-        syncConflicts = (try? modelContext.fetch(conflictDesc)) ?? []
     }
 
     // MARK: - Protocol
@@ -193,61 +187,4 @@ final class SettingsViewModel: ObservableObject {
         load()
     }
 
-    // MARK: - Conflicts
-
-    func markConflictReviewed(_ c: SDSyncConflict) {
-        c.isReviewed = true
-        try? modelContext.save()
-        load()
-    }
-
-    // MARK: - Sign Out
-
-    func signOut() async {
-        do {
-            try await SupabaseService.shared.signOut()
-            UserDefaults.standard.set(false, forKey: "isAuthenticated")
-            UserDefaults.standard.set(false, forKey: "onboardingCompleted")
-            UserDefaults.standard.set(false, forKey: "hkPermissionRequested")
-            UserDefaults.standard.removeObject(forKey: "userIDString")
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-
-    // MARK: - Delete Account
-
-    func deleteAccount(modelContext: ModelContext) async {
-        // 1. Delete all local SwiftData records for this user
-        do {
-            try modelContext.delete(model: SDCheckin.self)
-            try modelContext.delete(model: SDInjection.self)
-            try modelContext.delete(model: SDProtocol.self)
-            try modelContext.delete(model: SDBloodwork.self)
-            try modelContext.delete(model: SDPeptideLog.self)
-            try modelContext.delete(model: SDSupplementConfig.self)
-            try modelContext.delete(model: SDSyncConflict.self)
-            try modelContext.save()
-        } catch {
-            print("[Settings] Failed to delete local data: \(error)")
-        }
-
-        // 2. Delete the Supabase auth account via Edge Function
-        do {
-            try await SupabaseService.shared.deleteAccount()
-        } catch {
-            print("[Settings] Supabase account deletion failed (non-fatal): \(error)")
-        }
-
-        // 3. Clear all UserDefaults and sign out
-        let domain = Bundle.main.bundleIdentifier ?? "app.trough.ios"
-        UserDefaults.standard.removePersistentDomain(forName: domain)
-        UserDefaults.standard.set(false, forKey: "isAuthenticated")
-        UserDefaults.standard.set(false, forKey: "onboardingCompleted")
-        UserDefaults.standard.set(false, forKey: "hkPermissionRequested")
-        UserDefaults.standard.removeObject(forKey: "userIDString")
-
-        // 4. Sign out from Supabase
-        try? await SupabaseService.shared.signOut()
-    }
 }

@@ -1,18 +1,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("isAuthenticated")       private var isAuthenticated       = false
-    @AppStorage("onboardingCompleted")   private var onboardingCompleted   = false
-    @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
+    @AppStorage("onboardingCompleted") private var onboardingCompleted = false
 
     var body: some View {
         Group {
-            if !isAuthenticated {
-                AuthView()
-            } else if !onboardingCompleted {
-                OnboardingView(onComplete: {
-                    onboardingCompleted = true
-                })
+            if !onboardingCompleted {
+                // Onboarding includes: protocol setup → compounds → first check-in → HealthKit → trial prompt
+                OnboardingView()
             } else {
                 MainTabView()
             }
@@ -24,30 +19,63 @@ struct ContentView: View {
 // MARK: - Main Tab View
 
 struct MainTabView: View {
+    @Environment(\.modelContext) private var modelContext
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @StateObject private var gamificationVM = GamificationViewModel()
+
     var body: some View {
         TabView {
             DashboardView()
                 .tabItem {
-                    Label(NSLocalizedString("tab.home", comment: ""), systemImage: "house.fill")
+                    Label("Home", systemImage: "house.fill")
                 }
 
             DailyCheckinView()
                 .tabItem {
-                    Label(NSLocalizedString("tab.log", comment: ""), systemImage: "checkmark.circle.fill")
+                    Label("Log", systemImage: "checkmark.circle.fill")
                 }
 
             InjectionsView()
                 .tabItem {
-                    Label(NSLocalizedString("tab.injections", comment: ""), systemImage: "syringe.fill")
+                    Label("Injections", systemImage: "syringe.fill")
                 }
+
+            NavigationStack {
+                ZStack {
+                    AppColors.background.ignoresSafeArea()
+                    GamificationHomeView(viewModel: gamificationVM)
+                }
+                .navigationTitle("Achievements")
+                .navigationBarTitleDisplayMode(.large)
+            }
+            .tabItem {
+                Label("Achievements", systemImage: "star.fill")
+            }
 
             MoreView()
                 .tabItem {
-                    Label(NSLocalizedString("tab.more", comment: ""), systemImage: "ellipsis.circle.fill")
+                    Label("More", systemImage: "ellipsis.circle.fill")
                 }
         }
         .tint(AppColors.accent)
         .background(AppColors.background)
+        .environmentObject(gamificationVM)
+        .task {
+            // Run gamification setup off the initial render pass so it doesn't
+            // block the first frame. Task is automatically cancelled on disappear.
+            let uid = UUID(uuidString: userIDString) ?? UUID()
+            gamificationVM.setup(context: modelContext, userID: uid)
+            QuestService.seedIfNeeded(context: modelContext, userID: uid)
+            BadgeService.seedIfNeeded(context: modelContext, userID: uid)
+        }
+        .fullScreenCover(isPresented: $gamificationVM.showCelebration) {
+            if let event = gamificationVM.pendingCelebration {
+                LevelUpCelebrationView(event: event) {
+                    gamificationVM.showCelebration = false
+                    gamificationVM.pendingCelebration = nil
+                }
+            }
+        }
     }
 }
 
@@ -55,6 +83,7 @@ struct MainTabView: View {
 
 struct MoreView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
     @State private var showPaywall = false
 
     var body: some View {
@@ -62,19 +91,42 @@ struct MoreView: View {
             ZStack {
                 AppColors.background.ignoresSafeArea()
                 List {
+                    // Achievements (always accessible)
+                    Section {
+                        NavigationLink(destination:
+                            ZStack {
+                                AppColors.background.ignoresSafeArea()
+                                GamificationHomeView(viewModel: gamificationVM)
+                            }
+                            .navigationTitle("Achievements")
+                        ) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Achievements")
+                                    Text("Level \(gamificationVM.currentLevel) · \(gamificationVM.levelName)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.yellow)
+                            }
+                        }
+                    }
+
                     if subscriptionManager.isSubscribed {
                         NavigationLink(destination: BloodworkView()) {
-                            Label(NSLocalizedString("more.bloodwork", comment: ""), systemImage: "drop.fill")
+                            Label("Bloodwork", systemImage: "drop.fill")
                         }
                         NavigationLink(destination: PeptidesView()) {
-                            Label(NSLocalizedString("more.peptides", comment: ""), systemImage: "pills.fill")
+                            Label("Adjuncts & Peptides", systemImage: "pills.fill")
                         }
                     } else {
                         Button {
                             showPaywall = true
                         } label: {
                             HStack {
-                                Label(NSLocalizedString("more.bloodwork", comment: ""), systemImage: "drop.fill")
+                                Label("Bloodwork", systemImage: "drop.fill")
                                 Spacer()
                                 Image(systemName: "lock.fill")
                                     .font(.caption)
@@ -88,13 +140,13 @@ struct MoreView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack {
-                                    Label(NSLocalizedString("more.peptides", comment: ""), systemImage: "pills.fill")
+                                    Label("Adjuncts & Peptides", systemImage: "pills.fill")
                                     Spacer()
                                     Image(systemName: "lock.fill")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
-                                Text(NSLocalizedString("more.peptides.subtitle", comment: ""))
+                                Text("Track GLP-1, BPC-157 & more")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -102,160 +154,17 @@ struct MoreView: View {
                         .foregroundColor(.primary)
                     }
                     NavigationLink(destination: SettingsView()) {
-                        Label(NSLocalizedString("more.settings", comment: ""), systemImage: "gear")
+                        Label("Settings", systemImage: "gear")
                     }
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle(NSLocalizedString("more.title", comment: ""))
+            .navigationTitle("More")
             .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }
         }
-    }
-}
-
-// MARK: - Auth View (placeholder)
-
-struct AuthView: View {
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isSignUp = false
-    @State private var isLoading = false
-    @State private var errorMessage: String?
-    @State private var confirmationPending = false
-    @AppStorage("isAuthenticated") private var isAuthenticated = false
-    @AppStorage("userIDString") private var userIDString = UUID().uuidString
-
-    var body: some View {
-        ZStack {
-            AppColors.background.ignoresSafeArea()
-
-            ScrollView {
-                VStack(spacing: 24) {
-                    VStack(spacing: 12) {
-                        Image("AppIcon-Logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
-                            .clipShape(RoundedRectangle(cornerRadius: 22))
-
-                        Text(NSLocalizedString("auth.appName", comment: ""))
-                            .font(.system(size: 36, weight: .black, design: .rounded))
-                            .foregroundColor(AppColors.accent)
-
-                        Text(NSLocalizedString("auth.tagline", comment: ""))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.top, 50)
-
-                    // MARK: - Email/password
-                    VStack(spacing: 16) {
-                        TextField(NSLocalizedString("auth.email", comment: ""), text: $email)
-                            .textContentType(.emailAddress)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(AppColors.card)
-                            .cornerRadius(12)
-
-                        SecureField(NSLocalizedString("auth.password", comment: ""), text: $password)
-                            .textContentType(isSignUp ? .newPassword : .password)
-                            .padding()
-                            .background(AppColors.card)
-                            .cornerRadius(12)
-
-                        if let error = errorMessage {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundColor(AppColors.accent)
-                                .multilineTextAlignment(.center)
-                        }
-
-                        if confirmationPending {
-                            HStack(spacing: 8) {
-                                Image(systemName: "envelope.badge.fill")
-                                    .foregroundColor(.green)
-                                Text(NSLocalizedString("auth.confirmEmail", comment: ""))
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            }
-                            .padding()
-                            .background(AppColors.card)
-                            .cornerRadius(12)
-                        }
-                    }
-
-                    VStack(spacing: 12) {
-                        Button {
-                            Task { await authenticate() }
-                        } label: {
-                            HStack {
-                                if isLoading {
-                                    ProgressView()
-                                        .tint(.white)
-                                } else {
-                                    Text(isSignUp ? NSLocalizedString("auth.createAccount", comment: "") : NSLocalizedString("auth.signIn", comment: ""))
-                                        .fontWeight(.semibold)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(AppColors.accent)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                        }
-                        .disabled(isLoading)
-
-                        Button {
-                            isSignUp.toggle()
-                            errorMessage = nil
-                        } label: {
-                            Text(isSignUp ? NSLocalizedString("auth.switchToSignIn", comment: "") : NSLocalizedString("auth.switchToSignUp", comment: ""))
-                                .font(.caption)
-                                .foregroundColor(AppColors.textSecondary)
-                        }
-                    }
-
-                    Spacer(minLength: 40)
-                }
-                .padding(.horizontal, 24)
-            }
-        }
-    }
-
-    // MARK: - Email/password
-
-    private func authenticate() async {
-        guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = NSLocalizedString("auth.emptyFields", comment: "")
-            return
-        }
-        isLoading = true
-        errorMessage = nil
-        confirmationPending = false
-        do {
-            if isSignUp {
-                let hasSession = try await SupabaseService.shared.signUp(email: email, password: password)
-                if !hasSession {
-                    confirmationPending = true
-                    isSignUp = false
-                    isLoading = false
-                    return
-                }
-            } else {
-                try await SupabaseService.shared.signIn(email: email, password: password)
-            }
-            if let realID = SupabaseService.shared.currentUserID {
-                userIDString = realID
-            }
-            isAuthenticated = true
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
     }
 }
 

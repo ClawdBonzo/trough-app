@@ -7,6 +7,7 @@ struct DailyCheckinView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("userType") private var userType = "trt"
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
 
     @StateObject private var vm = DailyCheckinViewModel()
 
@@ -22,8 +23,9 @@ struct DailyCheckinView: View {
         }
         .environmentObject(vm)
         .onAppear {
-            let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
+            let uid = UUID(uuidString: userIDString) ?? UUID()
             vm.setup(context: modelContext, userID: uid)
+            vm.gamificationVM = gamificationVM
         }
     }
 }
@@ -65,7 +67,7 @@ private struct MetricsScreenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button(NSLocalizedString("common.done", comment: "")) {
+                Button("Done") {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .fontWeight(.semibold)
@@ -78,7 +80,7 @@ private struct MetricsScreenView: View {
 
     private var headerSection: some View {
         VStack(spacing: 6) {
-            Text(NSLocalizedString("checkin.title", comment: ""))
+            Text("How are you today?")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +91,7 @@ private struct MetricsScreenView: View {
                     .foregroundColor(.secondary)
 
                 if let info = vm.cycleInfo {
-                    Text(String(format: NSLocalizedString("checkin.cycleDay", comment: ""), info.day, info.totalDays))
+                    Text("Day \(info.day) of \(info.totalDays)")
                         .font(.subheadline.bold())
                         .foregroundColor(AppColors.accent)
                 }
@@ -103,7 +105,7 @@ private struct MetricsScreenView: View {
     private var scorePreview: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(NSLocalizedString("checkin.protocolScore", comment: ""))
+                Text("Protocol Score")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Text(String(format: "%.0f", vm.currentScore))
@@ -123,15 +125,15 @@ private struct MetricsScreenView: View {
 
     private var slidersCard: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(NSLocalizedString("checkin.wellnessMetrics", comment: ""))
+            Text("Wellness Metrics")
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            HapticSlider(emoji: "⚡️", label: NSLocalizedString("checkin.energy", comment: ""),        value: $vm.energyScore)
-            HapticSlider(emoji: "😌", label: NSLocalizedString("checkin.mood", comment: ""),          value: $vm.moodScore)
-            HapticSlider(emoji: "🔥", label: NSLocalizedString("checkin.libido", comment: ""),        value: $vm.libidoScore)
-            HapticSlider(emoji: "🌙", label: NSLocalizedString("checkin.sleepQuality", comment: ""), value: $vm.sleepQualityScore)
-            HapticSlider(emoji: "🧠", label: NSLocalizedString("checkin.mentalClarity", comment: ""),value: $vm.mentalClarityScore)
+            HapticSlider(emoji: "⚡️", label: "Energy",        value: $vm.energyScore)
+            HapticSlider(emoji: "😌", label: "Mood",          value: $vm.moodScore)
+            HapticSlider(emoji: "🔥", label: "Libido",        value: $vm.libidoScore)
+            HapticSlider(emoji: "🌙", label: "Sleep Quality", value: $vm.sleepQualityScore)
+            HapticSlider(emoji: "🧠", label: "Mental Clarity",value: $vm.mentalClarityScore)
         }
         .cardStyle()
     }
@@ -140,13 +142,13 @@ private struct MetricsScreenView: View {
 
     private var naturalExtrasCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text(NSLocalizedString("checkin.bodyMetrics", comment: ""))
+            Text("Body Metrics")
                 .font(.headline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(vm.usesMetricWeight ? NSLocalizedString("checkin.weight.kg", comment: "") : NSLocalizedString("checkin.weight.lbs", comment: ""))
+                    Text("Weight (\(vm.usesMetricWeight ? "kg" : "lbs"))")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     TextField(vm.usesMetricWeight ? "e.g. 82.5" : "e.g. 182", text: $vm.bodyWeightInput)
@@ -158,10 +160,10 @@ private struct MetricsScreenView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(NSLocalizedString("checkin.bodyFat", comment: ""))
+                    Text("Body Fat %")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    TextField(NSLocalizedString("checkin.optional", comment: ""), text: $vm.bodyFatInput)
+                    TextField("Optional", text: $vm.bodyFatInput)
                         .keyboardType(.decimalPad)
                         .padding(10)
                         .background(AppColors.background)
@@ -180,7 +182,7 @@ private struct MetricsScreenView: View {
             vm.navigationPath = [.binaryTaps]
         } label: {
             HStack {
-                Text(NSLocalizedString("common.next", comment: ""))
+                Text("Next")
                     .fontWeight(.semibold)
                 Image(systemName: "arrow.right")
             }

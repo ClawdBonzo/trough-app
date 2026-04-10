@@ -6,6 +6,7 @@ import SwiftData
 struct InjectionsView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
     @StateObject private var vm = InjectionsViewModel()
 
     var body: some View {
@@ -44,22 +45,23 @@ struct InjectionsView: View {
                         .shadow(color: AppColors.accent.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(20)
-                .accessibilityLabel(NSLocalizedString("injections.logNew", comment: ""))
+                .accessibilityLabel("Log new injection")
             }
-            .navigationTitle(NSLocalizedString("injections.title", comment: ""))
+            .navigationTitle("Injections")
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $vm.showingLogSheet, onDismiss: { vm.load() }) {
                 LogInjectionSheet(vm: vm)
             }
             .onAppear {
-                let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
+                let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
+                vm.gamificationVM = gamificationVM
             }
-            .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
+            .alert("Error", isPresented: Binding(
                 get: { vm.errorMessage != nil },
                 set: { if !$0 { vm.errorMessage = nil } }
             )) {
-                Button(NSLocalizedString("common.ok", comment: ""), role: .cancel) {}
+                Button("OK", role: .cancel) {}
             } message: {
                 Text(vm.errorMessage ?? "")
             }
@@ -69,9 +71,9 @@ struct InjectionsView: View {
     private var emptyState: some View {
         EmptyStateView(
             icon: "syringe",
-            title: NSLocalizedString("injections.empty.title", comment: ""),
-            subtitle: NSLocalizedString("injections.empty.subtitle", comment: ""),
-            ctaLabel: NSLocalizedString("injections.empty.cta", comment: ""),
+            title: "Log your first injection",
+            subtitle: "Tap + to record a dose. Trough tracks your cycle and suggests injection sites.",
+            ctaLabel: "Log Injection",
             onCTA: { vm.prepareLogForm() }
         )
     }
@@ -85,7 +87,7 @@ struct InjectionsView: View {
                             .onTapGesture { vm.prepareEditForm(injection: inj) }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) { vm.delete(inj) } label: {
-                                    Label(NSLocalizedString("common.delete", comment: ""), systemImage: "trash")
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                         Divider()
@@ -119,8 +121,8 @@ struct InjectionsView: View {
 
             let items = vm.injections.filter { $0.injectedAt.startOfDay == day }
             let header: String
-            if cal.isDateInToday(day)     { header = NSLocalizedString("common.today", comment: "") }
-            else if cal.isDateInYesterday(day) { header = NSLocalizedString("common.yesterday", comment: "") }
+            if cal.isDateInToday(day)     { header = "Today" }
+            else if cal.isDateInYesterday(day) { header = "Yesterday" }
             else { header = day.mediumString }
             groups.append((header, items))
         }
@@ -312,14 +314,14 @@ struct LogInjectionSheet: View {
                     .padding(16)
                 }
             }
-            .navigationTitle(vm.editingInjection != nil ? NSLocalizedString("injections.editTitle", comment: "") : NSLocalizedString("injections.logTitle", comment: ""))
+            .navigationTitle(vm.editingInjection != nil ? "Edit Injection" : "Log Injection")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(NSLocalizedString("common.cancel", comment: "")) { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(NSLocalizedString("common.save", comment: "")) { vm.saveForm() }
+                    Button("Save") { vm.saveForm() }
                         .foregroundColor(AppColors.accent)
                         .fontWeight(.semibold)
                 }
@@ -328,9 +330,9 @@ struct LogInjectionSheet: View {
     }
 
     private var compoundSection: some View {
-        SectionCard(title: NSLocalizedString("common.compound", comment: "")) {
+        SectionCard(title: "Compound") {
             if !vm.activeProtocols.isEmpty {
-                Picker(NSLocalizedString("common.compound", comment: ""), selection: $vm.formCompoundName) {
+                Picker("Compound", selection: $vm.formCompoundName) {
                     ForEach(vm.activeProtocols, id: \.compoundName) { p in
                         Text(p.compoundName).tag(p.compoundName)
                     }
@@ -342,7 +344,7 @@ struct LogInjectionSheet: View {
                     }
                 }
             } else {
-                Picker(NSLocalizedString("common.compound", comment: ""), selection: $vm.formCompoundName) {
+                Picker("Compound", selection: $vm.formCompoundName) {
                     ForEach(["Testosterone Cypionate", "Testosterone Enanthate",
                              "Testosterone Propionate", "HCG"], id: \.self) {
                         Text($0).tag($0)
@@ -355,27 +357,27 @@ struct LogInjectionSheet: View {
             Divider().background(Color.white.opacity(0.07))
 
             HStack {
-                Text(NSLocalizedString("common.dose", comment: ""))
+                Text("Dose")
                 Spacer()
-                TextField(NSLocalizedString("common.mg", comment: ""), text: $vm.formDoseMg)
+                TextField("mg", text: $vm.formDoseMg)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 80)
-                Text(NSLocalizedString("common.mg", comment: "")).foregroundColor(.secondary)
+                Text("mg").foregroundColor(.secondary)
             }
         }
     }
 
     private var dateSection: some View {
-        SectionCard(title: NSLocalizedString("injections.dateTime", comment: "")) {
-            DatePicker(NSLocalizedString("injections.when", comment: ""), selection: $vm.formDate, in: ...Date.now)
+        SectionCard(title: "Date & Time") {
+            DatePicker("When", selection: $vm.formDate, in: ...Date.now)
                 .tint(AppColors.accent)
         }
     }
 
     private var siteSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(NSLocalizedString("injections.site", comment: ""))
+            Text("Injection Site")
                 .font(.caption.bold())
                 .foregroundColor(.secondary)
                 .textCase(.uppercase)
@@ -387,8 +389,8 @@ struct LogInjectionSheet: View {
     }
 
     private var notesSection: some View {
-        SectionCard(title: NSLocalizedString("injections.notes", comment: "")) {
-            TextField(NSLocalizedString("injections.notesPlaceholder", comment: ""), text: $vm.formNotes, axis: .vertical)
+        SectionCard(title: "Notes (optional)") {
+            TextField("Any notes about this injection…", text: $vm.formNotes, axis: .vertical)
                 .lineLimit(3...6)
         }
     }

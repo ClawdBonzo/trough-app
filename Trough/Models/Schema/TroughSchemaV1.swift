@@ -8,7 +8,6 @@ enum TroughSchemaV1: VersionedSchema {
 
     static var models: [any PersistentModel.Type] {
         [
-            SDUser.self,
             SDProtocol.self,
             SDInjection.self,
             SDCheckin.self,
@@ -16,47 +15,12 @@ enum TroughSchemaV1: VersionedSchema {
             SDBloodworkMarker.self,
             SDPeptideLog.self,
             SDSupplementConfig.self,
-            SDSyncConflict.self,
             SDGamificationState.self,
             SDQuest.self,
             SDBadge.self,
             SDStreakState.self,
             SDLevelUpEvent.self,
         ]
-    }
-
-    // MARK: SDUser
-
-    @Model
-    final class SDUser {
-        @Attribute(.unique) var id: UUID
-        var supabaseUID: String          // auth.uid() from Supabase
-        var email: String
-        var displayName: String?
-        var userType: String             // "trt" | "natural"
-        var createdAt: Date
-        var updatedAt: Date
-        var isSampleData: Bool
-
-        init(
-            id: UUID = .init(),
-            supabaseUID: String,
-            email: String,
-            displayName: String? = nil,
-            userType: String = "trt",
-            createdAt: Date = .now,
-            updatedAt: Date = .now,
-            isSampleData: Bool = false
-        ) {
-            self.id = id
-            self.supabaseUID = supabaseUID
-            self.email = email
-            self.displayName = displayName
-            self.userType = userType
-            self.createdAt = createdAt
-            self.updatedAt = updatedAt
-            self.isSampleData = isSampleData
-        }
     }
 
     // MARK: SDProtocol
@@ -451,40 +415,6 @@ enum TroughSchemaV1: VersionedSchema {
         }
     }
 
-    // MARK: SDSyncConflict (local-only, never synced)
-
-    /// Records auto-resolved sync conflicts so the user can audit them.
-    @Model
-    final class SDSyncConflict {
-        @Attribute(.unique) var id: UUID
-        var recordID: UUID               // the conflicting record's ID
-        var tableName: String            // e.g. "checkins"
-        var localJSON: String            // JSON snapshot of local version
-        var remoteJSON: String           // JSON snapshot of remote version
-        var resolvedAt: Date             // when auto-resolution happened
-        var resolution: String           // e.g. "remote_wins", "local_wins"
-        var isReviewed: Bool             // user has seen/dismissed this conflict
-
-        init(
-            id: UUID = .init(),
-            recordID: UUID,
-            tableName: String,
-            localJSON: String,
-            remoteJSON: String,
-            resolvedAt: Date = .now,
-            resolution: String,
-            isReviewed: Bool = false
-        ) {
-            self.id = id
-            self.recordID = recordID
-            self.tableName = tableName
-            self.localJSON = localJSON
-            self.remoteJSON = remoteJSON
-            self.resolvedAt = resolvedAt
-            self.resolution = resolution
-            self.isReviewed = isReviewed
-        }
-    }
 }
 
     // MARK: SDGamificationState
@@ -695,7 +625,6 @@ enum TroughSchemaV1: VersionedSchema {
 
 // MARK: - Convenience Typealiases
 
-typealias SDUser                = TroughSchemaV1.SDUser
 typealias SDProtocol            = TroughSchemaV1.SDProtocol
 typealias SDInjection           = TroughSchemaV1.SDInjection
 typealias SDCheckin             = TroughSchemaV1.SDCheckin
@@ -703,7 +632,6 @@ typealias SDBloodwork           = TroughSchemaV1.SDBloodwork
 typealias SDBloodworkMarker     = TroughSchemaV1.SDBloodworkMarker
 typealias SDPeptideLog          = TroughSchemaV1.SDPeptideLog
 typealias SDSupplementConfig    = TroughSchemaV1.SDSupplementConfig
-typealias SDSyncConflict        = TroughSchemaV1.SDSyncConflict
 typealias SDGamificationState   = TroughSchemaV1.SDGamificationState
 typealias SDQuest              = TroughSchemaV1.SDQuest
 typealias SDBadge              = TroughSchemaV1.SDBadge

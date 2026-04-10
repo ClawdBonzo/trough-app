@@ -53,7 +53,7 @@ struct InjectionsView: View {
                 LogInjectionSheet(vm: vm)
             }
             .onAppear {
-                let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
+                let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
                 vm.gamificationVM = gamificationVM
             }

@@ -71,11 +71,14 @@ final class DailyCheckinViewModel: ObservableObject {
     private(set) var existingCheckin: SDCheckin? = nil
     let date: Date = Date.now.startOfDay
 
+    /// Injected by the parent view — used to award XP and update streaks on check-in save.
+    weak var gamificationVM: GamificationViewModel?
+
     // MARK: Setup
 
     func setup(context: ModelContext, userID: UUID) {
         self.modelContext = context
-        self.userID = SupabaseService.resolvedUserUUID ?? userID // FIXED: use real Supabase user ID
+        self.userID = userID
         loadExisting()
         loadCycleInfo()
         loadSupplements()
@@ -228,6 +231,15 @@ final class DailyCheckinViewModel: ObservableObject {
         }
         try? ctx.save()
 
+        // Gamification: award XP + update streak + complete quest (new check-ins only)
+        if let gvm = gamificationVM {
+            gvm.awardXP(20, reason: "daily_checkin")
+            gvm.updateStreak(type: "checkin")
+            gvm.completeQuest(QuestService.dailyCheckinQuestID())
+            // Check Protocol Score badge
+            BadgeService.checkProtocolScoreBadge(score: currentScore, context: ctx, userID: userID)
+        }
+
         if let kg = bwKg {
             Task { try? await HealthKitService.shared.writeBodyWeight(kg: kg, date: date) }
         }
@@ -244,6 +256,7 @@ final class DailyCheckinViewModel: ObservableObject {
                 Task { await WeeklyReportService.scheduleStreakDay7Notification(checkinCount: count) }
             }
         }
+
 
         // Analytics
         let dayInCycle = cycleInfo?.day

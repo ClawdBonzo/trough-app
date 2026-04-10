@@ -8,7 +8,6 @@ final class SettingsViewModel: ObservableObject {
     @Published var allSupplements: [SDSupplementConfig] = []    // all (for SupplementConfigView)
     @Published var showingAddProtocol = false
     @Published var showingAddSupplement = false
-    @Published var syncConflicts: [SDSyncConflict] = []
     @Published var isSyncing = false
     @Published var errorMessage: String?
 
@@ -49,7 +48,6 @@ final class SettingsViewModel: ObservableObject {
     static let presetNames: [String] = presets.map(\.name) + ["Custom"]
 
     private var modelContext: ModelContext!
-    private let syncEngine = SyncEngine.shared
     private(set) var userID: UUID = UUID()
 
     init() {}
@@ -76,11 +74,6 @@ final class SettingsViewModel: ObservableObject {
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
         )
         allSupplements = (try? modelContext.fetch(allSupplDesc)) ?? []
-
-        let conflictDesc = FetchDescriptor<SDSyncConflict>(
-            sortBy: [SortDescriptor(\.resolvedAt, order: .reverse)]
-        )
-        syncConflicts = (try? modelContext.fetch(conflictDesc)) ?? []
     }
 
     // MARK: - Protocol
@@ -114,7 +107,6 @@ final class SettingsViewModel: ObservableObject {
             try modelContext.save()
             showingAddProtocol = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -163,7 +155,6 @@ final class SettingsViewModel: ObservableObject {
             try modelContext.save()
             showingAddSupplement = false
             load()
-            syncEngine.triggerSync()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -196,25 +187,4 @@ final class SettingsViewModel: ObservableObject {
         load()
     }
 
-    // MARK: - Conflicts
-
-    func markConflictReviewed(_ c: SDSyncConflict) {
-        c.isReviewed = true
-        try? modelContext.save()
-        load()
-    }
-
-    // MARK: - Sign Out
-
-    func signOut() async {
-        do {
-            try await SupabaseService.shared.signOut()
-            UserDefaults.standard.set(false, forKey: "isAuthenticated")
-            UserDefaults.standard.set(false, forKey: "onboardingCompleted")
-            UserDefaults.standard.set(false, forKey: "hkPermissionRequested")
-            UserDefaults.standard.removeObject(forKey: "userIDString")
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
 }

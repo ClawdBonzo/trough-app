@@ -18,19 +18,17 @@
 		41DE374EBFEA44AC9FCA09E1 /* TroughTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */; };
 		43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E8DD8413C64082A81BB49A /* DisclaimerService.swift */; };
 		471D87D0674949C5ACC727B2 /* HapticSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68895EEF483945ECA13E505F /* HapticSlider.swift */; };
+		AA11BB22CC33DD44AA11BB33 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44AA11BB22 /* HapticManager.swift */; };
 		49404BD7AACB46A89F40B508 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E8486E1336492ABD4254F6 /* Extensions.swift */; };
 		535D44ECBF1D009FC96D57DF /* SplashWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD04416A6BCCD9429D1F4DB /* SplashWaveView.swift */; };
 		61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49BFE36059E4003B02441B5 /* HealthKitService.swift */; };
 		6512DAA45FCE4C72A6C1BF3A /* PeptidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BECDAEDC3994D1294FABFD9 /* PeptidesView.swift */; };
-		7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55107EFC75E74D0E97097A68 /* SyncEngine.swift */; };
-		7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90068C9514204B23A9A9F59E /* SupabaseService.swift */; };
 		80856F000BBF4844AA4648D4 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */; };
 		82E843F002F24380A93255C8 /* TroughMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21845092679249BE91F9C902 /* TroughMigrationPlan.swift */; };
 		8636F5E2C9CD4420A70EF5B5 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8663BF9EA184443DA308FD0E /* DashboardView.swift */; };
 		91D06458391E493BAFCE99B9 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */; };
 		9A89F955B10D44D0A128AFE9 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473FDDA8D28468F90567F47 /* CompletionView.swift */; };
 		9F5D55CE7E764F76807D7A0C /* InjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6700DE90AB24455083083527 /* InjectionsView.swift */; };
-		A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */; };
 		A5765172DC1A4C639882B9E9 /* PeptidesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495F474897E45968444B68F /* PeptidesViewModel.swift */; };
 		A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = EC01114F50764DA4AF3BF092 /* PostHog */; };
 		A7681EF0F90F432FB130F90B /* BloodworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */; };
@@ -56,7 +54,6 @@
 		EE1528F85B094B94A0CB00A5 /* TroughApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77403EEC9DAE42BAB03773FB /* TroughApp.swift */; };
 		EE220033FF440033EE22FF33 /* HealthKitPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */; };
 		EE80448A9C976CB2BE123720 /* ProjectedImprovementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465445D292FD493FB6F18F5C /* ProjectedImprovementView.swift */; };
-		'GOOG0011223344556677889901' = {isa = PBXBuildFile; fileRef = GOOG0011223344556677889900; };
 		'L10N001' = {isa = PBXBuildFile; fileRef = L10N002; };
 		'PL001' = {isa = PBXBuildFile; fileRef = PL002; };
 		'PL001ABUILDFILE000000' = {isa = PBXBuildFile; fileRef = PL001AFILEREF0000000000; };
@@ -72,6 +69,13 @@
 		'RC001122334455667788AA11' = {isa = PBXBuildFile; fileRef = RC001122334455667788AA22; };
 		'SC001BUILDFILE00000000' = {isa = PBXBuildFile; fileRef = SC001FILEREF0000000000; };
 		'SEC00112233445566778899AA' = {isa = PBXBuildFile; fileRef = SEC00112233445566778899BB; };
+		GMVM0002 /* GamificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = GMVM0001 /* GamificationViewModel.swift */; };
+		GMHV0002 /* GamificationHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GMHV0001 /* GamificationHomeView.swift */; };
+		LUVC0002 /* LevelUpCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = LUVC0001 /* LevelUpCelebrationView.swift */; };
+		QLST0002 /* QuestListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QLST0001 /* QuestListView.swift */; };
+		BCLV0002 /* BadgeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCLV0001 /* BadgeCollectionView.swift */; };
+		QSVC0002 /* QuestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = QSVC0001 /* QuestService.swift */; };
+		BSVC0002 /* BadgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BSVC0001 /* BadgeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,12 +86,12 @@
 		2B8F16387807402AA8FF9181 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		465445D292FD493FB6F18F5C /* ProjectedImprovementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProjectedImprovementView.swift; path = Trough/Features/Onboarding/ProjectedImprovementView.swift; sourceTree = SOURCE_ROOT; };
 		4FB9F88650304C6AB4F20F0F /* DailyCheckinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCheckinViewModel.swift; sourceTree = "<group>"; };
-		55107EFC75E74D0E97097A68 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		577D31A90D4A49AF8077E3ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BD04416A6BCCD9429D1F4DB /* SplashWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SplashWaveView.swift; path = Trough/Features/Onboarding/SplashWaveView.swift; sourceTree = SOURCE_ROOT; };
 		5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
 		6700DE90AB24455083083527 /* InjectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionsView.swift; sourceTree = "<group>"; };
 		68895EEF483945ECA13E505F /* HapticSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSlider.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44AA11BB22 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkViewModel.swift; sourceTree = "<group>"; };
 		7288B93B716541C89EF746DF /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		74E8486E1336492ABD4254F6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -97,11 +101,9 @@
 		8A5C4DE99347946B986BDAD9 /* PersonalizationLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonalizationLoaderView.swift; path = Trough/Features/Onboarding/PersonalizationLoaderView.swift; sourceTree = SOURCE_ROOT; };
 		8BECDAEDC3994D1294FABFD9 /* PeptidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptidesView.swift; sourceTree = "<group>"; };
 		8D004F1884913C720665C101 /* DiagnosticQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiagnosticQuizView.swift; path = Trough/Features/Onboarding/DiagnosticQuizView.swift; sourceTree = SOURCE_ROOT; };
-		90068C9514204B23A9A9F59E /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		91C366C041F44FE3BA72429B /* TroughSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughSchemaV1.swift; sourceTree = "<group>"; };
 		9473FDDA8D28468F90567F47 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
 		98E8DD8413C64082A81BB49A /* DisclaimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerService.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInCoordinator.swift; sourceTree = "<group>"; };
 		A42AECCC3A5D472BBE0E72A4 /* BinaryTapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTapsView.swift; sourceTree = "<group>"; };
 		A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionCycleService.swift; sourceTree = "<group>"; };
 		AB614DFAB48F49FAB6BCE712 /* ScoreRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScoreRevealView.swift; path = Trough/Features/Onboarding/ScoreRevealView.swift; sourceTree = SOURCE_ROOT; };
@@ -125,7 +127,6 @@
 		F72A5F6891E6486680F49CA1 /* Trough.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trough.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD5A16FB8C7B49F48FB0F21C /* DailyCheckinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCheckinView.swift; sourceTree = "<group>"; };
 		FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionView.swift; sourceTree = "<group>"; };
-		'GOOG0011223344556677889900' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInCoordinator.swift; sourceTree = "<group>"; };
 		'L10N003' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		'L10N004' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		'L10N005' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -143,6 +144,13 @@
 		'RC001122334455667788AA22' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		'SC001FILEREF0000000000' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementConfigView.swift; sourceTree = "<group>"; };
 		'SEC00112233445566778899BB' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		GMVM0001 /* GamificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationViewModel.swift; sourceTree = "<group>"; };
+		GMHV0001 /* GamificationHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationHomeView.swift; sourceTree = "<group>"; };
+		LUVC0001 /* LevelUpCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpCelebrationView.swift; sourceTree = "<group>"; };
+		QLST0001 /* QuestListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestListView.swift; sourceTree = "<group>"; };
+		BCLV0001 /* BadgeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCollectionView.swift; sourceTree = "<group>"; };
+		QSVC0001 /* QuestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestService.swift; sourceTree = "<group>"; };
+		BSVC0001 /* BadgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,11 +179,7 @@
 			children = (
 				5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */,
 				A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */,
-				90068C9514204B23A9A9F59E /* SupabaseService.swift */,
-				55107EFC75E74D0E97097A68 /* SyncEngine.swift */,
 				E49BFE36059E4003B02441B5 /* HealthKitService.swift */,
-				A1B2C3D4E5F60022A1B2C3D4 /* AppleSignInCoordinator.swift */,
-				GOOG0011223344556677889900,
 				SEC00112233445566778899BB,
 				98E8DD8413C64082A81BB49A /* DisclaimerService.swift */,
 				BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */,
@@ -186,6 +190,8 @@
 				PL004,
 				PL006,
 				CSV002,
+							QSVC0001 /* QuestService.swift */,
+				BSVC0001 /* BadgeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -245,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				68895EEF483945ECA13E505F /* HapticSlider.swift */,
+				AA11BB22CC33DD44AA11BB22 /* HapticManager.swift */,
 				74E8486E1336492ABD4254F6 /* Extensions.swift */,
 				BB11CC22DD440033BB11CC22 /* DisclaimerBanner.swift */,
 				PL008,
@@ -264,6 +271,7 @@
 				CC990011FF220099CC99FF11 /* Onboarding */,
 				RC001122334455667788AA33,
 				CSVIMP01,
+							GAMF0001 /* Gamification */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -372,6 +380,19 @@
 				PRFT001122334455667788B2,
 			);
 			path = Paywall;
+			sourceTree = "<group>";
+		};
+
+		GAMF0001 /* Gamification */ = {
+			isa = PBXGroup;
+			children = (
+				GMVM0001 /* GamificationViewModel.swift */,
+				GMHV0001 /* GamificationHomeView.swift */,
+				LUVC0001 /* LevelUpCelebrationView.swift */,
+				QLST0001 /* QuestListView.swift */,
+				BCLV0001 /* BadgeCollectionView.swift */,
+			);
+			path = Gamification;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -490,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				471D87D0674949C5ACC727B2 /* HapticSlider.swift in Sources */,
+				AA11BB22CC33DD44AA11BB33 /* HapticManager.swift in Sources */,
 				D753D23AF043408F93E68A3C /* InjectionCycleService.swift in Sources */,
 				91D06458391E493BAFCE99B9 /* InsightEngine.swift in Sources */,
 				18F49A5F058C41A89A751A5A /* BinaryTapsView.swift in Sources */,
@@ -499,10 +521,7 @@
 				1335C149E10345BAA59A8009 /* AppColors.swift in Sources */,
 				3ABDAE3FF8B94454A9092B09 /* TroughSchemaV1.swift in Sources */,
 				82E843F002F24380A93255C8 /* TroughMigrationPlan.swift in Sources */,
-				7D32A7555A064CD2B7A63EC3 /* SupabaseService.swift in Sources */,
-				7CE542C853354B8C981A2607 /* SyncEngine.swift in Sources */,
 				61BFD6814D1F49589E934A03 /* HealthKitService.swift in Sources */,
-				A1B2C3D4E5F60011A1B2C3D4 /* AppleSignInCoordinator.swift in Sources */,
 				GOOG0011223344556677889901,
 				SEC00112233445566778899AA,
 				43D0E87E0FCF4A94986F042D /* DisclaimerService.swift in Sources */,
@@ -547,6 +566,13 @@
 				3EA74F1AB90D33B620DE973F /* ScoreRevealView.swift in Sources */,
 				EE80448A9C976CB2BE123720 /* ProjectedImprovementView.swift in Sources */,
 				B6F24AF19999D87160D60EAD /* PersonalizationLoaderView.swift in Sources */,
+							GMVM0002 /* GamificationViewModel.swift in Sources */,
+				GMHV0002 /* GamificationHomeView.swift in Sources */,
+				LUVC0002 /* LevelUpCelebrationView.swift in Sources */,
+				QLST0002 /* QuestListView.swift in Sources */,
+				BCLV0002 /* BadgeCollectionView.swift in Sources */,
+				QSVC0002 /* QuestService.swift in Sources */,
+				BSVC0002 /* BadgeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

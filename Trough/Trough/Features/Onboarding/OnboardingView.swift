@@ -331,7 +331,7 @@ final class OnboardingViewModel: ObservableObject {
             mentalClarityScore: firstCheckinClarity
         )
         if let weight = Double(bodyWeightLbs), weight > 0 {
-            checkin.bodyWeightKg = Locale.usesMetricWeight ? weight : weight * 0.453592
+            checkin.bodyWeightKg = weight * 0.453592 // lbs to kg
         }
         if let bf = Double(bodyFatPercent), bf > 0 {
             checkin.bodyFatPercent = bf
@@ -375,8 +375,8 @@ final class OnboardingViewModel: ObservableObject {
 
         // Daily check-in reminder
         let checkinContent = UNMutableNotificationContent()
-        checkinContent.title = NSLocalizedString("notification.checkinTitle", comment: "")
-        checkinContent.body = NSLocalizedString("notification.checkinBody", comment: "")
+        checkinContent.title = "Time to check in"
+        checkinContent.body = "Log your energy, mood, and wellness for today."
         checkinContent.sound = .default
         var checkinComps = DateComponents()
         checkinComps.hour = hour
@@ -387,8 +387,8 @@ final class OnboardingViewModel: ObservableObject {
         // Per-compound reminders — ALL use calendar triggers at the user's chosen time
         for compound in compoundDoses {
             let content = UNMutableNotificationContent()
-            content.title = String(format: NSLocalizedString("notification.compoundDoseTitle", comment: ""), compound.name)
-            content.body = String(format: NSLocalizedString("notification.compoundDoseBody", comment: ""), compound.name, formatDose(compound.dose, unit: compound.unit))
+            content.title = "\(compound.name) dose"
+            content.body = "Time for \(compound.name) — \(formatDose(compound.dose, unit: compound.unit))"
             content.sound = .default
 
             if compound.frequencyDays == 1 {
@@ -521,43 +521,19 @@ final class OnboardingViewModel: ObservableObject {
     }
 }
 
-// MARK: - Onboarding Phase
-
-/// Commitment-hook screens shown before the setup flow.
-enum OnboardingPhase: Int, CaseIterable {
-    case splash = 0
-    case diagnosticQuiz
-    case scoreReveal
-    case projectedImprovement
-    case personalizationLoader
-    case setup   // handoff to the existing step-indexed setup flow
-}
-
 // MARK: - OnboardingView
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    @AppStorage("onboardingCompleted") private var onboardingCompleted = false
     @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
     @State private var showTrialPaywall = false
-    @State private var phase: OnboardingPhase = .splash
-
-    let onComplete: () -> Void
 
     @StateObject private var vm: OnboardingViewModel
 
-    init(onComplete: @escaping () -> Void) {
-        self.onComplete = onComplete
+    init() {
         _vm = StateObject(wrappedValue: OnboardingViewModel())
-    }
-
-    /// Total progress steps: 5 hook screens + 9 setup steps = 14
-    private var totalSteps: Int { 14 }
-    private var currentProgress: Int {
-        if phase == .setup {
-            return 5 + vm.stepIndex
-        }
-        return phase.rawValue
     }
 
     var body: some View {
@@ -565,108 +541,42 @@ struct OnboardingView: View {
             AppColors.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Progress bar (hidden on splash)
-                if phase != .splash {
-                    ProgressBar(current: currentProgress, total: totalSteps)
+                // Progress bar
+                if vm.stepIndex > 0 {
+                    ProgressBar(current: vm.stepIndex, total: 8)
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
                 }
 
-                // Phase content
-                switch phase {
-                case .splash:
-                    SplashWaveView(
-                        onContinue: { advancePhase() },
-                        onSkip: { skipToSetup() }
-                    )
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-
-                case .diagnosticQuiz:
-                    DiagnosticQuizView(
-                        energy: $vm.firstCheckinEnergy,
-                        mood: $vm.firstCheckinMood,
-                        libido: $vm.firstCheckinLibido,
-                        sleep: $vm.firstCheckinSleep,
-                        clarity: $vm.firstCheckinClarity,
-                        onContinue: { advancePhase() },
-                        onSkip: { skipToSetup() }
-                    )
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-
-                case .scoreReveal:
-                    ScoreRevealView(
-                        score: vm.firstProtocolScore,
-                        onContinue: { advancePhase() },
-                        onSkip: { skipToSetup() }
-                    )
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-
-                case .projectedImprovement:
-                    ProjectedImprovementView(
-                        currentScore: vm.firstProtocolScore,
-                        onContinue: { advancePhase() },
-                        onSkip: { skipToSetup() }
-                    )
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-
-                case .personalizationLoader:
-                    PersonalizationLoaderView(
-                        onComplete: { advancePhase() },
-                        onSkip: { skipToSetup() }
-                    )
-                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
-
-                case .setup:
-                    setupFlow
+                // Step content via TabView
+                TabView(selection: $vm.stepIndex) {
+                    AudienceStep(vm: vm).tag(0)
+                    ImportDataStep(vm: vm).tag(1)
+                    ProtocolSetupStep(vm: vm).tag(2)
+                    CompoundSelectStep(vm: vm).tag(3)
+                    CompoundDosesStep(vm: vm).tag(4)
+                    LastInjectionStep(vm: vm).tag(5)
+                    FirstCheckinStep(vm: vm).tag(6)
+                    HealthKitStep(vm: vm).tag(7)
+                    RemindersStep(vm: vm, onDone: {
+                        let uid = UUID(uuidString: userIDString) ?? UUID()
+                        vm.save(userID: uid)
+                        showTrialPaywall = true
+                    }).tag(8)
                 }
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
         .onAppear { vm.setup(context: modelContext) }
         .fullScreenCover(isPresented: $showTrialPaywall) {
             OnboardingTrialView(firstScore: vm.firstProtocolScore) {
-                onComplete()
+                onboardingCompleted = true
             }
         }
-    }
-
-    // MARK: - Setup flow (existing steps)
-
-    private var setupFlow: some View {
-        TabView(selection: $vm.stepIndex) {
-            AudienceStep(vm: vm).tag(0)
-            ImportDataStep(vm: vm).tag(1)
-            ProtocolSetupStep(vm: vm).tag(2)
-            CompoundSelectStep(vm: vm).tag(3)
-            CompoundDosesStep(vm: vm).tag(4)
-            LastInjectionStep(vm: vm).tag(5)
-            FirstCheckinStep(vm: vm).tag(6)
-            HealthKitStep(vm: vm).tag(7)
-            RemindersStep(vm: vm, onDone: {
-                let uid = SupabaseService.resolvedUserUUID ?? UUID()
-                vm.save(userID: uid)
-                showTrialPaywall = true
-            }).tag(8)
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .transition(.opacity.combined(with: .scale(scale: 0.95)))
-    }
-
-    // MARK: - Phase navigation
-
-    private func advancePhase() {
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-            if let next = OnboardingPhase(rawValue: phase.rawValue + 1) {
-                phase = next
-            }
-        }
-    }
-
-    private func skipToSetup() {
-        onComplete()
     }
 }
 
-// MARK: - Onboarding Trial Prompt (full-screen)
+// MARK: - Onboarding Trial Prompt (full-screen, no scroll)
 
 private struct OnboardingTrialView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
@@ -674,6 +584,9 @@ private struct OnboardingTrialView: View {
     @State private var isPurchasing = false
     @State private var errorMessage: String?
     @State private var selectedPlan: PlanType = .annual
+    @State private var scoreAppeared = false
+    @State private var contentAppeared = false
+
     let firstScore: Int
     let onContinue: () -> Void
 
@@ -681,13 +594,13 @@ private struct OnboardingTrialView: View {
 
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "trough_pro_monthly"
+            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.monthly"
         }
     }
 
     private var annualPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "trough_pro_annual"
+            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.yearly"
         }
     }
 
@@ -696,118 +609,94 @@ private struct OnboardingTrialView: View {
     }
 
     var body: some View {
-        ZStack {
-            AppColors.background.ignoresSafeArea()
+        GeometryReader { geo in
+            ZStack {
+                AppColors.background.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 24) {
-                    Spacer().frame(height: 20)
+                RadialGradient(
+                    colors: [AppColors.accent.opacity(0.15), Color.clear],
+                    center: .top,
+                    startRadius: 0,
+                    endRadius: geo.size.height * 0.6
+                )
+                .ignoresSafeArea()
 
-                    // Hero — show their first Protocol Score
-                    VStack(spacing: 10) {
+                VStack(spacing: 0) {
+                    Spacer(minLength: 0)
+
+                    // MARK: Score hero
+                    VStack(spacing: 8) {
                         ZStack {
                             Circle()
-                                .stroke(Color.white.opacity(0.1), lineWidth: 8)
-                                .frame(width: 100, height: 100)
+                                .stroke(Color.white.opacity(0.08), lineWidth: 10)
+                                .frame(width: 90, height: 90)
                             Circle()
-                                .trim(from: 0, to: CGFloat(firstScore) / 100.0)
-                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                                .frame(width: 100, height: 100)
+                                .trim(from: 0, to: scoreAppeared ? CGFloat(firstScore) / 100.0 : 0)
+                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: 90, height: 90)
                                 .rotationEffect(.degrees(-90))
+                                .animation(.spring(response: 1.0, dampingFraction: 0.7).delay(0.2), value: scoreAppeared)
                             Text("\(firstScore)")
-                                .font(.system(size: 36, weight: .black, design: .rounded))
+                                .font(.system(size: 30, weight: .black, design: .rounded))
                                 .foregroundColor(.white)
                         }
 
-                        Text(NSLocalizedString("scoreReveal.protocolScore", comment: ""))
-                            .font(.system(size: 24, weight: .black, design: .rounded))
+                        Text("Your Protocol Score")
+                            .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundColor(.white)
 
-                        Text(NSLocalizedString("onboarding.trialSubtitle", comment: ""))
+                        Text("Start your free trial to unlock full insights.")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
+                    .scaleEffect(scoreAppeared ? 1 : 0.8)
+                    .opacity(scoreAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.55, dampingFraction: 0.72), value: scoreAppeared)
 
-                    // What's included
-                    VStack(alignment: .leading, spacing: 10) {
-                        FeatureRow(icon: "waveform.path.ecg",        text: NSLocalizedString("paywall.featurePK", comment: ""))
-                        FeatureRow(icon: "chart.line.uptrend.xyaxis", text: NSLocalizedString("paywall.featureHistory", comment: ""))
-                        FeatureRow(icon: "drop.fill",                 text: NSLocalizedString("paywall.featureBloodwork", comment: ""))
-                        FeatureRow(icon: "chart.bar.doc.horizontal",  text: NSLocalizedString("paywall.featureReports", comment: ""))
-                        FeatureRow(icon: "brain.head.profile",        text: NSLocalizedString("paywall.featureAI", comment: ""))
-                        FeatureRow(icon: "pills.fill",                text: NSLocalizedString("paywall.featurePeptides", comment: ""))
+                    Spacer(minLength: 0)
+
+                    // MARK: Feature grid
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                        TrialFeatureCell(icon: "waveform.path.ecg",         text: "PK Curves")
+                        TrialFeatureCell(icon: "drop.fill",                  text: "Bloodwork")
+                        TrialFeatureCell(icon: "chart.line.uptrend.xyaxis",  text: "Full History")
+                        TrialFeatureCell(icon: "chart.bar.doc.horizontal",   text: "Weekly Reports")
+                        TrialFeatureCell(icon: "brain.head.profile",         text: "AI Insights")
+                        TrialFeatureCell(icon: "pills.fill",                 text: "GLP-1 & Peptides")
                     }
-                    .padding(16)
-                    .background(AppColors.card)
-                    .cornerRadius(16)
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 16)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.25), value: contentAppeared)
 
-                    // Plan selector
-                    HStack(spacing: 12) {
-                        // Monthly
-                        Button {
-                            selectedPlan = .monthly
-                        } label: {
-                            VStack(spacing: 6) {
-                                Text(NSLocalizedString("paywall.monthly", comment: ""))
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
-                                Text(monthlyPackage?.localizedPriceString ?? "$6.99")
-                                    .font(.title3.bold())
-                                    .foregroundColor(selectedPlan == .monthly ? .white : .secondary)
-                                Text(NSLocalizedString("paywall.perMonth", comment: ""))
-                                    .font(.caption2)
-                                    .foregroundColor(selectedPlan == .monthly ? .white.opacity(0.7) : .secondary.opacity(0.6))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(selectedPlan == .monthly ? AppColors.card : AppColors.card.opacity(0.4))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(selectedPlan == .monthly ? AppColors.accent : Color.clear, lineWidth: 2)
-                            )
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
+                    Spacer(minLength: 0)
 
-                        // Annual
-                        Button {
-                            selectedPlan = .annual
-                        } label: {
-                            VStack(spacing: 6) {
-                                HStack(spacing: 4) {
-                                    Text(NSLocalizedString("paywall.annual", comment: ""))
-                                        .font(.subheadline.bold())
-                                    Text(NSLocalizedString("paywall.save40", comment: ""))
-                                        .font(.caption2.bold())
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(AppColors.accent)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(4)
-                                }
-                                .foregroundColor(selectedPlan == .annual ? .white : .secondary)
-                                Text(annualPackage?.localizedPriceString ?? "$49.99")
-                                    .font(.title3.bold())
-                                    .foregroundColor(selectedPlan == .annual ? .white : .secondary)
-                                Text(NSLocalizedString("paywall.perYear", comment: ""))
-                                    .font(.caption2)
-                                    .foregroundColor(selectedPlan == .annual ? .white.opacity(0.7) : .secondary.opacity(0.6))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(selectedPlan == .annual ? AppColors.card : AppColors.card.opacity(0.4))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(selectedPlan == .annual ? AppColors.accent : Color.clear, lineWidth: 2)
-                            )
-                            .cornerRadius(12)
-                        }
-                        .buttonStyle(.plain)
+                    // MARK: Plan selector
+                    HStack(spacing: 10) {
+                        trialPlanButton(
+                            plan: .monthly,
+                            title: "Monthly",
+                            price: monthlyPackage?.localizedPriceString ?? "$6.99",
+                            period: "per month",
+                            badge: nil
+                        )
+                        trialPlanButton(
+                            plan: .annual,
+                            title: "Annual",
+                            price: annualPackage?.localizedPriceString ?? "$49.99",
+                            period: "per year",
+                            badge: "SAVE 40%"
+                        )
                     }
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.35), value: contentAppeared)
 
-                    // CTA
-                    VStack(spacing: 12) {
+                    Spacer(minLength: 0)
+
+                    // MARK: CTA
+                    VStack(spacing: 10) {
                         Button {
                             guard let pkg = selectedPackage else {
                                 onContinue()
@@ -819,7 +708,7 @@ private struct OnboardingTrialView: View {
                                 if isPurchasing {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text(NSLocalizedString("onboarding.startTrial", comment: ""))
+                                    Text("Start 14-Day Free Trial")
                                         .font(.headline)
                                         .foregroundColor(.white)
                                 }
@@ -839,42 +728,92 @@ private struct OnboardingTrialView: View {
                                 .multilineTextAlignment(.center)
                         }
 
-                        Button {
-                            onContinue()
-                        } label: {
-                            Text(NSLocalizedString("onboarding.maybeLater", comment: ""))
+                        Button { onContinue() } label: {
+                            Text("Maybe later")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
 
-                        Text(NSLocalizedString("onboarding.noCharge", comment: ""))
+                        Text("3-day free trial, then auto-renews. Cancel anytime.")
                             .font(.caption2)
-                            .foregroundColor(.secondary.opacity(0.6))
-                            .multilineTextAlignment(.center)
+                            .foregroundColor(.secondary.opacity(0.5))
 
                         HStack(spacing: 20) {
-                            Link(NSLocalizedString("paywall.privacy", comment: ""), destination: URL(string: "https://gettrough.app/privacy")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
-                            Link(NSLocalizedString("paywall.terms", comment: ""), destination: URL(string: "https://gettrough.app/terms")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.5))
-                            Button(NSLocalizedString("paywall.restore", comment: "")) {
+                            Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
+                            Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
+                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
+                            Button("Restore") {
                                 Task {
                                     _ = try? await RevenueCatService.shared.restorePurchases()
                                     await subscriptionManager.refresh()
                                     if subscriptionManager.isSubscribed { onContinue() }
                                 }
                             }
-                            .font(.caption2).foregroundColor(.secondary.opacity(0.5))
+                            .font(.caption2).foregroundColor(.secondary.opacity(0.4))
                         }
                     }
+                    .padding(.horizontal, 24)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.45), value: contentAppeared)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 20)
             }
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
         }
+        .onAppear {
+            scoreAppeared = true
+            contentAppeared = true
+        }
+    }
+
+    @ViewBuilder
+    private func trialPlanButton(
+        plan: PlanType,
+        title: String,
+        price: String,
+        period: String,
+        badge: String?
+    ) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                selectedPlan = plan
+            }
+        } label: {
+            VStack(spacing: 4) {
+                HStack(spacing: 4) {
+                    Text(title)
+                        .font(.subheadline.bold())
+                        .foregroundColor(selectedPlan == plan ? .white : .secondary)
+                    if let badge {
+                        Text(badge)
+                            .font(.system(size: 8, weight: .black))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(AppColors.accent)
+                            .clipShape(Capsule())
+                    }
+                }
+                Text(price)
+                    .font(.title3.bold())
+                    .foregroundColor(selectedPlan == plan ? .white : .secondary)
+                Text(period)
+                    .font(.caption2)
+                    .foregroundColor(selectedPlan == plan ? .white.opacity(0.6) : .secondary.opacity(0.5))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(AppColors.card)
+            .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(selectedPlan == plan ? AppColors.accent : Color.clear, lineWidth: 2)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func startTrial(package: Package) async {
@@ -885,13 +824,35 @@ private struct OnboardingTrialView: View {
             await subscriptionManager.refresh()
             onContinue()
         } catch {
-            if (error as NSError).code == 1 { // user cancelled
-                // Don't show error — they can tap "Maybe later"
-            } else {
+            if (error as NSError).code != 1 {
                 errorMessage = error.localizedDescription
             }
         }
         isPurchasing = false
+    }
+}
+
+// MARK: - TrialFeatureCell
+
+private struct TrialFeatureCell: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(AppColors.accent)
+                .frame(width: 18)
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.white)
+            Spacer()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .background(AppColors.card)
+        .cornerRadius(11)
     }
 }
 
@@ -954,7 +915,7 @@ private struct StepContainer<Content: View>: View {
                     }
                     if showBack, let back = onBack {
                         Button(action: back) {
-                            Text(NSLocalizedString("common.back", comment: ""))
+                            Text("Back")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -966,57 +927,155 @@ private struct StepContainer<Content: View>: View {
     }
 }
 
-// MARK: - Step 0: Audience
+// MARK: - Step 0: Audience (premium animated splash)
 
 private struct AudienceStep: View {
     @ObservedObject var vm: OnboardingViewModel
 
+    @State private var logoScale: CGFloat = 0.4
+    @State private var logoOpacity: Double = 0
+    @State private var glowOpacity: Double = 0
+    @State private var titleOffset: CGFloat = 24
+    @State private var titleOpacity: Double = 0
+    @State private var subtitleOpacity: Double = 0
+    @State private var button1Offset: CGFloat = 30
+    @State private var button1Opacity: Double = 0
+    @State private var button2Offset: CGFloat = 30
+    @State private var button2Opacity: Double = 0
+    @State private var ctaOpacity: Double = 0
+    @State private var ctaOffset: CGFloat = 20
+    @State private var pulsing = false
+
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            VStack(spacing: 32) {
-                VStack(spacing: 8) {
-                    Text("TROUGH")
-                        .font(.system(size: 40, weight: .black, design: .rounded))
-                        .foregroundColor(AppColors.accent)
-                    Text(NSLocalizedString("onboarding.whatBringsYou", comment: ""))
-                        .font(.title2.bold())
-                        .foregroundColor(.white)
-                    Text(NSLocalizedString("onboarding.personalizeExperience", comment: ""))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
+        GeometryReader { geo in
+            ZStack {
+                // Ambient glow behind logo
+                RadialGradient(
+                    colors: [AppColors.accent.opacity(0.22), Color.clear],
+                    center: UnitPoint(x: 0.5, y: 0.28),
+                    startRadius: 0,
+                    endRadius: geo.size.width * 0.55
+                )
+                .opacity(glowOpacity)
+                .ignoresSafeArea()
 
-                VStack(spacing: 14) {
-                    AudienceButton(
-                        title: NSLocalizedString("onboarding.imOnTRT", comment: ""),
-                        subtitle: NSLocalizedString("onboarding.trtSubtitle", comment: ""),
-                        icon: "syringe.fill",
-                        isSelected: vm.userType == "trt"
-                    ) { vm.userType = "trt" }
+                VStack(spacing: 0) {
+                    Spacer()
 
-                    AudienceButton(
-                        title: NSLocalizedString("onboarding.naturalTitle", comment: ""),
-                        subtitle: NSLocalizedString("onboarding.naturalSubtitle", comment: ""),
-                        icon: "figure.run",
-                        isSelected: vm.userType == "natural"
-                    ) { vm.userType = "natural" }
-                }
+                    // MARK: Logo — single source of truth
+                    ZStack {
+                        Circle()
+                            .fill(AppColors.accent.opacity(0.12))
+                            .frame(width: 92, height: 92)
+                            .scaleEffect(pulsing ? 1.12 : 1.0)
+                            .animation(
+                                .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
+                                value: pulsing
+                            )
 
-                Button(action: { vm.advance() }) {
-                    Text(NSLocalizedString("common.continue", comment: ""))
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.accent)
-                        .foregroundColor(.white)
-                        .cornerRadius(14)
+                        Image("AppIcon-Logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 72, height: 72)
+                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+                    .scaleEffect(logoScale)
+                    .opacity(logoOpacity)
+
+                    // MARK: Title — no duplicate text logo
+                    VStack(spacing: 6) {
+                        Text("What brings you here?")
+                            .font(.system(size: 26, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                        Text("This helps us personalize your experience.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 22)
+                    .offset(y: titleOffset)
+                    .opacity(titleOpacity)
+
+                    // MARK: Choices
+                    VStack(spacing: 14) {
+                        AudienceButton(
+                            title: "I'm on TRT",
+                            subtitle: "Track protocols, injections, and blood levels",
+                            icon: "syringe.fill",
+                            isSelected: vm.userType == "trt"
+                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "trt" } }
+                        .offset(y: button1Offset)
+                        .opacity(button1Opacity)
+
+                        AudienceButton(
+                            title: "Optimizing naturally",
+                            subtitle: "Track wellness, training, and supplements",
+                            icon: "figure.run",
+                            isSelected: vm.userType == "natural"
+                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "natural" } }
+                        .offset(y: button2Offset)
+                        .opacity(button2Opacity)
+                    }
+                    .padding(.top, 26)
+
+                    // MARK: CTA
+                    Button(action: { vm.advance() }) {
+                        Text("Continue")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.accent)
+                            .foregroundColor(.white)
+                            .cornerRadius(14)
+                    }
+                    .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .padding(.top, 28)
+                    .offset(y: ctaOffset)
+                    .opacity(ctaOpacity)
+
+                    Spacer()
                 }
-                .buttonStyle(.plain)  // FIXED: prevent SwiftUI button debounce
-                .contentShape(Rectangle())  // FIXED: ensure full tap area
+                .padding(.horizontal, 28)
             }
-            .padding(28)
+        }
+        .onAppear { runEntranceAnimation() }
+    }
+
+    private func runEntranceAnimation() {
+        // Logo: spring scale in
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.65).delay(0.05)) {
+            logoScale = 1.0
+            logoOpacity = 1.0
+        }
+        // Glow fade in
+        withAnimation(.easeIn(duration: 0.8).delay(0.1)) {
+            glowOpacity = 1.0
+        }
+        // Start pulse loop
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            pulsing = true
+        }
+        // Title slide up
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.25)) {
+            titleOffset = 0
+            titleOpacity = 1.0
+            subtitleOpacity = 1.0
+        }
+        // Button 1
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.72).delay(0.38)) {
+            button1Offset = 0
+            button1Opacity = 1.0
+        }
+        // Button 2
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.72).delay(0.48)) {
+            button2Offset = 0
+            button2Opacity = 1.0
+        }
+        // CTA
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.75).delay(0.58)) {
+            ctaOffset = 0
+            ctaOpacity = 1.0
         }
     }
 }
@@ -1065,21 +1124,21 @@ private struct ImportDataStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.haveData", comment: ""),
-            subtitle: NSLocalizedString("onboarding.importSubtitle", comment: ""),
+            title: "Have existing data?",
+            subtitle: "Import your tracking spreadsheet — we'll auto-map your columns.",
             content: {
                 VStack(spacing: 14) {
-                    OptionCard(icon: "doc.text", title: NSLocalizedString("onboarding.importSpreadsheet", comment: ""),
-                               subtitle: NSLocalizedString("onboarding.importCSV", comment: "")) {
+                    OptionCard(icon: "doc.text", title: "Import from spreadsheet",
+                               subtitle: "CSV, TSV — auto-detects columns & dates") {
                         showCSVImport = true
                     }
-                    OptionCard(icon: "sparkles", title: NSLocalizedString("onboarding.startFresh", comment: ""),
-                               subtitle: NSLocalizedString("onboarding.startFreshGuide", comment: "")) {
+                    OptionCard(icon: "sparkles", title: "Start fresh",
+                               subtitle: "We'll guide you through setup") {
                         vm.advance()
                     }
                 }
             },
-            primaryLabel: NSLocalizedString("onboarding.skipStartFresh", comment: ""),
+            primaryLabel: "Skip — start fresh",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
@@ -1129,12 +1188,12 @@ private struct ProtocolSetupStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.yourProtocol", comment: ""),
-            subtitle: NSLocalizedString("onboarding.protocolSubtitle", comment: ""),
+            title: "Your protocol",
+            subtitle: "We'll use this to track your blood levels and schedule.",
             content: {
                 VStack(spacing: 20) {
                     // Primary compound
-                    FormCard(title: NSLocalizedString("onboarding.primaryCompound", comment: "")) {
+                    FormCard(title: "Primary Compound") {
                         Picker("Compound", selection: $vm.primaryCompound) {
                             ForEach(OnboardingViewModel.primaryCompounds, id: \.self) {
                                 Text($0).tag($0)
@@ -1146,18 +1205,18 @@ private struct ProtocolSetupStep: View {
                         Divider().background(Color.white.opacity(0.07))
 
                         HStack {
-                            Text(NSLocalizedString("common.dose", comment: ""))
+                            Text("Dose")
                             Spacer()
-                            TextField(NSLocalizedString("common.mg", comment: ""), value: $vm.primaryDoseMg, format: .number)
+                            TextField("mg", value: $vm.primaryDoseMg, format: .number)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                                 .frame(width: 80)
-                            Text(NSLocalizedString("common.mg", comment: "")).foregroundColor(.secondary)
+                            Text("mg").foregroundColor(.secondary)
                         }
 
                         Divider().background(Color.white.opacity(0.07))
 
-                        Picker(NSLocalizedString("onboarding.frequency", comment: ""), selection: $vm.primaryFreqIndex) {
+                        Picker("Frequency", selection: $vm.primaryFreqIndex) {
                             ForEach(OnboardingViewModel.frequencies.indices, id: \.self) { i in
                                 Text(OnboardingViewModel.frequencies[i].label).tag(i)
                             }
@@ -1168,7 +1227,7 @@ private struct ProtocolSetupStep: View {
                         if vm.showWeekdayPicker {
                             Divider().background(Color.white.opacity(0.07))
                             VStack(alignment: .leading, spacing: 8) {
-                                Text(NSLocalizedString("onboarding.injectionDays", comment: ""))
+                                Text("Injection days")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack(spacing: 6) {
@@ -1204,14 +1263,14 @@ private struct ProtocolSetupStep: View {
                     }
 
                     // Secondary compounds
-                    Toggle(NSLocalizedString("onboarding.addSecondary", comment: ""), isOn: $vm.addSecondary.animation())
+                    Toggle("Add secondary compound", isOn: $vm.addSecondary.animation())
                         .tint(AppColors.accent)
                         .font(.subheadline)
                         .foregroundColor(.white)
 
                     if vm.addSecondary {
                         if vm.secondaryEntries.isEmpty {
-                            Button(NSLocalizedString("onboarding.addCompound", comment: "")) {
+                            Button("Add compound") {
                                 vm.addSecondaryEntry()
                             }
                             .font(.subheadline)
@@ -1221,7 +1280,7 @@ private struct ProtocolSetupStep: View {
                             SecondaryCompoundCard(entry: $entry)
                         }
                         if vm.secondaryEntries.count < 2 {
-                            Button(NSLocalizedString("onboarding.addAnother", comment: "")) {
+                            Button("+ Add another") {
                                 vm.addSecondaryEntry()
                             }
                             .font(.caption)
@@ -1230,7 +1289,7 @@ private struct ProtocolSetupStep: View {
                     }
                 }
             },
-            primaryLabel: NSLocalizedString("common.next", comment: ""),
+            primaryLabel: "Next",
             onPrimary: {
                 vm.lastInjectionDates[vm.primaryCompound] = vm.lastInjectionDates[vm.primaryCompound] ?? .now
                 for entry in vm.secondaryEntries {
@@ -1248,7 +1307,7 @@ private struct SecondaryCompoundCard: View {
     @Binding var entry: SecondaryCompoundEntry
 
     var body: some View {
-        FormCard(title: NSLocalizedString("onboarding.secondaryCompound", comment: "")) {
+        FormCard(title: "Secondary Compound") {
             HStack {
                 Circle().fill(Color(hex: entry.colorHex)).frame(width: 10, height: 10)
                 Picker("Compound", selection: $entry.compoundName) {
@@ -1261,13 +1320,13 @@ private struct SecondaryCompoundCard: View {
             }
             Divider().background(Color.white.opacity(0.07))
             HStack {
-                Text(NSLocalizedString("common.dose", comment: ""))
+                Text("Dose")
                 Spacer()
-                TextField(NSLocalizedString("common.mg", comment: ""), value: $entry.doseMg, format: .number)
+                TextField("mg", value: $entry.doseMg, format: .number)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 80)
-                Text(entry.compoundName == "HCG" ? "IU" : NSLocalizedString("common.mg", comment: ""))
+                Text(entry.compoundName == "HCG" ? "IU" : "mg")
                     .foregroundColor(.secondary)
             }
         }
@@ -1302,8 +1361,8 @@ private struct CompoundSelectStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.whatElse", comment: ""),
-            subtitle: NSLocalizedString("onboarding.tapAllApply", comment: ""),
+            title: "What else are you taking?",
+            subtitle: "Tap all that apply. You can always add more later.",
             content: {
                 VStack(alignment: .leading, spacing: 20) {
                     ForEach(OnboardingViewModel.compoundCategories) { category in
@@ -1332,7 +1391,7 @@ private struct CompoundSelectStep: View {
                     }.sorted()
                     if !customNames.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(NSLocalizedString("common.custom", comment: ""))
+                            Text("Custom")
                                 .font(.caption.bold())
                                 .foregroundColor(.secondary)
                                 .textCase(.uppercase)
@@ -1349,12 +1408,12 @@ private struct CompoundSelectStep: View {
                     // Add custom button / field
                     if showCustomField {
                         HStack {
-                            TextField(NSLocalizedString("onboarding.compoundName", comment: ""), text: $vm.customCompoundName)
+                            TextField("Compound name", text: $vm.customCompoundName)
                                 .padding(10)
                                 .background(AppColors.background)
                                 .cornerRadius(8)
                                 .foregroundColor(.white)
-                            Button(NSLocalizedString("common.add", comment: "")) {
+                            Button("Add") {
                                 vm.addCustomCompound()
                                 if vm.customCompoundName.isEmpty {
                                     showCustomField = false
@@ -1369,7 +1428,7 @@ private struct CompoundSelectStep: View {
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "plus.circle.fill")
-                                Text(NSLocalizedString("onboarding.addCustomCompound", comment: ""))
+                                Text("Add custom compound")
                             }
                             .font(.subheadline)
                             .foregroundColor(AppColors.accent)
@@ -1380,7 +1439,7 @@ private struct CompoundSelectStep: View {
                         HStack(spacing: 6) {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green)
-                            Text(String(format: NSLocalizedString("onboarding.selected", comment: ""), vm.selectedCompounds.count))
+                            Text("\(vm.selectedCompounds.count) selected")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -1388,7 +1447,7 @@ private struct CompoundSelectStep: View {
                     }
                 }
             },
-            primaryLabel: vm.selectedCompounds.isEmpty ? NSLocalizedString("common.skip", comment: "") : NSLocalizedString("common.next", comment: ""),
+            primaryLabel: vm.selectedCompounds.isEmpty ? "Skip" : "Next",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
@@ -1467,14 +1526,14 @@ private struct CompoundDosesStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.setDoses", comment: ""),
-            subtitle: NSLocalizedString("onboarding.dosesSubtitle", comment: ""),
+            title: "Set your doses",
+            subtitle: "We pre-filled typical doses and schedules — adjust as needed.",
             content: {
                 VStack(spacing: 14) {
                     ForEach($vm.compoundDoses) { $compound in
                         FormCard(title: compound.name) {
                             HStack {
-                                Text(NSLocalizedString("common.dose", comment: ""))
+                                Text("Dose")
                                 Spacer()
                                 TextField(compound.unit, value: $compound.dose, format: .number)
                                     .keyboardType(.decimalPad)
@@ -1486,7 +1545,7 @@ private struct CompoundDosesStep: View {
 
                             Divider().background(Color.white.opacity(0.07))
 
-                            Picker(NSLocalizedString("onboarding.schedule", comment: ""), selection: $compound.frequencyDays) {
+                            Picker("Schedule", selection: $compound.frequencyDays) {
                                 ForEach(OnboardingViewModel.compoundFrequencyOptions, id: \.days) { opt in
                                     Text(opt.label).tag(opt.days)
                                 }
@@ -1496,13 +1555,13 @@ private struct CompoundDosesStep: View {
                         }
                     }
 
-                    Text(NSLocalizedString("onboarding.dosesReminder", comment: ""))
+                    Text("We'll send reminders based on each compound's schedule.")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
             },
-            primaryLabel: NSLocalizedString("common.next", comment: ""),
+            primaryLabel: "Next",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
@@ -1523,14 +1582,14 @@ private struct LastInjectionStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.lastInjection", comment: ""),
-            subtitle: NSLocalizedString("onboarding.lastInjectionSubtitle", comment: ""),
+            title: "Last injection",
+            subtitle: "We'll start your PK curve from this date.",
             content: {
                 VStack(spacing: 14) {
                     ForEach(compounds, id: \.self) { compound in
                         FormCard(title: compound) {
                             DatePicker(
-                                NSLocalizedString("onboarding.dateAndTime", comment: ""),
+                                "Date & time",
                                 selection: Binding(
                                     get: { vm.lastInjectionDates[compound] ?? .now },
                                     set: { vm.lastInjectionDates[compound] = $0 }
@@ -1543,7 +1602,7 @@ private struct LastInjectionStep: View {
                     }
                 }
             },
-            primaryLabel: NSLocalizedString("common.next", comment: ""),
+            primaryLabel: "Next",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
@@ -1566,22 +1625,22 @@ private struct RemindersStep: View {
     /// Frequency label for a compound based on its frequencyDays
     private func freqLabel(for compound: OnboardingViewModel.SelectedCompound) -> String {
         switch compound.frequencyDays {
-        case 1:  return NSLocalizedString("frequency.daily", comment: "")
-        case 2:  return NSLocalizedString("frequency.everyOtherDay", comment: "")
-        case 3:  return NSLocalizedString("frequency.every3Days", comment: "")
-        case 7:  return NSLocalizedString("frequency.weekly", comment: "")
-        case 14: return NSLocalizedString("frequency.every2Weeks", comment: "")
-        default: return String(format: NSLocalizedString("frequency.everyNDays", comment: ""), compound.frequencyDays)
+        case 1:  return "Daily"
+        case 2:  return "Every other day"
+        case 3:  return "Every 3 days"
+        case 7:  return "Weekly"
+        case 14: return "Every 2 weeks"
+        default: return "Every \(compound.frequencyDays) days"
         }
     }
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.reminders", comment: ""),
-            subtitle: NSLocalizedString("onboarding.remindersSubtitle", comment: ""),
+            title: "Reminders",
+            subtitle: "Get a nudge to log check-ins, injections, or peptides.",
             content: {
                 VStack(spacing: 16) {
-                    Toggle(NSLocalizedString("onboarding.enableReminders", comment: ""), isOn: $vm.reminderEnabled)
+                    Toggle("Enable reminders", isOn: $vm.reminderEnabled)
                         .tint(AppColors.accent)
                         .font(.subheadline)
                         .foregroundColor(.white)
@@ -1589,14 +1648,14 @@ private struct RemindersStep: View {
                     if vm.reminderEnabled {
                         // Mode toggle: simple vs per-compound
                         Picker("Reminder mode", selection: $vm.reminderMode) {
-                            Text(NSLocalizedString("onboarding.sameTimeAll", comment: "")).tag("simple")
-                            Text(NSLocalizedString("onboarding.perCompound", comment: "")).tag("perCompound")
+                            Text("Same time for all").tag("simple")
+                            Text("Per compound").tag("perCompound")
                         }
                         .pickerStyle(.segmented)
 
                         if vm.reminderMode == "simple" {
                             // ── Simple mode: one frequency + one time ──
-                            FormCard(title: NSLocalizedString("onboarding.reminderFrequency", comment: "")) {
+                            FormCard(title: "Frequency") {
                                 Picker("How often", selection: $vm.reminderFreqIndex) {
                                     ForEach(OnboardingViewModel.reminderFrequencies.indices, id: \.self) { i in
                                         Text(OnboardingViewModel.reminderFrequencies[i].label).tag(i)
@@ -1608,7 +1667,7 @@ private struct RemindersStep: View {
                                 if showCustomDays {
                                     Divider().background(Color.white.opacity(0.07))
                                     VStack(alignment: .leading, spacing: 8) {
-                                        Text(NSLocalizedString("onboarding.selectDays", comment: ""))
+                                        Text("Select days")
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                         HStack(spacing: 6) {
@@ -1634,13 +1693,13 @@ private struct RemindersStep: View {
                                 }
                             }
 
-                            FormCard(title: NSLocalizedString("onboarding.reminderTime", comment: "")) {
+                            FormCard(title: "Reminder time") {
                                 DatePicker("Time", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
                                     .tint(AppColors.accent)
                             }
                         } else {
                             // ── Per-compound mode: each compound gets its own time ──
-                            FormCard(title: NSLocalizedString("onboarding.dailyCheckin", comment: "")) {
+                            FormCard(title: "Daily check-in") {
                                 DatePicker("Check-in reminder", selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
                                     .tint(AppColors.accent)
                             }
@@ -1661,7 +1720,7 @@ private struct RemindersStep: View {
                             }
 
                             // Show TRT protocol reminder too
-                            FormCard(title: vm.autoProtocolName.isEmpty ? NSLocalizedString("onboarding.trtInjection", comment: "") : vm.autoProtocolName) {
+                            FormCard(title: vm.autoProtocolName.isEmpty ? "TRT Injection" : vm.autoProtocolName) {
                                 HStack {
                                     Text(vm.primaryFreq.label)
                                         .font(.caption)
@@ -1674,12 +1733,12 @@ private struct RemindersStep: View {
                         }
                     }
 
-                    Text(NSLocalizedString("onboarding.changeInSettings", comment: ""))
+                    Text("You can always change this in Settings.")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
             },
-            primaryLabel: NSLocalizedString("onboarding.getStarted", comment: ""),
+            primaryLabel: "Get started",
             onPrimary: { onDone() },
             showBack: true,
             onBack: { vm.back() }
@@ -1694,8 +1753,8 @@ private struct FirstCheckinStep: View {
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.howFeeling", comment: ""),
-            subtitle: NSLocalizedString("onboarding.firstCheckinSubtitle", comment: ""),
+            title: "How are you feeling?",
+            subtitle: "Your first check-in. This creates your Protocol Score.",
             content: {
                 VStack(spacing: 20) {
                     MetricSlider(label: "⚡ Energy", value: $vm.firstCheckinEnergy)
@@ -1706,22 +1765,22 @@ private struct FirstCheckinStep: View {
 
                     // Body metrics
                     VStack(spacing: 12) {
-                        Text(NSLocalizedString("onboarding.bodyMetrics", comment: ""))
+                        Text("BODY METRICS")
                             .font(.caption.bold())
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(NSLocalizedString("onboarding.weight", comment: ""))
+                                Text("Weight")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack {
-                                    TextField(Locale.usesMetricWeight ? "84" : "185", text: $vm.bodyWeightLbs)
+                                    TextField("185", text: $vm.bodyWeightLbs)
                                         .keyboardType(.decimalPad)
                                         .font(.title3.bold())
                                         .foregroundColor(.white)
-                                    Text(Locale.weightUnit)
+                                    Text("lbs")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -1731,7 +1790,7 @@ private struct FirstCheckinStep: View {
                             .cornerRadius(10)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(NSLocalizedString("onboarding.bodyFat", comment: ""))
+                                Text("Body Fat")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack {
@@ -1753,7 +1812,7 @@ private struct FirstCheckinStep: View {
                     // Live Protocol Score preview
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("onboarding.protocolScoreLabel", comment: ""))
+                            Text("Protocol Score")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Text("\(vm.firstProtocolScore)")
@@ -1761,7 +1820,7 @@ private struct FirstCheckinStep: View {
                                 .foregroundColor(AppColors.accent)
                         }
                         Spacer()
-                        Text(NSLocalizedString("onboarding.outOf100", comment: ""))
+                        Text("/ 100")
                             .font(.title3)
                             .foregroundColor(.secondary)
                     }
@@ -1770,7 +1829,7 @@ private struct FirstCheckinStep: View {
                     .cornerRadius(14)
                 }
             },
-            primaryLabel: NSLocalizedString("common.next", comment: ""),
+            primaryLabel: "Next",
             onPrimary: { vm.advance() },
             showBack: true,
             onBack: { vm.back() }
@@ -1803,40 +1862,26 @@ private struct MetricSlider: View {
 private struct HealthKitStep: View {
     @ObservedObject var vm: OnboardingViewModel
     @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
-    @State private var alreadyDetermined = false
 
     var body: some View {
         StepContainer(
-            title: NSLocalizedString("onboarding.superchargeHK", comment: ""),
-            subtitle: NSLocalizedString("onboarding.hkSubtitle", comment: ""),
+            title: "Supercharge with HealthKit",
+            subtitle: "Automatically track sleep, steps, and heart rate variability.",
             content: {
                 VStack(spacing: 16) {
-                    HKFeatureRow(icon: "bed.double.fill", title: NSLocalizedString("onboarding.hkSleep", comment: ""), desc: NSLocalizedString("onboarding.hkSleepDesc", comment: ""))
-                    HKFeatureRow(icon: "figure.walk", title: NSLocalizedString("onboarding.hkSteps", comment: ""), desc: NSLocalizedString("onboarding.hkStepsDesc", comment: ""))
-                    HKFeatureRow(icon: "heart.fill", title: NSLocalizedString("onboarding.hkHRV", comment: ""), desc: NSLocalizedString("onboarding.hkHRVDesc", comment: ""))
-                    HKFeatureRow(icon: "scalemass.fill", title: NSLocalizedString("onboarding.hkWeight", comment: ""), desc: NSLocalizedString("onboarding.hkWeightDesc", comment: ""))
+                    HKFeatureRow(icon: "bed.double.fill", title: "Sleep", desc: "Auto-log sleep duration & quality")
+                    HKFeatureRow(icon: "figure.walk", title: "Steps", desc: "Daily activity without manual entry")
+                    HKFeatureRow(icon: "heart.fill", title: "HRV", desc: "Heart rate variability for recovery insights")
+                    HKFeatureRow(icon: "scalemass.fill", title: "Body Weight", desc: "Sync from your smart scale")
 
-                    Text(NSLocalizedString("onboarding.hkPrivacy", comment: ""))
+                    Text("Your data stays on-device. We never share it.")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.top, 8)
-
-                    if alreadyDetermined {
-                        Button {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
-                            Text(NSLocalizedString("onboarding.hkAlreadySet", comment: ""))
-                                .font(.caption)
-                                .foregroundColor(AppColors.accent)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
                 }
             },
-            primaryLabel: alreadyDetermined ? NSLocalizedString("common.continue", comment: "") : NSLocalizedString("onboarding.enableHK", comment: ""),
+            primaryLabel: "Enable HealthKit",
             onPrimary: {
                 Task {
                     try? await HealthKitService.shared.requestPermissions()
@@ -1847,10 +1892,6 @@ private struct HealthKitStep: View {
             showBack: true,
             onBack: { vm.back() }
         )
-        .onAppear {
-            let status = HealthKitService.shared.authorizationStatus
-            alreadyDetermined = (status != .notDetermined)
-        }
     }
 }
 

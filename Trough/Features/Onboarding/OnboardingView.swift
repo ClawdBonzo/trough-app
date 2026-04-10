@@ -353,7 +353,6 @@ final class OnboardingViewModel: ObservableObject {
         }
 
         try? ctx.save()
-        SyncEngine.shared.triggerSync()
 
         // NOTE: Do NOT set onboardingCompleted here.
         // It must be set AFTER the trial prompt screen is shown/dismissed,
@@ -560,7 +559,7 @@ struct OnboardingView: View {
                     FirstCheckinStep(vm: vm).tag(6)
                     HealthKitStep(vm: vm).tag(7)
                     RemindersStep(vm: vm, onDone: {
-                        let uid = SupabaseService.resolvedUserUUID ?? UUID() // FIXED: use real Supabase user ID
+                        let uid = UUID(uuidString: userIDString) ?? UUID()
                         vm.save(userID: uid)
                         showTrialPaywall = true
                     }).tag(8)
