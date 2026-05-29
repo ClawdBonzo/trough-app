@@ -739,9 +739,9 @@ private struct OnboardingTrialView: View {
                             .foregroundColor(.secondary.opacity(0.5))
 
                         HStack(spacing: 20) {
-                            Link("Privacy", destination: URL(string: "https://gettrough.app/privacy")!)
+                            Link("Privacy", destination: URL(string: "https://gwlabs.app/privacy")!)
                                 .font(.caption2).foregroundColor(.secondary.opacity(0.4))
-                            Link("Terms", destination: URL(string: "https://gettrough.app/terms")!)
+                            Link("Terms", destination: URL(string: "https://gwlabs.app/terms")!)
                                 .font(.caption2).foregroundColor(.secondary.opacity(0.4))
                             Button("Restore") {
                                 Task {

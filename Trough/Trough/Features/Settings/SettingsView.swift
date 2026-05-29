@@ -277,11 +277,11 @@ struct SettingsView: View {
 
     private var legalSection: some View {
         Section("Privacy & Legal") {
-            Link(destination: URL(string: "https://gettrough.app/privacy") ?? URL(string: "https://gettrough.app")!) {
+            Link(destination: URL(string: "https://gwlabs.app/privacy") ?? URL(string: "https://gwlabs.app")!) {
                 Label("Privacy & Data Policy", systemImage: "lock.shield")
             }
             .foregroundColor(.primary)
-            Link(destination: URL(string: "https://gettrough.app/terms") ?? URL(string: "https://gettrough.app")!) {
+            Link(destination: URL(string: "https://gwlabs.app/terms") ?? URL(string: "https://gwlabs.app")!) {
                 Label("Terms of Use", systemImage: "doc.text")
             }
             .foregroundColor(.primary)

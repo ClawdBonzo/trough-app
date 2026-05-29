@@ -41,12 +41,12 @@ struct PrivacyPolicyView: View {
                         Text("Full Policy & Terms")
                             .font(.headline)
                             .foregroundColor(.white)
-                        Link("Privacy Policy → gettrough.app/privacy",
-                             destination: URL(string: "https://gettrough.app/privacy")!)
+                        Link("Privacy Policy → gwlabs.app/privacy",
+                             destination: URL(string: "https://gwlabs.app/privacy")!)
                             .font(.subheadline)
                             .foregroundColor(AppColors.accent)
-                        Link("Terms of Use → gettrough.app/terms",
-                             destination: URL(string: "https://gettrough.app/terms")!)
+                        Link("Terms of Use → gwlabs.app/terms",
+                             destination: URL(string: "https://gwlabs.app/terms")!)
                             .font(.subheadline)
                             .foregroundColor(AppColors.accent)
                     }

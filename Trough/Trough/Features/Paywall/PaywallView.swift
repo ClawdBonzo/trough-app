@@ -303,11 +303,11 @@ struct PaywallView: View {
             }
             .buttonStyle(.plain)
 
-            if let url = URL(string: "https://gettrough.app/privacy") {
+            if let url = URL(string: "https://gwlabs.app/privacy") {
                 Link("Privacy", destination: url)
                     .font(.caption).foregroundColor(.secondary)
             }
-            if let url = URL(string: "https://gettrough.app/terms") {
+            if let url = URL(string: "https://gwlabs.app/terms") {
                 Link("Terms", destination: url)
                     .font(.caption).foregroundColor(.secondary)
             }
