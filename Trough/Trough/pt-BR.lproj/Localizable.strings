@@ -492,18 +492,18 @@
    Privacy Policy
    ═══════════════════════════════════════════════════════════════ */
 "privacy.title" = "Privacidade e Dados";
-"privacy.dataYours" = "Seus Dados Sao Seus";
-"privacy.dataYoursDesc" = "Todos os seus check-ins, injecoes e dados de protocolo sao armazenados localmente no seu dispositivo primeiro. A sincronizacao com nossos servidores acontece apenas quando voce esta online e somente para fazer backup dos seus dados.";
-"privacy.hkPrivacy" = "Dados do HealthKit Nunca Saem do Seu Dispositivo";
-"privacy.hkPrivacyDesc" = "HRV, sono, passos e FC em repouso sao lidos do HealthKit para preencher automaticamente seu check-in. Esses dados nunca sao transmitidos para nossos servidores e nunca sao compartilhados com terceiros.";
+"privacy.dataYours" = "Seus Dados Nunca Saem do Seu Dispositivo";
+"privacy.dataYoursDesc" = "Todos os seus check-ins, injecoes, exames de sangue e dados de protocolo sao armazenados apenas neste dispositivo. Nao ha conta nem nuvem — nada e enviado para um servidor.";
+"privacy.hkPrivacy" = "HealthKit Permanece Privado";
+"privacy.hkPrivacyDesc" = "HRV, sono, passos e FC em repouso sao lidos do HealthKit para preencher automaticamente seu check-in. Esses dados nunca saem do seu dispositivo e nunca sao compartilhados com terceiros.";
 "privacy.photos" = "Fotos de Exames de Sangue";
-"privacy.photosDesc" = "Fotos de resultados de laboratorio sao enviadas para o Supabase Storage seguro e criptografado com seguranca em nivel de linha. Somente voce pode acessar suas fotos — nenhum funcionario do Trough ou terceiro pode visualiza-las.";
-"privacy.sync" = "Sincronizacao Criptografada";
-"privacy.syncDesc" = "Ao sincronizar com nossos servidores, todos os dados sao transmitidos via HTTPS. Sua conta e protegida pelo Supabase Auth. Armazenamos apenas os dados necessarios para fornecer o servico.";
-"privacy.noSell" = "Nao Vendemos Seus Dados";
-"privacy.noSellDesc" = "Seus dados de saude nunca sao vendidos, alugados ou compartilhados com anunciantes. Usamos analytics focados em privacidade (PostHog) apenas para entender o uso de funcionalidades e melhorar o app. Nenhum dado pessoal de saude e incluido em eventos de analytics.";
+"privacy.photosDesc" = "Fotos de resultados de laboratorio sao armazenadas apenas no seu dispositivo. Elas nunca sao enviadas para lugar nenhum, e ninguem alem de voce pode ve-las.";
+"privacy.sync" = "Sem Analytics, Sem Rastreamento";
+"privacy.syncDesc" = "O Trough nao tem analytics nem rastreamento. Nao coletamos nada sobre como voce usa o app, e seus dados nunca sao vendidos, alugados ou compartilhados com ninguem.";
+"privacy.noSell" = "Sem Analytics, Sem Rastreamento";
+"privacy.noSellDesc" = "O Trough nao tem analytics nem rastreamento. Nao coletamos nada sobre como voce usa o app, e seus dados nunca sao vendidos, alugados ou compartilhados com ninguem.";
 "privacy.deletion" = "Exclusao de Dados";
-"privacy.deletionDesc" = "Voce pode excluir sua conta e todos os dados associados a qualquer momento entrando em contato com support@gettrough.app. A exclusao e permanente e irreversivel.";
+"privacy.deletionDesc" = "Voce pode excluir qualquer entrada a qualquer momento. Como tudo fica no seu dispositivo, excluir o app apaga todos os seus dados de forma permanente e irreversivel.";
 "privacy.fullPolicy" = "Politica Completa e Termos";
 
 /* ═══════════════════════════════════════════════════════════════

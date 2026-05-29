@@ -164,7 +164,6 @@ struct PaywallView: View {
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
-            AnalyticsService.paywallShown()
         }
         .onChange(of: purchaseSuccess) { _, v in if v { dismiss() } }
         .onChange(of: restoreSuccess) { _, v in if v { dismiss() } }
@@ -325,7 +324,6 @@ struct PaywallView: View {
             _ = try await RevenueCatService.shared.purchase(package: package)
             await subscriptionManager.refresh()
             if subscriptionManager.isSubscribed {
-                AnalyticsService.paywallConverted(productID: package.storeProduct.productIdentifier)
                 purchaseSuccess = true
                 return
             }

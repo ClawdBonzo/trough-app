@@ -30,7 +30,6 @@
 		9A89F955B10D44D0A128AFE9 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473FDDA8D28468F90567F47 /* CompletionView.swift */; };
 		9F5D55CE7E764F76807D7A0C /* InjectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6700DE90AB24455083083527 /* InjectionsView.swift */; };
 		A5765172DC1A4C639882B9E9 /* PeptidesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2495F474897E45968444B68F /* PeptidesViewModel.swift */; };
-		A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = EC01114F50764DA4AF3BF092 /* PostHog */; };
 		A7681EF0F90F432FB130F90B /* BloodworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */; };
 		AA11BB22CC330011AA11BB22 /* PKCurveEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD440011BB11CC22 /* PKCurveEngine.swift */; };
 		AA11BB22CC330022AA11BB22 /* PKCurveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD440022BB11CC22 /* PKCurveView.swift */; };
@@ -50,12 +49,10 @@
 		D3FB58F7807C4509B26653F8 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7288B93B716541C89EF746DF /* SettingsViewModel.swift */; };
 		D753D23AF043408F93E68A3C /* InjectionCycleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */; };
 		DD08E81BB8514F34953954A3 /* DailyCheckinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5A16FB8C7B49F48FB0F21C /* DailyCheckinView.swift */; };
-		E21215AE43A749D59D368CC2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9677675ECF484DEFBE2D9507 /* Supabase */; };
 		EE1528F85B094B94A0CB00A5 /* TroughApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77403EEC9DAE42BAB03773FB /* TroughApp.swift */; };
 		EE220033FF440033EE22FF33 /* HealthKitPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */; };
 		EE80448A9C976CB2BE123720 /* ProjectedImprovementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465445D292FD493FB6F18F5C /* ProjectedImprovementView.swift */; };
 		'L10N001' = {isa = PBXBuildFile; fileRef = L10N002; };
-		'PL001' = {isa = PBXBuildFile; fileRef = PL002; };
 		'PL001ABUILDFILE000000' = {isa = PBXBuildFile; fileRef = PL001AFILEREF0000000000; };
 		'PL003' = {isa = PBXBuildFile; fileRef = PL004; };
 		'PL005' = {isa = PBXBuildFile; fileRef = PL006; };
@@ -132,7 +129,6 @@
 		'L10N005' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		'L10N006' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		'PL001AFILEREF0000000000' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideLogView.swift; sourceTree = "<group>"; };
-		'PL002' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		'PL004' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		'PL006' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataService.swift; sourceTree = "<group>"; };
 		'PL008' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
@@ -165,8 +161,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E21215AE43A749D59D368CC2 /* Supabase in Frameworks */,
-				A6D5AF2FE9664E3299368A9F /* PostHog in Frameworks */,
 				RC00112233445566778899CC,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -186,7 +180,6 @@
 				BB110011BB220033BB440066 /* WeeklyReportService.swift */,
 				RC00112233445566778899EE,
 				RC001122334455667788AA00,
-				PL002,
 				PL004,
 				PL006,
 				CSV002,
@@ -412,8 +405,6 @@
 			);
 			name = Trough;
 			packageProductDependencies = (
-				9677675ECF484DEFBE2D9507 /* Supabase */,
-				EC01114F50764DA4AF3BF092 /* PostHog */,
 			);
 			productName = Trough;
 			productReference = F72A5F6891E6486680F49CA1 /* Trough.app */;
@@ -470,8 +461,6 @@
 			);
 			mainGroup = 2D6C384FF21A40698B048A4C /* Trough */;
 			packageReferences = (
-				FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				RC00112233445566778899AA,
 			);
 			productRefGroup = 2C700729301C4C148F188778 /* Products */;
@@ -554,7 +543,6 @@
 				PRFT001122334455667788B1,
 				BW001122334455667788AA01,
 				BW001122334455667788AA03,
-				PL001,
 				PL003,
 				PL005,
 				PL007,
@@ -621,7 +609,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -642,7 +630,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.1.2;
@@ -661,7 +649,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -705,7 +693,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 61;
+				CURRENT_PROJECT_VERSION = 62;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.1.2;
@@ -750,22 +738,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		'RC00112233445566778899AA' = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
@@ -777,16 +749,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9677675ECF484DEFBE2D9507 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FC8E7E09E42948F2B29A234F /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
-		};
-		EC01114F50764DA4AF3BF092 /* PostHog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 29E5E57286D849028A005AC2 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
-		};
 		'RC00112233445566778899BB' = {
 			isa = XCSwiftPackageProductDependency;
 			package = RC00112233445566778899AA;

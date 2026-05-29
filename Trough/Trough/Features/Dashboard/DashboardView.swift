@@ -628,7 +628,6 @@ struct DashboardView: View {
         .padding()
         .background(AppColors.card)
         .cornerRadius(16)
-        .onAppear { AnalyticsService.pkCurveViewed(absorptionDelay: pkAbsorptionDelay) }
     }
 
     // MARK: - Fertility Card (hCG users)

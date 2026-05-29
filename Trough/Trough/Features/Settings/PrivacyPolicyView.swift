@@ -10,33 +10,28 @@ struct PrivacyPolicyView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     privacySection(
                         icon: "lock.shield.fill",
-                        title: "Your Data Stays Yours",
-                        body: "All your check-ins, injections, and protocol data are stored locally on your device first. Sync to our servers happens only while you're online and only to back up your data."
+                        title: "Your Data Never Leaves Your Device",
+                        body: "All your check-ins, injections, bloodwork, and protocol data are stored only on this device. There is no account and no cloud — nothing is ever uploaded to a server."
                     )
                     privacySection(
                         icon: "heart.text.square.fill",
-                        title: "HealthKit Data Never Leaves Your Device",
-                        body: "HRV, sleep, steps, and resting HR are read from HealthKit to auto-fill your check-in. This data is never transmitted to our servers and never shared with third parties."
+                        title: "HealthKit Stays Private",
+                        body: "HRV, sleep, steps, and resting HR are read from HealthKit to auto-fill your check-in. This data never leaves your device and is never shared with third parties."
                     )
                     privacySection(
                         icon: "drop.fill",
                         title: "Bloodwork Photos",
-                        body: "Lab result photos are uploaded to secure, encrypted Supabase Storage with row-level security. Only you can access your photos — no Trough employee or third party can view them."
-                    )
-                    privacySection(
-                        icon: "server.rack",
-                        title: "Encrypted Sync",
-                        body: "When syncing to our servers, all data is transmitted over HTTPS. Your account is secured via Supabase Auth. We store only the data required to provide the service."
+                        body: "Lab result photos are stored locally on your device only. They are never uploaded anywhere, and no one but you can ever see them."
                     )
                     privacySection(
                         icon: "hand.raised.fill",
-                        title: "We Don't Sell Your Data",
-                        body: "Your health data is never sold, rented, or shared with advertisers. We use privacy-focused analytics (PostHog) solely to understand feature usage and improve the app. No personal health data is included in analytics events."
+                        title: "No Analytics, No Tracking",
+                        body: "Trough has no analytics and no tracking. We collect nothing about how you use the app, and your data is never sold, rented, or shared with anyone."
                     )
                     privacySection(
                         icon: "trash.fill",
                         title: "Data Deletion",
-                        body: "You can delete your account and all associated data at any time by contacting support@gettrough.app. Deletion is permanent and irreversible."
+                        body: "You can delete any entry at any time. Because everything lives on your device, deleting the app permanently and irreversibly erases all of your data."
                     )
 
                     Divider()

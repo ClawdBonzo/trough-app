@@ -9,7 +9,7 @@ extension Date {
         Calendar.current.startOfDay(for: self)
     }
 
-    /// ISO-8601 string for Supabase compatibility.
+    /// ISO-8601 formatted string.
     var iso8601String: String {
         ISO8601DateFormatter().string(from: self)
     }

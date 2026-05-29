@@ -551,18 +551,18 @@
    Privacy Policy
    ═══════════════════════════════════════════════════════════════ */
 "privacy.title" = "Privacy & Data";
-"privacy.dataYours" = "Your Data Stays Yours";
-"privacy.dataYoursDesc" = "All your check-ins, injections, and protocol data are stored locally on your device first. Sync to our servers happens only while you're online and only to back up your data.";
-"privacy.hkPrivacy" = "HealthKit Data Never Leaves Your Device";
-"privacy.hkPrivacyDesc" = "HRV, sleep, steps, and resting HR are read from HealthKit to auto-fill your check-in. This data is never transmitted to our servers and never shared with third parties.";
+"privacy.dataYours" = "Your Data Never Leaves Your Device";
+"privacy.dataYoursDesc" = "All your check-ins, injections, bloodwork, and protocol data are stored only on this device. There is no account and no cloud — nothing is ever uploaded to a server.";
+"privacy.hkPrivacy" = "HealthKit Stays Private";
+"privacy.hkPrivacyDesc" = "HRV, sleep, steps, and resting HR are read from HealthKit to auto-fill your check-in. This data never leaves your device and is never shared with third parties.";
 "privacy.photos" = "Bloodwork Photos";
-"privacy.photosDesc" = "Lab result photos are uploaded to secure, encrypted Supabase Storage with row-level security. Only you can access your photos — no Trough employee or third party can view them.";
-"privacy.sync" = "Encrypted Sync";
-"privacy.syncDesc" = "When syncing to our servers, all data is transmitted over HTTPS. Your account is secured via Supabase Auth. We store only the data required to provide the service.";
-"privacy.noSell" = "We Don't Sell Your Data";
-"privacy.noSellDesc" = "Your health data is never sold, rented, or shared with advertisers. We use privacy-focused analytics (PostHog) solely to understand feature usage and improve the app. No personal health data is included in analytics events.";
+"privacy.photosDesc" = "Lab result photos are stored locally on your device only. They are never uploaded anywhere, and no one but you can ever see them.";
+"privacy.sync" = "No Analytics, No Tracking";
+"privacy.syncDesc" = "Trough has no analytics and no tracking. We collect nothing about how you use the app, and your data is never sold, rented, or shared with anyone.";
+"privacy.noSell" = "No Analytics, No Tracking";
+"privacy.noSellDesc" = "Trough has no analytics and no tracking. We collect nothing about how you use the app, and your data is never sold, rented, or shared with anyone.";
 "privacy.deletion" = "Data Deletion";
-"privacy.deletionDesc" = "You can delete your account and all associated data at any time by contacting support@gettrough.app. Deletion is permanent and irreversible.";
+"privacy.deletionDesc" = "You can delete any entry at any time. Because everything lives on your device, deleting the app permanently and irreversibly erases all of your data.";
 "privacy.fullPolicy" = "Full Policy & Terms";
 
 /* ═══════════════════════════════════════════════════════════════

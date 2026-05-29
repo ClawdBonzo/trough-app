@@ -257,11 +257,6 @@ final class DailyCheckinViewModel: ObservableObject {
             }
         }
 
-
-        // Analytics
-        let dayInCycle = cycleInfo?.day
-        AnalyticsService.checkinCompleted(dayInCycle: dayInCycle)
-
         navigationPath = [.binaryTaps, .completion]
     }
 

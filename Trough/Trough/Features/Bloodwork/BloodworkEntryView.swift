@@ -71,6 +71,15 @@ struct BloodworkEntryView: View {
                     }
                 }
             }
+            .onAppear {
+                // When editing a panel that already has a photo, load it so it
+                // displays and can be replaced or removed.
+                if photoImage == nil,
+                   let data = BloodworkViewModel.loadPhoto(vm.editingResult?.photoURL),
+                   let img = UIImage(data: data) {
+                    photoImage = img
+                }
+            }
         }
     }
 

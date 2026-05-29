@@ -244,7 +244,7 @@ enum TroughSchemaV1: VersionedSchema {
         var labName: String?
         var notes: String?
         var doctorNotes: String?           // "Notes for Doctor" — for doctor visits / PDF export
-        var photoURL: String?              // Supabase Storage URL, set after background upload
+        var photoURL: String?              // Local file URL for the bloodwork photo, if attached
         var createdAt: Date
         var updatedAt: Date
         var isSampleData: Bool

@@ -492,18 +492,18 @@
    Privacy Policy
    ═══════════════════════════════════════════════════════════════ */
 "privacy.title" = "Privacidad y datos";
-"privacy.dataYours" = "Tus datos son tuyos";
-"privacy.dataYoursDesc" = "Todos tus check-ins, inyecciones y datos de protocolo se almacenan localmente en tu dispositivo primero. La sincronización con nuestros servidores ocurre solo cuando estás en línea y solo para respaldar tus datos.";
-"privacy.hkPrivacy" = "Los datos de HealthKit nunca salen de tu dispositivo";
-"privacy.hkPrivacyDesc" = "HRV, sueño, pasos y FC en reposo se leen de HealthKit para completar automáticamente tu check-in. Estos datos nunca se transmiten a nuestros servidores ni se comparten con terceros.";
+"privacy.dataYours" = "Tus datos nunca salen de tu dispositivo";
+"privacy.dataYoursDesc" = "Todos tus check-ins, inyecciones, análisis de sangre y datos de protocolo se almacenan únicamente en este dispositivo. No hay cuenta ni nube — nada se sube jamás a un servidor.";
+"privacy.hkPrivacy" = "HealthKit se mantiene privado";
+"privacy.hkPrivacyDesc" = "HRV, sueño, pasos y FC en reposo se leen de HealthKit para completar automáticamente tu check-in. Estos datos nunca salen de tu dispositivo ni se comparten con terceros.";
 "privacy.photos" = "Fotos de análisis de sangre";
-"privacy.photosDesc" = "Las fotos de resultados de laboratorio se suben al almacenamiento seguro y encriptado de Supabase con seguridad a nivel de fila. Solo tú puedes acceder a tus fotos — ningún empleado de Trough ni tercero puede verlas.";
-"privacy.sync" = "Sincronización encriptada";
-"privacy.syncDesc" = "Al sincronizar con nuestros servidores, todos los datos se transmiten por HTTPS. Tu cuenta está protegida por Supabase Auth. Solo almacenamos los datos necesarios para brindar el servicio.";
-"privacy.noSell" = "No vendemos tus datos";
-"privacy.noSellDesc" = "Tus datos de salud nunca se venden, rentan ni comparten con anunciantes. Usamos analítica enfocada en la privacidad (PostHog) únicamente para entender el uso de funciones y mejorar la app. Ningún dato personal de salud se incluye en los eventos de analítica.";
+"privacy.photosDesc" = "Las fotos de resultados de laboratorio se almacenan únicamente en tu dispositivo. Nunca se suben a ningún lugar y nadie más que tú puede verlas.";
+"privacy.sync" = "Sin analítica, sin rastreo";
+"privacy.syncDesc" = "Trough no tiene analítica ni rastreo. No recopilamos nada sobre cómo usas la app, y tus datos nunca se venden, rentan ni comparten con nadie.";
+"privacy.noSell" = "Sin analítica, sin rastreo";
+"privacy.noSellDesc" = "Trough no tiene analítica ni rastreo. No recopilamos nada sobre cómo usas la app, y tus datos nunca se venden, rentan ni comparten con nadie.";
 "privacy.deletion" = "Eliminación de datos";
-"privacy.deletionDesc" = "Puedes eliminar tu cuenta y todos los datos asociados en cualquier momento contactando a support@gettrough.app. La eliminación es permanente e irreversible.";
+"privacy.deletionDesc" = "Puedes eliminar cualquier entrada en cualquier momento. Como todo permanece en tu dispositivo, eliminar la app borra todos tus datos de forma permanente e irreversible.";
 "privacy.fullPolicy" = "Política y términos completos";
 
 /* ═══════════════════════════════════════════════════════════════

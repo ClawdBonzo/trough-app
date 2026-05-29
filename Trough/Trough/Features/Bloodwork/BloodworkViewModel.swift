@@ -250,6 +250,17 @@ final class BloodworkViewModel: ObservableObject {
             bw.markers.append(marker)
         }
 
+        // Persist photo locally (on-device only — nothing is uploaded).
+        if let data = pendingPhotoData {
+            if let saved = Self.savePhoto(data, for: bw.id) {
+                bw.photoURL = saved
+            }
+        } else if editingResult != nil {
+            // Editing an existing panel with no photo present — the user removed it.
+            Self.deletePhoto(bw.photoURL)
+            bw.photoURL = nil
+        }
+
         do {
             try modelContext.save()
             showingEntrySheet = false
@@ -262,9 +273,46 @@ final class BloodworkViewModel: ObservableObject {
     // MARK: Delete
 
     func delete(_ bw: SDBloodwork) {
+        Self.deletePhoto(bw.photoURL)
         modelContext.delete(bw)
         try? modelContext.save()
         load()
+    }
+
+    // MARK: Local photo storage (on-device only)
+
+    /// Directory holding bloodwork photos inside the app's Documents container.
+    private static var photoDirectory: URL {
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let dir = docs.appendingPathComponent("BloodworkPhotos", isDirectory: true)
+        if !FileManager.default.fileExists(atPath: dir.path) {
+            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
+        return dir
+    }
+
+    /// Writes JPEG data to the photos directory keyed by bloodwork id.
+    /// Returns the file URL string to store in `SDBloodwork.photoURL`, or nil on failure.
+    static func savePhoto(_ data: Data, for id: UUID) -> String? {
+        let url = photoDirectory.appendingPathComponent("\(id.uuidString).jpg")
+        do {
+            try data.write(to: url, options: .atomic)
+            return url.absoluteString
+        } catch {
+            return nil
+        }
+    }
+
+    /// Loads photo data from a stored `photoURL` string, if the file exists.
+    static func loadPhoto(_ urlString: String?) -> Data? {
+        guard let urlString, let url = URL(string: urlString) else { return nil }
+        return try? Data(contentsOf: url)
+    }
+
+    /// Removes the photo file for a stored `photoURL` string, if present.
+    static func deletePhoto(_ urlString: String?) {
+        guard let urlString, let url = URL(string: urlString) else { return }
+        try? FileManager.default.removeItem(at: url)
     }
 
     // MARK: Sections for form
