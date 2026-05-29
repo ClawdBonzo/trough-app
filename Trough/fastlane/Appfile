@@ -1,3 +1,5 @@
 app_identifier("app.trough.ios")
 
+apple_id("rgoldstein45@gmail.com") # App Store Connect login email — update if your developer-account Apple ID differs
+
 itc_team_id("6760955550") # App Store Connect team / Apple ID for the app
