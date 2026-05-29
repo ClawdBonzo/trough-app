@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "Du kannst das jederzeit in den Einstellungen ändern.";
 "onboarding.getStarted" = "Los geht's";
 
-"onboarding.startTrial" = "14-tägige Testphase starten";
+"onboarding.startTrial" = "3-tägige Testphase starten";
 "onboarding.trialSubtitle" = "Alle Einblicke freischalten und deinen Fortschritt bis 85+ verfolgen.";
-"onboarding.noCharge" = "14 Tage kostenlos. Jederzeit kündbar unter Einstellungen → Abonnements.";
+"onboarding.noCharge" = "3 Tage kostenlos. Jederzeit kündbar unter Einstellungen → Abonnements.";
 "onboarding.maybeLater" = "Vielleicht später";
 
 /* Frequency labels */
@@ -427,19 +427,19 @@
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
 "paywall.heroSubtitle" = "Von 42 → 85 Protocol Score.";
-"paywall.subtitle" = "Alles inklusive. 14 Tage kostenlos.";
+"paywall.subtitle" = "Alles inklusive. 3 Tage kostenlos.";
 "paywall.monthly" = "Monatlich";
 "paywall.annual" = "Jährlich";
-"paywall.save40" = "40 % sparen";
+"paywall.save40" = "58 % sparen";
 "paywall.startTrial" = "Kostenlose Testphase starten";
-"paywall.startTrialFull" = "Kostenlose Testphase starten — 14 Tage gratis, danach %@";
+"paywall.startTrialFull" = "Kostenlose Testphase starten — 3 Tage gratis, danach %@";
 "paywall.restorePurchases" = "Wiederherstellen";
 "paywall.privacyPolicy" = "Datenschutz";
 "paywall.termsOfUse" = "AGB";
 
 /* Pro features */
 "pro.title" = "Was du mit Pro bekommst";
-"pro.trialIncluded" = "14-tägige kostenlose Testphase inklusive";
+"pro.trialIncluded" = "3-tägige kostenlose Testphase inklusive";
 "pro.pkCurves" = "PK-Kurven";
 "pro.pkCurvesDesc" = "Geschätzte Blutspiegel mit Konfidenzintervallen und Multi-Ester-Stacking anzeigen";
 "pro.trendHistory" = "Vollständiger Trendverlauf";

@@ -33,21 +33,28 @@ final class PeptidesViewModel: ObservableObject {
     @Published var formDate: Date = .now
     @Published var editingLog: SDPeptideLog?
 
-    // GLP-1s at top, then AI/ancillary, then peptides
+    // GLP-1s at top, then AI/ancillary, then peptides by purpose
     static let presetCompounds = [
-        // GLP-1 / Weight management
-        "Semaglutide", "Tirzepatide", "Liraglutide",
+        // GLP-1 / incretin / weight management
+        "Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide",
         // AI / Ancillary
         "Anastrozole", "Aromasin (Exemestane)", "Letrozole", "Cabergoline", "hCG",
-        // Peptides
-        "BPC-157", "TB-500", "Ipamorelin", "CJC-1295", "MK-677",
-        "Sermorelin", "GHRP-2", "PT-141", "Epithalon",
+        // Growth hormone secretagogues
+        "Ipamorelin", "CJC-1295", "Sermorelin", "Tesamorelin", "GHRP-2",
+        "Hexarelin", "MK-677", "IGF-1 LR3",
+        // Healing / recovery
+        "BPC-157", "TB-500", "GHK-Cu", "AOD-9604", "KPV",
+        // Metabolic / longevity
+        "MOTS-c", "5-Amino-1MQ", "SS-31 (Elamipretide)", "Epithalon",
+        // Other / specialty
+        "PT-141", "Melanotan II", "Semax", "Selank", "DSIP",
+        "Thymosin Alpha-1", "Kisspeptin-10",
         "Custom"
     ]
 
-    /// GLP-1 receptor agonists tracked for weight correlation.
+    /// GLP-1 / incretin / amylin compounds tracked for weight correlation.
     nonisolated static let glp1Compounds: Set<String> = [
-        "Semaglutide", "Tirzepatide", "Liraglutide"
+        "Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide"
     ]
 
     nonisolated static func isGLP1Compound(_ name: String) -> Bool {
@@ -67,14 +74,24 @@ final class PeptidesViewModel: ObservableObject {
     static let doseUnits = ["mcg", "mg", "units"]
 
     private static let defaultUnits: [String: String] = [
+        // GLP-1 / incretin / weight management
+        "Semaglutide": "mg", "Tirzepatide": "mg", "Retatrutide": "mg",
+        "Liraglutide": "mg", "Cagrilintide": "mg",
         // AI / ancillary
         "Anastrozole": "mg", "Aromasin (Exemestane)": "mg",
         "Letrozole": "mg", "Cabergoline": "mg", "hCG": "units",
-        // Peptides
+        // Growth hormone secretagogues
         "BPC-157": "mcg", "TB-500": "mcg", "Ipamorelin": "mcg",
-        "CJC-1295": "mcg", "Sermorelin": "mcg", "GHRP-2": "mcg",
-        "PT-141": "mcg", "Epithalon": "mcg",
-        "Semaglutide": "mg", "Tirzepatide": "mg", "Liraglutide": "mg", "MK-677": "mg"
+        "CJC-1295": "mcg", "Sermorelin": "mcg", "Tesamorelin": "mg",
+        "GHRP-2": "mcg", "Hexarelin": "mcg", "MK-677": "mg", "IGF-1 LR3": "mcg",
+        // Healing / recovery
+        "GHK-Cu": "mg", "AOD-9604": "mcg", "KPV": "mcg",
+        // Metabolic / longevity
+        "MOTS-c": "mg", "5-Amino-1MQ": "mg", "SS-31 (Elamipretide)": "mg",
+        "Epithalon": "mcg",
+        // Other / specialty
+        "PT-141": "mcg", "Melanotan II": "mcg", "Semax": "mcg", "Selank": "mcg",
+        "DSIP": "mcg", "Thymosin Alpha-1": "mcg", "Kisspeptin-10": "mcg"
     ]
 
     var effectiveCompoundName: String {

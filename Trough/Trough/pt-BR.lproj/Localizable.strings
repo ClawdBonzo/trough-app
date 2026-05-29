@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "Voce sempre pode alterar isso nos Ajustes.";
 "onboarding.getStarted" = "Comecar";
 
-"onboarding.startTrial" = "Iniciar Teste Gratuito de 14 Dias";
+"onboarding.startTrial" = "Iniciar Teste Gratuito de 3 Dias";
 "onboarding.trialSubtitle" = "Desbloqueie todos os insights e acompanhe seu progresso ate 85+.";
-"onboarding.noCharge" = "Sem cobranca por 14 dias. Cancele quando quiser em Ajustes > Assinaturas.";
+"onboarding.noCharge" = "Sem cobranca por 3 dias. Cancele quando quiser em Ajustes > Assinaturas.";
 "onboarding.maybeLater" = "Talvez depois";
 
 /* Frequency labels */
@@ -427,19 +427,19 @@
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
 "paywall.heroSubtitle" = "Saia de 42 para 85 no Protocol Score.";
-"paywall.subtitle" = "Tudo. Gratis por 14 dias.";
+"paywall.subtitle" = "Tudo. Gratis por 3 dias.";
 "paywall.monthly" = "Mensal";
 "paywall.annual" = "Anual";
-"paywall.save40" = "Economize 40%";
+"paywall.save40" = "Economize 58%";
 "paywall.startTrial" = "Iniciar Teste Gratuito";
-"paywall.startTrialFull" = "Iniciar Teste Gratuito — 14 dias gratis, depois %@";
+"paywall.startTrialFull" = "Iniciar Teste Gratuito — 3 dias gratis, depois %@";
 "paywall.restorePurchases" = "Restaurar";
 "paywall.privacyPolicy" = "Privacidade";
 "paywall.termsOfUse" = "Termos";
 
 /* Pro features */
 "pro.title" = "O Que Voce Ganha Com o Pro";
-"pro.trialIncluded" = "Teste gratuito de 14 dias incluso";
+"pro.trialIncluded" = "Teste gratuito de 3 dias incluso";
 "pro.pkCurves" = "Curvas PK";
 "pro.pkCurvesDesc" = "Veja seus niveis sanguineos estimados com bandas de confianca e empilhamento multi-ester";
 "pro.trendHistory" = "Historico Completo de Tendencias";

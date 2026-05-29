@@ -60,8 +60,8 @@ final class OnboardingViewModel: ObservableObject {
         let compounds: [String]
     }
     static let compoundCategories: [CompoundCategory] = [
-        CompoundCategory(name: "GLP-1", compounds: ["Semaglutide", "Tirzepatide", "Liraglutide"]),
-        CompoundCategory(name: "Peptides", compounds: ["BPC-157", "CJC-1295", "Ipamorelin", "MK-677"]),
+        CompoundCategory(name: "GLP-1", compounds: ["Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide"]),
+        CompoundCategory(name: "Peptides", compounds: ["BPC-157", "TB-500", "CJC-1295", "Ipamorelin", "Tesamorelin", "GHK-Cu", "MK-677"]),
         CompoundCategory(name: "AI / Ancillary", compounds: ["Anastrozole", "Aromasin", "Cabergoline", "hCG", "Letrozole"]),
     ]
 
@@ -79,7 +79,7 @@ final class OnboardingViewModel: ObservableObject {
     @Published var compoundDoses: [SelectedCompound] = []
 
     static func defaultUnit(for compound: String) -> String {
-        let mgCompounds = ["Semaglutide", "Tirzepatide", "Liraglutide", "Anastrozole", "Aromasin", "Cabergoline", "Letrozole", "MK-677"]
+        let mgCompounds = ["Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide", "Anastrozole", "Aromasin", "Cabergoline", "Letrozole", "MK-677", "Tesamorelin", "GHK-Cu"]
         let iuCompounds = ["hCG"]
         if mgCompounds.contains(compound) { return "mg" }
         if iuCompounds.contains(compound) { return "IU" }
@@ -88,8 +88,10 @@ final class OnboardingViewModel: ObservableObject {
 
     static func defaultFrequencyDays(for compound: String) -> Int {
         switch compound {
-        case "Semaglutide", "Tirzepatide", "Liraglutide": return 7  // weekly
+        case "Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide": return 7  // weekly
         case "BPC-157", "Ipamorelin", "CJC-1295":       return 1  // daily
+        case "Tesamorelin", "GHK-Cu":                   return 1  // daily
+        case "TB-500":                                  return 4  // ~twice weekly
         case "MK-677":                                    return 1  // daily
         case "Anastrozole":                               return 4  // twice weekly (E3.5D)
         case "Aromasin":                                  return 3  // EOD-ish
@@ -104,10 +106,15 @@ final class OnboardingViewModel: ObservableObject {
         switch compound {
         case "Semaglutide":  return 0.25
         case "Tirzepatide":  return 2.5
+        case "Retatrutide":  return 2.0
         case "Liraglutide":  return 0.6
+        case "Cagrilintide": return 0.3
         case "BPC-157":      return 250
+        case "TB-500":       return 500
         case "CJC-1295":     return 100
         case "Ipamorelin":   return 200
+        case "Tesamorelin":  return 2.0
+        case "GHK-Cu":       return 1.0
         case "MK-677":       return 25
         case "Anastrozole":  return 0.5
         case "Aromasin":     return 12.5
@@ -677,7 +684,7 @@ private struct OnboardingTrialView: View {
                         trialPlanButton(
                             plan: .monthly,
                             title: "Monthly",
-                            price: monthlyPackage?.localizedPriceString ?? "$6.99",
+                            price: monthlyPackage?.localizedPriceString ?? "$9.99",
                             period: "per month",
                             badge: nil
                         )
@@ -686,7 +693,7 @@ private struct OnboardingTrialView: View {
                             title: "Annual",
                             price: annualPackage?.localizedPriceString ?? "$49.99",
                             period: "per year",
-                            badge: "SAVE 40%"
+                            badge: "SAVE 58%"
                         )
                     }
                     .padding(.horizontal, 24)
@@ -708,7 +715,7 @@ private struct OnboardingTrialView: View {
                                 if isPurchasing {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text("Start 14-Day Free Trial")
+                                    Text("Start 3-Day Free Trial")
                                         .font(.headline)
                                         .foregroundColor(.white)
                                 }

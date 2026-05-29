@@ -58,11 +58,11 @@
 
 /* Onboarding */
 "onboarding.whatBringsYou" = "What brings you here?";
-"onboarding.startTrial" = "Start 14-Day Free Trial";
+"onboarding.startTrial" = "Start 3-Day Free Trial";
 
 /* Paywall */
 "paywall.title" = "TROUGH PRO";
-"paywall.subtitle" = "Everything. Free for 14 days.";
+"paywall.subtitle" = "Everything. Free for 3 days.";
 "paywall.startTrial" = "Start Free Trial";
 "paywall.restorePurchases" = "Restore Purchases";
 "paywall.privacyPolicy" = "Privacy Policy";

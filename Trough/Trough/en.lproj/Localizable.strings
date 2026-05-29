@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "You can always change this in Settings.";
 "onboarding.getStarted" = "Get started";
 
-"onboarding.startTrial" = "Start 14-Day Free Trial";
+"onboarding.startTrial" = "Start 3-Day Free Trial";
 "onboarding.trialSubtitle" = "Unlock full insights and track your progress to 85+.";
-"onboarding.noCharge" = "No charge for 14 days. Cancel anytime in Settings → Subscriptions.";
+"onboarding.noCharge" = "No charge for 3 days. Cancel anytime in Settings → Subscriptions.";
 "onboarding.maybeLater" = "Maybe later";
 
 /* Frequency labels */
@@ -486,19 +486,19 @@
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
 "paywall.heroSubtitle" = "Go from 42 → 85 Protocol Score.";
-"paywall.subtitle" = "Everything. Free for 14 days.";
+"paywall.subtitle" = "Everything. Free for 3 days.";
 "paywall.monthly" = "Monthly";
 "paywall.annual" = "Annual";
-"paywall.save40" = "Save 40%";
+"paywall.save40" = "Save 58%";
 "paywall.startTrial" = "Start Free Trial";
-"paywall.startTrialFull" = "Start Free Trial — 14 days free, then %@";
+"paywall.startTrialFull" = "Start Free Trial — 3 days free, then %@";
 "paywall.restorePurchases" = "Restore";
 "paywall.privacyPolicy" = "Privacy";
 "paywall.termsOfUse" = "Terms";
 
 /* Pro features */
 "pro.title" = "What You Get With Pro";
-"pro.trialIncluded" = "14-day free trial included";
+"pro.trialIncluded" = "3-day free trial included";
 "pro.pkCurves" = "PK Curves";
 "pro.pkCurvesDesc" = "See your estimated blood levels with confidence bands and multi-ester stacking";
 "pro.trendHistory" = "Full Trend History";
