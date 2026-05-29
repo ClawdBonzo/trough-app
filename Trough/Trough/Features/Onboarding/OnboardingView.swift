@@ -601,13 +601,13 @@ private struct OnboardingTrialView: View {
 
     private var monthlyPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.monthly"
+            $0.storeProduct.productIdentifier == "trough_pro_monthly"
         }
     }
 
     private var annualPackage: Package? {
         offerings?.current?.availablePackages.first {
-            $0.storeProduct.productIdentifier == "com.clawdbonzo.trough.yearly"
+            $0.storeProduct.productIdentifier == "trough_pro_annual"
         }
     }
 

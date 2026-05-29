@@ -8,47 +8,37 @@ struct PaywallView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
 
     enum Plan: CaseIterable {
-        case weekly, monthly, yearly, lifetime
+        case monthly, yearly
 
         var productID: String {
             switch self {
-            case .weekly:   return "com.clawdbonzo.trough.weekly"
-            case .monthly:  return "com.clawdbonzo.trough.monthly"
-            case .yearly:   return "com.clawdbonzo.trough.yearly"
-            case .lifetime: return "com.clawdbonzo.trough.lifetime"
+            case .monthly:  return "trough_pro_monthly"
+            case .yearly:   return "trough_pro_annual"
             }
         }
 
         var label: String {
             switch self {
-            case .weekly:   return "Weekly"
             case .monthly:  return "Monthly"
             case .yearly:   return "Yearly"
-            case .lifetime: return "Lifetime"
             }
         }
 
         var fallbackPrice: String {
             switch self {
-            case .weekly:   return "$4.99"
             case .monthly:  return "$9.99"
             case .yearly:   return "$49.99"
-            case .lifetime: return "$79.99"
             }
         }
 
         var period: String {
             switch self {
-            case .weekly:   return "/wk"
             case .monthly:  return "/mo"
             case .yearly:   return "/yr"
-            case .lifetime: return ""
             }
         }
 
-        var hasTrial: Bool {
-            self == .monthly || self == .yearly
-        }
+        var hasTrial: Bool { true }
 
         var isBestValue: Bool { self == .monthly }
 
@@ -84,18 +74,13 @@ struct PaywallView: View {
     }
 
     private var ctaLabel: String {
-        switch selected {
-        case .monthly, .yearly: return "Start 3-Day Free Trial"
-        case .weekly:           return "Start Weekly — \(price(for: .weekly))/wk"
-        case .lifetime:         return "Get Lifetime Access — \(price(for: .lifetime))"
-        }
+        "Start 3-Day Free Trial"
     }
 
     private var ctaSubLabel: String? {
         switch selected {
         case .monthly: return "then \(price(for: .monthly))/mo · cancel anytime"
         case .yearly:  return "then \(price(for: .yearly))/yr · cancel anytime"
-        default: return nil
         }
     }
 

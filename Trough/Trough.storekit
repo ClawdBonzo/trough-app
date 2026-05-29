@@ -10,21 +10,7 @@
 
   ],
   "products" : [
-    {
-      "displayPrice" : "79.99",
-      "familyShareable" : false,
-      "internalID" : "100000001",
-      "localizations" : [
-        {
-          "description" : "Lifetime access to Trough Pro",
-          "displayName" : "Lifetime",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "com.clawdbonzo.trough.lifetime",
-      "referenceName" : "Lifetime",
-      "type" : "NonConsumable"
-    }
+
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
@@ -49,31 +35,6 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "4.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "300000001",
-          "introductoryOffer" : null,
-          "localizations" : [
-            {
-              "description" : "Weekly Trough Pro",
-              "displayName" : "Weekly",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "com.clawdbonzo.trough.weekly",
-          "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Weekly",
-          "subscriptionGroupID" : "200000001",
-          "type" : "RecurringSubscription"
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
           "displayPrice" : "9.99",
           "familyShareable" : false,
           "groupNumber" : 1,
@@ -90,7 +51,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.clawdbonzo.trough.monthly",
+          "productID" : "trough_pro_monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly",
           "subscriptionGroupID" : "200000001",
@@ -119,7 +80,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.clawdbonzo.trough.yearly",
+          "productID" : "trough_pro_annual",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Yearly",
           "subscriptionGroupID" : "200000001",
