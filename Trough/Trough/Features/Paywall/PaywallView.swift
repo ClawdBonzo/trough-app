@@ -79,8 +79,8 @@ struct PaywallView: View {
 
     private var ctaSubLabel: String? {
         switch selected {
-        case .monthly: return "then \(price(for: .monthly))/mo · cancel anytime"
-        case .yearly:  return "then \(price(for: .yearly))/yr · cancel anytime"
+        case .monthly: return "then \(price(for: .monthly))/mo · auto-renews · cancel anytime"
+        case .yearly:  return "then \(price(for: .yearly))/yr · auto-renews · cancel anytime"
         }
     }
 
