@@ -1,0 +1,4 @@
+• Expanded compound library: added Retatrutide, Cagrilintide, Tesamorelin, GHK-Cu, and more GLP-1s and peptides
+• Clearer subscription details and free trial information
+• Privacy hardening — everything stays 100% on your device
+• Performance and stability improvements

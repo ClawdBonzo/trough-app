@@ -1,0 +1,36 @@
+Know your Protocol Score in 7 days.
+
+Trough is the private, offline-first TRT and hormone tracking app built for men on testosterone replacement therapy.
+
+TRACK YOUR PROTOCOL
+• Log injections with dose, site rotation, and compound
+• Full support for Testosterone Cypionate, Enanthate, Propionate, Undecanoate, and multi-ester stacking
+• Track GLP-1s (Semaglutide, Tirzepatide), peptides, and ancillaries (Anastrozole, hCG, and more)
+
+DAILY WELLNESS CHECK-IN
+• Rate energy, mood, libido, sleep quality, and mental clarity in 30 seconds
+• Builds your personal Protocol Score — a single number that shows how your protocol is working
+• Track trends over time as you dial in your routine
+
+PK CURVES (Pro)
+• Real pharmacokinetic modeling using the Bateman equation with absorption delay
+• Estimated peak, trough, and current levels with confidence bands
+
+BLOODWORK TRACKING (Pro)
+• Log lab results with custom reference ranges
+• Visual trends with color-coded bands
+
+PEPTIDES & ADJUNCTS (Pro)
+• Track peptides, GLP-1 agonists, and ancillary compounds
+• Correlate them with your wellness metrics and bloodwork
+
+PRIVATE BY DESIGN
+• 100% on-device. No account, no cloud, no tracking.
+• Your data never leaves your iPhone
+
+Start your 3-day free trial to unlock all Pro features. Cancel anytime.
+
+Trough Pro is an auto-renewing subscription. Payment is charged to your Apple ID and renews automatically unless canceled at least 24 hours before the end of the period. Manage or cancel in Settings.
+
+Terms of Use: https://gwlabs.app/terms
+Privacy Policy: https://gwlabs.app/privacy
