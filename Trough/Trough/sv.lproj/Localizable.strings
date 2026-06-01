@@ -1,0 +1,637 @@
+/* Trough — Swedish (sv) Localizable Strings */
+
+/* ═══════════════════════════════════════════════════════════════
+   Navigation & Tab Bar
+   ═══════════════════════════════════════════════════════════════ */
+"tab.home" = "Hem";
+"tab.log" = "Logg";
+"tab.injections" = "Injektioner";
+"tab.more" = "Mer";
+
+/* ═══════════════════════════════════════════════════════════════
+   Common / Shared
+   ═══════════════════════════════════════════════════════════════ */
+"common.cancel" = "Avbryt";
+"common.save" = "Spara";
+"common.delete" = "Radera";
+"common.done" = "Klar";
+"common.next" = "Nästa";
+"common.back" = "Tillbaka";
+"common.skip" = "Hoppa över";
+"common.continue" = "Fortsätt";
+"common.ok" = "OK";
+"common.error" = "Fel";
+"common.today" = "Idag";
+"common.yesterday" = "Igår";
+"common.add" = "Lägg till";
+"common.edit" = "Redigera";
+"common.remove" = "Ta bort";
+"common.notes" = "Anteckningar";
+"common.custom" = "Anpassad";
+"common.dose" = "Dos";
+"common.compound" = "Preparat";
+"common.mg" = "mg";
+
+/* Units */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+"unit.perMonth" = "per månad";
+"unit.perYear" = "per år";
+"unit.days" = "dagar";
+"unit.daysAgo" = "för %dd sedan";
+
+/* ═══════════════════════════════════════════════════════════════
+   Auth
+   ═══════════════════════════════════════════════════════════════ */
+"auth.appName" = "TROUGH";
+"auth.tagline" = "TRT- & hormonspårare";
+"auth.email" = "E-post";
+"auth.password" = "Lösenord";
+"auth.createAccount" = "Skapa konto";
+"auth.signIn" = "Logga in";
+"auth.switchToSignIn" = "Har du redan ett konto? Logga in";
+"auth.switchToSignUp" = "Ny här? Skapa konto";
+"auth.enterCredentials" = "Ange e-post och lösenord.";
+"auth.confirmEmail" = "Kolla din e-post för att bekräfta ditt konto och logga sedan in nedan.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Splash / Onboarding Hook
+   ═══════════════════════════════════════════════════════════════ */
+"splash.headline" = "Spåra ditt protokoll.\nÄg dina data.";
+"splash.cta" = "Vi finjusterar dig";
+
+"quiz.title" = "Hur mår du?";
+"quiz.subtitle" = "Betygsätt varje område på en skala från 1–5.\nVi räknar ut din baslinje-protokollpoäng.";
+"quiz.energy" = "Energi";
+"quiz.mood" = "Humör";
+"quiz.libido" = "Libido";
+"quiz.sleepQuality" = "Sömnkvalitet";
+"quiz.mentalClarity" = "Mental skärpa";
+"quiz.cta" = "Visa min poäng";
+
+"scoreReveal.protocolScore" = "Protokollpoäng";
+"scoreReveal.cta" = "Visa din förväntade förbättring";
+"scoreReveal.dialedIn" = "Finjusterad";
+"scoreReveal.steady" = "Stabil";
+"scoreReveal.trendingDown" = "Trendar nedåt";
+"scoreReveal.offBaseline" = "Under baslinjen";
+"scoreReveal.encourage.high" = "Stark baslinje. Nu håller vi den.";
+"scoreReveal.encourage.mid" = "Solid grund. Utrymme att optimera.";
+"scoreReveal.encourage.low" = "Det finns potential här. Nu hittar vi den.";
+"scoreReveal.encourage.veryLow" = "Vi har jobb att göra — och det är poängen.";
+
+"projected.title" = "Din 7-dagarsprognos";
+"projected.subtitle" = "Med konsekvent spårning ser användare verklig förbättring redan första veckan.";
+"projected.today" = "Idag";
+"projected.day7" = "Dag 7";
+"projected.now" = "Nu";
+"projected.cta" = "Bygg min plan";
+
+"loader.step1" = "Analyserar din baslinje…";
+"loader.step2" = "Kalibrerar PK-modell…";
+"loader.step3" = "Bygger ditt protokoll…";
+"loader.step4" = "Ställer in spårning…";
+"loader.step5" = "Slutför din plan…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding Setup
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.whatBringsYou" = "Vad för dig hit?";
+"onboarding.personalizeExperience" = "Det hjälper oss att anpassa din upplevelse.";
+"onboarding.imOnTRT" = "Jag går på TRT";
+"onboarding.trtSubtitle" = "Spåra protokoll, injektioner och blodnivåer";
+"onboarding.naturalTitle" = "Optimerar naturligt";
+"onboarding.naturalSubtitle" = "Spåra välmående, träning och kosttillskott";
+
+"onboarding.haveData" = "Har du befintliga data?";
+"onboarding.importSubtitle" = "Importera ditt spårningskalkylblad — vi mappar dina kolumner automatiskt.";
+"onboarding.importSpreadsheet" = "Importera från kalkylblad";
+"onboarding.importCSV" = "CSV, TSV — identifierar kolumner och datum automatiskt";
+"onboarding.startFresh" = "Börja om från början";
+"onboarding.startFreshGuide" = "Vi guidar dig genom installationen";
+"onboarding.skipStartFresh" = "Hoppa över — börja från början";
+
+"onboarding.yourProtocol" = "Ditt protokoll";
+"onboarding.protocolSubtitle" = "Vi använder detta för att spåra dina blodnivåer och ditt schema.";
+"onboarding.primaryCompound" = "Primärt preparat";
+"onboarding.frequency" = "Frekvens";
+"onboarding.injectionDays" = "Injektionsdagar";
+"onboarding.addSecondary" = "Lägg till sekundärt preparat";
+"onboarding.addCompound" = "Lägg till preparat";
+"onboarding.addAnother" = "+ Lägg till ytterligare";
+"onboarding.secondaryCompound" = "Sekundärt preparat";
+"onboarding.concentration" = "Koncentration";
+
+"onboarding.whatElse" = "Vad mer tar du?";
+"onboarding.tapAllApply" = "Tryck på allt som stämmer. Du kan alltid lägga till mer senare.";
+"onboarding.addCustomCompound" = "Lägg till eget preparat";
+"onboarding.compoundName" = "Preparatnamn";
+"onboarding.selected" = "%d valda";
+"onboarding.setDoses" = "Ställ in dina doser";
+"onboarding.dosesSubtitle" = "Vi har förifyllt typiska doser och scheman — justera efter behov.";
+"onboarding.schedule" = "Schema";
+"onboarding.dosesReminder" = "Vi skickar påminnelser baserat på varje preparats schema.";
+
+"onboarding.lastInjection" = "Senaste injektion";
+"onboarding.lastInjectionSubtitle" = "Vi startar din PK-kurva från detta datum.";
+"onboarding.dateAndTime" = "Datum och tid";
+
+"onboarding.howFeeling" = "Hur mår du?";
+"onboarding.firstCheckinSubtitle" = "Din första incheckning. Detta skapar din protokollpoäng.";
+"onboarding.bodyMetrics" = "KROPPSMÅTT";
+"onboarding.weight" = "Vikt";
+"onboarding.bodyFat" = "Kroppsfett";
+"onboarding.protocolScoreLabel" = "Protokollpoäng";
+"onboarding.outOf100" = "/ 100";
+
+"onboarding.superchargeHK" = "Förstärk med HealthKit";
+"onboarding.hkSubtitle" = "Spåra automatiskt sömn, steg och hjärtfrekvensvariabilitet.";
+"onboarding.hkSleep" = "Sömn";
+"onboarding.hkSleepDesc" = "Logga automatiskt sömnens längd och kvalitet";
+"onboarding.hkSteps" = "Steg";
+"onboarding.hkStepsDesc" = "Daglig aktivitet utan manuell inmatning";
+"onboarding.hkHRV" = "HRV";
+"onboarding.hkHRVDesc" = "Hjärtfrekvensvariabilitet för återhämtningsinsikter";
+"onboarding.hkWeight" = "Kroppsvikt";
+"onboarding.hkWeightDesc" = "Synka från din smarta våg";
+"onboarding.hkPrivacy" = "Dina data stannar på enheten. Vi delar dem aldrig.";
+"onboarding.enableHK" = "Aktivera HealthKit";
+"onboarding.hkAlreadySet" = "HealthKit-behörigheter är redan inställda. Tryck för att öppna Inställningar.";
+
+"onboarding.reminders" = "Påminnelser";
+"onboarding.remindersSubtitle" = "Få en knuff att logga incheckningar, injektioner eller peptider.";
+"onboarding.enableReminders" = "Aktivera påminnelser";
+"onboarding.sameTimeAll" = "Samma tid för alla";
+"onboarding.perCompound" = "Per preparat";
+"onboarding.reminderFrequency" = "Frekvens";
+"onboarding.reminderTime" = "Påminnelsetid";
+"onboarding.selectDays" = "Välj dagar";
+"onboarding.dailyCheckin" = "Daglig incheckning";
+"onboarding.changeInSettings" = "Du kan alltid ändra detta i Inställningar.";
+"onboarding.getStarted" = "Kom igång";
+
+"onboarding.startTrial" = "Starta 3-dagars gratis provperiod";
+"onboarding.trialSubtitle" = "Lås upp fullständiga insikter och spåra dina framsteg mot 85+.";
+"onboarding.noCharge" = "Ingen kostnad i 3 dagar. Avsluta när som helst i Inställningar → Prenumerationer.";
+"onboarding.maybeLater" = "Kanske senare";
+
+/* Frequency labels */
+"freq.daily" = "Dagligen";
+"freq.everyOtherDay" = "Varannan dag";
+"freq.every3Days" = "Var tredje dag";
+"freq.twiceWeekly" = "Två gånger i veckan";
+"freq.weekly" = "Veckovis";
+"freq.biweekly" = "Varannan vecka";
+"freq.monthly" = "Månadsvis";
+"freq.customDays" = "Anpassade dagar";
+"freq.e1d" = "Varje dag (E1D)";
+"freq.e2d" = "Varannan dag";
+"freq.e3d" = "Var tredje dag";
+"freq.e3.5d" = "Två gånger i veckan (E3.5D)";
+"freq.e7d" = "Veckovis (E7D)";
+"freq.e14d" = "Varannan vecka (E14D)";
+"freq.twiceWeekMonThu" = "Två gånger i veckan (mån, tors)";
+"freq.threeTimesWeek" = "Tre gånger i veckan";
+
+/* ═══════════════════════════════════════════════════════════════
+   Dashboard
+   ═══════════════════════════════════════════════════════════════ */
+"dashboard.title" = "Översikt";
+"dashboard.noDataTitle" = "👋 Inga data än";
+"dashboard.noDataSubtitle" = "Ladda exempeldata för att utforska appen, eller börja din första incheckning.";
+"dashboard.loadSampleData" = "Ladda exempeldata";
+"dashboard.startCheckin" = "Starta incheckning";
+"dashboard.activeProtocol" = "Aktivt protokoll";
+"dashboard.overdue" = "FÖRSENAD";
+"dashboard.nextIn" = "Nästa om %dd";
+"dashboard.protocolScore" = "Protokollpoäng";
+"dashboard.7dayAvg" = "7-dagars snitt";
+"dashboard.prior7day" = "Föregående 7 dagar";
+"dashboard.logToday" = "Logga idag";
+"dashboard.dailyCheckin" = "Daglig incheckning";
+"dashboard.tapToLog" = "Tryck för att logga hur du mår idag";
+"dashboard.todaysCheckin" = "Dagens incheckning";
+"dashboard.checkinStreak" = "Incheckningssvit";
+"dashboard.estimatedBloodLevel" = "Uppskattad blodnivå";
+"dashboard.pkCurve.empty" = "Logga en injektion för att se din PK-kurva";
+"dashboard.seeBloodLevels" = "Se dina verkliga blodnivåer";
+"dashboard.pkCurveDesc" = "Personlig PK-kurva baserad på ditt protokoll";
+"dashboard.startFreeTrial" = "Starta gratis provperiod";
+"dashboard.fertilityActive" = "Fertilitetsläge aktivt";
+"dashboard.hcgStarted" = "hCG startade för %dw sedan";
+"dashboard.protocol" = "Protokoll";
+"dashboard.glp1Weight" = "GLP-1-viktspårning";
+"dashboard.energyStable" = "Stabil energi";
+"dashboard.glp1Working" = "GLP-1 + vikt trendar nedåt + stabil energi = protokollet fungerar bra";
+"dashboard.bodyComp" = "Kroppssammansättning";
+"dashboard.logWeightHint" = "Logga kroppsvikt i din dagliga incheckning";
+"dashboard.weeklyReport" = "Vecko-\nrapport";
+"dashboard.weight.current" = "Aktuell";
+"dashboard.weight.30dChange" = "30d-förändring";
+"dashboard.weight.bodyFat" = "Kroppsfett";
+"dashboard.weight.30dTrend" = "30-dagarstrend";
+
+/* Dashboard - additional keys */
+"dashboard.sampleData.title" = "👋 Inga data än";
+"dashboard.sampleData.subtitle" = "Ladda exempeldata för att utforska appen, eller börja din första incheckning.";
+"dashboard.sampleData.load" = "Ladda exempeldata";
+"dashboard.sampleData.startCheckin" = "Starta incheckning";
+"dashboard.checkin.title" = "Daglig incheckning";
+"dashboard.checkin.cta" = "Checka in nu";
+"dashboard.checkin.done" = "Dagens incheckning";
+"dashboard.streak" = "Incheckningssvit";
+"dashboard.streak.days" = "dagar";
+"dashboard.personalBest" = "🏆 Nytt personligt rekord!";
+"dashboard.personalBest.subtitle" = "Din protokollpoäng nådde en ny topp.";
+"dashboard.weightTrend" = "Vikt";
+"dashboard.weightTrend.30day" = "30-dagarstrend";
+"dashboard.pkCurve" = "Uppskattad PK-kurva";
+"dashboard.pkCurve.subtitle" = "Se dina uppskattade testosteronnivåer";
+"dashboard.fertility" = "Fertilitetsstöd";
+"dashboard.fertility.hcgStarted" = "hCG startade";
+"dashboard.fertility.protocol" = "Protokoll";
+"dashboard.glp1" = "GLP-1 och vikt";
+"dashboard.glp1.energyStable" = "Stabil energi";
+"dashboard.glp1.workingWell" = "GLP-1 + vikt trendar nedåt + stabil energi = protokollet fungerar bra";
+"dashboard.bodyComposition" = "Kroppssammansättning";
+"dashboard.bodyComposition.subtitle" = "Spåra trender för vikt och kroppsfett";
+"dashboard.bodyComposition.logWeight" = "Logga kroppsvikt i din dagliga incheckning";
+"dashboard.bodyComposition.bodyFat" = "Kroppsfett";
+"dashboard.bodyComposition.bodyFatPct" = "Kroppsfett %";
+"dashboard.forecast" = "Morgondagens prognos";
+"dashboard.quickStats" = "Snabbstatistik";
+"dashboard.totalCheckins" = "Totalt antal incheckningar";
+"dashboard.quickStats.avgEnergy" = "Snittenergi";
+"dashboard.quickStats.avgLibido" = "Snittlibido";
+"dashboard.quickStats.morningWood" = "Morgonstånd";
+"dashboard.quickStats.30d" = "30d";
+"dashboard.quickStats.nextInjection" = "Nästa injektion";
+"dashboard.quickStats.overdue" = "Försenad";
+"dashboard.quickStats.onTrack" = "På rätt spår";
+"dashboard.quickStats.adherence" = "Följsamhet";
+"dashboard.trendChart" = "7-dagarstrender";
+"dashboard.trendChart.empty" = "Checka in dagligen för att se trender";
+"dashboard.trendChart.upsell" = "Se fullständiga 7-dagarstrender med Pro";
+"dashboard.trendChart.3days" = "3 dagar";
+"dashboard.cycleDay" = "Dag %d av %d · %@";
+"dashboard.compliance.injections" = "Injektioner";
+"dashboard.compliance.thisMonth" = "Denna månad";
+"dashboard.compliance.supplements" = "Kosttillskott";
+"dashboard.compliance.tapToAdd" = "Tryck för att lägga till";
+"dashboard.compliance.thisWeek" = "Denna vecka";
+"dashboard.supplementSetup.title" = "Ställ in din stack";
+"dashboard.supplementSetup.subtitle" = "Lägg till kosttillskott för att spåra daglig följsamhet.";
+
+/* Trial / billing */
+"dashboard.trial.ended" = "Din provperiod har upphört";
+"dashboard.trial.endsIn" = "Provperioden slutar om %d dag(ar)";
+"dashboard.trial.subscribe" = "Prenumerera för att behålla alla dina data och funktioner.";
+"dashboard.trial.subscribeButton" = "Prenumerera";
+"dashboard.trial.accomplished" = "Se vad du har åstadkommit";
+"dashboard.trial.freeForever" = "Gratis för alltid";
+"dashboard.trial.freeFeatures" = "Protokollpoäng, dagliga incheckningar, HealthKit-synk och grundläggande insikter";
+"dashboard.trial.withPro" = "Med Pro";
+"dashboard.trial.proFeatures" = "PK-kurvor, blodprovsspårning, veckorapporter, peptidspårning med mera";
+"dashboard.trial.subscribePro" = "Prenumerera på Trough Pro";
+"dashboard.trial.continueFree" = "Fortsätt med Gratis";
+"dashboard.trial.dataSafe" = "Dina data är trygga — uppgradera när som helst.";
+"dashboard.grace.title" = "Betalningsproblem";
+"dashboard.grace.subtitle" = "Vi försöker debitera igen — din åtkomst fortsätter i %d dag(ar) till.";
+
+/* Greetings */
+"greeting.morning" = "God morgon";
+"greeting.afternoon" = "God eftermiddag";
+"greeting.evening" = "God kväll";
+
+/* Milestones */
+"milestone.7" = "🔥 En vecka! Topp 30 % av alla TRT-spårare";
+"milestone.14" = "🔥🔥 Två veckor! Topp 15 % av alla TRT-spårare";
+"milestone.30" = "🔥🔥🔥 En månad! Topp 5 % av alla TRT-spårare";
+"milestone.60" = "🔥🔥🔥🔥 Två månader! Topp 2 % — du är elit";
+"milestone.90" = "🔥🔥🔥🔥🔥 Tre månader! Topp 1 % — legend";
+
+/* Forecast */
+"forecast.injectionToday" = "Injektionsdag idag — energin bör nå sin topp om 24–48 timmar.";
+"forecast.injectionTomorrow" = "Injektion ska tas imorgon. Du är i dalen — viss trötthet är normalt.";
+"forecast.dip" = "Dag %d imorgon — energin sjunker ofta. Ligg steget före.";
+"forecast.strong" = "Dag %d imorgon — nivåerna bör vara starka efter injektionen.";
+"forecast.tapering" = "Nästa injektion om %d dagar. Nivåerna avtar gradvis.";
+
+/* PK Curve */
+"pk.overdue" = "Försenad med %dd";
+"pk.peak" = "Topp";
+"pk.trough" = "Dal";
+"pk.now" = "Nu";
+
+/* ═══════════════════════════════════════════════════════════════
+   Daily Check-in
+   ═══════════════════════════════════════════════════════════════ */
+"checkin.title" = "Hur mår du idag?";
+"checkin.dayOf" = "Dag %d av %d";
+"checkin.protocolScore" = "Protokollpoäng";
+"checkin.wellnessMetrics" = "Välmåendemått";
+"checkin.energy" = "Energi";
+"checkin.mood" = "Humör";
+"checkin.libido" = "Libido";
+"checkin.sleepQuality" = "Sömnkvalitet";
+"checkin.mentalClarity" = "Mental skärpa";
+"checkin.bodyMetrics" = "Kroppsmått";
+"checkin.weight" = "Vikt (%@)";
+"checkin.bodyFat" = "Kroppsfett %%";
+"checkin.optional" = "Valfritt";
+"checkin.next" = "Nästa";
+"checkin.saveCheckin" = "Spara incheckning";
+"checkin.saved" = "Sparad";
+"checkin.injectionCycle" = "Injektionscykel";
+"checkin.noData" = "Inga data";
+
+/* Binary taps */
+"checkin.quickQuestions" = "Snabbfrågor";
+"checkin.morningWood" = "Morgonstånd?";
+"checkin.yes" = "Ja ✓";
+"checkin.no" = "Nej ✗";
+"checkin.workout" = "Tränat idag?";
+"checkin.trainingPerformance" = "Träningsprestation";
+"checkin.performance" = "Prestation";
+"checkin.aiSideEffects" = "AI-biverkningar";
+"checkin.aiSideEffectsDesc" = "Hjälper till att upptäcka om din AI-dos kraschar östrogenet.";
+"checkin.jointPain" = "Ledvärk";
+"checkin.noIssues" = "Inga problem";
+"checkin.glp1Check" = "GLP-1-koll";
+"checkin.nausea" = "Illamående";
+"checkin.noNausea" = "Inget illamående";
+"checkin.supplementsTaken" = "Tagit kosttillskott idag?";
+
+/* Completion */
+"checkin.hrv" = "HRV";
+"checkin.sleep" = "Sömn";
+"checkin.steps" = "Steg";
+"checkin.restingHR" = "Vilopuls";
+
+/* ═══════════════════════════════════════════════════════════════
+   Injections
+   ═══════════════════════════════════════════════════════════════ */
+"injections.title" = "Injektioner";
+"injections.logNew" = "Logga ny injektion";
+"injections.logFirst" = "Logga din första injektion";
+"injections.logFirstSubtitle" = "Tryck på + för att registrera en dos. Trough spårar din cykel och föreslår injektionsställen.";
+"injections.logInjection" = "Logga injektion";
+"injections.editInjection" = "Redigera injektion";
+"injections.today" = "Idag";
+"injections.yesterday" = "Igår";
+"injections.dateTime" = "Datum och tid";
+"injections.when" = "När";
+"injections.injectionSite" = "Injektionsställe";
+"injections.notesOptional" = "Anteckningar (valfritt)";
+"injections.notesPlaceholder" = "Eventuella anteckningar om denna injektion…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Bloodwork
+   ═══════════════════════════════════════════════════════════════ */
+"bloodwork.title" = "Blodprover";
+"bloodwork.results" = "Resultat";
+"bloodwork.trends" = "Trender";
+"bloodwork.noRecords" = "Inga blodprover registrerade";
+"bloodwork.logFirst" = "Logga din första panel för att börja spåra trender.";
+"bloodwork.addResults" = "Lägg till resultat";
+"bloodwork.addBloodwork" = "Lägg till blodprov";
+"bloodwork.editBloodwork" = "Redigera blodprov";
+"bloodwork.panelInfo" = "Panelinformation";
+"bloodwork.drawDate" = "Provtagningsdatum";
+"bloodwork.labName" = "Labbets namn (valfritt)";
+"bloodwork.photo" = "Foto";
+"bloodwork.chooseLibrary" = "Välj från biblioteket";
+"bloodwork.takePhoto" = "Ta foto";
+"bloodwork.photoUnavailable" = "Foto otillgängligt";
+"bloodwork.notesPlaceholder" = "Anteckningar till din läkare om denna panel...";
+"bloodwork.refRange" = "Ditt labbs referensintervall";
+"bloodwork.editRefRange" = "Redigera referensintervall";
+"bloodwork.markers" = "%d markörer";
+"bloodwork.view" = "Visa";
+
+/* ═══════════════════════════════════════════════════════════════
+   Peptides / Adjuncts
+   ═══════════════════════════════════════════════════════════════ */
+"peptides.title" = "Tilläggspreparat och peptider";
+"peptides.trackYourStack" = "Spåra din stack";
+"peptides.trackSubtitle" = "Logga tilläggspreparat och peptiddoser för att\nspåra din stack och upptäcka mönster.";
+"peptides.logFirstDose" = "Logga första dosen";
+"peptides.glp1Weight" = "GLP-1 / viktkontroll";
+"peptides.weightTracking" = "Viktspårning";
+"peptides.aiAncillary" = "AI / stödpreparat";
+"peptides.peptides" = "Peptider";
+"peptides.activeCompounds" = "Aktiva preparat";
+"peptides.e2Correlation" = "E2-korrelation";
+"peptides.log" = "Logga";
+"peptides.dosesTotal" = "%d dos(er) totalt";
+"peptides.logDose" = "Logga dos";
+"peptides.editLog" = "Redigera logg";
+"peptides.adjunctPeptide" = "Tilläggspreparat / peptid";
+"peptides.amount" = "Mängd";
+"peptides.unit" = "Enhet";
+"peptides.route" = "Administreringssätt";
+"peptides.injectionSite" = "Injektionsställe";
+"peptides.details" = "Detaljer";
+"peptides.batchLot" = "Batch / lotnr";
+"peptides.compoundName" = "Preparatnamn";
+"peptides.dateTime" = "Datum och tid";
+
+/* ═══════════════════════════════════════════════════════════════
+   Settings
+   ═══════════════════════════════════════════════════════════════ */
+"settings.title" = "Inställningar";
+"settings.activeProtocol" = "Aktivt protokoll";
+"settings.noActiveProtocol" = "Inget aktivt protokoll";
+"settings.setNewProtocol" = "Ange nytt protokoll";
+"settings.supplements" = "Kosttillskott";
+"settings.manageSupplements" = "Hantera kosttillskott";
+"settings.active" = "%d aktiva";
+"settings.trackingPrefs" = "Spårningsinställningar";
+"settings.trackBodyWeight" = "Spåra kroppsvikt";
+"settings.dataImport" = "Dataimport";
+"settings.importSpreadsheet" = "Importera från kalkylblad";
+"settings.reminders" = "Påminnelser";
+"settings.account" = "Konto";
+"settings.signOut" = "Logga ut";
+"settings.deleteAccount" = "Radera konto";
+"settings.deleteAccount.title" = "Radera konto?";
+"settings.deleteAccount.message" = "Detta raderar permanent ditt konto och alla dina data. Åtgärden kan inte ångras.";
+"settings.deleteAccount.confirm" = "Radera allt";
+"settings.deleting" = "Raderar...";
+"settings.recommend" = "Rekommendera Trough till en vän";
+"settings.shareSubject" = "Kolla in Trough";
+"settings.shareBody" = "Jag har använt Trough för att spåra mitt TRT-protokoll — det är riktigt välgjort.";
+"settings.privacyPolicy" = "Integritets- och datapolicy";
+"settings.termsOfUse" = "Användarvillkor";
+"settings.proFeatures" = "Vad du får med Pro";
+
+/* New Protocol */
+"settings.newProtocol" = "Nytt protokoll";
+"settings.protocolName" = "Protokollnamn (t.ex. Test Cyp 150mg E7D)";
+
+/* Supplements */
+"supplements.title" = "Kosttillskott";
+"supplements.yourStack" = "Din stack";
+"supplements.noSupplements" = "Inga kosttillskott än";
+"supplements.addHint" = "Lägg till din stack för att spåra daglig följsamhet i din incheckning.";
+"supplements.addSupplement" = "Lägg till kosttillskott";
+"supplements.name" = "Namn";
+"supplements.amount" = "Mängd";
+"supplements.every" = "Var";
+"supplements.preset" = "Förinställning";
+"supplements.doseFrequency" = "Dos och frekvens";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.title" = "TROUGH PRO";
+"paywall.heroSubtitle" = "Gå från 42 → 85 i protokollpoäng.";
+"paywall.subtitle" = "Allt. Gratis i 3 dagar.";
+"paywall.monthly" = "Månadsvis";
+"paywall.annual" = "Årsvis";
+"paywall.save40" = "Spara 58 %";
+"paywall.startTrial" = "Starta gratis provperiod";
+"paywall.startTrialFull" = "Starta gratis provperiod — 3 dagar gratis, sedan %@";
+"paywall.restorePurchases" = "Återställ";
+"paywall.privacyPolicy" = "Integritet";
+"paywall.termsOfUse" = "Villkor";
+
+/* Pro features */
+"pro.title" = "Vad du får med Pro";
+"pro.trialIncluded" = "3 dagars gratis provperiod ingår";
+"pro.pkCurves" = "PK-kurvor";
+"pro.pkCurvesDesc" = "Se dina uppskattade blodnivåer med konfidensband och flerester-stacking";
+"pro.trendHistory" = "Fullständig trendhistorik";
+"pro.trendHistoryDesc" = "Obegränsade trenddiagram för energi, humör, libido och sömn (gratis visar 3 dagar)";
+"pro.bloodwork" = "Blodprovsspårning";
+"pro.bloodworkDesc" = "Logga labbresultat, spåra trender över tid, ange egna referensintervall";
+"pro.reports" = "Veckorapporter och export";
+"pro.reportsDesc" = "PDF- och CSV-export med läkaranteckningar — perfekt för klinikbesök";
+"pro.peptides" = "Tilläggspreparat och peptider";
+"pro.peptidesDesc" = "Spåra AI-preparat, peptider och GLP-1-agonister med E2-korrelation";
+"pro.siteRotation" = "Rotation av injektionsställen";
+"pro.siteRotationDesc" = "Visuell rotationskarta för att förhindra ärrvävnadsbildning";
+"pro.reminders" = "Injektionspåminnelser";
+"pro.remindersDesc" = "Missa aldrig en injektionsdag — smarta påminnelser baserade på ditt protokoll";
+"pro.alwaysFree" = "Alltid gratis";
+"pro.alwaysFreeDesc" = "Protokollpoäng, dagliga incheckningar, HealthKit-synk och grundläggande insikter";
+
+/* Paywall feature list */
+"paywall.feat.history" = "Obegränsad historik och protokollpoängstrender";
+"paywall.feat.pk" = "PK-kurvor med konfidensband";
+"paywall.feat.bloodwork" = "Blodprovsspårning och trenddiagram";
+"paywall.feat.reports" = "Veckorapporter och CSV/PDF-export";
+"paywall.feat.peptides" = "Peptid- och GLP-1-spårning";
+"paywall.feat.siteMap" = "Rotationskarta för injektionsställen";
+"paywall.feat.reminders" = "Injektionspåminnelser och kalender";
+"paywall.feat.healthkit" = "HealthKit-autosynk (alltid gratis)";
+
+/* ═══════════════════════════════════════════════════════════════
+   HealthKit Permission
+   ═══════════════════════════════════════════════════════════════ */
+"hk.title" = "Anslut Hälsa";
+"hk.subtitle" = "Trough läser dina biometriska data för att hitta mönster i ditt hormonprotokoll.";
+"hk.hrv" = "HRV";
+"hk.hrvDesc" = "Hjärtfrekvensvariabilitet — signal för stress och återhämtning";
+"hk.sleep" = "Sömn";
+"hk.sleepDesc" = "Stadierna Kärnsömn, Djupsömn och REM från i natt";
+"hk.stepsEnergy" = "Steg och energi";
+"hk.stepsEnergyDesc" = "Daglig rörelse att korrelera med protokollet";
+"hk.restingHR" = "Vilopuls";
+"hk.restingHRDesc" = "Kardiovaskulär baslinje över tid";
+"hk.privacy" = "Skrivskyddat. Vi säljer aldrig dina hälsodata.";
+"hk.allow" = "Tillåt åtkomst";
+"hk.notNow" = "Inte nu";
+"hk.denied" = "Hälsoåtkomst nekad";
+"hk.deniedDesc" = "Tryck för att öppna Inställningar och aktivera hälsoåtkomst.";
+"hk.permissionError" = "Kunde inte begära behörigheter. Du kan aktivera hälsoåtkomst i Inställningar.";
+"hk.noData" = "Inga data tillgängliga";
+
+/* ═══════════════════════════════════════════════════════════════
+   Privacy Policy
+   ═══════════════════════════════════════════════════════════════ */
+"privacy.title" = "Integritet och data";
+"privacy.dataYours" = "Dina data lämnar aldrig din enhet";
+"privacy.dataYoursDesc" = "Alla dina incheckningar, injektioner, blodprover och protokolldata lagras endast på den här enheten. Det finns inget konto och inget moln — ingenting laddas någonsin upp till en server.";
+"privacy.hkPrivacy" = "HealthKit förblir privat";
+"privacy.hkPrivacyDesc" = "HRV, sömn, steg och vilopuls läses från HealthKit för att fylla i din incheckning automatiskt. Dessa data lämnar aldrig din enhet och delas aldrig med tredje part.";
+"privacy.photos" = "Blodprovsfoton";
+"privacy.photosDesc" = "Foton på labbresultat lagras endast lokalt på din enhet. De laddas aldrig upp någonstans, och ingen utom du kan någonsin se dem.";
+"privacy.sync" = "Ingen analys, ingen spårning";
+"privacy.syncDesc" = "Trough har ingen analys och ingen spårning. Vi samlar inte in något om hur du använder appen, och dina data säljs, hyrs ut eller delas aldrig med någon.";
+"privacy.noSell" = "Ingen analys, ingen spårning";
+"privacy.noSellDesc" = "Trough har ingen analys och ingen spårning. Vi samlar inte in något om hur du använder appen, och dina data säljs, hyrs ut eller delas aldrig med någon.";
+"privacy.deletion" = "Radering av data";
+"privacy.deletionDesc" = "Du kan radera vilken post som helst när som helst. Eftersom allt finns på din enhet raderas alla dina data permanent och oåterkalleligt när du tar bort appen.";
+"privacy.fullPolicy" = "Fullständig policy och villkor";
+
+/* ═══════════════════════════════════════════════════════════════
+   Disclaimers
+   ═══════════════════════════════════════════════════════════════ */
+"disclaimer.medical" = "Inte medicinsk rådgivning. Rådfråga din vårdgivare.";
+"disclaimer.standard" = "Denna information är endast för personlig spårning och utgör inte medicinsk rådgivning. Rådfråga en legitimerad vårdgivare innan du gör några ändringar i ditt protokoll.";
+"disclaimer.bloodwork" = "De labbvärden som visas är för referens. Normalintervall varierar mellan labb och individer. Diskutera alltid dina resultat med din förskrivande läkare.";
+"disclaimer.pkCurve" = "Farmakokinetiska kurvor är uppskattningar baserade på populationssnitt. Individuell absorption och metabolism varierar avsevärt. Detta ersätter inte regelbunden blodprovskontroll.";
+"disclaimer.protocolScore" = "Protokollpoängen återspeglar dina egenrapporterade välmåendemått. Den är inte en klinisk mätning och bör inte vägleda medicinska beslut.";
+"disclaimer.insight" = "Insikter genereras endast utifrån dina personliga spårningsdata. De är observerade mönster, inte medicinska diagnoser eller råd.";
+"disclaimer.weeklyReport" = "Denna rapport sammanfattar dina egenrapporterade data. Den är inte ett kliniskt dokument och bör inte användas för att vägleda medicinska beslut. Rådfråga alltid din förskrivande läkare.";
+"disclaimer.supplement" = "Information om kosttillskott är endast för personlig spårning. Rådfråga en kvalificerad vårdgivare innan du börjar med något nytt kosttillskott.";
+"disclaimer.fertility" = "Uppskattningar av fertilitetsåterhämtning baseras på publicerade snitt. Individuella tidsförlopp varierar avsevärt. Rådfråga alltid en reproduktionsendokrinolog.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Weekly Report
+   ═══════════════════════════════════════════════════════════════ */
+"report.title" = "Veckorapport";
+"report.notEnoughData" = "Inte tillräckligt med data än";
+"report.notEnoughDataDesc" = "Checka in 7 dagar i rad för att låsa upp din veckorapport.";
+"report.share" = "Dela rapport";
+
+/* ═══════════════════════════════════════════════════════════════
+   CSV Import
+   ═══════════════════════════════════════════════════════════════ */
+"import.dailyCheckins" = "Dagliga incheckningar";
+"import.bloodwork" = "Blodprover";
+"import.both" = "Båda";
+"import.chooseFile" = "Välj fil";
+"import.import" = "Importera";
+"import.date" = "Datum";
+"import.labName" = "Labbets namn";
+
+/* ═══════════════════════════════════════════════════════════════
+   Frequency Labels
+   ═══════════════════════════════════════════════════════════════ */
+"frequency.daily" = "Dagligen";
+"frequency.everyOtherDay" = "Varannan dag";
+"frequency.every3Days" = "Var tredje dag";
+"frequency.weekly" = "Veckovis";
+"frequency.every2Weeks" = "Varannan vecka";
+"frequency.everyNDays" = "Var %d:e dag";
+
+/* ═══════════════════════════════════════════════════════════════
+   Notifications
+   ═══════════════════════════════════════════════════════════════ */
+"notification.checkinTitle" = "Daglig incheckning";
+"notification.checkinBody" = "Hur mår du idag? Logga din dagliga incheckning.";
+"notification.compoundDoseTitle" = "%@-påminnelse";
+"notification.compoundDoseBody" = "Dags för din dos %@ (%@).";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.featurePK" = "Liveuppdaterade PK-kurvor";
+"paywall.featureHistory" = "Fullständig trendhistorik";
+"paywall.featureBloodwork" = "Blodprovsspårning";
+"paywall.featureReports" = "Veckorapporter";
+"paywall.featureAI" = "AI-drivna insikter";
+"paywall.featurePeptides" = "Peptidspårning";
+"paywall.perMonth" = "per månad";
+"paywall.perYear" = "per år";
+"paywall.privacy" = "Integritet";
+"paywall.terms" = "Villkor";
+"paywall.restore" = "Återställ";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.trtInjection" = "TRT-injektion";
+"onboarding.selected" = "%d valda";

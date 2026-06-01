@@ -1,0 +1,637 @@
+/* Trough — Base English (en) Localizable Strings */
+
+/* ═══════════════════════════════════════════════════════════════
+   Navigation & Tab Bar
+   ═══════════════════════════════════════════════════════════════ */
+"tab.home" = "ホーム";
+"tab.log" = "記録";
+"tab.injections" = "注射";
+"tab.more" = "その他";
+
+/* ═══════════════════════════════════════════════════════════════
+   Common / Shared
+   ═══════════════════════════════════════════════════════════════ */
+"common.cancel" = "キャンセル";
+"common.save" = "保存";
+"common.delete" = "削除";
+"common.done" = "完了";
+"common.next" = "次へ";
+"common.back" = "戻る";
+"common.skip" = "スキップ";
+"common.continue" = "続ける";
+"common.ok" = "OK";
+"common.error" = "エラー";
+"common.today" = "今日";
+"common.yesterday" = "昨日";
+"common.add" = "追加";
+"common.edit" = "編集";
+"common.remove" = "削除";
+"common.notes" = "メモ";
+"common.custom" = "カスタム";
+"common.dose" = "用量";
+"common.compound" = "化合物";
+"common.mg" = "mg";
+
+/* Units */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+"unit.perMonth" = "月あたり";
+"unit.perYear" = "年あたり";
+"unit.days" = "日";
+"unit.daysAgo" = "%d日前";
+
+/* ═══════════════════════════════════════════════════════════════
+   Auth
+   ═══════════════════════════════════════════════════════════════ */
+"auth.appName" = "TROUGH";
+"auth.tagline" = "TRT・ホルモントラッカー";
+"auth.email" = "メールアドレス";
+"auth.password" = "パスワード";
+"auth.createAccount" = "アカウント作成";
+"auth.signIn" = "サインイン";
+"auth.switchToSignIn" = "すでにアカウントをお持ちですか？サインイン";
+"auth.switchToSignUp" = "初めての方はこちら？アカウント作成";
+"auth.enterCredentials" = "メールアドレスとパスワードを入力してください。";
+"auth.confirmEmail" = "メールを確認してアカウントを認証し、以下からサインインしてください。";
+
+/* ═══════════════════════════════════════════════════════════════
+   Splash / Onboarding Hook
+   ═══════════════════════════════════════════════════════════════ */
+"splash.headline" = "プロトコルを記録。\nデータは自分のもの。";
+"splash.cta" = "最適化を始めよう";
+
+"quiz.title" = "今日の調子はいかがですか？";
+"quiz.subtitle" = "各項目を1〜5で評価してください。\nベースラインのプロトコルスコアを算出します。";
+"quiz.energy" = "エネルギー";
+"quiz.mood" = "気分";
+"quiz.libido" = "性欲";
+"quiz.sleepQuality" = "睡眠の質";
+"quiz.mentalClarity" = "頭の明晰さ";
+"quiz.cta" = "スコアを見る";
+
+"scoreReveal.protocolScore" = "プロトコルスコア";
+"scoreReveal.cta" = "予測される改善を見る";
+"scoreReveal.dialedIn" = "最適化済み";
+"scoreReveal.steady" = "安定";
+"scoreReveal.trendingDown" = "低下傾向";
+"scoreReveal.offBaseline" = "ベースラインから外れ";
+"scoreReveal.encourage.high" = "良好なベースラインです。この調子を維持しましょう。";
+"scoreReveal.encourage.mid" = "しっかりした土台です。最適化の余地があります。";
+"scoreReveal.encourage.low" = "伸びしろがあります。一緒に見つけましょう。";
+"scoreReveal.encourage.veryLow" = "やるべきことがあります — それこそが目的です。";
+
+"projected.title" = "7日間の見通し";
+"projected.subtitle" = "継続的に記録すると、最初の1週間で実際の改善が見られます。";
+"projected.today" = "今日";
+"projected.day7" = "7日目";
+"projected.now" = "現在";
+"projected.cta" = "プランを作成";
+
+"loader.step1" = "ベースラインを分析中…";
+"loader.step2" = "PKモデルを調整中…";
+"loader.step3" = "プロトコルを構築中…";
+"loader.step4" = "トラッキングを設定中…";
+"loader.step5" = "プランを仕上げ中…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding Setup
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.whatBringsYou" = "ご利用の目的は？";
+"onboarding.personalizeExperience" = "あなたに合わせて最適化するために使用します。";
+"onboarding.imOnTRT" = "TRTを行っている";
+"onboarding.trtSubtitle" = "プロトコル、注射、血中値を記録";
+"onboarding.naturalTitle" = "自然に最適化中";
+"onboarding.naturalSubtitle" = "ウェルネス、トレーニング、サプリを記録";
+
+"onboarding.haveData" = "既存のデータがありますか？";
+"onboarding.importSubtitle" = "トラッキング用スプレッドシートをインポート — 列を自動マッピングします。";
+"onboarding.importSpreadsheet" = "スプレッドシートからインポート";
+"onboarding.importCSV" = "CSV、TSV — 列と日付を自動検出";
+"onboarding.startFresh" = "最初から始める";
+"onboarding.startFreshGuide" = "設定をご案内します";
+"onboarding.skipStartFresh" = "スキップ — 最初から始める";
+
+"onboarding.yourProtocol" = "あなたのプロトコル";
+"onboarding.protocolSubtitle" = "血中値とスケジュールの追跡に使用します。";
+"onboarding.primaryCompound" = "主要化合物";
+"onboarding.frequency" = "頻度";
+"onboarding.injectionDays" = "注射日";
+"onboarding.addSecondary" = "副次的な化合物を追加";
+"onboarding.addCompound" = "化合物を追加";
+"onboarding.addAnother" = "+ さらに追加";
+"onboarding.secondaryCompound" = "副次的化合物";
+"onboarding.concentration" = "濃度";
+
+"onboarding.whatElse" = "他に使用しているものは？";
+"onboarding.tapAllApply" = "該当するものをすべてタップ。後からいつでも追加できます。";
+"onboarding.addCustomCompound" = "カスタム化合物を追加";
+"onboarding.compoundName" = "化合物名";
+"onboarding.selected" = "%d件選択中";
+"onboarding.setDoses" = "用量を設定";
+"onboarding.dosesSubtitle" = "一般的な用量とスケジュールを事前入力しました — 必要に応じて調整してください。";
+"onboarding.schedule" = "スケジュール";
+"onboarding.dosesReminder" = "各化合物のスケジュールに基づいてリマインダーを送信します。";
+
+"onboarding.lastInjection" = "前回の注射";
+"onboarding.lastInjectionSubtitle" = "この日付からPK曲線を開始します。";
+"onboarding.dateAndTime" = "日時";
+
+"onboarding.howFeeling" = "今日の調子はいかがですか？";
+"onboarding.firstCheckinSubtitle" = "最初のチェックインです。これでプロトコルスコアが作成されます。";
+"onboarding.bodyMetrics" = "身体指標";
+"onboarding.weight" = "体重";
+"onboarding.bodyFat" = "体脂肪";
+"onboarding.protocolScoreLabel" = "プロトコルスコア";
+"onboarding.outOf100" = "/ 100";
+
+"onboarding.superchargeHK" = "HealthKitで強化";
+"onboarding.hkSubtitle" = "睡眠、歩数、心拍変動を自動で記録します。";
+"onboarding.hkSleep" = "睡眠";
+"onboarding.hkSleepDesc" = "睡眠時間と質を自動記録";
+"onboarding.hkSteps" = "歩数";
+"onboarding.hkStepsDesc" = "手動入力なしで日々の活動を記録";
+"onboarding.hkHRV" = "HRV";
+"onboarding.hkHRVDesc" = "回復インサイトのための心拍変動";
+"onboarding.hkWeight" = "体重";
+"onboarding.hkWeightDesc" = "スマート体重計から同期";
+"onboarding.hkPrivacy" = "データは端末内に保存され、共有されることはありません。";
+"onboarding.enableHK" = "HealthKitを有効化";
+"onboarding.hkAlreadySet" = "HealthKitの許可は設定済みです。タップして設定を開きます。";
+
+"onboarding.reminders" = "リマインダー";
+"onboarding.remindersSubtitle" = "チェックイン、注射、ペプチドの記録を促します。";
+"onboarding.enableReminders" = "リマインダーを有効化";
+"onboarding.sameTimeAll" = "すべて同じ時刻";
+"onboarding.perCompound" = "化合物ごと";
+"onboarding.reminderFrequency" = "頻度";
+"onboarding.reminderTime" = "リマインダー時刻";
+"onboarding.selectDays" = "曜日を選択";
+"onboarding.dailyCheckin" = "毎日のチェックイン";
+"onboarding.changeInSettings" = "設定でいつでも変更できます。";
+"onboarding.getStarted" = "始める";
+
+"onboarding.startTrial" = "3日間の無料トライアルを開始";
+"onboarding.trialSubtitle" = "すべてのインサイトを解放し、85以上への進捗を追跡します。";
+"onboarding.noCharge" = "3日間は無料です。設定 → サブスクリプションでいつでも解約できます。";
+"onboarding.maybeLater" = "後で";
+
+/* Frequency labels */
+"freq.daily" = "毎日";
+"freq.everyOtherDay" = "1日おき";
+"freq.every3Days" = "3日ごと";
+"freq.twiceWeekly" = "週2回";
+"freq.weekly" = "毎週";
+"freq.biweekly" = "隔週";
+"freq.monthly" = "毎月";
+"freq.customDays" = "カスタム日数";
+"freq.e1d" = "毎日 (E1D)";
+"freq.e2d" = "2日ごと";
+"freq.e3d" = "3日ごと";
+"freq.e3.5d" = "週2回 (E3.5D)";
+"freq.e7d" = "毎週 (E7D)";
+"freq.e14d" = "隔週 (E14D)";
+"freq.twiceWeekMonThu" = "週2回 (月・木)";
+"freq.threeTimesWeek" = "週3回";
+
+/* ═══════════════════════════════════════════════════════════════
+   Dashboard
+   ═══════════════════════════════════════════════════════════════ */
+"dashboard.title" = "ダッシュボード";
+"dashboard.noDataTitle" = "👋 まだデータがありません";
+"dashboard.noDataSubtitle" = "サンプルデータを読み込んでアプリを試すか、最初のチェックインを始めましょう。";
+"dashboard.loadSampleData" = "サンプルデータを読み込む";
+"dashboard.startCheckin" = "チェックインを始める";
+"dashboard.activeProtocol" = "有効なプロトコル";
+"dashboard.overdue" = "期限超過";
+"dashboard.nextIn" = "次回 %d日後";
+"dashboard.protocolScore" = "プロトコルスコア";
+"dashboard.7dayAvg" = "7日間平均";
+"dashboard.prior7day" = "前の7日間";
+"dashboard.logToday" = "今日を記録";
+"dashboard.dailyCheckin" = "毎日のチェックイン";
+"dashboard.tapToLog" = "タップして今日の調子を記録";
+"dashboard.todaysCheckin" = "今日のチェックイン";
+"dashboard.checkinStreak" = "チェックイン連続日数";
+"dashboard.estimatedBloodLevel" = "推定血中濃度";
+"dashboard.pkCurve.empty" = "注射を記録するとPK曲線が表示されます";
+"dashboard.seeBloodLevels" = "実際の血中濃度を見る";
+"dashboard.pkCurveDesc" = "あなたのプロトコルに基づくパーソナライズされたPK曲線";
+"dashboard.startFreeTrial" = "無料トライアルを開始";
+"dashboard.fertilityActive" = "生殖機能モード有効";
+"dashboard.hcgStarted" = "hCG開始から%d週";
+"dashboard.protocol" = "プロトコル";
+"dashboard.glp1Weight" = "GLP-1 体重トラッキング";
+"dashboard.energyStable" = "エネルギー安定";
+"dashboard.glp1Working" = "GLP-1 + 体重低下傾向 + エネルギー安定 = プロトコルが良好に機能";
+"dashboard.bodyComp" = "身体組成";
+"dashboard.logWeightHint" = "毎日のチェックインで体重を記録";
+"dashboard.weeklyReport" = "週間\nレポート";
+"dashboard.weight.current" = "現在";
+"dashboard.weight.30dChange" = "30日間の変化";
+"dashboard.weight.bodyFat" = "体脂肪";
+"dashboard.weight.30dTrend" = "30日間トレンド";
+
+/* Dashboard - additional keys */
+"dashboard.sampleData.title" = "👋 まだデータがありません";
+"dashboard.sampleData.subtitle" = "サンプルデータを読み込んでアプリを試すか、最初のチェックインを始めましょう。";
+"dashboard.sampleData.load" = "サンプルデータを読み込む";
+"dashboard.sampleData.startCheckin" = "チェックインを始める";
+"dashboard.checkin.title" = "毎日のチェックイン";
+"dashboard.checkin.cta" = "今すぐチェックイン";
+"dashboard.checkin.done" = "今日のチェックイン";
+"dashboard.streak" = "チェックイン連続日数";
+"dashboard.streak.days" = "日";
+"dashboard.personalBest" = "🏆 自己ベスト更新！";
+"dashboard.personalBest.subtitle" = "プロトコルスコアが過去最高を記録しました。";
+"dashboard.weightTrend" = "体重";
+"dashboard.weightTrend.30day" = "30日間トレンド";
+"dashboard.pkCurve" = "推定PK曲線";
+"dashboard.pkCurve.subtitle" = "推定テストステロン値を見る";
+"dashboard.fertility" = "生殖機能サポート";
+"dashboard.fertility.hcgStarted" = "hCG開始";
+"dashboard.fertility.protocol" = "プロトコル";
+"dashboard.glp1" = "GLP-1 と体重";
+"dashboard.glp1.energyStable" = "エネルギー安定";
+"dashboard.glp1.workingWell" = "GLP-1 + 体重低下傾向 + エネルギー安定 = プロトコルが良好に機能";
+"dashboard.bodyComposition" = "身体組成";
+"dashboard.bodyComposition.subtitle" = "体重と体脂肪のトレンドを記録";
+"dashboard.bodyComposition.logWeight" = "毎日のチェックインで体重を記録";
+"dashboard.bodyComposition.bodyFat" = "体脂肪";
+"dashboard.bodyComposition.bodyFatPct" = "体脂肪率 %";
+"dashboard.forecast" = "明日の予測";
+"dashboard.quickStats" = "クイック統計";
+"dashboard.totalCheckins" = "総チェックイン数";
+"dashboard.quickStats.avgEnergy" = "平均エネルギー";
+"dashboard.quickStats.avgLibido" = "平均性欲";
+"dashboard.quickStats.morningWood" = "朝立ち";
+"dashboard.quickStats.30d" = "30日";
+"dashboard.quickStats.nextInjection" = "次回の注射";
+"dashboard.quickStats.overdue" = "期限超過";
+"dashboard.quickStats.onTrack" = "順調";
+"dashboard.quickStats.adherence" = "遵守率";
+"dashboard.trendChart" = "7日間トレンド";
+"dashboard.trendChart.empty" = "毎日チェックインするとトレンドが表示されます";
+"dashboard.trendChart.upsell" = "Proで7日間の完全なトレンドを見る";
+"dashboard.trendChart.3days" = "3日間";
+"dashboard.cycleDay" = "%d / %d 日目 · %@";
+"dashboard.compliance.injections" = "注射";
+"dashboard.compliance.thisMonth" = "今月";
+"dashboard.compliance.supplements" = "サプリメント";
+"dashboard.compliance.tapToAdd" = "タップして追加";
+"dashboard.compliance.thisWeek" = "今週";
+"dashboard.supplementSetup.title" = "スタックを設定";
+"dashboard.supplementSetup.subtitle" = "サプリメントを追加して日々の遵守を記録しましょう。";
+
+/* Trial / billing */
+"dashboard.trial.ended" = "トライアルが終了しました";
+"dashboard.trial.endsIn" = "トライアルはあと%d日で終了";
+"dashboard.trial.subscribe" = "登録してすべてのデータと機能を保持しましょう。";
+"dashboard.trial.subscribeButton" = "登録する";
+"dashboard.trial.accomplished" = "あなたの成果をご覧ください";
+"dashboard.trial.freeForever" = "ずっと無料";
+"dashboard.trial.freeFeatures" = "プロトコルスコア、毎日のチェックイン、HealthKit同期、基本インサイト";
+"dashboard.trial.withPro" = "Proの場合";
+"dashboard.trial.proFeatures" = "PK曲線、血液検査トラッキング、週間レポート、ペプチドトラッキングなど";
+"dashboard.trial.subscribePro" = "Trough Proに登録";
+"dashboard.trial.continueFree" = "無料版を続ける";
+"dashboard.trial.dataSafe" = "データは安全です — いつでもアップグレードできます。";
+"dashboard.grace.title" = "お支払いの問題";
+"dashboard.grace.subtitle" = "請求を再試行します — あと%d日間アクセスを継続できます。";
+
+/* Greetings */
+"greeting.morning" = "おはようございます";
+"greeting.afternoon" = "こんにちは";
+"greeting.evening" = "こんばんは";
+
+/* Milestones */
+"milestone.7" = "🔥 1週間達成！TRTトラッカー上位30%";
+"milestone.14" = "🔥🔥 2週間達成！TRTトラッカー上位15%";
+"milestone.30" = "🔥🔥🔥 1ヶ月達成！TRTトラッカー上位5%";
+"milestone.60" = "🔥🔥🔥🔥 2ヶ月達成！上位2% — エリートです";
+"milestone.90" = "🔥🔥🔥🔥🔥 3ヶ月達成！上位1% — レジェンド";
+
+/* Forecast */
+"forecast.injectionToday" = "今日は注射日 — エネルギーは24〜48時間でピークに達するはずです。";
+"forecast.injectionTomorrow" = "明日が注射予定日。トラフ期にあり — 多少の疲労は正常です。";
+"forecast.dip" = "明日は%d日目 — エネルギーは通常低下します。先回りして対処を。";
+"forecast.strong" = "明日は%d日目 — 注射後で値は高いはずです。";
+"forecast.tapering" = "次回の注射まで%d日。値は徐々に低下しています。";
+
+/* PK Curve */
+"pk.overdue" = "%d日超過";
+"pk.peak" = "ピーク";
+"pk.trough" = "トラフ";
+"pk.now" = "現在";
+
+/* ═══════════════════════════════════════════════════════════════
+   Daily Check-in
+   ═══════════════════════════════════════════════════════════════ */
+"checkin.title" = "今日の調子はいかがですか？";
+"checkin.dayOf" = "%d / %d 日目";
+"checkin.protocolScore" = "プロトコルスコア";
+"checkin.wellnessMetrics" = "ウェルネス指標";
+"checkin.energy" = "エネルギー";
+"checkin.mood" = "気分";
+"checkin.libido" = "性欲";
+"checkin.sleepQuality" = "睡眠の質";
+"checkin.mentalClarity" = "頭の明晰さ";
+"checkin.bodyMetrics" = "身体指標";
+"checkin.weight" = "体重 (%@)";
+"checkin.bodyFat" = "体脂肪率 %%";
+"checkin.optional" = "任意";
+"checkin.next" = "次へ";
+"checkin.saveCheckin" = "チェックインを保存";
+"checkin.saved" = "保存しました";
+"checkin.injectionCycle" = "注射サイクル";
+"checkin.noData" = "データなし";
+
+/* Binary taps */
+"checkin.quickQuestions" = "クイック質問";
+"checkin.morningWood" = "朝立ちは？";
+"checkin.yes" = "はい ✓";
+"checkin.no" = "いいえ ✗";
+"checkin.workout" = "今日トレーニングは？";
+"checkin.trainingPerformance" = "トレーニングパフォーマンス";
+"checkin.performance" = "パフォーマンス";
+"checkin.aiSideEffects" = "AIの副作用";
+"checkin.aiSideEffectsDesc" = "AIの用量がエストロゲンを過剰に下げていないか検出するのに役立ちます。";
+"checkin.jointPain" = "関節痛";
+"checkin.noIssues" = "問題なし";
+"checkin.glp1Check" = "GLP-1チェック";
+"checkin.nausea" = "吐き気";
+"checkin.noNausea" = "吐き気なし";
+"checkin.supplementsTaken" = "今日サプリは摂取した？";
+
+/* Completion */
+"checkin.hrv" = "HRV";
+"checkin.sleep" = "睡眠";
+"checkin.steps" = "歩数";
+"checkin.restingHR" = "安静時心拍数";
+
+/* ═══════════════════════════════════════════════════════════════
+   Injections
+   ═══════════════════════════════════════════════════════════════ */
+"injections.title" = "注射";
+"injections.logNew" = "新しい注射を記録";
+"injections.logFirst" = "最初の注射を記録";
+"injections.logFirstSubtitle" = "+ をタップして用量を記録。Troughがサイクルを追跡し、注射部位を提案します。";
+"injections.logInjection" = "注射を記録";
+"injections.editInjection" = "注射を編集";
+"injections.today" = "今日";
+"injections.yesterday" = "昨日";
+"injections.dateTime" = "日時";
+"injections.when" = "いつ";
+"injections.injectionSite" = "注射部位";
+"injections.notesOptional" = "メモ（任意）";
+"injections.notesPlaceholder" = "この注射に関するメモ…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Bloodwork
+   ═══════════════════════════════════════════════════════════════ */
+"bloodwork.title" = "血液検査";
+"bloodwork.results" = "結果";
+"bloodwork.trends" = "トレンド";
+"bloodwork.noRecords" = "血液検査の記録がありません";
+"bloodwork.logFirst" = "最初のパネルを記録してトレンドの追跡を始めましょう。";
+"bloodwork.addResults" = "結果を追加";
+"bloodwork.addBloodwork" = "血液検査を追加";
+"bloodwork.editBloodwork" = "血液検査を編集";
+"bloodwork.panelInfo" = "パネル情報";
+"bloodwork.drawDate" = "採血日";
+"bloodwork.labName" = "検査機関名（任意）";
+"bloodwork.photo" = "写真";
+"bloodwork.chooseLibrary" = "ライブラリから選択";
+"bloodwork.takePhoto" = "写真を撮影";
+"bloodwork.photoUnavailable" = "写真を利用できません";
+"bloodwork.notesPlaceholder" = "このパネルについて医師へのメモ...";
+"bloodwork.refRange" = "検査機関の基準範囲";
+"bloodwork.editRefRange" = "基準範囲を編集";
+"bloodwork.markers" = "%d項目";
+"bloodwork.view" = "表示";
+
+/* ═══════════════════════════════════════════════════════════════
+   Peptides / Adjuncts
+   ═══════════════════════════════════════════════════════════════ */
+"peptides.title" = "補助薬とペプチド";
+"peptides.trackYourStack" = "スタックを記録";
+"peptides.trackSubtitle" = "補助薬とペプチドの用量を記録して\nスタックを追跡しパターンを見つけましょう。";
+"peptides.logFirstDose" = "最初の用量を記録";
+"peptides.glp1Weight" = "GLP-1 / 体重管理";
+"peptides.weightTracking" = "体重トラッキング";
+"peptides.aiAncillary" = "AI / 補助薬";
+"peptides.peptides" = "ペプチド";
+"peptides.activeCompounds" = "有効な化合物";
+"peptides.e2Correlation" = "E2相関";
+"peptides.log" = "記録";
+"peptides.dosesTotal" = "合計%d回の用量";
+"peptides.logDose" = "用量を記録";
+"peptides.editLog" = "記録を編集";
+"peptides.adjunctPeptide" = "補助薬 / ペプチド";
+"peptides.amount" = "量";
+"peptides.unit" = "単位";
+"peptides.route" = "投与経路";
+"peptides.injectionSite" = "注射部位";
+"peptides.details" = "詳細";
+"peptides.batchLot" = "バッチ / ロット番号";
+"peptides.compoundName" = "化合物名";
+"peptides.dateTime" = "日時";
+
+/* ═══════════════════════════════════════════════════════════════
+   Settings
+   ═══════════════════════════════════════════════════════════════ */
+"settings.title" = "設定";
+"settings.activeProtocol" = "有効なプロトコル";
+"settings.noActiveProtocol" = "有効なプロトコルがありません";
+"settings.setNewProtocol" = "新しいプロトコルを設定";
+"settings.supplements" = "サプリメント";
+"settings.manageSupplements" = "サプリメントを管理";
+"settings.active" = "%d件有効";
+"settings.trackingPrefs" = "トラッキング設定";
+"settings.trackBodyWeight" = "体重を記録";
+"settings.dataImport" = "データインポート";
+"settings.importSpreadsheet" = "スプレッドシートからインポート";
+"settings.reminders" = "リマインダー";
+"settings.account" = "アカウント";
+"settings.signOut" = "サインアウト";
+"settings.deleteAccount" = "アカウントを削除";
+"settings.deleteAccount.title" = "アカウントを削除しますか？";
+"settings.deleteAccount.message" = "アカウントとすべてのデータが完全に削除されます。この操作は取り消せません。";
+"settings.deleteAccount.confirm" = "すべて削除";
+"settings.deleting" = "削除中...";
+"settings.recommend" = "Troughを友達に勧める";
+"settings.shareSubject" = "Troughをチェック";
+"settings.shareBody" = "TroughでTRTプロトコルを記録しています — 本当によくできたアプリです。";
+"settings.privacyPolicy" = "プライバシー・データポリシー";
+"settings.termsOfUse" = "利用規約";
+"settings.proFeatures" = "Proで使える機能";
+
+/* New Protocol */
+"settings.newProtocol" = "新規プロトコル";
+"settings.protocolName" = "プロトコル名（例：Test Cyp 150mg E7D）";
+
+/* Supplements */
+"supplements.title" = "サプリメント";
+"supplements.yourStack" = "あなたのスタック";
+"supplements.noSupplements" = "サプリメントがまだありません";
+"supplements.addHint" = "スタックを追加して、チェックインで日々の遵守を記録しましょう。";
+"supplements.addSupplement" = "サプリメントを追加";
+"supplements.name" = "名前";
+"supplements.amount" = "量";
+"supplements.every" = "間隔";
+"supplements.preset" = "プリセット";
+"supplements.doseFrequency" = "用量と頻度";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.title" = "TROUGH PRO";
+"paywall.heroSubtitle" = "プロトコルスコアを42 → 85へ。";
+"paywall.subtitle" = "すべての機能。3日間無料。";
+"paywall.monthly" = "月額";
+"paywall.annual" = "年額";
+"paywall.save40" = "58%お得";
+"paywall.startTrial" = "無料トライアルを開始";
+"paywall.startTrialFull" = "無料トライアルを開始 — 3日間無料、その後%@";
+"paywall.restorePurchases" = "復元";
+"paywall.privacyPolicy" = "プライバシー";
+"paywall.termsOfUse" = "規約";
+
+/* Pro features */
+"pro.title" = "Proで使える機能";
+"pro.trialIncluded" = "3日間の無料トライアル付き";
+"pro.pkCurves" = "PK曲線";
+"pro.pkCurvesDesc" = "信頼区間と複数エステルの重ね合わせで推定血中濃度を表示";
+"pro.trendHistory" = "完全なトレンド履歴";
+"pro.trendHistoryDesc" = "エネルギー、気分、性欲、睡眠のトレンドチャートが無制限（無料版は3日間表示）";
+"pro.bloodwork" = "血液検査トラッキング";
+"pro.bloodworkDesc" = "検査を記録し、時系列でトレンドを追跡、カスタム基準範囲を設定";
+"pro.reports" = "週間レポートと書き出し";
+"pro.reportsDesc" = "医師向けメモ付きのPDF・CSV書き出し — 通院に最適";
+"pro.peptides" = "補助薬とペプチド";
+"pro.peptidesDesc" = "AI化合物、ペプチド、GLP-1作動薬をE2相関とともに記録";
+"pro.siteRotation" = "注射部位のローテーション";
+"pro.siteRotationDesc" = "瘢痕組織の蓄積を防ぐビジュアルローテーションマップ";
+"pro.reminders" = "注射リマインダー";
+"pro.remindersDesc" = "注射日を逃さない — プロトコルに基づくスマートリマインダー";
+"pro.alwaysFree" = "ずっと無料";
+"pro.alwaysFreeDesc" = "プロトコルスコア、毎日のチェックイン、HealthKit同期、基本インサイト";
+
+/* Paywall feature list */
+"paywall.feat.history" = "無制限の履歴とプロトコルスコアのトレンド";
+"paywall.feat.pk" = "信頼区間付きのPK曲線";
+"paywall.feat.bloodwork" = "血液検査トラッキングとトレンドチャート";
+"paywall.feat.reports" = "週間レポートとCSV/PDF書き出し";
+"paywall.feat.peptides" = "ペプチドとGLP-1のトラッキング";
+"paywall.feat.siteMap" = "注射部位ローテーションマップ";
+"paywall.feat.reminders" = "注射リマインダーとカレンダー";
+"paywall.feat.healthkit" = "HealthKit自動同期（常に無料）";
+
+/* ═══════════════════════════════════════════════════════════════
+   HealthKit Permission
+   ═══════════════════════════════════════════════════════════════ */
+"hk.title" = "ヘルスケアに接続";
+"hk.subtitle" = "Troughはあなたの生体データを読み取り、ホルモンプロトコルのパターンを見つけます。";
+"hk.hrv" = "HRV";
+"hk.hrvDesc" = "心拍変動 — ストレスと回復のシグナル";
+"hk.sleep" = "睡眠";
+"hk.sleepDesc" = "昨夜のコア・深い・REMの各睡眠ステージ";
+"hk.stepsEnergy" = "歩数とエネルギー";
+"hk.stepsEnergyDesc" = "プロトコルと相関させる日々の運動量";
+"hk.restingHR" = "安静時心拍数";
+"hk.restingHRDesc" = "経時的な心血管ベースライン";
+"hk.privacy" = "読み取り専用。健康データを販売することはありません。";
+"hk.allow" = "アクセスを許可";
+"hk.notNow" = "今はしない";
+"hk.denied" = "ヘルスケアへのアクセスが拒否されました";
+"hk.deniedDesc" = "タップして設定を開き、ヘルスケアへのアクセスを有効にしてください。";
+"hk.permissionError" = "許可をリクエストできませんでした。設定でヘルスケアへのアクセスを有効にできます。";
+"hk.noData" = "利用できるデータがありません";
+
+/* ═══════════════════════════════════════════════════════════════
+   Privacy Policy
+   ═══════════════════════════════════════════════════════════════ */
+"privacy.title" = "プライバシーとデータ";
+"privacy.dataYours" = "データが端末から出ることはありません";
+"privacy.dataYoursDesc" = "チェックイン、注射、血液検査、プロトコルのデータはすべてこの端末内にのみ保存されます。アカウントもクラウドもなく — サーバーにアップロードされることは一切ありません。";
+"privacy.hkPrivacy" = "HealthKitはプライベートに保たれます";
+"privacy.hkPrivacyDesc" = "HRV、睡眠、歩数、安静時心拍数はHealthKitから読み取られ、チェックインを自動入力します。このデータが端末から出ることはなく、第三者と共有されることもありません。";
+"privacy.photos" = "血液検査の写真";
+"privacy.photosDesc" = "検査結果の写真は端末内にのみローカル保存されます。どこにもアップロードされず、あなた以外の誰も見ることはできません。";
+"privacy.sync" = "分析なし、トラッキングなし";
+"privacy.syncDesc" = "Troughには分析もトラッキングもありません。アプリの使用状況について何も収集せず、データが販売、貸与、共有されることは一切ありません。";
+"privacy.noSell" = "分析なし、トラッキングなし";
+"privacy.noSellDesc" = "Troughには分析もトラッキングもありません。アプリの使用状況について何も収集せず、データが販売、貸与、共有されることは一切ありません。";
+"privacy.deletion" = "データの削除";
+"privacy.deletionDesc" = "いつでも任意の項目を削除できます。すべてが端末内にあるため、アプリを削除するとすべてのデータが完全かつ不可逆的に消去されます。";
+"privacy.fullPolicy" = "ポリシーと規約の全文";
+
+/* ═══════════════════════════════════════════════════════════════
+   Disclaimers
+   ═══════════════════════════════════════════════════════════════ */
+"disclaimer.medical" = "医学的助言ではありません。医療提供者にご相談ください。";
+"disclaimer.standard" = "この情報は個人的な記録のみを目的としており、医学的助言を構成するものではありません。プロトコルを変更する前に、有資格の医療提供者にご相談ください。";
+"disclaimer.bloodwork" = "表示される検査値は参考用です。正常範囲は検査機関や個人によって異なります。結果については必ず処方医にご相談ください。";
+"disclaimer.pkCurve" = "薬物動態曲線は集団平均に基づく推定値です。個人の吸収や代謝は大きく異なります。これは定期的な血液検査によるモニタリングの代わりにはなりません。";
+"disclaimer.protocolScore" = "プロトコルスコアは自己申告のウェルネス指標を反映したものです。臨床的な測定値ではなく、医学的判断の指針にすべきではありません。";
+"disclaimer.insight" = "インサイトはあなたの個人的な記録データのみから生成されます。観察的なパターンであり、医学的な診断や助言ではありません。";
+"disclaimer.weeklyReport" = "このレポートは自己申告データを要約したものです。臨床文書ではなく、医学的判断の指針に使用すべきではありません。必ず処方医にご相談ください。";
+"disclaimer.supplement" = "サプリメント情報は個人的な記録のみを目的としています。新しいサプリメントを始める前に、有資格の医療提供者にご相談ください。";
+"disclaimer.fertility" = "生殖機能回復の推定値は公表された平均に基づいています。個人の経過は大きく異なります。必ず生殖内分泌専門医にご相談ください。";
+
+/* ═══════════════════════════════════════════════════════════════
+   Weekly Report
+   ═══════════════════════════════════════════════════════════════ */
+"report.title" = "週間レポート";
+"report.notEnoughData" = "まだデータが不足しています";
+"report.notEnoughDataDesc" = "7日間連続でチェックインすると週間レポートが解放されます。";
+"report.share" = "レポートを共有";
+
+/* ═══════════════════════════════════════════════════════════════
+   CSV Import
+   ═══════════════════════════════════════════════════════════════ */
+"import.dailyCheckins" = "毎日のチェックイン";
+"import.bloodwork" = "血液検査";
+"import.both" = "両方";
+"import.chooseFile" = "ファイルを選択";
+"import.import" = "インポート";
+"import.date" = "日付";
+"import.labName" = "検査機関名";
+
+/* ═══════════════════════════════════════════════════════════════
+   Frequency Labels
+   ═══════════════════════════════════════════════════════════════ */
+"frequency.daily" = "毎日";
+"frequency.everyOtherDay" = "1日おき";
+"frequency.every3Days" = "3日ごと";
+"frequency.weekly" = "毎週";
+"frequency.every2Weeks" = "2週間ごと";
+"frequency.everyNDays" = "%d日ごと";
+
+/* ═══════════════════════════════════════════════════════════════
+   Notifications
+   ═══════════════════════════════════════════════════════════════ */
+"notification.checkinTitle" = "毎日のチェックイン";
+"notification.checkinBody" = "今日の調子はいかがですか？毎日のチェックインを記録しましょう。";
+"notification.compoundDoseTitle" = "%@ リマインダー";
+"notification.compoundDoseBody" = "%@の用量（%@）の時間です。";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.featurePK" = "リアルタイムPK曲線";
+"paywall.featureHistory" = "完全なトレンド履歴";
+"paywall.featureBloodwork" = "血液検査トラッキング";
+"paywall.featureReports" = "週間レポート";
+"paywall.featureAI" = "AIによるインサイト";
+"paywall.featurePeptides" = "ペプチドトラッキング";
+"paywall.perMonth" = "月あたり";
+"paywall.perYear" = "年あたり";
+"paywall.privacy" = "プライバシー";
+"paywall.terms" = "規約";
+"paywall.restore" = "復元";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.trtInjection" = "TRT注射";
+"onboarding.selected" = "%d件選択中";

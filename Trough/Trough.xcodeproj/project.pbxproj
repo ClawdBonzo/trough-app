@@ -128,6 +128,14 @@
 		'L10N004' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		'L10N005' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		'L10N006' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		'L10N007' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N008' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		'L10N009' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N010' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N011' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N012' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N013' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		'L10N014' = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		'PL001AFILEREF0000000000' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideLogView.swift; sourceTree = "<group>"; };
 		'PL004' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		'PL006' = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataService.swift; sourceTree = "<group>"; };
@@ -457,6 +465,11 @@
 				es,
 				"pt-BR",
 				de,
+				fr,
+				nl,
+				sv,
+				ja,
+				ko,
 				Base,
 			);
 			mainGroup = 2D6C384FF21A40698B048A4C /* Trough */;
@@ -574,6 +587,14 @@
 				L10N004,
 				L10N005,
 				L10N006,
+				L10N007,
+				L10N008,
+				L10N009,
+				L10N010,
+				L10N011,
+				L10N012,
+				L10N013,
+				L10N014,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

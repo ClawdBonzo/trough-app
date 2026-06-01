@@ -1,0 +1,637 @@
+/* Trough — Dutch (nl) Localizable Strings */
+
+/* ═══════════════════════════════════════════════════════════════
+   Navigation & Tab Bar
+   ═══════════════════════════════════════════════════════════════ */
+"tab.home" = "Start";
+"tab.log" = "Logboek";
+"tab.injections" = "Injecties";
+"tab.more" = "Meer";
+
+/* ═══════════════════════════════════════════════════════════════
+   Common / Shared
+   ═══════════════════════════════════════════════════════════════ */
+"common.cancel" = "Annuleren";
+"common.save" = "Opslaan";
+"common.delete" = "Verwijderen";
+"common.done" = "Klaar";
+"common.next" = "Volgende";
+"common.back" = "Terug";
+"common.skip" = "Overslaan";
+"common.continue" = "Doorgaan";
+"common.ok" = "OK";
+"common.error" = "Fout";
+"common.today" = "Vandaag";
+"common.yesterday" = "Gisteren";
+"common.add" = "Toevoegen";
+"common.edit" = "Bewerken";
+"common.remove" = "Verwijderen";
+"common.notes" = "Notities";
+"common.custom" = "Aangepast";
+"common.dose" = "Dosis";
+"common.compound" = "Middel";
+"common.mg" = "mg";
+
+/* Units */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+"unit.perMonth" = "per maand";
+"unit.perYear" = "per jaar";
+"unit.days" = "dagen";
+"unit.daysAgo" = "%dd geleden";
+
+/* ═══════════════════════════════════════════════════════════════
+   Auth
+   ═══════════════════════════════════════════════════════════════ */
+"auth.appName" = "TROUGH";
+"auth.tagline" = "TRT & hormoontracker";
+"auth.email" = "E-mail";
+"auth.password" = "Wachtwoord";
+"auth.createAccount" = "Account aanmaken";
+"auth.signIn" = "Inloggen";
+"auth.switchToSignIn" = "Heb je al een account? Inloggen";
+"auth.switchToSignUp" = "Nieuw hier? Account aanmaken";
+"auth.enterCredentials" = "Voer je e-mail en wachtwoord in.";
+"auth.confirmEmail" = "Controleer je e-mail om je account te bevestigen en log daarna hieronder in.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Splash / Onboarding Hook
+   ═══════════════════════════════════════════════════════════════ */
+"splash.headline" = "Volg je protocol.\nBeheer je eigen data.";
+"splash.cta" = "Laten we je optimaliseren";
+
+"quiz.title" = "Hoe voel je je?";
+"quiz.subtitle" = "Geef elk onderdeel een score van 1–5.\nWe berekenen je basis-Protocol Score.";
+"quiz.energy" = "Energie";
+"quiz.mood" = "Stemming";
+"quiz.libido" = "Libido";
+"quiz.sleepQuality" = "Slaapkwaliteit";
+"quiz.mentalClarity" = "Mentale helderheid";
+"quiz.cta" = "Toon mijn score";
+
+"scoreReveal.protocolScore" = "Protocol Score";
+"scoreReveal.cta" = "Bekijk je verwachte verbetering";
+"scoreReveal.dialedIn" = "Optimaal afgesteld";
+"scoreReveal.steady" = "Stabiel";
+"scoreReveal.trendingDown" = "Dalende trend";
+"scoreReveal.offBaseline" = "Onder je basislijn";
+"scoreReveal.encourage.high" = "Sterke basislijn. Laten we die vasthouden.";
+"scoreReveal.encourage.mid" = "Solide basis. Ruimte om te optimaliseren.";
+"scoreReveal.encourage.low" = "Hier valt winst te halen. Laten we die vinden.";
+"scoreReveal.encourage.veryLow" = "Er is werk aan de winkel — en daar draait het om.";
+
+"projected.title" = "Je vooruitzicht voor 7 dagen";
+"projected.subtitle" = "Met consequent bijhouden zien gebruikers in de eerste week echte verbetering.";
+"projected.today" = "Vandaag";
+"projected.day7" = "Dag 7";
+"projected.now" = "Nu";
+"projected.cta" = "Stel mijn plan op";
+
+"loader.step1" = "Je basislijn analyseren…";
+"loader.step2" = "PK-model kalibreren…";
+"loader.step3" = "Je protocol opbouwen…";
+"loader.step4" = "Tracking instellen…";
+"loader.step5" = "Je plan afronden…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding Setup
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.whatBringsYou" = "Wat brengt je hier?";
+"onboarding.personalizeExperience" = "Dit helpt ons je ervaring te personaliseren.";
+"onboarding.imOnTRT" = "Ik gebruik TRT";
+"onboarding.trtSubtitle" = "Volg protocollen, injecties en bloedwaarden";
+"onboarding.naturalTitle" = "Natuurlijk optimaliseren";
+"onboarding.naturalSubtitle" = "Volg welzijn, training en supplementen";
+
+"onboarding.haveData" = "Heb je al gegevens?";
+"onboarding.importSubtitle" = "Importeer je tracking-spreadsheet — we koppelen je kolommen automatisch.";
+"onboarding.importSpreadsheet" = "Importeren uit spreadsheet";
+"onboarding.importCSV" = "CSV, TSV — herkent kolommen & datums automatisch";
+"onboarding.startFresh" = "Opnieuw beginnen";
+"onboarding.startFreshGuide" = "We loodsen je door de instellingen";
+"onboarding.skipStartFresh" = "Overslaan — opnieuw beginnen";
+
+"onboarding.yourProtocol" = "Je protocol";
+"onboarding.protocolSubtitle" = "We gebruiken dit om je bloedwaarden en schema bij te houden.";
+"onboarding.primaryCompound" = "Primair middel";
+"onboarding.frequency" = "Frequentie";
+"onboarding.injectionDays" = "Injectiedagen";
+"onboarding.addSecondary" = "Secundair middel toevoegen";
+"onboarding.addCompound" = "Middel toevoegen";
+"onboarding.addAnother" = "+ Nog een toevoegen";
+"onboarding.secondaryCompound" = "Secundair middel";
+"onboarding.concentration" = "Concentratie";
+
+"onboarding.whatElse" = "Wat gebruik je nog meer?";
+"onboarding.tapAllApply" = "Tik alles aan wat van toepassing is. Je kunt later altijd meer toevoegen.";
+"onboarding.addCustomCompound" = "Eigen middel toevoegen";
+"onboarding.compoundName" = "Naam van het middel";
+"onboarding.selected" = "%d geselecteerd";
+"onboarding.setDoses" = "Stel je doses in";
+"onboarding.dosesSubtitle" = "We hebben gangbare doses en schema's vooraf ingevuld — pas ze aan waar nodig.";
+"onboarding.schedule" = "Schema";
+"onboarding.dosesReminder" = "We sturen herinneringen op basis van het schema van elk middel.";
+
+"onboarding.lastInjection" = "Laatste injectie";
+"onboarding.lastInjectionSubtitle" = "We starten je PK-curve vanaf deze datum.";
+"onboarding.dateAndTime" = "Datum & tijd";
+
+"onboarding.howFeeling" = "Hoe voel je je?";
+"onboarding.firstCheckinSubtitle" = "Je eerste check-in. Hiermee maak je je Protocol Score aan.";
+"onboarding.bodyMetrics" = "LICHAAMSMETINGEN";
+"onboarding.weight" = "Gewicht";
+"onboarding.bodyFat" = "Vetpercentage";
+"onboarding.protocolScoreLabel" = "Protocol Score";
+"onboarding.outOf100" = "/ 100";
+
+"onboarding.superchargeHK" = "Versterk met HealthKit";
+"onboarding.hkSubtitle" = "Volg automatisch je slaap, stappen en hartslagvariabiliteit.";
+"onboarding.hkSleep" = "Slaap";
+"onboarding.hkSleepDesc" = "Log automatisch slaapduur & kwaliteit";
+"onboarding.hkSteps" = "Stappen";
+"onboarding.hkStepsDesc" = "Dagelijkse activiteit zonder handmatige invoer";
+"onboarding.hkHRV" = "HRV";
+"onboarding.hkHRVDesc" = "Hartslagvariabiliteit voor inzicht in je herstel";
+"onboarding.hkWeight" = "Lichaamsgewicht";
+"onboarding.hkWeightDesc" = "Synchroniseer vanaf je slimme weegschaal";
+"onboarding.hkPrivacy" = "Je gegevens blijven op je apparaat. We delen ze nooit.";
+"onboarding.enableHK" = "HealthKit inschakelen";
+"onboarding.hkAlreadySet" = "HealthKit-rechten zijn al ingesteld. Tik om Instellingen te openen.";
+
+"onboarding.reminders" = "Herinneringen";
+"onboarding.remindersSubtitle" = "Krijg een seintje om check-ins, injecties of peptiden te loggen.";
+"onboarding.enableReminders" = "Herinneringen inschakelen";
+"onboarding.sameTimeAll" = "Zelfde tijd voor alles";
+"onboarding.perCompound" = "Per middel";
+"onboarding.reminderFrequency" = "Frequentie";
+"onboarding.reminderTime" = "Tijdstip herinnering";
+"onboarding.selectDays" = "Kies dagen";
+"onboarding.dailyCheckin" = "Dagelijkse check-in";
+"onboarding.changeInSettings" = "Je kunt dit altijd wijzigen in Instellingen.";
+"onboarding.getStarted" = "Aan de slag";
+
+"onboarding.startTrial" = "Start gratis proefperiode van 3 dagen";
+"onboarding.trialSubtitle" = "Ontgrendel volledige inzichten en volg je voortgang naar 85+.";
+"onboarding.noCharge" = "3 dagen gratis. Annuleer altijd via Instellingen → Abonnementen.";
+"onboarding.maybeLater" = "Misschien later";
+
+/* Frequency labels */
+"freq.daily" = "Dagelijks";
+"freq.everyOtherDay" = "Om de dag";
+"freq.every3Days" = "Om de 3 dagen";
+"freq.twiceWeekly" = "Twee keer per week";
+"freq.weekly" = "Wekelijks";
+"freq.biweekly" = "Tweewekelijks";
+"freq.monthly" = "Maandelijks";
+"freq.customDays" = "Aangepaste dagen";
+"freq.e1d" = "Elke dag (E1D)";
+"freq.e2d" = "Om de 2 dagen";
+"freq.e3d" = "Om de 3 dagen";
+"freq.e3.5d" = "Twee keer per week (E3.5D)";
+"freq.e7d" = "Wekelijks (E7D)";
+"freq.e14d" = "Tweewekelijks (E14D)";
+"freq.twiceWeekMonThu" = "Twee keer per week (ma, do)";
+"freq.threeTimesWeek" = "Drie keer per week";
+
+/* ═══════════════════════════════════════════════════════════════
+   Dashboard
+   ═══════════════════════════════════════════════════════════════ */
+"dashboard.title" = "Dashboard";
+"dashboard.noDataTitle" = "👋 Nog geen gegevens";
+"dashboard.noDataSubtitle" = "Laad voorbeeldgegevens om de app te verkennen, of start je eerste check-in.";
+"dashboard.loadSampleData" = "Voorbeeldgegevens laden";
+"dashboard.startCheckin" = "Check-in starten";
+"dashboard.activeProtocol" = "Actief protocol";
+"dashboard.overdue" = "TE LAAT";
+"dashboard.nextIn" = "Volgende over %dd";
+"dashboard.protocolScore" = "Protocol Score";
+"dashboard.7dayAvg" = "Gem. 7 dagen";
+"dashboard.prior7day" = "Vorige 7 dagen";
+"dashboard.logToday" = "Vandaag loggen";
+"dashboard.dailyCheckin" = "Dagelijkse check-in";
+"dashboard.tapToLog" = "Tik om te loggen hoe je je vandaag voelt";
+"dashboard.todaysCheckin" = "Check-in van vandaag";
+"dashboard.checkinStreak" = "Check-in-reeks";
+"dashboard.estimatedBloodLevel" = "Geschatte bloedwaarde";
+"dashboard.pkCurve.empty" = "Log een injectie om je PK-curve te zien";
+"dashboard.seeBloodLevels" = "Bekijk je echte bloedwaarden";
+"dashboard.pkCurveDesc" = "Gepersonaliseerde PK-curve op basis van je protocol";
+"dashboard.startFreeTrial" = "Start gratis proefperiode";
+"dashboard.fertilityActive" = "Vruchtbaarheidsmodus actief";
+"dashboard.hcgStarted" = "hCG %dw geleden gestart";
+"dashboard.protocol" = "Protocol";
+"dashboard.glp1Weight" = "GLP-1 gewichtsmonitoring";
+"dashboard.energyStable" = "Energie stabiel";
+"dashboard.glp1Working" = "GLP-1 + dalend gewicht + stabiele energie = protocol werkt goed";
+"dashboard.bodyComp" = "Lichaamssamenstelling";
+"dashboard.logWeightHint" = "Log je lichaamsgewicht bij je dagelijkse check-in";
+"dashboard.weeklyReport" = "Wekelijks\nrapport";
+"dashboard.weight.current" = "Huidig";
+"dashboard.weight.30dChange" = "Verandering 30d";
+"dashboard.weight.bodyFat" = "Vetpercentage";
+"dashboard.weight.30dTrend" = "Trend over 30 dagen";
+
+/* Dashboard - additional keys */
+"dashboard.sampleData.title" = "👋 Nog geen gegevens";
+"dashboard.sampleData.subtitle" = "Laad voorbeeldgegevens om de app te verkennen, of start je eerste check-in.";
+"dashboard.sampleData.load" = "Voorbeeldgegevens laden";
+"dashboard.sampleData.startCheckin" = "Check-in starten";
+"dashboard.checkin.title" = "Dagelijkse check-in";
+"dashboard.checkin.cta" = "Nu inchecken";
+"dashboard.checkin.done" = "Check-in van vandaag";
+"dashboard.streak" = "Check-in-reeks";
+"dashboard.streak.days" = "dagen";
+"dashboard.personalBest" = "🏆 Nieuw persoonlijk record!";
+"dashboard.personalBest.subtitle" = "Je Protocol Score bereikte een nieuw hoogtepunt.";
+"dashboard.weightTrend" = "Gewicht";
+"dashboard.weightTrend.30day" = "Trend over 30 dagen";
+"dashboard.pkCurve" = "Geschatte PK-curve";
+"dashboard.pkCurve.subtitle" = "Bekijk je geschatte testosteronwaarden";
+"dashboard.fertility" = "Vruchtbaarheidsondersteuning";
+"dashboard.fertility.hcgStarted" = "hCG gestart";
+"dashboard.fertility.protocol" = "Protocol";
+"dashboard.glp1" = "GLP-1 & gewicht";
+"dashboard.glp1.energyStable" = "Energie stabiel";
+"dashboard.glp1.workingWell" = "GLP-1 + dalend gewicht + stabiele energie = protocol werkt goed";
+"dashboard.bodyComposition" = "Lichaamssamenstelling";
+"dashboard.bodyComposition.subtitle" = "Volg trends in gewicht & vetpercentage";
+"dashboard.bodyComposition.logWeight" = "Log je lichaamsgewicht bij je dagelijkse check-in";
+"dashboard.bodyComposition.bodyFat" = "Vetpercentage";
+"dashboard.bodyComposition.bodyFatPct" = "Vetpercentage %";
+"dashboard.forecast" = "Voorspelling voor morgen";
+"dashboard.quickStats" = "Snelle statistieken";
+"dashboard.totalCheckins" = "Totaal check-ins";
+"dashboard.quickStats.avgEnergy" = "Gem. energie";
+"dashboard.quickStats.avgLibido" = "Gem. libido";
+"dashboard.quickStats.morningWood" = "Ochtenderectie";
+"dashboard.quickStats.30d" = "30d";
+"dashboard.quickStats.nextInjection" = "Volgende injectie";
+"dashboard.quickStats.overdue" = "Te laat";
+"dashboard.quickStats.onTrack" = "Op schema";
+"dashboard.quickStats.adherence" = "Therapietrouw";
+"dashboard.trendChart" = "Trends over 7 dagen";
+"dashboard.trendChart.empty" = "Check dagelijks in om trends te zien";
+"dashboard.trendChart.upsell" = "Bekijk volledige trends over 7 dagen met Pro";
+"dashboard.trendChart.3days" = "3 dagen";
+"dashboard.cycleDay" = "Dag %d van %d · %@";
+"dashboard.compliance.injections" = "Injecties";
+"dashboard.compliance.thisMonth" = "Deze maand";
+"dashboard.compliance.supplements" = "Supplementen";
+"dashboard.compliance.tapToAdd" = "Tik om toe te voegen";
+"dashboard.compliance.thisWeek" = "Deze week";
+"dashboard.supplementSetup.title" = "Stel je stack samen";
+"dashboard.supplementSetup.subtitle" = "Voeg supplementen toe om je dagelijkse therapietrouw te volgen.";
+
+/* Trial / billing */
+"dashboard.trial.ended" = "Je proefperiode is afgelopen";
+"dashboard.trial.endsIn" = "Proefperiode eindigt over %d dag(en)";
+"dashboard.trial.subscribe" = "Neem een abonnement om al je gegevens en functies te behouden.";
+"dashboard.trial.subscribeButton" = "Abonneren";
+"dashboard.trial.accomplished" = "Kijk eens wat je hebt bereikt";
+"dashboard.trial.freeForever" = "Altijd gratis";
+"dashboard.trial.freeFeatures" = "Protocol Score, dagelijkse check-ins, HealthKit-synchronisatie en basisinzichten";
+"dashboard.trial.withPro" = "Met Pro";
+"dashboard.trial.proFeatures" = "PK-curves, bloedwaarden bijhouden, wekelijkse rapporten, peptiden bijhouden en meer";
+"dashboard.trial.subscribePro" = "Abonneer op Trough Pro";
+"dashboard.trial.continueFree" = "Doorgaan met gratis";
+"dashboard.trial.dataSafe" = "Je gegevens zijn veilig — upgrade wanneer je wilt.";
+"dashboard.grace.title" = "Betalingsprobleem";
+"dashboard.grace.subtitle" = "We proberen de betaling opnieuw — je toegang loopt nog %d dag(en) door.";
+
+/* Greetings */
+"greeting.morning" = "Goedemorgen";
+"greeting.afternoon" = "Goedemiddag";
+"greeting.evening" = "Goedenavond";
+
+/* Milestones */
+"milestone.7" = "🔥 Eén week! Top 30% van de TRT-trackers";
+"milestone.14" = "🔥🔥 Twee weken! Top 15% van de TRT-trackers";
+"milestone.30" = "🔥🔥🔥 Eén maand! Top 5% van de TRT-trackers";
+"milestone.60" = "🔥🔥🔥🔥 Twee maanden! Top 2% — je bent een topper";
+"milestone.90" = "🔥🔥🔥🔥🔥 Drie maanden! Top 1% — legende";
+
+/* Forecast */
+"forecast.injectionToday" = "Vandaag is je injectiedag — je energie zou over 24–48 uur moeten pieken.";
+"forecast.injectionTomorrow" = "Morgen is er een injectie gepland. Je zit op het dieptepunt — wat vermoeidheid is normaal.";
+"forecast.dip" = "Dag %d morgen — je energie zakt doorgaans wat. Blijf erop voor.";
+"forecast.strong" = "Dag %d morgen — je waarden zouden sterk moeten zijn na de injectie.";
+"forecast.tapering" = "Volgende injectie over %d dagen. Je waarden lopen geleidelijk terug.";
+
+/* PK Curve */
+"pk.overdue" = "%dd te laat";
+"pk.peak" = "Piek";
+"pk.trough" = "Dieptepunt";
+"pk.now" = "Nu";
+
+/* ═══════════════════════════════════════════════════════════════
+   Daily Check-in
+   ═══════════════════════════════════════════════════════════════ */
+"checkin.title" = "Hoe gaat het vandaag?";
+"checkin.dayOf" = "Dag %d van %d";
+"checkin.protocolScore" = "Protocol Score";
+"checkin.wellnessMetrics" = "Welzijnsmetingen";
+"checkin.energy" = "Energie";
+"checkin.mood" = "Stemming";
+"checkin.libido" = "Libido";
+"checkin.sleepQuality" = "Slaapkwaliteit";
+"checkin.mentalClarity" = "Mentale helderheid";
+"checkin.bodyMetrics" = "Lichaamsmetingen";
+"checkin.weight" = "Gewicht (%@)";
+"checkin.bodyFat" = "Vetpercentage %%";
+"checkin.optional" = "Optioneel";
+"checkin.next" = "Volgende";
+"checkin.saveCheckin" = "Check-in opslaan";
+"checkin.saved" = "Opgeslagen";
+"checkin.injectionCycle" = "Injectiecyclus";
+"checkin.noData" = "Geen gegevens";
+
+/* Binary taps */
+"checkin.quickQuestions" = "Korte vragen";
+"checkin.morningWood" = "Ochtenderectie?";
+"checkin.yes" = "Ja ✓";
+"checkin.no" = "Nee ✗";
+"checkin.workout" = "Vandaag getraind?";
+"checkin.trainingPerformance" = "Trainingsprestatie";
+"checkin.performance" = "Prestatie";
+"checkin.aiSideEffects" = "AI-bijwerkingen";
+"checkin.aiSideEffectsDesc" = "Helpt opsporen of je AI-dosis je oestrogeen te laag drukt.";
+"checkin.jointPain" = "Gewrichtspijn";
+"checkin.noIssues" = "Geen klachten";
+"checkin.glp1Check" = "GLP-1-check";
+"checkin.nausea" = "Misselijkheid";
+"checkin.noNausea" = "Geen misselijkheid";
+"checkin.supplementsTaken" = "Vandaag supplementen ingenomen?";
+
+/* Completion */
+"checkin.hrv" = "HRV";
+"checkin.sleep" = "Slaap";
+"checkin.steps" = "Stappen";
+"checkin.restingHR" = "Rusthartslag";
+
+/* ═══════════════════════════════════════════════════════════════
+   Injections
+   ═══════════════════════════════════════════════════════════════ */
+"injections.title" = "Injecties";
+"injections.logNew" = "Nieuwe injectie loggen";
+"injections.logFirst" = "Log je eerste injectie";
+"injections.logFirstSubtitle" = "Tik op + om een dosis vast te leggen. Trough volgt je cyclus en stelt injectieplekken voor.";
+"injections.logInjection" = "Injectie loggen";
+"injections.editInjection" = "Injectie bewerken";
+"injections.today" = "Vandaag";
+"injections.yesterday" = "Gisteren";
+"injections.dateTime" = "Datum & tijd";
+"injections.when" = "Wanneer";
+"injections.injectionSite" = "Injectieplek";
+"injections.notesOptional" = "Notities (optioneel)";
+"injections.notesPlaceholder" = "Eventuele notities over deze injectie…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Bloodwork
+   ═══════════════════════════════════════════════════════════════ */
+"bloodwork.title" = "Bloedwaarden";
+"bloodwork.results" = "Resultaten";
+"bloodwork.trends" = "Trends";
+"bloodwork.noRecords" = "Geen bloedwaarden vastgelegd";
+"bloodwork.logFirst" = "Log je eerste panel om trends te gaan volgen.";
+"bloodwork.addResults" = "Resultaten toevoegen";
+"bloodwork.addBloodwork" = "Bloedwaarden toevoegen";
+"bloodwork.editBloodwork" = "Bloedwaarden bewerken";
+"bloodwork.panelInfo" = "Panelgegevens";
+"bloodwork.drawDate" = "Afnamedatum";
+"bloodwork.labName" = "Naam lab (optioneel)";
+"bloodwork.photo" = "Foto";
+"bloodwork.chooseLibrary" = "Kies uit bibliotheek";
+"bloodwork.takePhoto" = "Foto maken";
+"bloodwork.photoUnavailable" = "Foto niet beschikbaar";
+"bloodwork.notesPlaceholder" = "Notities voor je arts over dit panel...";
+"bloodwork.refRange" = "Referentiewaarden van je lab";
+"bloodwork.editRefRange" = "Referentiewaarden bewerken";
+"bloodwork.markers" = "%d markers";
+"bloodwork.view" = "Bekijken";
+
+/* ═══════════════════════════════════════════════════════════════
+   Peptides / Adjuncts
+   ═══════════════════════════════════════════════════════════════ */
+"peptides.title" = "Aanvullingen & peptiden";
+"peptides.trackYourStack" = "Volg je stack";
+"peptides.trackSubtitle" = "Log aanvullingen en peptidedoses om\nje stack te volgen en patronen te herkennen.";
+"peptides.logFirstDose" = "Eerste dosis loggen";
+"peptides.glp1Weight" = "GLP-1 / gewichtsbeheer";
+"peptides.weightTracking" = "Gewicht bijhouden";
+"peptides.aiAncillary" = "AI / ondersteunend";
+"peptides.peptides" = "Peptiden";
+"peptides.activeCompounds" = "Actieve middelen";
+"peptides.e2Correlation" = "E2-correlatie";
+"peptides.log" = "Loggen";
+"peptides.dosesTotal" = "%d dosis(sen) in totaal";
+"peptides.logDose" = "Dosis loggen";
+"peptides.editLog" = "Logitem bewerken";
+"peptides.adjunctPeptide" = "Aanvulling / peptide";
+"peptides.amount" = "Hoeveelheid";
+"peptides.unit" = "Eenheid";
+"peptides.route" = "Toedieningsweg";
+"peptides.injectionSite" = "Injectieplek";
+"peptides.details" = "Details";
+"peptides.batchLot" = "Batch- / lotnr.";
+"peptides.compoundName" = "Naam van het middel";
+"peptides.dateTime" = "Datum & tijd";
+
+/* ═══════════════════════════════════════════════════════════════
+   Settings
+   ═══════════════════════════════════════════════════════════════ */
+"settings.title" = "Instellingen";
+"settings.activeProtocol" = "Actief protocol";
+"settings.noActiveProtocol" = "Geen actief protocol";
+"settings.setNewProtocol" = "Nieuw protocol instellen";
+"settings.supplements" = "Supplementen";
+"settings.manageSupplements" = "Supplementen beheren";
+"settings.active" = "%d actief";
+"settings.trackingPrefs" = "Trackingvoorkeuren";
+"settings.trackBodyWeight" = "Lichaamsgewicht bijhouden";
+"settings.dataImport" = "Gegevens importeren";
+"settings.importSpreadsheet" = "Importeren uit spreadsheet";
+"settings.reminders" = "Herinneringen";
+"settings.account" = "Account";
+"settings.signOut" = "Uitloggen";
+"settings.deleteAccount" = "Account verwijderen";
+"settings.deleteAccount.title" = "Account verwijderen?";
+"settings.deleteAccount.message" = "Hiermee verwijder je je account en al je gegevens permanent. Deze actie kan niet ongedaan worden gemaakt.";
+"settings.deleteAccount.confirm" = "Alles verwijderen";
+"settings.deleting" = "Verwijderen...";
+"settings.recommend" = "Trough aanraden aan een vriend";
+"settings.shareSubject" = "Bekijk Trough eens";
+"settings.shareBody" = "Ik gebruik Trough om mijn TRT-protocol bij te houden — echt heel goed gemaakt.";
+"settings.privacyPolicy" = "Privacy- & gegevensbeleid";
+"settings.termsOfUse" = "Gebruiksvoorwaarden";
+"settings.proFeatures" = "Wat je krijgt met Pro";
+
+/* New Protocol */
+"settings.newProtocol" = "Nieuw protocol";
+"settings.protocolName" = "Protocolnaam (bijv. Test Cyp 150mg E7D)";
+
+/* Supplements */
+"supplements.title" = "Supplementen";
+"supplements.yourStack" = "Je stack";
+"supplements.noSupplements" = "Nog geen supplementen";
+"supplements.addHint" = "Voeg je stack toe om je dagelijkse therapietrouw bij je check-in te volgen.";
+"supplements.addSupplement" = "Supplement toevoegen";
+"supplements.name" = "Naam";
+"supplements.amount" = "Hoeveelheid";
+"supplements.every" = "Elke";
+"supplements.preset" = "Voorinstelling";
+"supplements.doseFrequency" = "Dosis & frequentie";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.title" = "TROUGH PRO";
+"paywall.heroSubtitle" = "Ga van 42 → 85 Protocol Score.";
+"paywall.subtitle" = "Alles. 3 dagen gratis.";
+"paywall.monthly" = "Maandelijks";
+"paywall.annual" = "Jaarlijks";
+"paywall.save40" = "Bespaar 58%";
+"paywall.startTrial" = "Start gratis proefperiode";
+"paywall.startTrialFull" = "Start gratis proefperiode — 3 dagen gratis, daarna %@";
+"paywall.restorePurchases" = "Herstellen";
+"paywall.privacyPolicy" = "Privacy";
+"paywall.termsOfUse" = "Voorwaarden";
+
+/* Pro features */
+"pro.title" = "Wat je krijgt met Pro";
+"pro.trialIncluded" = "Inclusief gratis proefperiode van 3 dagen";
+"pro.pkCurves" = "PK-curves";
+"pro.pkCurvesDesc" = "Bekijk je geschatte bloedwaarden met betrouwbaarheidsmarges en stapeling van meerdere esters";
+"pro.trendHistory" = "Volledige trendgeschiedenis";
+"pro.trendHistoryDesc" = "Onbeperkte trendgrafieken voor energie, stemming, libido en slaap (gratis toont 3 dagen)";
+"pro.bloodwork" = "Bloedwaarden bijhouden";
+"pro.bloodworkDesc" = "Log labwaarden, volg trends in de tijd, stel aangepaste referentiewaarden in";
+"pro.reports" = "Wekelijkse rapporten & export";
+"pro.reportsDesc" = "Export naar PDF en CSV met dokternotities — perfect voor je consult";
+"pro.peptides" = "Aanvullingen & peptiden";
+"pro.peptidesDesc" = "Volg AI-middelen, peptiden en GLP-1-agonisten met E2-correlatie";
+"pro.siteRotation" = "Rotatie van injectieplekken";
+"pro.siteRotationDesc" = "Visuele rotatiekaart om littekenvorming te voorkomen";
+"pro.reminders" = "Injectieherinneringen";
+"pro.remindersDesc" = "Mis nooit meer een prikdag — slimme herinneringen op basis van je protocol";
+"pro.alwaysFree" = "Altijd gratis";
+"pro.alwaysFreeDesc" = "Protocol Score, dagelijkse check-ins, HealthKit-synchronisatie en basisinzichten";
+
+/* Paywall feature list */
+"paywall.feat.history" = "Onbeperkte geschiedenis & Protocol Score-trends";
+"paywall.feat.pk" = "PK-curves met betrouwbaarheidsmarges";
+"paywall.feat.bloodwork" = "Bloedwaarden bijhouden & trendgrafieken";
+"paywall.feat.reports" = "Wekelijkse rapporten & export naar CSV/PDF";
+"paywall.feat.peptides" = "Peptiden & GLP-1 bijhouden";
+"paywall.feat.siteMap" = "Rotatiekaart voor injectieplekken";
+"paywall.feat.reminders" = "Injectieherinneringen & agenda";
+"paywall.feat.healthkit" = "Automatische HealthKit-synchronisatie (altijd gratis)";
+
+/* ═══════════════════════════════════════════════════════════════
+   HealthKit Permission
+   ═══════════════════════════════════════════════════════════════ */
+"hk.title" = "Verbind met Gezondheid";
+"hk.subtitle" = "Trough leest je biometrische gegevens om patronen in je hormoonprotocol te vinden.";
+"hk.hrv" = "HRV";
+"hk.hrvDesc" = "Hartslagvariabiliteit — signaal voor stress & herstel";
+"hk.sleep" = "Slaap";
+"hk.sleepDesc" = "Lichte, diepe & REM-fases van afgelopen nacht";
+"hk.stepsEnergy" = "Stappen & energie";
+"hk.stepsEnergyDesc" = "Dagelijkse beweging om te koppelen aan je protocol";
+"hk.restingHR" = "Rusthartslag";
+"hk.restingHRDesc" = "Cardiovasculaire basislijn in de tijd";
+"hk.privacy" = "Alleen-lezen. We verkopen je gezondheidsgegevens nooit.";
+"hk.allow" = "Toegang toestaan";
+"hk.notNow" = "Niet nu";
+"hk.denied" = "Toegang tot Gezondheid geweigerd";
+"hk.deniedDesc" = "Tik om Instellingen te openen en toegang tot Gezondheid in te schakelen.";
+"hk.permissionError" = "Kon geen toegang aanvragen. Je kunt toegang tot Gezondheid inschakelen in Instellingen.";
+"hk.noData" = "Geen gegevens beschikbaar";
+
+/* ═══════════════════════════════════════════════════════════════
+   Privacy Policy
+   ═══════════════════════════════════════════════════════════════ */
+"privacy.title" = "Privacy & gegevens";
+"privacy.dataYours" = "Je gegevens verlaten nooit je apparaat";
+"privacy.dataYoursDesc" = "Al je check-ins, injecties, bloedwaarden en protocolgegevens worden alleen op dit apparaat bewaard. Er is geen account en geen cloud — er wordt nooit iets naar een server geüpload.";
+"privacy.hkPrivacy" = "HealthKit blijft privé";
+"privacy.hkPrivacyDesc" = "HRV, slaap, stappen en rusthartslag worden uit HealthKit gelezen om je check-in automatisch in te vullen. Deze gegevens verlaten nooit je apparaat en worden nooit met derden gedeeld.";
+"privacy.photos" = "Foto's van bloedwaarden";
+"privacy.photosDesc" = "Foto's van labresultaten worden alleen lokaal op je apparaat bewaard. Ze worden nergens geüpload en niemand behalve jij kan ze ooit zien.";
+"privacy.sync" = "Geen analytics, geen tracking";
+"privacy.syncDesc" = "Trough heeft geen analytics en geen tracking. We verzamelen niets over hoe je de app gebruikt en je gegevens worden nooit verkocht, verhuurd of met iemand gedeeld.";
+"privacy.noSell" = "Geen analytics, geen tracking";
+"privacy.noSellDesc" = "Trough heeft geen analytics en geen tracking. We verzamelen niets over hoe je de app gebruikt en je gegevens worden nooit verkocht, verhuurd of met iemand gedeeld.";
+"privacy.deletion" = "Gegevens verwijderen";
+"privacy.deletionDesc" = "Je kunt elk item op elk moment verwijderen. Omdat alles op je apparaat staat, wist het verwijderen van de app al je gegevens permanent en onomkeerbaar.";
+"privacy.fullPolicy" = "Volledig beleid & voorwaarden";
+
+/* ═══════════════════════════════════════════════════════════════
+   Disclaimers
+   ═══════════════════════════════════════════════════════════════ */
+"disclaimer.medical" = "Geen medisch advies. Raadpleeg je zorgverlener.";
+"disclaimer.standard" = "Deze informatie is uitsluitend bedoeld om zelf bij te houden en vormt geen medisch advies. Raadpleeg een bevoegde zorgverlener voordat je wijzigingen in je protocol aanbrengt.";
+"disclaimer.bloodwork" = "De getoonde labwaarden dienen ter referentie. Normaalwaarden verschillen per lab en per individu. Bespreek je resultaten altijd met je voorschrijvend arts.";
+"disclaimer.pkCurve" = "Farmacokinetische curves zijn schattingen op basis van gemiddelden in de bevolking. Individuele opname en stofwisseling verschillen aanzienlijk. Dit is geen vervanging voor regelmatige controle van je bloedwaarden.";
+"disclaimer.protocolScore" = "De Protocol Score weerspiegelt je zelfgerapporteerde welzijnsmetingen. Het is geen klinische meting en mag geen medische beslissingen sturen.";
+"disclaimer.insight" = "Inzichten worden alleen gegenereerd op basis van je persoonlijke trackinggegevens. Het zijn waargenomen patronen, geen medische diagnoses of adviezen.";
+"disclaimer.weeklyReport" = "Dit rapport vat je zelfgerapporteerde gegevens samen. Het is geen klinisch document en mag niet worden gebruikt om medische beslissingen te sturen. Raadpleeg altijd je voorschrijvend arts.";
+"disclaimer.supplement" = "Informatie over supplementen is uitsluitend bedoeld om zelf bij te houden. Raadpleeg een gekwalificeerde zorgverlener voordat je met een nieuw supplement begint.";
+"disclaimer.fertility" = "Schattingen voor vruchtbaarheidsherstel zijn gebaseerd op gepubliceerde gemiddelden. Individuele tijdlijnen verschillen aanzienlijk. Raadpleeg altijd een voortplantingsendocrinoloog.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Weekly Report
+   ═══════════════════════════════════════════════════════════════ */
+"report.title" = "Wekelijks rapport";
+"report.notEnoughData" = "Nog niet genoeg gegevens";
+"report.notEnoughDataDesc" = "Check 7 dagen op rij in om je wekelijkse rapport te ontgrendelen.";
+"report.share" = "Rapport delen";
+
+/* ═══════════════════════════════════════════════════════════════
+   CSV Import
+   ═══════════════════════════════════════════════════════════════ */
+"import.dailyCheckins" = "Dagelijkse check-ins";
+"import.bloodwork" = "Bloedwaarden";
+"import.both" = "Beide";
+"import.chooseFile" = "Bestand kiezen";
+"import.import" = "Importeren";
+"import.date" = "Datum";
+"import.labName" = "Naam lab";
+
+/* ═══════════════════════════════════════════════════════════════
+   Frequency Labels
+   ═══════════════════════════════════════════════════════════════ */
+"frequency.daily" = "Dagelijks";
+"frequency.everyOtherDay" = "Om de dag";
+"frequency.every3Days" = "Om de 3 dagen";
+"frequency.weekly" = "Wekelijks";
+"frequency.every2Weeks" = "Om de 2 weken";
+"frequency.everyNDays" = "Om de %d dagen";
+
+/* ═══════════════════════════════════════════════════════════════
+   Notifications
+   ═══════════════════════════════════════════════════════════════ */
+"notification.checkinTitle" = "Dagelijkse check-in";
+"notification.checkinBody" = "Hoe voel je je vandaag? Log je dagelijkse check-in.";
+"notification.compoundDoseTitle" = "%@-herinnering";
+"notification.compoundDoseBody" = "Tijd voor je %@-dosis (%@).";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.featurePK" = "Live PK-curves";
+"paywall.featureHistory" = "Volledige trendgeschiedenis";
+"paywall.featureBloodwork" = "Bloedwaarden bijhouden";
+"paywall.featureReports" = "Wekelijkse rapporten";
+"paywall.featureAI" = "AI-gestuurde inzichten";
+"paywall.featurePeptides" = "Peptiden bijhouden";
+"paywall.perMonth" = "per maand";
+"paywall.perYear" = "per jaar";
+"paywall.privacy" = "Privacy";
+"paywall.terms" = "Voorwaarden";
+"paywall.restore" = "Herstellen";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.trtInjection" = "TRT-injectie";
+"onboarding.selected" = "%d geselecteerd";

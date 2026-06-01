@@ -1,0 +1,637 @@
+/* Trough — Base English (en) Localizable Strings */
+
+/* ═══════════════════════════════════════════════════════════════
+   Navigation & Tab Bar
+   ═══════════════════════════════════════════════════════════════ */
+"tab.home" = "홈";
+"tab.log" = "기록";
+"tab.injections" = "주사";
+"tab.more" = "더보기";
+
+/* ═══════════════════════════════════════════════════════════════
+   Common / Shared
+   ═══════════════════════════════════════════════════════════════ */
+"common.cancel" = "취소";
+"common.save" = "저장";
+"common.delete" = "삭제";
+"common.done" = "완료";
+"common.next" = "다음";
+"common.back" = "뒤로";
+"common.skip" = "건너뛰기";
+"common.continue" = "계속";
+"common.ok" = "확인";
+"common.error" = "오류";
+"common.today" = "오늘";
+"common.yesterday" = "어제";
+"common.add" = "추가";
+"common.edit" = "편집";
+"common.remove" = "제거";
+"common.notes" = "메모";
+"common.custom" = "사용자 지정";
+"common.dose" = "용량";
+"common.compound" = "약물";
+"common.mg" = "mg";
+
+/* Units */
+"unit.lbs" = "lbs";
+"unit.kg" = "kg";
+"unit.perMonth" = "월";
+"unit.perYear" = "년";
+"unit.days" = "일";
+"unit.daysAgo" = "%d일 전";
+
+/* ═══════════════════════════════════════════════════════════════
+   Auth
+   ═══════════════════════════════════════════════════════════════ */
+"auth.appName" = "TROUGH";
+"auth.tagline" = "TRT 및 호르몬 트래커";
+"auth.email" = "이메일";
+"auth.password" = "비밀번호";
+"auth.createAccount" = "계정 만들기";
+"auth.signIn" = "로그인";
+"auth.switchToSignIn" = "이미 계정이 있으신가요? 로그인";
+"auth.switchToSignUp" = "처음이신가요? 계정 만들기";
+"auth.enterCredentials" = "이메일과 비밀번호를 입력해 주세요.";
+"auth.confirmEmail" = "이메일에서 계정을 확인한 후 아래에서 로그인하세요.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Splash / Onboarding Hook
+   ═══════════════════════════════════════════════════════════════ */
+"splash.headline" = "프로토콜을 추적하세요.\n데이터를 직접 관리하세요.";
+"splash.cta" = "최적화를 시작해 볼까요";
+
+"quiz.title" = "오늘 컨디션은 어떠신가요?";
+"quiz.subtitle" = "각 항목을 1~5점으로 평가하세요.\n기준 프로토콜 점수를 계산해 드립니다.";
+"quiz.energy" = "활력";
+"quiz.mood" = "기분";
+"quiz.libido" = "성욕";
+"quiz.sleepQuality" = "수면의 질";
+"quiz.mentalClarity" = "정신적 명료함";
+"quiz.cta" = "내 점수 보기";
+
+"scoreReveal.protocolScore" = "프로토콜 점수";
+"scoreReveal.cta" = "예상 개선 효과 보기";
+"scoreReveal.dialedIn" = "최적 상태";
+"scoreReveal.steady" = "안정적";
+"scoreReveal.trendingDown" = "하락 추세";
+"scoreReveal.offBaseline" = "기준 미달";
+"scoreReveal.encourage.high" = "탄탄한 기준입니다. 이 상태를 유지해요.";
+"scoreReveal.encourage.mid" = "견고한 토대예요. 최적화할 여지가 있습니다.";
+"scoreReveal.encourage.low" = "개선 여지가 있어요. 함께 찾아봐요.";
+"scoreReveal.encourage.veryLow" = "할 일이 있어요 — 바로 그게 핵심입니다.";
+
+"projected.title" = "7일 전망";
+"projected.subtitle" = "꾸준히 추적하면 첫 주에 실질적인 개선을 경험할 수 있습니다.";
+"projected.today" = "오늘";
+"projected.day7" = "7일째";
+"projected.now" = "현재";
+"projected.cta" = "내 계획 만들기";
+
+"loader.step1" = "기준 상태 분석 중…";
+"loader.step2" = "PK 모델 보정 중…";
+"loader.step3" = "프로토콜 구성 중…";
+"loader.step4" = "추적 설정 중…";
+"loader.step5" = "계획 마무리 중…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding Setup
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.whatBringsYou" = "어떤 목적으로 오셨나요?";
+"onboarding.personalizeExperience" = "경험을 맞춤화하는 데 도움이 됩니다.";
+"onboarding.imOnTRT" = "TRT를 하고 있어요";
+"onboarding.trtSubtitle" = "프로토콜, 주사, 혈중 농도를 추적하세요";
+"onboarding.naturalTitle" = "자연적으로 최적화";
+"onboarding.naturalSubtitle" = "웰니스, 운동, 보충제를 추적하세요";
+
+"onboarding.haveData" = "기존 데이터가 있으신가요?";
+"onboarding.importSubtitle" = "추적 스프레드시트를 가져오세요 — 열을 자동으로 매핑해 드립니다.";
+"onboarding.importSpreadsheet" = "스프레드시트에서 가져오기";
+"onboarding.importCSV" = "CSV, TSV — 열과 날짜 자동 감지";
+"onboarding.startFresh" = "새로 시작";
+"onboarding.startFreshGuide" = "설정 과정을 안내해 드립니다";
+"onboarding.skipStartFresh" = "건너뛰기 — 새로 시작";
+
+"onboarding.yourProtocol" = "내 프로토콜";
+"onboarding.protocolSubtitle" = "이 정보로 혈중 농도와 일정을 추적합니다.";
+"onboarding.primaryCompound" = "주 약물";
+"onboarding.frequency" = "빈도";
+"onboarding.injectionDays" = "주사일";
+"onboarding.addSecondary" = "보조 약물 추가";
+"onboarding.addCompound" = "약물 추가";
+"onboarding.addAnother" = "+ 추가하기";
+"onboarding.secondaryCompound" = "보조 약물";
+"onboarding.concentration" = "농도";
+
+"onboarding.whatElse" = "그 밖에 무엇을 복용하시나요?";
+"onboarding.tapAllApply" = "해당하는 항목을 모두 탭하세요. 나중에 언제든 추가할 수 있습니다.";
+"onboarding.addCustomCompound" = "사용자 지정 약물 추가";
+"onboarding.compoundName" = "약물 이름";
+"onboarding.selected" = "%d개 선택됨";
+"onboarding.setDoses" = "용량 설정";
+"onboarding.dosesSubtitle" = "일반적인 용량과 일정을 미리 입력해 두었습니다 — 필요에 맞게 조정하세요.";
+"onboarding.schedule" = "일정";
+"onboarding.dosesReminder" = "각 약물의 일정에 따라 알림을 보내드립니다.";
+
+"onboarding.lastInjection" = "마지막 주사";
+"onboarding.lastInjectionSubtitle" = "이 날짜부터 PK 곡선을 시작합니다.";
+"onboarding.dateAndTime" = "날짜 및 시간";
+
+"onboarding.howFeeling" = "오늘 컨디션은 어떠신가요?";
+"onboarding.firstCheckinSubtitle" = "첫 체크인입니다. 이를 통해 프로토콜 점수가 생성됩니다.";
+"onboarding.bodyMetrics" = "신체 지표";
+"onboarding.weight" = "체중";
+"onboarding.bodyFat" = "체지방";
+"onboarding.protocolScoreLabel" = "프로토콜 점수";
+"onboarding.outOf100" = "/ 100";
+
+"onboarding.superchargeHK" = "HealthKit으로 강화하기";
+"onboarding.hkSubtitle" = "수면, 걸음 수, 심박 변이도를 자동으로 추적합니다.";
+"onboarding.hkSleep" = "수면";
+"onboarding.hkSleepDesc" = "수면 시간과 질을 자동 기록";
+"onboarding.hkSteps" = "걸음 수";
+"onboarding.hkStepsDesc" = "수동 입력 없이 일일 활동 기록";
+"onboarding.hkHRV" = "HRV";
+"onboarding.hkHRVDesc" = "회복 인사이트를 위한 심박 변이도";
+"onboarding.hkWeight" = "체중";
+"onboarding.hkWeightDesc" = "스마트 체중계에서 동기화";
+"onboarding.hkPrivacy" = "데이터는 기기에 그대로 남습니다. 절대 공유하지 않습니다.";
+"onboarding.enableHK" = "HealthKit 사용";
+"onboarding.hkAlreadySet" = "HealthKit 권한이 이미 설정되어 있습니다. 탭하여 설정을 여세요.";
+
+"onboarding.reminders" = "알림";
+"onboarding.remindersSubtitle" = "체크인, 주사, 펩타이드 기록을 위한 알림을 받으세요.";
+"onboarding.enableReminders" = "알림 사용";
+"onboarding.sameTimeAll" = "모두 같은 시간";
+"onboarding.perCompound" = "약물별";
+"onboarding.reminderFrequency" = "빈도";
+"onboarding.reminderTime" = "알림 시간";
+"onboarding.selectDays" = "요일 선택";
+"onboarding.dailyCheckin" = "일일 체크인";
+"onboarding.changeInSettings" = "이 설정은 언제든 변경할 수 있습니다.";
+"onboarding.getStarted" = "시작하기";
+
+"onboarding.startTrial" = "3일 무료 체험 시작";
+"onboarding.trialSubtitle" = "전체 인사이트를 잠금 해제하고 85점 이상까지 진행 상황을 추적하세요.";
+"onboarding.noCharge" = "3일간 무료. 설정 → 구독에서 언제든 취소할 수 있습니다.";
+"onboarding.maybeLater" = "나중에";
+
+/* Frequency labels */
+"freq.daily" = "매일";
+"freq.everyOtherDay" = "격일";
+"freq.every3Days" = "3일마다";
+"freq.twiceWeekly" = "주 2회";
+"freq.weekly" = "주 1회";
+"freq.biweekly" = "격주";
+"freq.monthly" = "월 1회";
+"freq.customDays" = "사용자 지정 요일";
+"freq.e1d" = "매일 (E1D)";
+"freq.e2d" = "2일마다";
+"freq.e3d" = "3일마다";
+"freq.e3.5d" = "주 2회 (E3.5D)";
+"freq.e7d" = "주 1회 (E7D)";
+"freq.e14d" = "격주 (E14D)";
+"freq.twiceWeekMonThu" = "주 2회 (월, 목)";
+"freq.threeTimesWeek" = "주 3회";
+
+/* ═══════════════════════════════════════════════════════════════
+   Dashboard
+   ═══════════════════════════════════════════════════════════════ */
+"dashboard.title" = "대시보드";
+"dashboard.noDataTitle" = "👋 아직 데이터가 없어요";
+"dashboard.noDataSubtitle" = "샘플 데이터를 불러와 앱을 둘러보거나 첫 체크인을 시작하세요.";
+"dashboard.loadSampleData" = "샘플 데이터 불러오기";
+"dashboard.startCheckin" = "체크인 시작";
+"dashboard.activeProtocol" = "활성 프로토콜";
+"dashboard.overdue" = "기한 초과";
+"dashboard.nextIn" = "다음까지 %d일";
+"dashboard.protocolScore" = "프로토콜 점수";
+"dashboard.7dayAvg" = "7일 평균";
+"dashboard.prior7day" = "이전 7일";
+"dashboard.logToday" = "오늘 기록";
+"dashboard.dailyCheckin" = "일일 체크인";
+"dashboard.tapToLog" = "탭하여 오늘의 컨디션을 기록하세요";
+"dashboard.todaysCheckin" = "오늘의 체크인";
+"dashboard.checkinStreak" = "체크인 연속 기록";
+"dashboard.estimatedBloodLevel" = "예상 혈중 농도";
+"dashboard.pkCurve.empty" = "주사를 기록하면 PK 곡선이 표시됩니다";
+"dashboard.seeBloodLevels" = "실제 혈중 농도 보기";
+"dashboard.pkCurveDesc" = "내 프로토콜 기반 맞춤 PK 곡선";
+"dashboard.startFreeTrial" = "무료 체험 시작";
+"dashboard.fertilityActive" = "생식력 모드 활성";
+"dashboard.hcgStarted" = "hCG 시작 %d주 전";
+"dashboard.protocol" = "프로토콜";
+"dashboard.glp1Weight" = "GLP-1 체중 추적";
+"dashboard.energyStable" = "활력 안정";
+"dashboard.glp1Working" = "GLP-1 + 체중 하락 추세 + 안정적 활력 = 프로토콜이 잘 작동 중";
+"dashboard.bodyComp" = "신체 구성";
+"dashboard.logWeightHint" = "일일 체크인에서 체중을 기록하세요";
+"dashboard.weeklyReport" = "주간\n리포트";
+"dashboard.weight.current" = "현재";
+"dashboard.weight.30dChange" = "30일 변화";
+"dashboard.weight.bodyFat" = "체지방";
+"dashboard.weight.30dTrend" = "30일 추세";
+
+/* Dashboard - additional keys */
+"dashboard.sampleData.title" = "👋 아직 데이터가 없어요";
+"dashboard.sampleData.subtitle" = "샘플 데이터를 불러와 앱을 둘러보거나 첫 체크인을 시작하세요.";
+"dashboard.sampleData.load" = "샘플 데이터 불러오기";
+"dashboard.sampleData.startCheckin" = "체크인 시작";
+"dashboard.checkin.title" = "일일 체크인";
+"dashboard.checkin.cta" = "지금 체크인";
+"dashboard.checkin.done" = "오늘의 체크인";
+"dashboard.streak" = "체크인 연속 기록";
+"dashboard.streak.days" = "일";
+"dashboard.personalBest" = "🏆 개인 최고 기록 경신!";
+"dashboard.personalBest.subtitle" = "프로토콜 점수가 최고치를 기록했습니다.";
+"dashboard.weightTrend" = "체중";
+"dashboard.weightTrend.30day" = "30일 추세";
+"dashboard.pkCurve" = "예상 PK 곡선";
+"dashboard.pkCurve.subtitle" = "예상 테스토스테론 수치를 확인하세요";
+"dashboard.fertility" = "생식력 지원";
+"dashboard.fertility.hcgStarted" = "hCG 시작";
+"dashboard.fertility.protocol" = "프로토콜";
+"dashboard.glp1" = "GLP-1 및 체중";
+"dashboard.glp1.energyStable" = "활력 안정";
+"dashboard.glp1.workingWell" = "GLP-1 + 체중 하락 추세 + 안정적 활력 = 프로토콜이 잘 작동 중";
+"dashboard.bodyComposition" = "신체 구성";
+"dashboard.bodyComposition.subtitle" = "체중 및 체지방 추세 추적";
+"dashboard.bodyComposition.logWeight" = "일일 체크인에서 체중을 기록하세요";
+"dashboard.bodyComposition.bodyFat" = "체지방";
+"dashboard.bodyComposition.bodyFatPct" = "체지방률";
+"dashboard.forecast" = "내일의 예측";
+"dashboard.quickStats" = "빠른 통계";
+"dashboard.totalCheckins" = "총 체크인 수";
+"dashboard.quickStats.avgEnergy" = "평균 활력";
+"dashboard.quickStats.avgLibido" = "평균 성욕";
+"dashboard.quickStats.morningWood" = "아침 발기";
+"dashboard.quickStats.30d" = "30일";
+"dashboard.quickStats.nextInjection" = "다음 주사";
+"dashboard.quickStats.overdue" = "기한 초과";
+"dashboard.quickStats.onTrack" = "정상 진행";
+"dashboard.quickStats.adherence" = "준수율";
+"dashboard.trendChart" = "7일 추세";
+"dashboard.trendChart.empty" = "추세를 보려면 매일 체크인하세요";
+"dashboard.trendChart.upsell" = "Pro로 전체 7일 추세 보기";
+"dashboard.trendChart.3days" = "3일";
+"dashboard.cycleDay" = "%d일 / %d일 · %@";
+"dashboard.compliance.injections" = "주사";
+"dashboard.compliance.thisMonth" = "이번 달";
+"dashboard.compliance.supplements" = "보충제";
+"dashboard.compliance.tapToAdd" = "탭하여 추가";
+"dashboard.compliance.thisWeek" = "이번 주";
+"dashboard.supplementSetup.title" = "스택 설정하기";
+"dashboard.supplementSetup.subtitle" = "보충제를 추가하여 매일 준수율을 추적하세요.";
+
+/* Trial / billing */
+"dashboard.trial.ended" = "체험이 종료되었습니다";
+"dashboard.trial.endsIn" = "체험이 %d일 후 종료됩니다";
+"dashboard.trial.subscribe" = "모든 데이터와 기능을 유지하려면 구독하세요.";
+"dashboard.trial.subscribeButton" = "구독";
+"dashboard.trial.accomplished" = "그동안의 성과를 확인하세요";
+"dashboard.trial.freeForever" = "영구 무료";
+"dashboard.trial.freeFeatures" = "프로토콜 점수, 일일 체크인, HealthKit 동기화, 기본 인사이트";
+"dashboard.trial.withPro" = "Pro 포함";
+"dashboard.trial.proFeatures" = "PK 곡선, 혈액 검사 추적, 주간 리포트, 펩타이드 추적 등";
+"dashboard.trial.subscribePro" = "Trough Pro 구독";
+"dashboard.trial.continueFree" = "무료로 계속하기";
+"dashboard.trial.dataSafe" = "데이터는 안전합니다 — 언제든 업그레이드하세요.";
+"dashboard.grace.title" = "결제 문제";
+"dashboard.grace.subtitle" = "결제를 다시 시도합니다 — %d일 더 이용할 수 있습니다.";
+
+/* Greetings */
+"greeting.morning" = "좋은 아침입니다";
+"greeting.afternoon" = "좋은 오후입니다";
+"greeting.evening" = "좋은 저녁입니다";
+
+/* Milestones */
+"milestone.7" = "🔥 일주일! TRT 트래커 상위 30%%";
+"milestone.14" = "🔥🔥 2주! TRT 트래커 상위 15%%";
+"milestone.30" = "🔥🔥🔥 한 달! TRT 트래커 상위 5%%";
+"milestone.60" = "🔥🔥🔥🔥 두 달! 상위 2%% — 엘리트입니다";
+"milestone.90" = "🔥🔥🔥🔥🔥 석 달! 상위 1%% — 전설입니다";
+
+/* Forecast */
+"forecast.injectionToday" = "오늘은 주사일입니다 — 활력은 24~48시간 후 정점에 이릅니다.";
+"forecast.injectionTomorrow" = "내일 주사 예정입니다. 현재 트로프 구간이라 다소 피로감이 정상입니다.";
+"forecast.dip" = "내일 %d일째 — 활력이 보통 떨어집니다. 미리 대비하세요.";
+"forecast.strong" = "내일 %d일째 — 주사 후 수치가 강할 것입니다.";
+"forecast.tapering" = "다음 주사까지 %d일. 수치가 서서히 감소하고 있습니다.";
+
+/* PK Curve */
+"pk.overdue" = "%d일 초과";
+"pk.peak" = "정점";
+"pk.trough" = "트로프";
+"pk.now" = "현재";
+
+/* ═══════════════════════════════════════════════════════════════
+   Daily Check-in
+   ═══════════════════════════════════════════════════════════════ */
+"checkin.title" = "오늘 컨디션은 어떠신가요?";
+"checkin.dayOf" = "%d일 / %d일";
+"checkin.protocolScore" = "프로토콜 점수";
+"checkin.wellnessMetrics" = "웰니스 지표";
+"checkin.energy" = "활력";
+"checkin.mood" = "기분";
+"checkin.libido" = "성욕";
+"checkin.sleepQuality" = "수면의 질";
+"checkin.mentalClarity" = "정신적 명료함";
+"checkin.bodyMetrics" = "신체 지표";
+"checkin.weight" = "체중 (%@)";
+"checkin.bodyFat" = "체지방률 %%";
+"checkin.optional" = "선택 사항";
+"checkin.next" = "다음";
+"checkin.saveCheckin" = "체크인 저장";
+"checkin.saved" = "저장됨";
+"checkin.injectionCycle" = "주사 주기";
+"checkin.noData" = "데이터 없음";
+
+/* Binary taps */
+"checkin.quickQuestions" = "간단한 질문";
+"checkin.morningWood" = "아침 발기가 있었나요?";
+"checkin.yes" = "예 ✓";
+"checkin.no" = "아니요 ✗";
+"checkin.workout" = "오늘 운동했나요?";
+"checkin.trainingPerformance" = "운동 수행 능력";
+"checkin.performance" = "수행 능력";
+"checkin.aiSideEffects" = "AI 부작용";
+"checkin.aiSideEffectsDesc" = "AI 용량이 에스트로겐을 과도하게 낮추는지 감지하는 데 도움이 됩니다.";
+"checkin.jointPain" = "관절통";
+"checkin.noIssues" = "이상 없음";
+"checkin.glp1Check" = "GLP-1 점검";
+"checkin.nausea" = "메스꺼움";
+"checkin.noNausea" = "메스꺼움 없음";
+"checkin.supplementsTaken" = "오늘 보충제를 복용했나요?";
+
+/* Completion */
+"checkin.hrv" = "HRV";
+"checkin.sleep" = "수면";
+"checkin.steps" = "걸음 수";
+"checkin.restingHR" = "안정시 심박수";
+
+/* ═══════════════════════════════════════════════════════════════
+   Injections
+   ═══════════════════════════════════════════════════════════════ */
+"injections.title" = "주사";
+"injections.logNew" = "새 주사 기록";
+"injections.logFirst" = "첫 주사를 기록하세요";
+"injections.logFirstSubtitle" = "+를 탭하여 용량을 기록하세요. Trough가 주기를 추적하고 주사 부위를 제안합니다.";
+"injections.logInjection" = "주사 기록";
+"injections.editInjection" = "주사 편집";
+"injections.today" = "오늘";
+"injections.yesterday" = "어제";
+"injections.dateTime" = "날짜 및 시간";
+"injections.when" = "시점";
+"injections.injectionSite" = "주사 부위";
+"injections.notesOptional" = "메모 (선택)";
+"injections.notesPlaceholder" = "이 주사에 대한 메모…";
+
+/* ═══════════════════════════════════════════════════════════════
+   Bloodwork
+   ═══════════════════════════════════════════════════════════════ */
+"bloodwork.title" = "혈액 검사";
+"bloodwork.results" = "결과";
+"bloodwork.trends" = "추세";
+"bloodwork.noRecords" = "기록된 혈액 검사가 없습니다";
+"bloodwork.logFirst" = "첫 패널을 기록하여 추세 추적을 시작하세요.";
+"bloodwork.addResults" = "결과 추가";
+"bloodwork.addBloodwork" = "혈액 검사 추가";
+"bloodwork.editBloodwork" = "혈액 검사 편집";
+"bloodwork.panelInfo" = "패널 정보";
+"bloodwork.drawDate" = "채혈 날짜";
+"bloodwork.labName" = "검사실 이름 (선택)";
+"bloodwork.photo" = "사진";
+"bloodwork.chooseLibrary" = "라이브러리에서 선택";
+"bloodwork.takePhoto" = "사진 촬영";
+"bloodwork.photoUnavailable" = "사진을 사용할 수 없음";
+"bloodwork.notesPlaceholder" = "이 패널에 대해 의사에게 전할 메모...";
+"bloodwork.refRange" = "검사실 참고 범위";
+"bloodwork.editRefRange" = "참고 범위 편집";
+"bloodwork.markers" = "마커 %d개";
+"bloodwork.view" = "보기";
+
+/* ═══════════════════════════════════════════════════════════════
+   Peptides / Adjuncts
+   ═══════════════════════════════════════════════════════════════ */
+"peptides.title" = "보조제 및 펩타이드";
+"peptides.trackYourStack" = "스택 추적하기";
+"peptides.trackSubtitle" = "보조제와 펩타이드 용량을 기록하여\n스택을 추적하고 패턴을 파악하세요.";
+"peptides.logFirstDose" = "첫 용량 기록";
+"peptides.glp1Weight" = "GLP-1 / 체중 관리";
+"peptides.weightTracking" = "체중 추적";
+"peptides.aiAncillary" = "AI / 보조 약물";
+"peptides.peptides" = "펩타이드";
+"peptides.activeCompounds" = "활성 약물";
+"peptides.e2Correlation" = "E2 상관관계";
+"peptides.log" = "기록";
+"peptides.dosesTotal" = "총 %d회 투여";
+"peptides.logDose" = "용량 기록";
+"peptides.editLog" = "기록 편집";
+"peptides.adjunctPeptide" = "보조제 / 펩타이드";
+"peptides.amount" = "양";
+"peptides.unit" = "단위";
+"peptides.route" = "투여 경로";
+"peptides.injectionSite" = "주사 부위";
+"peptides.details" = "세부 정보";
+"peptides.batchLot" = "배치 / 로트 번호";
+"peptides.compoundName" = "약물 이름";
+"peptides.dateTime" = "날짜 및 시간";
+
+/* ═══════════════════════════════════════════════════════════════
+   Settings
+   ═══════════════════════════════════════════════════════════════ */
+"settings.title" = "설정";
+"settings.activeProtocol" = "활성 프로토콜";
+"settings.noActiveProtocol" = "활성 프로토콜 없음";
+"settings.setNewProtocol" = "새 프로토콜 설정";
+"settings.supplements" = "보충제";
+"settings.manageSupplements" = "보충제 관리";
+"settings.active" = "%d개 활성";
+"settings.trackingPrefs" = "추적 환경 설정";
+"settings.trackBodyWeight" = "체중 추적";
+"settings.dataImport" = "데이터 가져오기";
+"settings.importSpreadsheet" = "스프레드시트에서 가져오기";
+"settings.reminders" = "알림";
+"settings.account" = "계정";
+"settings.signOut" = "로그아웃";
+"settings.deleteAccount" = "계정 삭제";
+"settings.deleteAccount.title" = "계정을 삭제할까요?";
+"settings.deleteAccount.message" = "계정과 모든 데이터가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.";
+"settings.deleteAccount.confirm" = "모두 삭제";
+"settings.deleting" = "삭제 중...";
+"settings.recommend" = "친구에게 Trough 추천하기";
+"settings.shareSubject" = "Trough를 확인해 보세요";
+"settings.shareBody" = "Trough로 TRT 프로토콜을 추적하고 있는데 정말 잘 만들어졌어요.";
+"settings.privacyPolicy" = "개인정보 및 데이터 정책";
+"settings.termsOfUse" = "이용 약관";
+"settings.proFeatures" = "Pro로 누릴 수 있는 기능";
+
+/* New Protocol */
+"settings.newProtocol" = "새 프로토콜";
+"settings.protocolName" = "프로토콜 이름 (예: Test Cyp 150mg E7D)";
+
+/* Supplements */
+"supplements.title" = "보충제";
+"supplements.yourStack" = "내 스택";
+"supplements.noSupplements" = "아직 보충제가 없습니다";
+"supplements.addHint" = "스택을 추가하여 체크인에서 매일 준수율을 추적하세요.";
+"supplements.addSupplement" = "보충제 추가";
+"supplements.name" = "이름";
+"supplements.amount" = "양";
+"supplements.every" = "매";
+"supplements.preset" = "프리셋";
+"supplements.doseFrequency" = "용량 및 빈도";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.title" = "TROUGH PRO";
+"paywall.heroSubtitle" = "프로토콜 점수를 42 → 85로 끌어올리세요.";
+"paywall.subtitle" = "모든 기능. 3일간 무료.";
+"paywall.monthly" = "월간";
+"paywall.annual" = "연간";
+"paywall.save40" = "58%% 절약";
+"paywall.startTrial" = "무료 체험 시작";
+"paywall.startTrialFull" = "무료 체험 시작 — 3일 무료, 이후 %@";
+"paywall.restorePurchases" = "복원";
+"paywall.privacyPolicy" = "개인정보";
+"paywall.termsOfUse" = "약관";
+
+/* Pro features */
+"pro.title" = "Pro로 누릴 수 있는 기능";
+"pro.trialIncluded" = "3일 무료 체험 포함";
+"pro.pkCurves" = "PK 곡선";
+"pro.pkCurvesDesc" = "신뢰 구간 및 다중 에스테르 스태킹과 함께 예상 혈중 농도 확인";
+"pro.trendHistory" = "전체 추세 기록";
+"pro.trendHistoryDesc" = "무제한 활력, 기분, 성욕, 수면 추세 차트 (무료는 3일 표시)";
+"pro.bloodwork" = "혈액 검사 추적";
+"pro.bloodworkDesc" = "검사 결과 기록, 시간 경과에 따른 추세 추적, 사용자 지정 참고 범위 설정";
+"pro.reports" = "주간 리포트 및 내보내기";
+"pro.reportsDesc" = "의사용 메모가 포함된 PDF 및 CSV 내보내기 — 진료에 안성맞춤";
+"pro.peptides" = "보조제 및 펩타이드";
+"pro.peptidesDesc" = "AI 약물, 펩타이드, GLP-1 작용제를 E2 상관관계와 함께 추적";
+"pro.siteRotation" = "주사 부위 순환";
+"pro.siteRotationDesc" = "흉터 조직 형성을 방지하는 시각적 순환 맵";
+"pro.reminders" = "주사 알림";
+"pro.remindersDesc" = "주사일을 놓치지 마세요 — 프로토콜 기반 스마트 알림";
+"pro.alwaysFree" = "항상 무료";
+"pro.alwaysFreeDesc" = "프로토콜 점수, 일일 체크인, HealthKit 동기화, 기본 인사이트";
+
+/* Paywall feature list */
+"paywall.feat.history" = "무제한 기록 및 프로토콜 점수 추세";
+"paywall.feat.pk" = "신뢰 구간이 있는 PK 곡선";
+"paywall.feat.bloodwork" = "혈액 검사 추적 및 추세 차트";
+"paywall.feat.reports" = "주간 리포트 및 CSV/PDF 내보내기";
+"paywall.feat.peptides" = "펩타이드 및 GLP-1 추적";
+"paywall.feat.siteMap" = "주사 부위 순환 맵";
+"paywall.feat.reminders" = "주사 알림 및 캘린더";
+"paywall.feat.healthkit" = "HealthKit 자동 동기화 (항상 무료)";
+
+/* ═══════════════════════════════════════════════════════════════
+   HealthKit Permission
+   ═══════════════════════════════════════════════════════════════ */
+"hk.title" = "건강 연결";
+"hk.subtitle" = "Trough는 생체 데이터를 읽어 호르몬 프로토콜의 패턴을 찾습니다.";
+"hk.hrv" = "HRV";
+"hk.hrvDesc" = "심박 변이도 — 스트레스 및 회복 신호";
+"hk.sleep" = "수면";
+"hk.sleepDesc" = "지난밤의 코어, 깊은 수면, REM 단계";
+"hk.stepsEnergy" = "걸음 수 및 에너지";
+"hk.stepsEnergyDesc" = "프로토콜과 연관 분석을 위한 일일 활동량";
+"hk.restingHR" = "안정시 심박수";
+"hk.restingHRDesc" = "시간 경과에 따른 심혈관 기준치";
+"hk.privacy" = "읽기 전용입니다. 건강 데이터를 절대 판매하지 않습니다.";
+"hk.allow" = "접근 허용";
+"hk.notNow" = "나중에";
+"hk.denied" = "건강 접근이 거부되었습니다";
+"hk.deniedDesc" = "탭하여 설정을 열고 건강 접근을 허용하세요.";
+"hk.permissionError" = "권한을 요청할 수 없습니다. 설정에서 건강 접근을 허용할 수 있습니다.";
+"hk.noData" = "사용 가능한 데이터 없음";
+
+/* ═══════════════════════════════════════════════════════════════
+   Privacy Policy
+   ═══════════════════════════════════════════════════════════════ */
+"privacy.title" = "개인정보 및 데이터";
+"privacy.dataYours" = "데이터는 절대 기기를 벗어나지 않습니다";
+"privacy.dataYoursDesc" = "모든 체크인, 주사, 혈액 검사, 프로토콜 데이터는 이 기기에만 저장됩니다. 계정도 클라우드도 없으며, 서버에 업로드되는 것은 아무것도 없습니다.";
+"privacy.hkPrivacy" = "HealthKit은 비공개로 유지됩니다";
+"privacy.hkPrivacyDesc" = "HRV, 수면, 걸음 수, 안정시 심박수는 체크인을 자동으로 채우기 위해 HealthKit에서 읽어옵니다. 이 데이터는 기기를 벗어나지 않으며 제3자와 절대 공유되지 않습니다.";
+"privacy.photos" = "혈액 검사 사진";
+"privacy.photosDesc" = "검사 결과 사진은 기기에 로컬로만 저장됩니다. 어디에도 업로드되지 않으며, 본인 외에는 누구도 볼 수 없습니다.";
+"privacy.sync" = "분석 없음, 추적 없음";
+"privacy.syncDesc" = "Trough에는 분석도 추적도 없습니다. 앱 사용 방식에 대해 아무것도 수집하지 않으며, 데이터는 절대 판매, 대여, 공유되지 않습니다.";
+"privacy.noSell" = "분석 없음, 추적 없음";
+"privacy.noSellDesc" = "Trough에는 분석도 추적도 없습니다. 앱 사용 방식에 대해 아무것도 수집하지 않으며, 데이터는 절대 판매, 대여, 공유되지 않습니다.";
+"privacy.deletion" = "데이터 삭제";
+"privacy.deletionDesc" = "언제든 항목을 삭제할 수 있습니다. 모든 것이 기기에 저장되므로, 앱을 삭제하면 모든 데이터가 영구적이고 되돌릴 수 없게 삭제됩니다.";
+"privacy.fullPolicy" = "전체 정책 및 약관";
+
+/* ═══════════════════════════════════════════════════════════════
+   Disclaimers
+   ═══════════════════════════════════════════════════════════════ */
+"disclaimer.medical" = "의학적 조언이 아닙니다. 의료 전문가와 상담하세요.";
+"disclaimer.standard" = "이 정보는 개인 추적 용도일 뿐이며 의학적 조언에 해당하지 않습니다. 프로토콜을 변경하기 전에 면허를 가진 의료 전문가와 상담하세요.";
+"disclaimer.bloodwork" = "표시된 검사 수치는 참고용입니다. 정상 범위는 검사실과 개인에 따라 다릅니다. 결과는 항상 처방 의사와 상의하세요.";
+"disclaimer.pkCurve" = "약동학 곡선은 인구 평균을 기반으로 한 추정치입니다. 개인의 흡수와 대사는 크게 다를 수 있습니다. 정기적인 혈액 검사 모니터링을 대체하지 않습니다.";
+"disclaimer.protocolScore" = "프로토콜 점수는 본인이 보고한 웰니스 지표를 반영합니다. 임상 측정값이 아니며 의학적 결정의 기준이 되어서는 안 됩니다.";
+"disclaimer.insight" = "인사이트는 본인의 개인 추적 데이터만으로 생성됩니다. 이는 관찰된 패턴일 뿐 의학적 진단이나 조언이 아닙니다.";
+"disclaimer.weeklyReport" = "이 리포트는 본인이 보고한 데이터를 요약한 것입니다. 임상 문서가 아니며 의학적 결정의 기준으로 사용해서는 안 됩니다. 항상 처방 의사와 상담하세요.";
+"disclaimer.supplement" = "보충제 정보는 개인 추적 용도일 뿐입니다. 새 보충제를 시작하기 전에 자격을 갖춘 의료 전문가와 상담하세요.";
+"disclaimer.fertility" = "생식력 회복 추정치는 발표된 평균을 기반으로 합니다. 개인별 시기는 크게 다릅니다. 항상 생식내분비 전문의와 상담하세요.";
+
+/* ═══════════════════════════════════════════════════════════════
+   Weekly Report
+   ═══════════════════════════════════════════════════════════════ */
+"report.title" = "주간 리포트";
+"report.notEnoughData" = "아직 데이터가 충분하지 않습니다";
+"report.notEnoughDataDesc" = "7일 연속 체크인하면 주간 리포트가 잠금 해제됩니다.";
+"report.share" = "리포트 공유";
+
+/* ═══════════════════════════════════════════════════════════════
+   CSV Import
+   ═══════════════════════════════════════════════════════════════ */
+"import.dailyCheckins" = "일일 체크인";
+"import.bloodwork" = "혈액 검사";
+"import.both" = "둘 다";
+"import.chooseFile" = "파일 선택";
+"import.import" = "가져오기";
+"import.date" = "날짜";
+"import.labName" = "검사실 이름";
+
+/* ═══════════════════════════════════════════════════════════════
+   Frequency Labels
+   ═══════════════════════════════════════════════════════════════ */
+"frequency.daily" = "매일";
+"frequency.everyOtherDay" = "격일";
+"frequency.every3Days" = "3일마다";
+"frequency.weekly" = "주 1회";
+"frequency.every2Weeks" = "2주마다";
+"frequency.everyNDays" = "%d일마다";
+
+/* ═══════════════════════════════════════════════════════════════
+   Notifications
+   ═══════════════════════════════════════════════════════════════ */
+"notification.checkinTitle" = "일일 체크인";
+"notification.checkinBody" = "오늘 컨디션은 어떠신가요? 일일 체크인을 기록하세요.";
+"notification.compoundDoseTitle" = "%@ 알림";
+"notification.compoundDoseBody" = "%@ 투여 시간입니다 (%@).";
+
+/* ═══════════════════════════════════════════════════════════════
+   Paywall (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"paywall.featurePK" = "실시간 PK 곡선";
+"paywall.featureHistory" = "전체 추세 기록";
+"paywall.featureBloodwork" = "혈액 검사 추적";
+"paywall.featureReports" = "주간 리포트";
+"paywall.featureAI" = "AI 기반 인사이트";
+"paywall.featurePeptides" = "펩타이드 추적";
+"paywall.perMonth" = "월";
+"paywall.perYear" = "년";
+"paywall.privacy" = "개인정보";
+"paywall.terms" = "약관";
+"paywall.restore" = "복원";
+
+/* ═══════════════════════════════════════════════════════════════
+   Onboarding (additional)
+   ═══════════════════════════════════════════════════════════════ */
+"onboarding.trtInjection" = "TRT 주사";
+"onboarding.selected" = "%d개 선택됨";
