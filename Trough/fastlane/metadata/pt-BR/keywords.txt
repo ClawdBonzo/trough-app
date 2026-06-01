@@ -1,0 +1,1 @@
+testosterona,hormônio,trt,injeção,exames,peptídeo,glp-1,protocolo,estradiol,hcg,e2,clomid

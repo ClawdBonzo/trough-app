@@ -1,0 +1,4 @@
+• Slimmere inzichten in je Protocol Score
+• Nauwkeurigere PK-curves
+• Nieuwe trendgrafieken voor bloedonderzoek
+• Bugfixes en prestatieverbeteringen

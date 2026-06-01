@@ -1,0 +1,4 @@
+• Helt ny Trough-upplevelse för att följa ditt TRT-protokoll
+• Logga injektioner, doser och peptider
+• Dagliga hälsokoll och Protocol Score
+• PK-kurvor för att visualisera uppskattade blodnivåer

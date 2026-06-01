@@ -1,0 +1,1 @@
+testosteron,trt,hormon,injektion,blodprov,peptid,glp-1,hcg,estradiol,e2,dos,protokoll,man,halsa

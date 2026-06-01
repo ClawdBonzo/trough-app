@@ -1,0 +1,4 @@
+• Intelligenterer Protocol Score, der dein Befinden mit der Konstanz deiner Dosierung verbindet
+• Verbesserte pharmakokinetische (PK) Kurven für genauere Hormonschätzungen
+• Erweiterte Wirkstoffbibliothek – mehr Ester, Peptide und GLP-1-Optionen
+• Fehlerbehebungen und Leistungsverbesserungen
