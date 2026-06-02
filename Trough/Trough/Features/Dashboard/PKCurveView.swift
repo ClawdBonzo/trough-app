@@ -27,8 +27,9 @@ struct PKCurveView: View {
             if protocols.isEmpty || injections.isEmpty {
                 emptyState
             } else {
-                chart(for: data)
-                legendRow(for: data)
+                let curveData = data  // compute once per render; engine also memoizes across renders
+                chart(for: curveData)
+                legendRow(for: curveData)
                 toggleRow
             }
             DisclaimerBanner(type: .pkCurve)

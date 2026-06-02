@@ -170,9 +170,11 @@ enum WeeklyReportService {
             hcgDesc.fetchLimit = 1
             if let hcg = try? context.fetch(hcgDesc).first {
                 var parts = ["hCG active"]
-                // Latest FSH value
-                let allBW = (try? context.fetch(FetchDescriptor<SDBloodwork>())) ?? []
-                let fshValues = allBW.flatMap(\.markers).filter { $0.markerName == "FSH" }
+                // Latest FSH value — fetch newest bloodwork first so we stop early.
+                var bwDesc = FetchDescriptor<SDBloodwork>(sortBy: [SortDescriptor(\.drawnAt, order: .reverse)])
+                bwDesc.fetchLimit = 25
+                let recentBW = (try? context.fetch(bwDesc)) ?? []
+                let fshValues = recentBW.flatMap(\.markers).filter { $0.markerName == "FSH" }
                     .sorted { $0.bloodworkID < $1.bloodworkID }
                 if let latestFSH = fshValues.last {
                     parts.append("FSH \(String(format: "%.1f", latestFSH.value)) IU/L")
@@ -221,8 +223,10 @@ enum WeeklyReportService {
             aiDosesSummary: aiDosesSummary,
             fertilitySnapshot: fertilitySnapshot,
             doctorNotes: {
-                let allBW = (try? context.fetch(FetchDescriptor<SDBloodwork>())) ?? []
-                let weekBW = allBW.filter { $0.drawnAt >= weekStart && $0.drawnAt <= weekEnd }
+                let weekPred = #Predicate<SDBloodwork> {
+                    $0.drawnAt >= weekStart && $0.drawnAt <= weekEnd
+                }
+                let weekBW = (try? context.fetch(FetchDescriptor<SDBloodwork>(predicate: weekPred))) ?? []
                 let notes = weekBW.compactMap(\.doctorNotes).filter { !$0.isEmpty }
                 return notes.isEmpty ? nil : notes.joined(separator: "\n")
             }()

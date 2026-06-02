@@ -79,9 +79,7 @@ struct BadgeCollectionView: View {
     }
 
     private func dateString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        return "Unlocked \(formatter.string(from: date))"
+        "Unlocked \(SharedFormatters.shortDate.string(from: date))"
     }
 }
 

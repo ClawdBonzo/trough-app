@@ -98,17 +98,22 @@ final class InsightEngine {
         var dipCycles = 0
         var totalCycles = 0
 
-        for i in 0..<(matchingInjs.count - 1) {
-            let cycleStart = matchingInjs[i].injectedAt
-            let cycleEnd   = matchingInjs[i + 1].injectedAt
-            let lateStart  = cycleStart.addingTimeInterval(freq * 0.6 * 86400)
+        // Pre-sort check-ins once so each cycle binary-searches its window instead of
+        // re-scanning every check-in (was O(cycles × check-ins) — a filter inside the loop).
+        let sortedCheckins = ctx.recentCheckins.sorted { $0.date < $1.date }
+        let sortedDates = sortedCheckins.map(\.date)
 
-            let lateCheckins = ctx.recentCheckins.filter {
-                $0.date >= lateStart && $0.date < cycleEnd
-            }
-            guard !lateCheckins.isEmpty else { continue }
+        for i in 0..<(matchingInjs.count - 1) {
+            let cycleEnd   = matchingInjs[i + 1].injectedAt
+            let lateStart  = matchingInjs[i].injectedAt.addingTimeInterval(freq * 0.6 * 86400)
+
+            let lo = Self.lowerBound(sortedDates, lateStart)  // first index with date >= lateStart
+            let hi = Self.lowerBound(sortedDates, cycleEnd)    // first index with date >= cycleEnd
+            guard lo < hi else { continue }
+
+            let lateEnergy = sortedCheckins[lo..<hi].map(\.energyScore)
             totalCycles += 1
-            if mean(lateCheckins.map(\.energyScore)) < avgEnergy { dipCycles += 1 }
+            if mean(lateEnergy) < avgEnergy { dipCycles += 1 }
         }
 
         guard dipCycles >= 2 else { return nil }
@@ -351,5 +356,16 @@ final class InsightEngine {
     private func compoundsMatch(_ a: String, _ b: String) -> Bool {
         let al = a.lowercased(), bl = b.lowercased()
         return al == bl || al.contains(bl) || bl.contains(al)
+    }
+
+    /// First index `i` in the ascending-sorted `dates` where `dates[i] >= target`.
+    /// Returns `dates.count` if all elements are smaller. O(log n).
+    static func lowerBound(_ dates: [Date], _ target: Date) -> Int {
+        var lo = 0, hi = dates.count
+        while lo < hi {
+            let mid = (lo + hi) / 2
+            if dates[mid] < target { lo = mid + 1 } else { hi = mid }
+        }
+        return lo
     }
 }

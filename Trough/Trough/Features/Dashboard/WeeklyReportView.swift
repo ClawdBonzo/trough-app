@@ -114,8 +114,7 @@ struct WeeklyReportCard: View {
     let userType: String
 
     private var weekRangeText: String {
-        let fmt = DateFormatter()
-        fmt.setLocalizedDateFormatFromTemplate("MMM d")
+        let fmt = SharedFormatters.monthDay
         return "\(fmt.string(from: report.weekStart)) – \(fmt.string(from: report.weekEnd))"
     }
 

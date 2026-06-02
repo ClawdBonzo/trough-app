@@ -1083,9 +1083,7 @@ struct MiniBadge: View {
     }
 
     private func dayAbbrev(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E"
-        return String(formatter.string(from: date).prefix(2))
+        String(SharedFormatters.weekdayShort.string(from: date).prefix(2))
     }
 
 }

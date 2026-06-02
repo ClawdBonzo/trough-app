@@ -1,6 +1,32 @@
 import SwiftUI
 import Foundation
 
+// MARK: - Shared Formatters
+// DateFormatter allocation is expensive (~hundreds of µs). These app-wide cached
+// instances avoid re-allocating one on every call inside view bodies and loops.
+enum SharedFormatters {
+    /// Single-letter+ weekday abbreviation source, e.g. "Mon" → caller may trim.
+    static let weekdayShort: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "E"
+        return f
+    }()
+
+    /// Localized month+day, e.g. "Jun 2" (en) — reorders for other locales.
+    static let monthDay: DateFormatter = {
+        let f = DateFormatter()
+        f.setLocalizedDateFormatFromTemplate("MMMd")
+        return f
+    }()
+
+    /// Short, locale-aware date, e.g. "6/2/26" (en).
+    static let shortDate: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .short
+        return f
+    }()
+}
+
 // MARK: - Date Extensions
 
 extension Date {

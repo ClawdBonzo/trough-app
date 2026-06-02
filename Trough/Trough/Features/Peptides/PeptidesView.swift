@@ -219,9 +219,7 @@ struct PeptidesView: View {
         let cal = Calendar.current
         if cal.isDateInToday(date) { return "Today" }
         if cal.isDateInYesterday(date) { return "Yesterday" }
-        let fmt = DateFormatter()
-        fmt.dateFormat = "MMM d"
-        return fmt.string(from: date)
+        return SharedFormatters.monthDay.string(from: date)
     }
 }
 

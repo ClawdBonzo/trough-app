@@ -49,6 +49,18 @@ final class PKCurveEngine {
     static let shared = PKCurveEngine()
     private init() {}
 
+    // MARK: - Memoization
+    // The curve is recomputed whenever a SwiftUI view body re-evaluates — which
+    // happens on unrelated state changes (e.g. toggling the "show bands" overlay)
+    // and is also called more than once per render. The Bateman simulation is the
+    // single most expensive read-time derivation in the app, so we cache the last
+    // result keyed on its inputs. The cache self-invalidates after a short TTL so
+    // the "days from now" axis stays fresh as real time advances.
+    private var cacheKey: String?
+    private var cacheValue: PKCurveData?
+    private var cacheStamp: Date?
+    private static let cacheTTL: TimeInterval = 60  // seconds
+
     // Half-lives in days (from literature)
     static let defaultHalfLives: [String: Double] = [
         "Testosterone Cypionate":   8.0,
@@ -86,7 +98,14 @@ final class PKCurveEngine {
             return PKCurveData(curves: [], combinedPoints: [], currentDayIndex: 0, peakDay: 0, troughDay: 0)
         }
 
+        // Return memoized result if inputs are unchanged and the cache is still fresh.
         let now = Date.now
+        let key = cacheSignature(protocols: protocols, injections: injections,
+                                 includeAbsorptionDelay: includeAbsorptionDelay, resolution: resolution)
+        if key == cacheKey, let cached = cacheValue, let stamp = cacheStamp,
+           now.timeIntervalSince(stamp) < Self.cacheTTL {
+            return cached
+        }
         let maxHL    = protocols.map { effectiveHalfLife(compound: $0.compoundName, custom: $0.customHalfLife) }.max() ?? 8.0
         let maxFreq  = protocols.map { Double($0.frequencyDays) }.max() ?? 7.0
         let startT   = -maxHL * 3
@@ -151,13 +170,35 @@ final class PKCurveEngine {
         let postPeakPairs = zip(timeGrid, totalLevels).dropFirst(peakIdx)
         let troughDay = postPeakPairs.min(by: { $0.1 < $1.1 })?.0 ?? endT
 
-        return PKCurveData(
+        let result = PKCurveData(
             curves: allCurves,
             combinedPoints: combinedPoints,
             currentDayIndex: currentIdx,
             peakDay: peakDay,
             troughDay: troughDay
         )
+        cacheKey = key
+        cacheValue = result
+        cacheStamp = now
+        return result
+    }
+
+    /// Cheap, deterministic signature of the inputs for memoization.
+    private func cacheSignature(
+        protocols: [PKProtocolInput],
+        injections: [PKInjectionInput],
+        includeAbsorptionDelay: Bool,
+        resolution: Int
+    ) -> String {
+        var s = "d\(includeAbsorptionDelay ? 1 : 0)r\(resolution)|"
+        for p in protocols {
+            s += "\(p.compoundName):\(p.doseAmountMg):\(p.frequencyDays):\(p.customHalfLife ?? -1):\(p.route);"
+        }
+        s += "|"
+        for inj in injections {
+            s += "\(inj.compoundName):\(inj.doseAmountMg):\(Int(inj.injectedAt.timeIntervalSince1970)):\(inj.route);"
+        }
+        return s
     }
 
     // MARK: - Private helpers
