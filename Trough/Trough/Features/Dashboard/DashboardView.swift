@@ -21,6 +21,8 @@ struct DashboardView: View {
     @State private var showSupplementBanner = false
     @State private var navigateToInjections = false
     @State private var navigateToSupplements = false
+    @State private var showAchievements = false
+    @AppStorage("dismissedInsightsReEngage") private var dismissedInsightsReEngage = false
 
     var body: some View {
         NavigationStack {
@@ -54,6 +56,13 @@ struct DashboardView: View {
                             smartInsightCard(insight)
                         }
 
+                        // Re-engagement: enough data logged but not yet subscribed
+                        if !subscriptionManager.isSubscribed
+                            && vm.totalCheckins >= 6
+                            && !dismissedInsightsReEngage {
+                            insightsReEngageBanner
+                        }
+
                         protocolScoreHero
                         if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
                             activeProtocolCard
@@ -79,8 +88,8 @@ struct DashboardView: View {
 
                         streakCard
 
-                        // Gamification progress card
-                        GamificationHomeView(viewModel: gamificationVM)
+                        // Compact level / XP progress card (taps through to full Achievements)
+                        levelProgressCard
 
                         // PK Curve / Body Composition
                         if subscriptionManager.isSubscribed {
@@ -105,9 +114,11 @@ struct DashboardView: View {
                             }
                         }
 
-                        // GLP-1 weight correlation (paid only)
+                        // GLP-1 weight correlation (paid only); free users see a teaser
                         if subscriptionManager.isSubscribed && vm.hasGLP1Data {
                             glp1CorrelationCard
+                        } else if !subscriptionManager.isSubscribed {
+                            peptideTeaserCard
                         }
 
                         // 7-Day Trends bar chart
@@ -141,6 +152,21 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showProFeatures) {
                 ProFeaturesSheet { showPaywall = true }
+            }
+            .sheet(isPresented: $showAchievements) {
+                NavigationStack {
+                    ZStack {
+                        AppColors.background.ignoresSafeArea()
+                        ScrollView { GamificationHomeView(viewModel: gamificationVM) }
+                    }
+                    .navigationTitle("Achievements")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") { showAchievements = false }
+                        }
+                    }
+                }
             }
             .fullScreenCover(isPresented: $showTrialEndedSheet) {
                 TrialEndedView(
@@ -203,6 +229,71 @@ struct DashboardView: View {
         .background(AppColors.card)
         .cornerRadius(16)
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.3), lineWidth: 1))
+    }
+
+    // MARK: - Insights Re-engagement Banner (free users with enough data)
+
+    private var insightsReEngageBanner: some View {
+        Button { showPaywall = true } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "sparkles")
+                    .font(.title3)
+                    .foregroundColor(AppColors.accent)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("You've logged \(vm.totalCheckins) check-ins")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Text("Unlock AI insights, PK curves & full history with a free trial.")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer(minLength: 4)
+                Image(systemName: "xmark")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(8)
+                    .contentShape(Rectangle())
+                    .onTapGesture { dismissedInsightsReEngage = true }
+                    .accessibilityLabel("Dismiss")
+            }
+            .padding()
+            .background(AppColors.card)
+            .cornerRadius(16)
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.35), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Opens Pro free trial")
+    }
+
+    // MARK: - Peptide / GLP-1 Teaser (free users)
+
+    private var peptideTeaserCard: some View {
+        Button { showPaywall = true } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "pills.fill")
+                    .font(.title3)
+                    .foregroundColor(AppColors.softCTA)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Tracking GLP-1 or peptides?")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Text("See weight & energy correlations for Semaglutide, BPC-157 & more.")
+                        .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer(minLength: 4)
+                Image(systemName: "lock.fill")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(AppColors.card)
+            .cornerRadius(16)
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Opens Pro free trial")
     }
 
     // MARK: - Trial Expiry Banner
@@ -545,6 +636,71 @@ struct DashboardView: View {
         .padding()
         .background(AppColors.card)
         .cornerRadius(16)
+    }
+
+    // MARK: - Level Progress Card (compact; taps to full Achievements)
+
+    private var nextBadgeToUnlock: BadgeDisplayModel? {
+        gamificationVM.allBadges.first { !$0.isUnlocked }
+    }
+
+    private var levelProgressCard: some View {
+        Button { showAchievements = true } label: {
+            HStack(spacing: 16) {
+                // Level ring
+                ZStack {
+                    Circle()
+                        .stroke(AppColors.secondary.opacity(0.4), lineWidth: 5)
+                        .frame(width: 56, height: 56)
+                    Circle()
+                        .trim(from: 0, to: gamificationVM.levelProgressPercent)
+                        .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                        .frame(width: 56, height: 56)
+                        .rotationEffect(.degrees(-90))
+                    Text("\(gamificationVM.currentLevel)")
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Level \(gamificationVM.currentLevel) · \(gamificationVM.levelName)")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    ProgressView(value: gamificationVM.levelProgressPercent)
+                        .tint(AppColors.accent)
+                        .frame(height: 5)
+                    Text("\(gamificationVM.xpUntilNextLevel) XP to level \(gamificationVM.currentLevel + 1)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                // Next badge to unlock (dimmed) or chevron
+                if let next = nextBadgeToUnlock {
+                    VStack(spacing: 3) {
+                        Text(next.emoji)
+                            .font(.title2)
+                            .opacity(0.4)
+                            .grayscale(1.0)
+                        Text("Next")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .accessibilityLabel("Next badge to unlock: \(next.name)")
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding()
+            .background(AppColors.card)
+            .cornerRadius(16)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Level \(gamificationVM.currentLevel), \(gamificationVM.levelName). \(gamificationVM.xpUntilNextLevel) XP to next level. Tap for achievements.")
     }
 
     // MARK: - PK Curve Preview (free users — blurred with CTA)
@@ -935,17 +1091,21 @@ struct DashboardView: View {
                 // Upsell for free users
                 if !subscriptionManager.isSubscribed {
                     Button { showPaywall = true } label: {
-                        HStack(spacing: 4) {
+                        HStack(spacing: 6) {
                             Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.caption2)
-                            Text("See full 7-day history with Pro")
-                                .font(.caption)
+                                .font(.caption.bold())
+                            Text("Unlock full 7-day history")
+                                .font(.caption.bold())
                         }
-                        .foregroundColor(AppColors.softCTA)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(AppColors.softCTA)
+                        .clipShape(Capsule())
                     }
                     .buttonStyle(.plain)
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 4)
+                    .padding(.top, 6)
                 }
             }
         }

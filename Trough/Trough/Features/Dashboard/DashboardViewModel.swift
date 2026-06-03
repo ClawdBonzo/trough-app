@@ -44,6 +44,7 @@ final class DashboardViewModel: ObservableObject {
 
     // MARK: Streak
     @Published var streak: Int = 0
+    @Published var totalCheckins: Int = 0   // real (non-sample) check-ins logged
     @Published var hasWeeklyReport: Bool = false
     @Published var milestoneText: String? = nil
 
@@ -181,7 +182,8 @@ final class DashboardViewModel: ObservableObject {
             predicate: realPred,
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
-        var all = (try? modelContext.fetch(realDesc)) ?? []
+        let realData = (try? modelContext.fetch(realDesc)) ?? []
+        var all = realData
         if all.isEmpty {
             let samplePred = #Predicate<SDCheckin> { $0.isSampleData }
             let sampleDesc = FetchDescriptor<SDCheckin>(
@@ -191,6 +193,7 @@ final class DashboardViewModel: ObservableObject {
             all = (try? modelContext.fetch(sampleDesc)) ?? []
         }
         recentCheckins = Array(all.prefix(42))
+        totalCheckins = realData.count  // real check-ins only (excludes sample/demo data)
 
         let today = Date.now.startOfDay
         todayCheckin = all.first { $0.date == today }

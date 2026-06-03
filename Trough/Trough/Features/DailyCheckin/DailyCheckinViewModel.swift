@@ -255,6 +255,9 @@ final class DailyCheckinViewModel: ObservableObject {
                 let count = ctx.recentCheckins.count
                 Task { await WeeklyReportService.scheduleStreakDay7Notification(checkinCount: count) }
             }
+            // Schedule (or push forward) the streak-at-risk reminder for tomorrow evening.
+            let streakNow = ctx.streak
+            Task { await WeeklyReportService.scheduleStreakAtRiskNotification(currentStreak: streakNow) }
         }
 
         navigationPath = [.binaryTaps, .completion]
