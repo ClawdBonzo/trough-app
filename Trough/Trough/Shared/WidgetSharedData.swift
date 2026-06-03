@@ -7,7 +7,7 @@ import ActivityKit
 
 enum TroughShared {
     /// App Group container shared by the app and the widget extension.
-    static let appGroupID = "group.app.trough.ios"
+    static let appGroupID = "group.app.trough.shared"
 
     static var defaults: UserDefaults? { UserDefaults(suiteName: appGroupID) }
 
