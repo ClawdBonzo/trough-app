@@ -200,6 +200,19 @@ final class GamificationViewModel: ObservableObject {
         let progress = Double(currentXP - currentThreshold) / Double(nextThreshold - currentThreshold)
         levelProgressPercent = min(max(progress, 0.0), 1.0)
         xpUntilNextLevel = max(0, nextThreshold - currentXP)
+        syncWidget()
+    }
+
+    /// Pushes level / XP / streak to the home-screen widget.
+    private func syncWidget() {
+        let streak = streakStates["checkin"]?.currentCount ?? 0
+        WidgetBridge.updateGamification(
+            streak: streak,
+            level: currentLevel,
+            levelName: levelName,
+            progress: levelProgressPercent,
+            xpToNext: xpUntilNextLevel
+        )
     }
 
     private func updateFlameLevel(_ streak: SDStreakState) {
@@ -399,6 +412,7 @@ final class GamificationViewModel: ObservableObject {
                 )
             )
         })
+        syncWidget()
     }
 
     private func refreshQuests() {

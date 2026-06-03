@@ -161,6 +161,31 @@ final class DashboardViewModel: ObservableObject {
         loadWeeklyComparison()
         if userType == "natural" { loadBodyComposition() }
         isLoading = false
+        syncWidgetAndLiveActivity()
+    }
+
+    /// Pushes the current dashboard state to the home-screen widget and reconciles
+    /// the injection Live Activity.
+    private func syncWidgetAndLiveActivity() {
+        var daysUntil: Int? = nil
+        if let proto = activeProtocol {
+            if injectionOverdueDays > 0 {
+                daysUntil = 0
+            } else {
+                let freq = max(1, proto.frequencyDays)
+                let rem = freq - (daysSinceLastInjection % freq)
+                daysUntil = (rem == freq) ? 0 : rem
+            }
+        }
+        WidgetBridge.updateDashboard(checkedInToday: todayCheckin != nil,
+                                     daysUntilInjection: daysUntil)
+
+        if let proto = activeProtocol, let du = daysUntil {
+            let nextDate = Calendar.current.date(byAdding: .day, value: du, to: Date.now.startOfDay) ?? Date()
+            LiveActivityService.reconcile(compound: proto.compoundName, nextDate: nextDate, daysUntil: du)
+        } else {
+            LiveActivityService.end()
+        }
     }
 
     // MARK: Active Compounds
