@@ -47,15 +47,15 @@ platform :ios do
       output_name:      "Trough.ipa",
       clean:            true,
       disable_xcpretty: true,
-      xcargs:           "-allowProvisioningUpdates " \
-                        "-authenticationKeyID K34HFNJTXH " \
-                        "-authenticationKeyIssuerID 69a6de84-f289-47e3-e053-5b8c7c11a4d1 " \
-                        "-authenticationKeyPath #{key_path} " \
-                        "DEVELOPMENT_TEAM=3N9RY9EG8V",
+      xcargs:           "DEVELOPMENT_TEAM=3N9RY9EG8V",
       export_options:   {
         method:       "app-store",
-        signingStyle: "automatic",
-        teamID:       "3N9RY9EG8V"
+        signingStyle: "manual",
+        teamID:       "3N9RY9EG8V",
+        provisioningProfiles: {
+          "app.trough.ios"        => "app.trough.ios AppStore",
+          "app.trough.ios.widget" => "app.trough.ios.widget AppStore"
+        }
       }
     )
 
