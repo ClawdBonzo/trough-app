@@ -1,4 +1,5 @@
-• Intelligenterer Protocol Score, der dein Befinden mit der Konstanz deiner Dosierung verbindet
-• Verbesserte pharmakokinetische (PK) Kurven für genauere Hormonschätzungen
-• Erweiterte Wirkstoffbibliothek – mehr Ester, Peptide und GLP-1-Optionen
-• Fehlerbehebungen und Leistungsverbesserungen
+• Neues Home-Bildschirm-Widget: Streak, Level-Fortschritt und nächste Injektion auf einen Blick
+• Neue Live-Aktivität: Injektions-Countdown auf dem Sperrbildschirm und in der Dynamic Island
+• Schnelleres Dashboard mit flüssigeren Diagrammen und schnelleren Insights
+• Verbesserte Level- und Streak-Anzeige direkt auf der Startseite
+• Fehlerbehebungen und Stabilitätsverbesserungen

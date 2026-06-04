@@ -1,4 +1,5 @@
-• Helt ny Trough-upplevelse för att följa ditt TRT-protokoll
-• Logga injektioner, doser och peptider
-• Dagliga hälsokoll och Protocol Score
-• PK-kurvor för att visualisera uppskattade blodnivåer
+• Ny widget på hemskärmen: se din streak, dina nivåframsteg och din nästa injektion med en blick
+• Ny Live-aktivitet: en nedräkning till injektionen på låsskärmen och i Dynamic Island
+• Snabbare översikt med mjukare diagram och snabbare insikter
+• Förbättrad nivå- och streakvisning direkt på hemfliken
+• Buggfixar och stabilitetsförbättringar

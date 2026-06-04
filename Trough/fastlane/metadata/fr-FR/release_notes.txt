@@ -1,4 +1,5 @@
-• Bibliothèque de composés enrichie : ajout du rétatrutide, du cagrilintide, de la tésamoréline, du GHK-Cu, et d'autres GLP-1 et peptides
-• Détails d'abonnement et informations sur l'essai gratuit plus clairs
-• Renforcement de la confidentialité — tout reste 100% sur votre appareil
-• Améliorations des performances et de la stabilité
+• Nouveau widget sur l'écran d'accueil : votre série, votre progression de niveau et votre prochaine injection en un coup d'œil
+• Nouvelle activité en direct : compte à rebours d'injection sur l'écran verrouillé et la Dynamic Island
+• Tableau de bord plus rapide, graphiques plus fluides et analyses accélérées
+• Progression de niveau et de série améliorée sur l'accueil
+• Corrections de bugs et améliorations de stabilité

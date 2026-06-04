@@ -1,4 +1,5 @@
-• Catálogo de compostos ampliado: adicionados Retatrutida, Cagrilintida, Tesamorelina, GHK-Cu e mais GLP-1 e peptídeos
-• Detalhes de assinatura e do teste gratuito mais claros
-• Reforço de privacidade — tudo continua 100% no seu aparelho
-• Melhorias de desempenho e estabilidade
+• Novo widget na tela de início: veja sua sequência, seu progresso de nível e sua próxima aplicação num relance
+• Nova Atividade ao Vivo: contagem regressiva da aplicação na Tela Bloqueada e na Ilha Dinâmica
+• Painel mais rápido, com gráficos mais fluidos e insights mais ágeis
+• Progresso de nível e sequência aprimorado na tela inicial
+• Correções de bugs e melhorias de estabilidade

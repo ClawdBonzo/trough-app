@@ -1,4 +1,5 @@
-• Biblioteca de compuestos ampliada: añadidos Retatrutida, Cagrilintida, Tesamorelina, GHK-Cu y más GLP-1 y péptidos
-• Detalles de suscripción y prueba gratuita más claros
-• Mayor privacidad: todo se queda al 100% en tu dispositivo
-• Mejoras de rendimiento y estabilidad
+• Nuevo widget en la pantalla de inicio: consulta tu racha, tu progreso de nivel y tu próxima inyección de un vistazo
+• Nueva Live Activity: cuenta regresiva para la inyección en la pantalla de bloqueo y la Isla Dinámica
+• Panel más rápido, con gráficas más fluidas e insights más ágiles
+• Progreso de nivel y racha mejorado en la pantalla de inicio
+• Corrección de errores y mejoras de estabilidad

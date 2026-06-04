@@ -1,4 +1,5 @@
-• Expanded compound library: added Retatrutide, Cagrilintide, Tesamorelin, GHK-Cu, and more GLP-1s and peptides
-• Clearer subscription details and free trial information
-• Privacy hardening — everything stays 100% on your device
-• Performance and stability improvements
+• New home-screen widget: see your check-in streak, level progress, and next injection at a glance
+• New Live Activity: an injection countdown on your Lock Screen and Dynamic Island
+• Faster dashboard with smoother charts and quicker insights
+• Polished level & streak progress on your home tab
+• Bug fixes and stability improvements

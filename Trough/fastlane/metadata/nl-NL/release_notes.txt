@@ -1,4 +1,5 @@
-• Slimmere inzichten in je Protocol Score
-• Nauwkeurigere PK-curves
-• Nieuwe trendgrafieken voor bloedonderzoek
-• Bugfixes en prestatieverbeteringen
+• Nieuwe widget op het beginscherm: zie je streak, levelvoortgang en volgende injectie in één oogopslag
+• Nieuwe Live Activity: een injectie-aftelling op je toegangsscherm en in het Dynamic Island
+• Sneller dashboard met vloeiendere grafieken en snellere inzichten
+• Verbeterde level- en streakvoortgang op je beginscherm
+• Bugfixes en stabiliteitsverbeteringen
