@@ -635,3 +635,82 @@
 /* Onboarding (adicional) */
 "onboarding.trtInjection" = "Injeção de TRT";
 "onboarding.selected" = "%d selecionados";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Conquistas";
+"more.peptidesTeaser" = "Registre GLP-1, BPC-157 e mais";
+
+/* Gamification */
+"gamification.levelLine" = "Nível %d · %@";
+"gamification.xpToLevel" = "%d XP para o nível %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "Você registrou %d check-ins";
+"dashboard.reEngage.subtitle" = "Desbloqueie insights com IA, curvas PK e o histórico completo com um teste gratuito.";
+"dashboard.peptideTeaser.title" = "Usa GLP-1 ou peptídeos?";
+"dashboard.peptideTeaser.subtitle" = "Veja correlações de peso e energia para Semaglutida, BPC-157 e mais.";
+"dashboard.weeksAgo" = "há %d sem.";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/semana";
+"dashboard.trendChart.recent" = "Tendências recentes";
+"dashboard.trendChart.unlock" = "Desbloquear histórico completo de 7 dias";
+"dashboard.7daySummary" = "Resumo de 7 dias";
+"dashboard.daysLate" = "%d dias de atraso";
+"dashboard.personalBest.new" = "Novo recorde pessoal: %d";
+"dashboard.supplementSetup.track" = "Registre seus suplementos";
+"dashboard.supplementSetup.correlations" = "Veja correlações com seu Protocol Score";
+"trial.checkins" = "Check-ins";
+"trial.streak" = "Sequência";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "Excluir esta injeção?";
+"injections.cantUndo" = "Isso não pode ser desfeito.";
+"injections.deleteInjection" = "Excluir Injeção";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Registre melhor. Otimize tudo.";
+"paywall.perMo" = "/mês";
+"paywall.perYr" = "/ano";
+"paywall.savePct" = "Economize %d%%";
+"paywall.ctaSub.trial" = "depois %@ · renovação automática · cancele quando quiser";
+"paywall.ctaSub.noTrial" = "%@ · renovação automática · cancele quando quiser";
+"paywall.trialBadge" = "3 dias de teste grátis";
+"paywall.bestValue" = "MELHOR OFERTA";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Seu Protocol Score";
+"onboarding.trialUnlock" = "Inicie seu teste gratuito para desbloquear todos os insights.";
+"onboarding.proUnlock" = "Desbloqueie todos os insights com o Trough Pro.";
+"onboarding.trialLegal" = "3 dias de teste grátis, depois renovação automática. Cancele quando quiser.";
+"onboarding.subscribeLegal" = "Renovação automática. Cancele quando quiser.";
+
+/* Export */
+"export.title" = "Exportar Dados";
+"export.checkins.title" = "Histórico de Check-ins (CSV)";
+"export.checkins.subtitle" = "Pontuações diárias, peso, notas e sintomas. Reimportável via importação CSV.";
+"export.bloodwork.title" = "Exames de Sangue (CSV)";
+"export.bloodwork.subtitle" = "Todos os painéis com valores, unidades e faixas de referência. Reimportável via importação CSV.";
+"export.doctor.title" = "Relatório Médico (PDF)";
+"export.doctor.subtitle" = "Resumo imprimível: protocolo, tabelas de exames, notas para o médico e tendências.";
+"export.sensitiveNote" = "As exportações contêm dados de saúde sensíveis. Os arquivos são criados neste dispositivo e só saem dele se você os compartilhar.";
+"export.failed" = "Falha na Exportação";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Lembrete de check-in diário";
+"settings.injectionReminders" = "Lembretes de dia de injeção";
+"settings.injectionReminderTime" = "Horário do lembrete de injeção";
+"settings.everyDaysConcentration" = "A cada %d dia(s) · %.0f mg/mL";
+"settings.privacyLegal" = "Privacidade e Legal";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "Hora da sua dose de %@.";
+"notification.injectionTitle" = "Dia de injeção";
+"notification.injectionBody" = "Dia de injeção — registre no Trough quando terminar.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Horário";
+"onboarding.enterPrescribedDose" = "Insira sua dose prescrita";
+"onboarding.doseValidation" = "Insira a dose prescrita pelo seu médico para continuar.";

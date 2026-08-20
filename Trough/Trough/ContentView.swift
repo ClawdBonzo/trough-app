@@ -18,44 +18,69 @@ struct ContentView: View {
 
 // MARK: - Main Tab View
 
+/// Tabs in MainTabView, in display order. Used as TabView selection tags and
+/// as deep-link targets for the `trough://` URL scheme (widget + Live Activity).
+enum AppTab: Hashable {
+    case home
+    case checkin
+    case injections
+    case achievements
+    case more
+}
+
 struct MainTabView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @StateObject private var gamificationVM = GamificationViewModel()
+    @State private var selectedTab: AppTab = .home
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             DashboardView()
                 .tabItem {
-                    Label("Home", systemImage: "house.fill")
+                    Label(NSLocalizedString("tab.home", comment: ""), systemImage: "house.fill")
                 }
+                .tag(AppTab.home)
 
             DailyCheckinView()
                 .tabItem {
-                    Label("Log", systemImage: "checkmark.circle.fill")
+                    Label(NSLocalizedString("tab.log", comment: ""), systemImage: "checkmark.circle.fill")
                 }
+                .tag(AppTab.checkin)
 
             InjectionsView()
                 .tabItem {
-                    Label("Injections", systemImage: "syringe.fill")
+                    Label(NSLocalizedString("tab.injections", comment: ""), systemImage: "syringe.fill")
                 }
+                .tag(AppTab.injections)
 
             NavigationStack {
                 ZStack {
                     AppColors.background.ignoresSafeArea()
                     GamificationHomeView(viewModel: gamificationVM)
                 }
-                .navigationTitle("Achievements")
+                .navigationTitle(NSLocalizedString("tab.achievements", comment: ""))
                 .navigationBarTitleDisplayMode(.large)
             }
             .tabItem {
-                Label("Achievements", systemImage: "star.fill")
+                Label(NSLocalizedString("tab.achievements", comment: ""), systemImage: "star.fill")
             }
+            .tag(AppTab.achievements)
 
             MoreView()
                 .tabItem {
-                    Label("More", systemImage: "ellipsis.circle.fill")
+                    Label(NSLocalizedString("tab.more", comment: ""), systemImage: "ellipsis.circle.fill")
                 }
+                .tag(AppTab.more)
+        }
+        .onOpenURL { url in
+            // Deep links from the widget (trough://checkin) and the Live
+            // Activity (trough://injections). Unknown hosts are ignored.
+            switch url.host?.lowercased() {
+            case "checkin":    selectedTab = .checkin
+            case "injections": selectedTab = .injections
+            default:           break
+            }
         }
         .tint(AppColors.accent)
         .background(AppColors.background)
@@ -98,12 +123,12 @@ struct MoreView: View {
                                 AppColors.background.ignoresSafeArea()
                                 GamificationHomeView(viewModel: gamificationVM)
                             }
-                            .navigationTitle("Achievements")
+                            .navigationTitle(NSLocalizedString("tab.achievements", comment: ""))
                         ) {
                             Label {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Achievements")
-                                    Text("Level \(gamificationVM.currentLevel) · \(gamificationVM.levelName)")
+                                    Text(NSLocalizedString("tab.achievements", comment: ""))
+                                    Text(String(format: NSLocalizedString("gamification.levelLine", comment: ""), gamificationVM.currentLevel, gamificationVM.levelName))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -116,17 +141,17 @@ struct MoreView: View {
 
                     if subscriptionManager.isSubscribed {
                         NavigationLink(destination: BloodworkView()) {
-                            Label("Bloodwork", systemImage: "drop.fill")
+                            Label(NSLocalizedString("bloodwork.title", comment: ""), systemImage: "drop.fill")
                         }
                         NavigationLink(destination: PeptidesView()) {
-                            Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                            Label(NSLocalizedString("peptides.title", comment: ""), systemImage: "pills.fill")
                         }
                     } else {
                         Button {
                             showPaywall = true
                         } label: {
                             HStack {
-                                Label("Bloodwork", systemImage: "drop.fill")
+                                Label(NSLocalizedString("bloodwork.title", comment: ""), systemImage: "drop.fill")
                                 Spacer()
                                 Image(systemName: "lock.fill")
                                     .font(.caption)
@@ -140,13 +165,13 @@ struct MoreView: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack {
-                                    Label("Adjuncts & Peptides", systemImage: "pills.fill")
+                                    Label(NSLocalizedString("peptides.title", comment: ""), systemImage: "pills.fill")
                                     Spacer()
                                     Image(systemName: "lock.fill")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
-                                Text("Track GLP-1, BPC-157 & more")
+                                Text(NSLocalizedString("more.peptidesTeaser", comment: ""))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -154,13 +179,13 @@ struct MoreView: View {
                         .foregroundColor(.primary)
                     }
                     NavigationLink(destination: SettingsView()) {
-                        Label("Settings", systemImage: "gear")
+                        Label(NSLocalizedString("settings.title", comment: ""), systemImage: "gear")
                     }
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle("More")
+            .navigationTitle(NSLocalizedString("tab.more", comment: ""))
             .fullScreenCover(isPresented: $showPaywall) {
                 PaywallView()
             }

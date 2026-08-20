@@ -635,3 +635,82 @@
    ═══════════════════════════════════════════════════════════════ */
 "onboarding.trtInjection" = "TRT Injection";
 "onboarding.selected" = "%d selected";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Achievements";
+"more.peptidesTeaser" = "Track GLP-1, BPC-157 & more";
+
+/* Gamification */
+"gamification.levelLine" = "Level %d · %@";
+"gamification.xpToLevel" = "%d XP to level %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "You've logged %d check-ins";
+"dashboard.reEngage.subtitle" = "Unlock AI insights, PK curves & full history with a free trial.";
+"dashboard.peptideTeaser.title" = "Tracking GLP-1 or peptides?";
+"dashboard.peptideTeaser.subtitle" = "See weight & energy correlations for Semaglutide, BPC-157 & more.";
+"dashboard.weeksAgo" = "%dw ago";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/week";
+"dashboard.trendChart.recent" = "Recent Trends";
+"dashboard.trendChart.unlock" = "Unlock full 7-day history";
+"dashboard.7daySummary" = "7-Day Summary";
+"dashboard.daysLate" = "%dd late";
+"dashboard.personalBest.new" = "New personal best: %d";
+"dashboard.supplementSetup.track" = "Track your supplements";
+"dashboard.supplementSetup.correlations" = "See correlations with your Protocol Score";
+"trial.checkins" = "Check-ins";
+"trial.streak" = "Streak";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "Delete this injection?";
+"injections.cantUndo" = "This can't be undone.";
+"injections.deleteInjection" = "Delete Injection";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Track smarter. Optimize everything.";
+"paywall.perMo" = "/mo";
+"paywall.perYr" = "/yr";
+"paywall.savePct" = "Save %d%%";
+"paywall.ctaSub.trial" = "then %@ · auto-renews · cancel anytime";
+"paywall.ctaSub.noTrial" = "%@ · auto-renews · cancel anytime";
+"paywall.trialBadge" = "3-day free trial";
+"paywall.bestValue" = "BEST VALUE";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Your Protocol Score";
+"onboarding.trialUnlock" = "Start your free trial to unlock full insights.";
+"onboarding.proUnlock" = "Unlock full insights with Trough Pro.";
+"onboarding.trialLegal" = "3-day free trial, then auto-renews. Cancel anytime.";
+"onboarding.subscribeLegal" = "Auto-renews. Cancel anytime.";
+
+/* Export */
+"export.title" = "Export Data";
+"export.checkins.title" = "Check-in History (CSV)";
+"export.checkins.subtitle" = "Daily scores, weight, notes & symptoms. Re-importable via CSV import.";
+"export.bloodwork.title" = "Bloodwork (CSV)";
+"export.bloodwork.subtitle" = "All panels with values, units and reference ranges. Re-importable via CSV import.";
+"export.doctor.title" = "Doctor Report (PDF)";
+"export.doctor.subtitle" = "Printable summary: protocol, bloodwork tables, notes for doctor & trends.";
+"export.sensitiveNote" = "Exports contain sensitive health data. Files are created on this device and only leave it if you share them.";
+"export.failed" = "Export Failed";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Daily check-in reminder";
+"settings.injectionReminders" = "Injection day reminders";
+"settings.injectionReminderTime" = "Injection reminder time";
+"settings.everyDaysConcentration" = "Every %d day(s) · %.0f mg/mL";
+"settings.privacyLegal" = "Privacy & Legal";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "Time for your %@ dose.";
+"notification.injectionTitle" = "Injection day";
+"notification.injectionBody" = "Injection day — log it in Trough when done.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Time";
+"onboarding.enterPrescribedDose" = "Enter your prescribed dose";
+"onboarding.doseValidation" = "Enter the dose your provider prescribed to continue.";

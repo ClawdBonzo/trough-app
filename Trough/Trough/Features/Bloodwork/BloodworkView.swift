@@ -7,9 +7,11 @@ struct BloodworkView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @StateObject private var vm = BloodworkViewModel()
+    @EnvironmentObject private var gamificationVM: GamificationViewModel
 
     enum Tab { case results, trends }
     @State private var selectedTab: Tab = .results
+    @State private var showingExportSheet = false
 
     var body: some View {
         NavigationStack {
@@ -38,6 +40,13 @@ struct BloodworkView: View {
             .navigationTitle("Bloodwork")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    Button { showingExportSheet = true } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .foregroundColor(AppColors.accent)
+                    }
+                    .accessibilityLabel("Export data")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
                     Button { vm.prepareAddForm() } label: {
                         Image(systemName: "plus")
                             .foregroundColor(AppColors.accent)
@@ -47,9 +56,13 @@ struct BloodworkView: View {
             .sheet(isPresented: $vm.showingEntrySheet, onDismiss: { vm.load() }) {
                 BloodworkEntryView(vm: vm)
             }
+            .sheet(isPresented: $showingExportSheet) {
+                ExportDataView()
+            }
             .onAppear {
                 let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
+                vm.gamificationVM = gamificationVM
                 vm.load()
             }
         }

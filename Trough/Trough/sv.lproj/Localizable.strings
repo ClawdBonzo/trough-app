@@ -635,3 +635,82 @@
    ═══════════════════════════════════════════════════════════════ */
 "onboarding.trtInjection" = "TRT-injektion";
 "onboarding.selected" = "%d valda";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Prestationer";
+"more.peptidesTeaser" = "Spåra GLP-1, BPC-157 och mer";
+
+/* Gamification */
+"gamification.levelLine" = "Nivå %d · %@";
+"gamification.xpToLevel" = "%d XP till nivå %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "Du har loggat %d incheckningar";
+"dashboard.reEngage.subtitle" = "Lås upp AI-insikter, PK-kurvor och hela historiken med en gratis provperiod.";
+"dashboard.peptideTeaser.title" = "Använder du GLP-1 eller peptider?";
+"dashboard.peptideTeaser.subtitle" = "Se vikt- och energikorrelationer för Semaglutid, BPC-157 och mer.";
+"dashboard.weeksAgo" = "%d v sedan";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/vecka";
+"dashboard.trendChart.recent" = "Senaste trender";
+"dashboard.trendChart.unlock" = "Lås upp hela 7-dagarshistoriken";
+"dashboard.7daySummary" = "7-dagarsöversikt";
+"dashboard.daysLate" = "%d d försenad";
+"dashboard.personalBest.new" = "Nytt personligt rekord: %d";
+"dashboard.supplementSetup.track" = "Spåra dina kosttillskott";
+"dashboard.supplementSetup.correlations" = "Se korrelationer med din protokollpoäng";
+"trial.checkins" = "Incheckningar";
+"trial.streak" = "Svit";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "Ta bort denna injektion?";
+"injections.cantUndo" = "Detta kan inte ångras.";
+"injections.deleteInjection" = "Ta bort injektion";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Spåra smartare. Optimera allt.";
+"paywall.perMo" = "/mån";
+"paywall.perYr" = "/år";
+"paywall.savePct" = "Spara %d%%";
+"paywall.ctaSub.trial" = "därefter %@ · förnyas automatiskt · avsluta när som helst";
+"paywall.ctaSub.noTrial" = "%@ · förnyas automatiskt · avsluta när som helst";
+"paywall.trialBadge" = "3 dagars gratis provperiod";
+"paywall.bestValue" = "BÄSTA VÄRDE";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Din protokollpoäng";
+"onboarding.trialUnlock" = "Starta din gratis provperiod för att låsa upp alla insikter.";
+"onboarding.proUnlock" = "Lås upp alla insikter med Trough Pro.";
+"onboarding.trialLegal" = "3 dagars gratis provperiod, därefter automatisk förnyelse. Avsluta när som helst.";
+"onboarding.subscribeLegal" = "Förnyas automatiskt. Avsluta när som helst.";
+
+/* Export */
+"export.title" = "Exportera data";
+"export.checkins.title" = "Incheckningshistorik (CSV)";
+"export.checkins.subtitle" = "Dagliga poäng, vikt, anteckningar och symtom. Kan återimporteras via CSV-import.";
+"export.bloodwork.title" = "Blodprover (CSV)";
+"export.bloodwork.subtitle" = "Alla paneler med värden, enheter och referensintervall. Kan återimporteras via CSV-import.";
+"export.doctor.title" = "Läkarrapport (PDF)";
+"export.doctor.subtitle" = "Utskrivbar sammanfattning: protokoll, blodprovstabeller, anteckningar till läkaren och trender.";
+"export.sensitiveNote" = "Exporter innehåller känsliga hälsodata. Filerna skapas på den här enheten och lämnar den bara om du delar dem.";
+"export.failed" = "Exporten misslyckades";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Daglig incheckningspåminnelse";
+"settings.injectionReminders" = "Påminnelser på injektionsdagen";
+"settings.injectionReminderTime" = "Tid för injektionspåminnelse";
+"settings.everyDaysConcentration" = "Var %d dag(ar) · %.0f mg/mL";
+"settings.privacyLegal" = "Integritet och juridik";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "Dags för din dos av %@.";
+"notification.injectionTitle" = "Injektionsdag";
+"notification.injectionBody" = "Injektionsdag — logga den i Trough när du är klar.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Tid";
+"onboarding.enterPrescribedDose" = "Ange din ordinerade dos";
+"onboarding.doseValidation" = "Ange dosen din läkare ordinerat för att fortsätta.";

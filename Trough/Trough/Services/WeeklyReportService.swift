@@ -163,8 +163,9 @@ enum WeeklyReportService {
         // Fertility snapshot — detect active hCG protocol
         let fertilitySnapshot: String?
         if let activeProto = activeProtocol {
+            // Case-insensitive containment so "hCG 500IU", "hcg", etc. match.
             let hcgPred = #Predicate<SDProtocol> {
-                $0.isActive && !$0.isSampleData && $0.compoundName == "HCG"
+                $0.isActive && !$0.isSampleData && $0.compoundName.localizedStandardContains("hcg")
             }
             var hcgDesc = FetchDescriptor<SDProtocol>(predicate: hcgPred)
             hcgDesc.fetchLimit = 1
@@ -201,7 +202,7 @@ enum WeeklyReportService {
             weekStart: weekStart,
             weekEnd: weekEnd,
             protocolScore: curScore,
-            scoreChange: prvScore > 0 ? curScore - prvScore : 0,
+            scoreChange: priorWeek.isEmpty ? 0 : curScore - prvScore,
             avgEnergy:  avg(\.energyScore,       in: thisWeek),
             avgMood:    avg(\.moodScore,          in: thisWeek),
             avgLibido:  avg(\.libidoScore,        in: thisWeek),

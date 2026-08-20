@@ -90,6 +90,56 @@ enum BadgeService {
         }
     }
 
+    /// Checks the 30-day supplement adherence badge ("90%+ supplement compliance
+    /// over 30 days"). Compliance is derived at read time from check-in rows:
+    /// a day is compliant when its check-in logged at least one supplement, and
+    /// 90% of 30 days = ≥27 compliant days in the trailing 30-day window.
+    static func checkSupplementAdherenceBadge(context: ModelContext, userID: UUID) {
+        let todayStart = Date().startOfDay
+        guard let cutoff = Calendar.current.date(byAdding: .day, value: -29, to: todayStart) else { return }
+        let pred = #Predicate<SDCheckin> {
+            $0.userID == userID && $0.date >= cutoff && !$0.isSampleData
+        }
+        let checkins = (try? context.fetch(FetchDescriptor<SDCheckin>(predicate: pred))) ?? []
+        let compliantDays = Set(
+            checkins
+                .filter { !($0.supplementsTaken ?? "").isEmpty }
+                .map { $0.date.startOfDay }
+        ).count
+        if compliantDays >= 27 {
+            unlockIfNeeded("supplement_adherence", context: context, userID: userID)
+        }
+    }
+
+    /// Checks the injection precision badge ("No missed injections for 30 days").
+    /// Derived at read time from injection dates: the user must have been injecting
+    /// for ≥30 days, and within the trailing 30-day window no gap between
+    /// consecutive injections (including window edges) may exceed the protocol
+    /// frequency plus a 24h grace period.
+    static func checkInjectionPrecisionBadge(context: ModelContext, userID: UUID, frequencyDays: Int) {
+        guard frequencyDays > 0 else { return }
+        let now = Date()
+        guard let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: now) else { return }
+
+        let pred = #Predicate<SDInjection> { $0.userID == userID && !$0.isSampleData }
+        let all = (try? context.fetch(FetchDescriptor<SDInjection>(predicate: pred))) ?? []
+
+        // Must have at least 30 days of injection history.
+        guard let earliestEver = all.map(\.injectedAt).min(), earliestEver <= cutoff else { return }
+
+        let window = all.map(\.injectedAt).filter { $0 >= cutoff }.sorted()
+        guard let first = window.first, let last = window.last else { return }
+
+        let maxGap = TimeInterval(frequencyDays) * 86_400 + 86_400 // frequency + 24h grace
+        guard first.timeIntervalSince(cutoff) <= maxGap,
+              now.timeIntervalSince(last) <= maxGap else { return }
+        for (a, b) in zip(window, window.dropFirst()) where b.timeIntervalSince(a) > maxGap {
+            return
+        }
+
+        unlockIfNeeded("injection_precision", context: context, userID: userID)
+    }
+
     /// Unlocks a badge by ID if not already unlocked.
     static func unlockIfNeeded(_ badgeID: String, context: ModelContext, userID: UUID) {
         let pred = #Predicate<SDBadge> {

@@ -144,6 +144,9 @@ final class BloodworkViewModel: ObservableObject {
     private var modelContext: ModelContext!
     private(set) var userID: UUID = UUID()
 
+    /// Injected by the parent view — used to award XP and complete quests on bloodwork save.
+    weak var gamificationVM: GamificationViewModel?
+
     init() {}
 
     func setup(context: ModelContext, userID: UUID) {
@@ -232,6 +235,7 @@ final class BloodworkViewModel: ObservableObject {
         let filled = formMarkers.filter { $0.valueDouble != nil }
         guard !filled.isEmpty else { errorMessage = "Enter at least one value."; return }
 
+        let isNewResult = editingResult == nil
         let bw: SDBloodwork
         if let existing = editingResult {
             existing.drawnAt      = formDrawnAt
@@ -282,6 +286,15 @@ final class BloodworkViewModel: ObservableObject {
             try modelContext.save()
             showingEntrySheet = false
             load()
+
+            // Gamification: only award XP for new bloodwork results (not edits)
+            if isNewResult {
+                BadgeService.checkBloodworkMasterBadge(context: modelContext, userID: userID)
+                if let gvm = gamificationVM {
+                    gvm.awardXP(30, reason: "bloodwork_logged")
+                    gvm.completeQuest(QuestService.weeklyBloodworkQuestID())
+                }
+            }
         } catch {
             errorMessage = error.localizedDescription
         }

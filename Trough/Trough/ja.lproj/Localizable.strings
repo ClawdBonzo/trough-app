@@ -635,3 +635,82 @@
    ═══════════════════════════════════════════════════════════════ */
 "onboarding.trtInjection" = "TRT注射";
 "onboarding.selected" = "%d件選択中";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "実績";
+"more.peptidesTeaser" = "GLP-1、BPC-157などを記録";
+
+/* Gamification */
+"gamification.levelLine" = "レベル%d · %@";
+"gamification.xpToLevel" = "レベル%2$dまであと%1$d XP";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "%d件のチェックインを記録しました";
+"dashboard.reEngage.subtitle" = "無料トライアルでAIインサイト、PK曲線、全履歴をアンロック。";
+"dashboard.peptideTeaser.title" = "GLP-1やペプチドを使用中？";
+"dashboard.peptideTeaser.subtitle" = "セマグルチドやBPC-157などの体重・エネルギー相関を確認。";
+"dashboard.weeksAgo" = "%d週間前";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/週";
+"dashboard.trendChart.recent" = "最近のトレンド";
+"dashboard.trendChart.unlock" = "7日間の全履歴をアンロック";
+"dashboard.7daySummary" = "7日間サマリー";
+"dashboard.daysLate" = "%d日遅れ";
+"dashboard.personalBest.new" = "自己ベスト更新：%d";
+"dashboard.supplementSetup.track" = "サプリを記録しよう";
+"dashboard.supplementSetup.correlations" = "プロトコルスコアとの相関を確認";
+"trial.checkins" = "チェックイン";
+"trial.streak" = "連続日数";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "この注射を削除しますか？";
+"injections.cantUndo" = "この操作は取り消せません。";
+"injections.deleteInjection" = "注射を削除";
+
+/* Paywall (additional) */
+"paywall.tagline" = "もっと賢く記録。すべてを最適化。";
+"paywall.perMo" = "/月";
+"paywall.perYr" = "/年";
+"paywall.savePct" = "%d%%お得";
+"paywall.ctaSub.trial" = "その後%@ · 自動更新 · いつでもキャンセル可";
+"paywall.ctaSub.noTrial" = "%@ · 自動更新 · いつでもキャンセル可";
+"paywall.trialBadge" = "3日間無料トライアル";
+"paywall.bestValue" = "ベストバリュー";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "あなたのプロトコルスコア";
+"onboarding.trialUnlock" = "無料トライアルを開始してすべてのインサイトをアンロック。";
+"onboarding.proUnlock" = "Trough Proですべてのインサイトをアンロック。";
+"onboarding.trialLegal" = "3日間無料トライアル、その後自動更新。いつでもキャンセルできます。";
+"onboarding.subscribeLegal" = "自動更新。いつでもキャンセルできます。";
+
+/* Export */
+"export.title" = "データを書き出す";
+"export.checkins.title" = "チェックイン履歴（CSV）";
+"export.checkins.subtitle" = "毎日のスコア、体重、メモ、症状。CSVインポートで再取り込み可能。";
+"export.bloodwork.title" = "血液検査（CSV）";
+"export.bloodwork.subtitle" = "数値・単位・基準範囲を含むすべてのパネル。CSVインポートで再取り込み可能。";
+"export.doctor.title" = "医師向けレポート（PDF）";
+"export.doctor.subtitle" = "印刷可能なサマリー：プロトコル、血液検査表、医師へのメモ、トレンド。";
+"export.sensitiveNote" = "書き出しには機密性の高い健康データが含まれます。ファイルはこのデバイス上で作成され、共有しない限り外部に出ることはありません。";
+"export.failed" = "書き出しに失敗しました";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "毎日のチェックインリマインダー";
+"settings.injectionReminders" = "注射日リマインダー";
+"settings.injectionReminderTime" = "注射リマインダーの時刻";
+"settings.everyDaysConcentration" = "%d日ごと · %.0f mg/mL";
+"settings.privacyLegal" = "プライバシーと法的事項";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "%@の投与時間です。";
+"notification.injectionTitle" = "注射日";
+"notification.injectionBody" = "今日は注射日です — 終わったらTroughに記録しましょう。";
+
+/* Onboarding steps (additional) */
+"common.time" = "時刻";
+"onboarding.enterPrescribedDose" = "処方された用量を入力";
+"onboarding.doseValidation" = "続行するには、医師に処方された用量を入力してください。";

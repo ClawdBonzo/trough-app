@@ -20,11 +20,25 @@ struct StreakProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<StreakEntry>) -> Void) {
-        let entry = StreakEntry(date: Date(), snapshot: WidgetSnapshot.load())
-        // The app pushes reloads on data change; refresh hourly as a fallback so
-        // "checked in today" and injection countdown stay roughly current.
-        let next = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date().addingTimeInterval(3600)
-        completion(Timeline(entries: [entry], policy: .after(next)))
+        let raw = WidgetSnapshot.loadRaw()
+        let now = Date()
+        let cal = Calendar.current
+
+        // One entry for right now, plus entries just past the next few
+        // midnights so "checked in today" clears and the injection countdown
+        // ticks down without an app launch.
+        var entries = [StreakEntry(date: now, snapshot: raw.resolved(at: now))]
+        for dayOffset in 1...3 {
+            if let midnight = cal.date(byAdding: .day, value: dayOffset, to: cal.startOfDay(for: now)) {
+                let entryDate = midnight.addingTimeInterval(1)
+                entries.append(StreakEntry(date: entryDate, snapshot: raw.resolved(at: entryDate)))
+            }
+        }
+
+        // The app pushes reloads on data change; refresh hourly as a fallback
+        // so the snapshot stays roughly current.
+        let next = cal.date(byAdding: .hour, value: 1, to: now) ?? now.addingTimeInterval(3600)
+        completion(Timeline(entries: entries, policy: .after(next)))
     }
 }
 

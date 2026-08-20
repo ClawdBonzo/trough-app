@@ -18,10 +18,36 @@ enum WidgetBridge {
         reload()
     }
 
-    static func updateDashboard(checkedInToday: Bool, daysUntilInjection: Int?) {
+    /// - Parameters:
+    ///   - checkedInToday: whether today's check-in exists right now.
+    ///   - daysUntilInjection: whole days until the next dose (nil == no active
+    ///     protocol). Still written for back-compat with older widget builds.
+    ///   - nextInjectionDate: exact due date, if the caller has it. When nil it
+    ///     is derived from `daysUntilInjection` (start of today + N days) so the
+    ///     widget can count down between app launches either way.
+    static func updateDashboard(checkedInToday: Bool, daysUntilInjection: Int?,
+                                nextInjectionDate: Date? = nil) {
         guard let d = TroughShared.defaults else { return }
         d.set(checkedInToday, forKey: TroughShared.Key.checkedInToday)
         d.set(daysUntilInjection ?? Int.min, forKey: TroughShared.Key.daysUntilInjection)
+
+        // Additive v1.2 fields (see WidgetSharedData.Key). Date-stamp the
+        // check-in so the widget can scope it to the calendar day it was made.
+        if checkedInToday {
+            d.set(Date(), forKey: TroughShared.Key.checkedInDate)
+        } else {
+            d.removeObject(forKey: TroughShared.Key.checkedInDate)
+        }
+        let cal = Calendar.current
+        let dueDate = nextInjectionDate ?? daysUntilInjection.flatMap {
+            cal.date(byAdding: .day, value: $0, to: cal.startOfDay(for: Date()))
+        }
+        if let dueDate {
+            d.set(dueDate, forKey: TroughShared.Key.nextInjectionDate)
+        } else {
+            d.removeObject(forKey: TroughShared.Key.nextInjectionDate)
+        }
+
         d.set(Date(), forKey: TroughShared.Key.updatedAt)
         reload()
     }

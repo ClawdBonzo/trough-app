@@ -464,15 +464,15 @@ final class DashboardViewModel: ObservableObject {
         let name = UserDefaults.standard.string(forKey: "userName") ?? ""
         let prefix: String
         switch hour {
-        case 0..<12:  prefix = "Good morning"
-        case 12..<17: prefix = "Good afternoon"
-        default:      prefix = "Good evening"
+        case 0..<12:  prefix = NSLocalizedString("greeting.morning", comment: "")
+        case 12..<17: prefix = NSLocalizedString("greeting.afternoon", comment: "")
+        default:      prefix = NSLocalizedString("greeting.evening", comment: "")
         }
         greetingText = name.isEmpty ? prefix : "\(prefix), \(name)"
 
         // Cycle day (days since last injection)
-        if daysSinceLastInjection > 0, let proto = activeProtocol {
-            cycleDay = (daysSinceLastInjection % proto.frequencyDays) + 1
+        if daysSinceLastInjection >= 0, let proto = activeProtocol {
+            cycleDay = (daysSinceLastInjection % max(1, proto.frequencyDays)) + 1
         }
 
         // Smart insight from InsightEngine (wrapped for safety)
@@ -594,15 +594,15 @@ final class DashboardViewModel: ObservableObject {
         let daysUntilInjection = max(0, proto.frequencyDays - daysSinceLastInjection)
 
         if daysUntilInjection == 0 {
-            forecastText = "Injection day today — energy should peak in 24–48 hours."
+            forecastText = NSLocalizedString("forecast.injectionToday", comment: "")
         } else if daysUntilInjection == 1 {
-            forecastText = "Injection due tomorrow. You're at the trough — some fatigue is normal."
+            forecastText = NSLocalizedString("forecast.injectionTomorrow", comment: "")
         } else if nextCycleDay >= 5 && nextCycleDay <= 6 {
-            forecastText = "Day \(nextCycleDay) tomorrow — energy typically dips. Stay ahead of it."
+            forecastText = String(format: NSLocalizedString("forecast.dip", comment: ""), nextCycleDay)
         } else if nextCycleDay <= 3 {
-            forecastText = "Day \(nextCycleDay) tomorrow — levels should be strong post-injection."
+            forecastText = String(format: NSLocalizedString("forecast.strong", comment: ""), nextCycleDay)
         } else {
-            forecastText = "Next injection in \(daysUntilInjection) days. Levels are tapering gradually."
+            forecastText = String(format: NSLocalizedString("forecast.tapering", comment: ""), daysUntilInjection)
         }
     }
 
@@ -628,10 +628,10 @@ final class DashboardViewModel: ObservableObject {
 
     static func interpret(_ score: Double) -> String {
         switch score {
-        case 80...:    return "Dialed in"
-        case 60..<80:  return "Steady"
-        case 40..<60:  return "Trending down"
-        default:       return "Off baseline"
+        case 80...:    return NSLocalizedString("scoreReveal.dialedIn", comment: "")
+        case 60..<80:  return NSLocalizedString("scoreReveal.steady", comment: "")
+        case 40..<60:  return NSLocalizedString("scoreReveal.trendingDown", comment: "")
+        default:       return NSLocalizedString("scoreReveal.offBaseline", comment: "")
         }
     }
 
@@ -647,11 +647,11 @@ final class DashboardViewModel: ObservableObject {
 
     private static func milestone(for streak: Int) -> String? {
         switch streak {
-        case 7:   return "🔥 One week! Top 30% of TRT trackers"
-        case 14:  return "🔥🔥 Two weeks! Top 15% of TRT trackers"
-        case 30:  return "🔥🔥🔥 One month! Top 5% of TRT trackers"
-        case 60:  return "🔥🔥🔥🔥 Two months! Top 2% — you're elite"
-        case 90:  return "🔥🔥🔥🔥🔥 Three months! Top 1% — legend"
+        case 7:   return NSLocalizedString("milestone.7", comment: "")
+        case 14:  return NSLocalizedString("milestone.14", comment: "")
+        case 30:  return NSLocalizedString("milestone.30", comment: "")
+        case 60:  return NSLocalizedString("milestone.60", comment: "")
+        case 90:  return NSLocalizedString("milestone.90", comment: "")
         default:  return nil
         }
     }

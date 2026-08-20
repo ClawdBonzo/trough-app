@@ -635,3 +635,82 @@
    ═══════════════════════════════════════════════════════════════ */
 "onboarding.trtInjection" = "Injection TRT";
 "onboarding.selected" = "%d sélectionné(s)";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Succès";
+"more.peptidesTeaser" = "Suivez GLP-1, BPC-157 et plus";
+
+/* Gamification */
+"gamification.levelLine" = "Niveau %d · %@";
+"gamification.xpToLevel" = "%d XP avant le niveau %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "Vous avez enregistré %d bilans";
+"dashboard.reEngage.subtitle" = "Débloquez les insights IA, les courbes PK et l'historique complet avec un essai gratuit.";
+"dashboard.peptideTeaser.title" = "Vous suivez un GLP-1 ou des peptides ?";
+"dashboard.peptideTeaser.subtitle" = "Voyez les corrélations poids et énergie pour le Sémaglutide, le BPC-157 et plus.";
+"dashboard.weeksAgo" = "il y a %d sem.";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/semaine";
+"dashboard.trendChart.recent" = "Tendances récentes";
+"dashboard.trendChart.unlock" = "Débloquer l'historique complet sur 7 jours";
+"dashboard.7daySummary" = "Résumé sur 7 jours";
+"dashboard.daysLate" = "%d j de retard";
+"dashboard.personalBest.new" = "Nouveau record personnel : %d";
+"dashboard.supplementSetup.track" = "Suivez vos compléments";
+"dashboard.supplementSetup.correlations" = "Voyez les corrélations avec votre Score de protocole";
+"trial.checkins" = "Bilans";
+"trial.streak" = "Série";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "Supprimer cette injection ?";
+"injections.cantUndo" = "Cette action est irréversible.";
+"injections.deleteInjection" = "Supprimer l'injection";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Suivez mieux. Optimisez tout.";
+"paywall.perMo" = "/mois";
+"paywall.perYr" = "/an";
+"paywall.savePct" = "Économisez %d%%";
+"paywall.ctaSub.trial" = "puis %@ · renouvellement automatique · annulable à tout moment";
+"paywall.ctaSub.noTrial" = "%@ · renouvellement automatique · annulable à tout moment";
+"paywall.trialBadge" = "3 jours d'essai gratuit";
+"paywall.bestValue" = "MEILLEURE OFFRE";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Votre Score de protocole";
+"onboarding.trialUnlock" = "Démarrez votre essai gratuit pour débloquer tous les insights.";
+"onboarding.proUnlock" = "Débloquez tous les insights avec Trough Pro.";
+"onboarding.trialLegal" = "3 jours d'essai gratuit, puis renouvellement automatique. Annulable à tout moment.";
+"onboarding.subscribeLegal" = "Renouvellement automatique. Annulable à tout moment.";
+
+/* Export */
+"export.title" = "Exporter les données";
+"export.checkins.title" = "Historique des bilans (CSV)";
+"export.checkins.subtitle" = "Scores quotidiens, poids, notes et symptômes. Réimportable via l'import CSV.";
+"export.bloodwork.title" = "Bilan sanguin (CSV)";
+"export.bloodwork.subtitle" = "Tous les panels avec valeurs, unités et plages de référence. Réimportable via l'import CSV.";
+"export.doctor.title" = "Rapport médical (PDF)";
+"export.doctor.subtitle" = "Résumé imprimable : protocole, tableaux d'analyses, notes pour le médecin et tendances.";
+"export.sensitiveNote" = "Les exports contiennent des données de santé sensibles. Les fichiers sont créés sur cet appareil et n'en sortent que si vous les partagez.";
+"export.failed" = "Échec de l'export";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Rappel de bilan quotidien";
+"settings.injectionReminders" = "Rappels de jour d'injection";
+"settings.injectionReminderTime" = "Heure du rappel d'injection";
+"settings.everyDaysConcentration" = "Tous les %d jour(s) · %.0f mg/mL";
+"settings.privacyLegal" = "Confidentialité et mentions légales";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "C'est l'heure de votre dose de %@.";
+"notification.injectionTitle" = "Jour d'injection";
+"notification.injectionBody" = "Jour d'injection — enregistrez-la dans Trough une fois faite.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Heure";
+"onboarding.enterPrescribedDose" = "Saisissez votre dose prescrite";
+"onboarding.doseValidation" = "Saisissez la dose prescrite par votre médecin pour continuer.";

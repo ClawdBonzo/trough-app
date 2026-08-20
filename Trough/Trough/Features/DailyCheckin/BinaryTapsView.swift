@@ -119,7 +119,7 @@ struct BinaryTapsView: View {
                     .font(.headline)
                     .foregroundColor(.white)
             }
-            Text(NSLocalizedString("checkin.aiHelp", comment: ""))
+            Text(NSLocalizedString("checkin.aiSideEffectsDesc", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
 

@@ -635,3 +635,82 @@
 /* Onboarding (adicional) */
 "onboarding.trtInjection" = "Inyección de TRT";
 "onboarding.selected" = "%d seleccionados";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Logros";
+"more.peptidesTeaser" = "Registra GLP-1, BPC-157 y más";
+
+/* Gamification */
+"gamification.levelLine" = "Nivel %d · %@";
+"gamification.xpToLevel" = "%d XP para el nivel %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "Has registrado %d check-ins";
+"dashboard.reEngage.subtitle" = "Desbloquea insights con IA, curvas PK y el historial completo con una prueba gratuita.";
+"dashboard.peptideTeaser.title" = "¿Usas GLP-1 o péptidos?";
+"dashboard.peptideTeaser.subtitle" = "Ve correlaciones de peso y energía para Semaglutida, BPC-157 y más.";
+"dashboard.weeksAgo" = "hace %d sem.";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/semana";
+"dashboard.trendChart.recent" = "Tendencias recientes";
+"dashboard.trendChart.unlock" = "Desbloquear historial completo de 7 días";
+"dashboard.7daySummary" = "Resumen de 7 días";
+"dashboard.daysLate" = "%d días de retraso";
+"dashboard.personalBest.new" = "Nuevo récord personal: %d";
+"dashboard.supplementSetup.track" = "Registra tus suplementos";
+"dashboard.supplementSetup.correlations" = "Ve correlaciones con tu Protocol Score";
+"trial.checkins" = "Check-ins";
+"trial.streak" = "Racha";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "¿Eliminar esta inyección?";
+"injections.cantUndo" = "Esta acción no se puede deshacer.";
+"injections.deleteInjection" = "Eliminar inyección";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Registra mejor. Optimízalo todo.";
+"paywall.perMo" = "/mes";
+"paywall.perYr" = "/año";
+"paywall.savePct" = "Ahorra %d%%";
+"paywall.ctaSub.trial" = "luego %@ · se renueva automáticamente · cancela cuando quieras";
+"paywall.ctaSub.noTrial" = "%@ · se renueva automáticamente · cancela cuando quieras";
+"paywall.trialBadge" = "3 días de prueba gratis";
+"paywall.bestValue" = "MEJOR OPCIÓN";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Tu Protocol Score";
+"onboarding.trialUnlock" = "Inicia tu prueba gratuita para desbloquear todos los insights.";
+"onboarding.proUnlock" = "Desbloquea todos los insights con Trough Pro.";
+"onboarding.trialLegal" = "3 días de prueba gratis, luego se renueva automáticamente. Cancela cuando quieras.";
+"onboarding.subscribeLegal" = "Se renueva automáticamente. Cancela cuando quieras.";
+
+/* Export */
+"export.title" = "Exportar datos";
+"export.checkins.title" = "Historial de check-ins (CSV)";
+"export.checkins.subtitle" = "Puntuaciones diarias, peso, notas y síntomas. Reimportable con la importación CSV.";
+"export.bloodwork.title" = "Análisis de sangre (CSV)";
+"export.bloodwork.subtitle" = "Todos los paneles con valores, unidades y rangos de referencia. Reimportable con la importación CSV.";
+"export.doctor.title" = "Informe médico (PDF)";
+"export.doctor.subtitle" = "Resumen imprimible: protocolo, tablas de análisis, notas para el médico y tendencias.";
+"export.sensitiveNote" = "Las exportaciones contienen datos de salud sensibles. Los archivos se crean en este dispositivo y solo salen de él si tú los compartes.";
+"export.failed" = "Error al exportar";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Recordatorio de check-in diario";
+"settings.injectionReminders" = "Recordatorios de día de inyección";
+"settings.injectionReminderTime" = "Hora del recordatorio de inyección";
+"settings.everyDaysConcentration" = "Cada %d día(s) · %.0f mg/mL";
+"settings.privacyLegal" = "Privacidad y legal";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "Es hora de tu dosis de %@.";
+"notification.injectionTitle" = "Día de inyección";
+"notification.injectionBody" = "Día de inyección — regístrala en Trough cuando termines.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Hora";
+"onboarding.enterPrescribedDose" = "Ingresa tu dosis prescrita";
+"onboarding.doseValidation" = "Ingresa la dosis que te prescribió tu médico para continuar.";

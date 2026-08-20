@@ -151,9 +151,8 @@ enum UserIdentityService {
 
     static let userIDKey = "userIDString"
 
-    // XP thresholds and flame levels replicated from GamificationViewModel
-    // (`xpPerLevel` / `updateFlameLevel`) — they are private there. Keep in sync.
-    private static let xpPerLevel = [0, 50, 120, 220, 360, 550, 800, 1120, 1520, 2000, 2600]
+    // Flame levels replicated from GamificationViewModel (`updateFlameLevel`) —
+    // private there. Keep in sync. XP levels come from SDGamificationState.level(forXP:).
     private static let flameLevels = [(1, 1), (3, 2), (7, 3), (14, 4), (30, 5)]
 
     /// Runs only while the defaults key is absent; idempotent afterwards.
@@ -290,11 +289,7 @@ enum UserIdentityService {
     // MARK: Level / flame helpers
 
     private static func levelFromXP(_ xp: Int) -> Int {
-        var level = 1
-        for i in 0..<xpPerLevel.count where xp >= xpPerLevel[i] {
-            level = i + 1
-        }
-        return min(level, 11)
+        SDGamificationState.level(forXP: xp)
     }
 
     private static func flameLevel(for streakCount: Int) -> Int {

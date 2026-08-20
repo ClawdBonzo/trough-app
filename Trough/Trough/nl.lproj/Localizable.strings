@@ -635,3 +635,82 @@
    ═══════════════════════════════════════════════════════════════ */
 "onboarding.trtInjection" = "TRT-injectie";
 "onboarding.selected" = "%d geselecteerd";
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.2.0 Retrofit — Tabs, Gamification, Dashboard, Export, Settings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tabs & More menu */
+"tab.achievements" = "Prestaties";
+"more.peptidesTeaser" = "Volg GLP-1, BPC-157 en meer";
+
+/* Gamification */
+"gamification.levelLine" = "Level %d · %@";
+"gamification.xpToLevel" = "%d XP tot level %d";
+
+/* Dashboard (additional) */
+"dashboard.reEngage.title" = "Je hebt %d check-ins gelogd";
+"dashboard.reEngage.subtitle" = "Ontgrendel AI-inzichten, PK-curves en de volledige geschiedenis met een gratis proefperiode.";
+"dashboard.peptideTeaser.title" = "Gebruik je GLP-1 of peptiden?";
+"dashboard.peptideTeaser.subtitle" = "Bekijk gewichts- en energiecorrelaties voor Semaglutide, BPC-157 en meer.";
+"dashboard.weeksAgo" = "%d wk geleden";
+"dashboard.glp1.lbsPerWeek" = "%+.1f lbs/week";
+"dashboard.trendChart.recent" = "Recente trends";
+"dashboard.trendChart.unlock" = "Volledige 7-daagse geschiedenis ontgrendelen";
+"dashboard.7daySummary" = "Samenvatting van 7 dagen";
+"dashboard.daysLate" = "%d d te laat";
+"dashboard.personalBest.new" = "Nieuw persoonlijk record: %d";
+"dashboard.supplementSetup.track" = "Volg je supplementen";
+"dashboard.supplementSetup.correlations" = "Bekijk correlaties met je Protocol Score";
+"trial.checkins" = "Check-ins";
+"trial.streak" = "Reeks";
+
+/* Injections (additional) */
+"injections.deleteConfirm" = "Deze injectie verwijderen?";
+"injections.cantUndo" = "Dit kan niet ongedaan worden gemaakt.";
+"injections.deleteInjection" = "Injectie verwijderen";
+
+/* Paywall (additional) */
+"paywall.tagline" = "Slimmer bijhouden. Alles optimaliseren.";
+"paywall.perMo" = "/mnd";
+"paywall.perYr" = "/jr";
+"paywall.savePct" = "Bespaar %d%%";
+"paywall.ctaSub.trial" = "daarna %@ · verlengt automatisch · altijd opzegbaar";
+"paywall.ctaSub.noTrial" = "%@ · verlengt automatisch · altijd opzegbaar";
+"paywall.trialBadge" = "3 dagen gratis proberen";
+"paywall.bestValue" = "BESTE DEAL";
+
+/* Onboarding trial (additional) */
+"onboarding.yourProtocolScore" = "Jouw Protocol Score";
+"onboarding.trialUnlock" = "Start je gratis proefperiode om alle inzichten te ontgrendelen.";
+"onboarding.proUnlock" = "Ontgrendel alle inzichten met Trough Pro.";
+"onboarding.trialLegal" = "3 dagen gratis proberen, daarna automatische verlenging. Altijd opzegbaar.";
+"onboarding.subscribeLegal" = "Verlengt automatisch. Altijd opzegbaar.";
+
+/* Export */
+"export.title" = "Gegevens exporteren";
+"export.checkins.title" = "Check-in-geschiedenis (CSV)";
+"export.checkins.subtitle" = "Dagelijkse scores, gewicht, notities en symptomen. Opnieuw importeerbaar via CSV-import.";
+"export.bloodwork.title" = "Bloedwaarden (CSV)";
+"export.bloodwork.subtitle" = "Alle panels met waarden, eenheden en referentiebereiken. Opnieuw importeerbaar via CSV-import.";
+"export.doctor.title" = "Artsenrapport (PDF)";
+"export.doctor.subtitle" = "Afdrukbare samenvatting: protocol, bloedwaardetabellen, notities voor de arts en trends.";
+"export.sensitiveNote" = "Exports bevatten gevoelige gezondheidsgegevens. Bestanden worden op dit apparaat gemaakt en verlaten het alleen als jij ze deelt.";
+"export.failed" = "Exporteren mislukt";
+
+/* Settings (additional) */
+"settings.dailyCheckinReminder" = "Dagelijkse check-in-herinnering";
+"settings.injectionReminders" = "Herinneringen op injectiedag";
+"settings.injectionReminderTime" = "Tijd injectieherinnering";
+"settings.everyDaysConcentration" = "Elke %d dag(en) · %.0f mg/mL";
+"settings.privacyLegal" = "Privacy en juridisch";
+
+/* Notifications (additional) */
+"notification.compoundDoseBodyShort" = "Tijd voor je dosis %@.";
+"notification.injectionTitle" = "Injectiedag";
+"notification.injectionBody" = "Injectiedag — log hem in Trough zodra je klaar bent.";
+
+/* Onboarding steps (additional) */
+"common.time" = "Tijd";
+"onboarding.enterPrescribedDose" = "Voer je voorgeschreven dosis in";
+"onboarding.doseValidation" = "Voer de door je arts voorgeschreven dosis in om door te gaan.";

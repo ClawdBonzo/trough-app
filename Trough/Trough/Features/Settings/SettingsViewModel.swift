@@ -187,4 +187,20 @@ final class SettingsViewModel: ObservableObject {
         load()
     }
 
+    // MARK: - Reminder support
+
+    /// All active, non-sample protocols (used for injection-day reminder scheduling).
+    func activeProtocols() -> [SDProtocol] {
+        guard modelContext != nil else { return [] }
+        let pred = #Predicate<SDProtocol> { $0.isActive && !$0.isSampleData }
+        return (try? modelContext.fetch(FetchDescriptor<SDProtocol>(predicate: pred))) ?? []
+    }
+
+    /// All real (non-sample) injections, for deriving each protocol's next due date.
+    func allInjections() -> [SDInjection] {
+        guard modelContext != nil else { return [] }
+        let pred = #Predicate<SDInjection> { !$0.isSampleData }
+        return (try? modelContext.fetch(FetchDescriptor<SDInjection>(predicate: pred))) ?? []
+    }
+
 }

@@ -19,8 +19,8 @@ struct PaywallView: View {
 
         var label: String {
             switch self {
-            case .monthly:  return "Monthly"
-            case .yearly:   return "Yearly"
+            case .monthly:  return NSLocalizedString("paywall.monthly", comment: "")
+            case .yearly:   return NSLocalizedString("paywall.annual", comment: "")
             }
         }
 
@@ -33,8 +33,8 @@ struct PaywallView: View {
 
         var period: String {
             switch self {
-            case .monthly:  return "/mo"
-            case .yearly:   return "/yr"
+            case .monthly:  return NSLocalizedString("paywall.perMo", comment: "")
+            case .yearly:   return NSLocalizedString("paywall.perYr", comment: "")
             }
         }
 
@@ -80,19 +80,23 @@ struct PaywallView: View {
         guard fullYear > yearly else { return nil }
         let pct = Int((NSDecimalNumber(decimal: (fullYear - yearly) / fullYear).doubleValue * 100).rounded())
         guard pct > 0 else { return nil }
-        return "Save \(pct)%"
+        return String(format: NSLocalizedString("paywall.savePct", comment: ""), pct)
     }
 
     private var ctaLabel: String {
-        hasTrial(for: selected) ? "Start 3-Day Free Trial" : "Subscribe"
+        hasTrial(for: selected)
+            ? NSLocalizedString("onboarding.startTrial", comment: "")
+            : NSLocalizedString("dashboard.trial.subscribeButton", comment: "")
     }
 
     private var ctaSubLabel: String? {
-        let prefix = hasTrial(for: selected) ? "then " : ""
+        let key = hasTrial(for: selected) ? "paywall.ctaSub.trial" : "paywall.ctaSub.noTrial"
+        let pricePeriod: String
         switch selected {
-        case .monthly: return "\(prefix)\(price(for: .monthly))/mo · auto-renews · cancel anytime"
-        case .yearly:  return "\(prefix)\(price(for: .yearly))/yr · auto-renews · cancel anytime"
+        case .monthly: pricePeriod = price(for: .monthly) + Plan.monthly.period
+        case .yearly:  pricePeriod = price(for: .yearly) + Plan.yearly.period
         }
+        return String(format: NSLocalizedString(key, comment: ""), pricePeriod)
     }
 
     var body: some View {
@@ -182,7 +186,7 @@ struct PaywallView: View {
                     .font(.system(size: 26, weight: .black, design: .rounded))
                     .foregroundColor(.white)
             }
-            Text("Track smarter. Optimize everything.")
+            Text(NSLocalizedString("paywall.tagline", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -193,10 +197,10 @@ struct PaywallView: View {
 
     private var featureBullets: some View {
         HStack(spacing: 0) {
-            featurePill(icon: "drop.fill",   text: "Bloodwork")
-            featurePill(icon: "waveform.path.ecg", text: "PK Curve")
-            featurePill(icon: "pills.fill",  text: "Peptides")
-            featurePill(icon: "chart.bar.fill", text: "Trends")
+            featurePill(icon: "drop.fill",   text: NSLocalizedString("bloodwork.title", comment: ""))
+            featurePill(icon: "waveform.path.ecg", text: NSLocalizedString("pro.pkCurves", comment: ""))
+            featurePill(icon: "pills.fill",  text: NSLocalizedString("peptides.peptides", comment: ""))
+            featurePill(icon: "chart.bar.fill", text: NSLocalizedString("bloodwork.trends", comment: ""))
         }
         .padding(10)
         .background(
@@ -296,7 +300,7 @@ struct PaywallView: View {
             } label: {
                 Group {
                     if isRestoring { ProgressView().tint(.secondary) }
-                    else { Text("Restore") }
+                    else { Text(NSLocalizedString("paywall.restore", comment: "")) }
                 }
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -304,11 +308,11 @@ struct PaywallView: View {
             .buttonStyle(.plain)
 
             if let url = URL(string: "https://gwlabs.app/privacy") {
-                Link("Privacy", destination: url)
+                Link(NSLocalizedString("paywall.privacy", comment: ""), destination: url)
                     .font(.caption).foregroundColor(.secondary)
             }
             if let url = URL(string: "https://gwlabs.app/terms") {
-                Link("Terms", destination: url)
+                Link(NSLocalizedString("paywall.terms", comment: ""), destination: url)
                     .font(.caption).foregroundColor(.secondary)
             }
         }
@@ -442,7 +446,7 @@ private struct PlanCard: View {
     }
 
     private var trialBadge: some View {
-        Text("3-day free trial")
+        Text(NSLocalizedString("paywall.trialBadge", comment: ""))
             .font(.system(size: 10, weight: .semibold))
             .foregroundColor(Color(hex: "#0AB4A6"))
             .padding(.horizontal, 7)
@@ -463,7 +467,7 @@ private struct PlanCard: View {
     }
 
     private var bestValueBadge: some View {
-        Text("BEST VALUE")
+        Text(NSLocalizedString("paywall.bestValue", comment: ""))
             .font(.system(size: 8, weight: .black))
             .foregroundColor(.black)
             .padding(.horizontal, 7)

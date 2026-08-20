@@ -192,6 +192,7 @@ final class DailyCheckinViewModel: ObservableObject {
         if existingCheckin?.date != saveDate {
             existingCheckin = fetchCheckin(on: saveDate)
         }
+        let isNewCheckin = existingCheckin == nil
         // FIXED: convert lbs input to kg for storage if US locale
         let rawWeight = Double(bodyWeightInput)
         let bwKg = rawWeight.map { usesMetricWeight ? $0 : $0 / 2.20462 }
@@ -245,13 +246,20 @@ final class DailyCheckinViewModel: ObservableObject {
         }
         try? ctx.save()
 
-        // Gamification: award XP + update streak + complete quest (new check-ins only)
+        // Gamification: streak + quests are idempotent and run on every save,
+        // but XP is awarded for NEW check-ins only — re-saving today's entry
+        // must not re-award.
         if let gvm = gamificationVM {
-            gvm.awardXP(20, reason: "daily_checkin")
+            if isNewCheckin {
+                gvm.awardXP(20, reason: "daily_checkin")
+            }
             gvm.updateStreak(type: "checkin")
             gvm.completeQuest(QuestService.dailyCheckinQuestID())
+            completeSupplementQuestIfEarned(gvm)
             // Check Protocol Score badge
             BadgeService.checkProtocolScoreBadge(score: currentScore, context: ctx, userID: userID)
+            // 30-day supplement adherence badge (90%+ compliance)
+            BadgeService.checkSupplementAdherenceBadge(context: ctx, userID: userID)
         }
 
         if let kg = bwKg {
@@ -275,6 +283,31 @@ final class DailyCheckinViewModel: ObservableObject {
         }
 
         navigationPath = [.binaryTaps, .completion]
+    }
+
+    // MARK: - Supplement adherence quest
+
+    /// Weekly quest: "Hit ≥80% supplement compliance this week". SDQuest has no
+    /// progress fields, so compliance is derived at read time from check-in rows:
+    /// a day counts when its check-in logged at least one supplement, and the
+    /// quest completes once 6 of the week's 7 days (⌈80% × 7⌉) are covered.
+    private func completeSupplementQuestIfEarned(_ gvm: GamificationViewModel) {
+        guard let ctx = modelContext,
+              let week = Calendar.current.dateInterval(of: .weekOfYear, for: date) else { return }
+        let weekStart = week.start
+        let weekEnd = week.end
+        let pred = #Predicate<SDCheckin> {
+            $0.date >= weekStart && $0.date < weekEnd && !$0.isSampleData
+        }
+        let checkins = (try? ctx.fetch(FetchDescriptor<SDCheckin>(predicate: pred))) ?? []
+        let compliantDays = Set(
+            checkins
+                .filter { !($0.supplementsTaken ?? "").isEmpty }
+                .map { $0.date.startOfDay }
+        ).count
+        if compliantDays >= 6 {
+            gvm.completeQuest(QuestService.weeklySupplementQuestID())
+        }
     }
 
     // MARK: - Insight context

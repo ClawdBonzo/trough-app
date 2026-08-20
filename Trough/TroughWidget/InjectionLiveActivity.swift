@@ -15,6 +15,7 @@ struct InjectionLiveActivity: Widget {
                         .font(.subheadline.bold())
                         .foregroundColor(.white)
                         .lineLimit(1)
+                        .privacySensitive() // redact compound name on the locked Lock Screen
                     Text(context.state.statusLine)
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.7))

@@ -59,20 +59,9 @@ final class GamificationViewModel: ObservableObject {
     private var userID: UUID?
     private var hapticManager: HapticManager?
 
-    // XP thresholds for levels (cumulative)
-    private let xpPerLevel = [
-        0,      // Level 1
-        50,     // Level 2
-        120,    // Level 3
-        220,    // Level 4
-        360,    // Level 5
-        550,    // Level 6
-        800,    // Level 7
-        1120,   // Level 8
-        1520,   // Level 9
-        2000,   // Level 10
-        2600,   // Level 11 (Optimized Alpha)
-    ]
+    // XP thresholds for levels (cumulative) — canonical table lives on the model
+    // so level is always derivable from XP (CLAUDE.md derive-at-read).
+    private let xpPerLevel = SDGamificationState.xpThresholds
 
     private let levelNames = [
         1: "Beginner",
@@ -93,10 +82,20 @@ final class GamificationViewModel: ObservableObject {
         self.userID = userID
         self.hapticManager = hapticManager
 
+        // Ensure today's/this week's quests and badge rows exist before loading.
+        // MainTabView also seeds after calling setup — both calls are idempotent,
+        // but seeding here first means the daily-login quest below can complete
+        // on the first launch of a new day.
+        QuestService.seedIfNeeded(context: context, userID: userID)
+        BadgeService.seedIfNeeded(context: context, userID: userID)
+
         loadState()
         loadQuests()
         loadBadges()
         loadStreakState()
+
+        // Daily-login quest: completes on the launch-time load (app open).
+        completeQuest(QuestService.dailyLoginQuestID())
     }
 
     // MARK: - Core Methods: XP & Levels
@@ -176,6 +175,12 @@ final class GamificationViewModel: ObservableObject {
         }
 
         try? ctx.save()
+
+        // Weekly quest: check-in streak reached 7+ days.
+        if type == "checkin", streak.currentCount >= 7 {
+            completeQuest(QuestService.weeklyStreakQuestID())
+        }
+
         loadStreakState()
         checkBadgeUnlocks()
     }
@@ -183,15 +188,7 @@ final class GamificationViewModel: ObservableObject {
     // MARK: - Private Helpers: Level Calculations
 
     private func levelFromXP(_ xp: Int) -> Int {
-        var level = 1
-        for i in 0..<xpPerLevel.count {
-            if xp >= xpPerLevel[i] {
-                level = i + 1
-            } else {
-                break
-            }
-        }
-        return min(level, 11) // Cap at Level 11
+        SDGamificationState.level(forXP: xp)
     }
 
     private func updateProgressBar() {
@@ -273,25 +270,42 @@ final class GamificationViewModel: ObservableObject {
             }
         }
 
-        // Check other milestone badges
-        let pred = #Predicate<SDCheckin> {
-            $0.userID == uid && !$0.isSampleData
-        }
-        var desc = FetchDescriptor<SDCheckin>(predicate: pred)
-        let checkinCount = (try? ctx.fetch(desc).count) ?? 0
+        // Streak-based badges — consecutive days derived from check-in dates
+        // at read time (never trust a stored count).
+        let streakDays = consecutiveCheckinDays(context: ctx, userID: uid)
 
-        if checkinCount >= 7 {
-            unlockBadgeIfNotAlready(
-                "perfect_week",
-                "Perfect Week",
-                "✅",
-                context: ctx,
-                userID: uid
-            )
+        if streakDays >= 7 {
+            unlockBadgeIfNotAlready("streak_flame_7", "Flame Keeper", "🔥", context: ctx, userID: uid)
+            unlockBadgeIfNotAlready("perfect_week", "Perfect Week", "✅", context: ctx, userID: uid)
+        }
+        if streakDays >= 30 {
+            unlockBadgeIfNotAlready("consistency_king", "Consistency King", "👑", context: ctx, userID: uid)
         }
 
         try? ctx.save()
         loadBadges()
+        persistState() // refresh stored level/badge-count copies from derived values
+    }
+
+    /// Consecutive-day check-in streak ending today (or yesterday, when today's
+    /// check-in hasn't happened yet) — derived from SDCheckin dates at read time.
+    private func consecutiveCheckinDays(context: ModelContext, userID: UUID) -> Int {
+        let pred = #Predicate<SDCheckin> {
+            $0.userID == userID && !$0.isSampleData
+        }
+        let checkins = (try? context.fetch(FetchDescriptor<SDCheckin>(predicate: pred))) ?? []
+        let dates = Set(checkins.map { $0.date.startOfDay })
+
+        var day = Date().startOfDay
+        if !dates.contains(day) {
+            day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
+        }
+        var streak = 0
+        while dates.contains(day) {
+            streak += 1
+            day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
+        }
+        return streak
     }
 
     private func unlockBadgeIfNotAlready(_ badgeID: String, _ name: String, _ emoji: String, context: ModelContext, userID: UUID) {
@@ -323,7 +337,7 @@ final class GamificationViewModel: ObservableObject {
 
         if let state = try? ctx.fetch(desc).first {
             currentXP = state.currentXP
-            currentLevel = state.currentLevel
+            currentLevel = state.derivedLevel // derive from XP; never trust the stored copy
             levelName = levelNames[currentLevel] ?? "Beginner"
             updateProgressBar()
         } else {
@@ -342,10 +356,22 @@ final class GamificationViewModel: ObservableObject {
 
         if let state = try? ctx.fetch(desc).first {
             state.currentXP = currentXP
-            state.currentLevel = currentLevel
+            // Stored copies kept for widget/back-compat — written ONLY here,
+            // always from derived values (CLAUDE.md derive-at-read).
+            state.currentLevel = SDGamificationState.level(forXP: currentXP)
+            state.totalBadgesUnlocked = unlockedBadgeCount()
             state.updatedAt = Date()
             try? ctx.save()
         }
+    }
+
+    /// Unlocked badge count derived from SDBadge rows at read time.
+    private func unlockedBadgeCount() -> Int {
+        guard let ctx = modelContext, let uid = userID else { return 0 }
+        let pred = #Predicate<SDBadge> {
+            $0.userID == uid && $0.unlockedDate != nil
+        }
+        return (try? ctx.fetchCount(FetchDescriptor<SDBadge>(predicate: pred))) ?? 0
     }
 
     private func loadQuests() {

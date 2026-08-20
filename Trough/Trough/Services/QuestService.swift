@@ -67,10 +67,24 @@ enum QuestService {
     // MARK: - Public API
 
     /// Seeds today's daily quests and this week's weekly quests if not yet present.
+    /// Also purges quests from past periods so dead rows don't accumulate.
     static func seedIfNeeded(context: ModelContext, userID: UUID) {
+        purgeExpired(context: context)
         seedDaily(context: context, userID: userID)
         seedWeekly(context: context, userID: userID)
         try? context.save()
+    }
+
+    // MARK: - Hygiene
+
+    /// Deletes quests whose period has ended (dueDate before today). Daily quests
+    /// expire at yesterday's endOfDay and weekly quests at last week's endOfWeek,
+    /// so `dueDate < startOfToday` matches exactly the past-period rows. Applies
+    /// to all userIDs so pre-v1.1.4 orphaned rows are swept too.
+    private static func purgeExpired(context: ModelContext) {
+        let todayStart = Date().startOfDay
+        let pred = #Predicate<SDQuest> { $0.dueDate < todayStart }
+        try? context.delete(model: SDQuest.self, where: pred)
     }
 
     // MARK: - Seeding helpers
@@ -137,24 +151,45 @@ enum QuestService {
 
     // MARK: - Quest ID helpers for completion hooks
 
+    /// Week key matching the one used in seedWeekly — keep in sync.
+    private static func currentWeekKey() -> String {
+        let cal = Calendar.current
+        let weekStart = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
+        return "wk\(weekStart.weekOfYear ?? 0)_\(weekStart.yearForWeekOfYear ?? 0)"
+    }
+
     /// Returns the questID for today's daily check-in quest (for use in completeQuest).
     static func dailyCheckinQuestID() -> String {
         "\("log_checkin_daily")_\(Date().startOfDay.iso8601String)"
     }
 
+    /// Returns the questID for today's daily-login quest.
+    static func dailyLoginQuestID() -> String {
+        "\("daily_login")_\(Date().startOfDay.iso8601String)"
+    }
+
+    /// Returns the questID for today's view-insights quest.
+    static func viewInsightsQuestID() -> String {
+        "\("view_insights_daily")_\(Date().startOfDay.iso8601String)"
+    }
+
     /// Returns the questID for this week's injection quest.
     static func weeklyInjectionQuestID() -> String {
-        let cal = Calendar.current
-        let weekStart = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
-        let weekKey = "wk\(weekStart.weekOfYear ?? 0)_\(weekStart.yearForWeekOfYear ?? 0)"
-        return "inject_on_schedule_weekly_\(weekKey)"
+        "inject_on_schedule_weekly_\(currentWeekKey())"
     }
 
     /// Returns the questID for this week's bloodwork quest.
     static func weeklyBloodworkQuestID() -> String {
-        let cal = Calendar.current
-        let weekStart = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
-        let weekKey = "wk\(weekStart.weekOfYear ?? 0)_\(weekStart.yearForWeekOfYear ?? 0)"
-        return "complete_bloodwork_weekly_\(weekKey)"
+        "complete_bloodwork_weekly_\(currentWeekKey())"
+    }
+
+    /// Returns the questID for this week's 7-day streak quest.
+    static func weeklyStreakQuestID() -> String {
+        "hit_streak_7_weekly_\(currentWeekKey())"
+    }
+
+    /// Returns the questID for this week's supplement adherence quest.
+    static func weeklySupplementQuestID() -> String {
+        "supplement_adherence_weekly_\(currentWeekKey())"
     }
 }

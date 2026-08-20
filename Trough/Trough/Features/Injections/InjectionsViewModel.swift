@@ -114,10 +114,21 @@ final class InjectionsViewModel: ObservableObject {
             errorMessage = "Please enter a valid dose."
             return
         }
-        let conc: Double = activeProtocols.first(where: {
+        let matchingProtocol = activeProtocols.first {
             $0.compoundName.lowercased() == formCompoundName.lowercased()
-        })?.concentrationMgPerMl ?? 200
+        }
+        let conc: Double = matchingProtocol?.concentrationMgPerMl ?? 200
         let vol = dose / conc
+
+        // "Inject On Schedule" quest: honor the description — the injection must
+        // land within 24h of the scheduled due date. Judged against the schedule
+        // BEFORE this log is saved (self.injections is refreshed only in load()).
+        let isNewInjection = editingInjection == nil
+        var isOnSchedule = false
+        if isNewInjection, let proto = matchingProtocol {
+            let due = InjectionCycleService.nextInjectionDate(for: proto, injections: injections)
+            isOnSchedule = abs(formDate.timeIntervalSince(due)) <= 86_400
+        }
 
         if let existing = editingInjection {
             existing.compoundName  = formCompoundName
@@ -146,10 +157,20 @@ final class InjectionsViewModel: ObservableObject {
             load()
 
             // Gamification: only award XP for new injections (not edits)
-            if editingInjection == nil, let gvm = gamificationVM {
+            if isNewInjection, let gvm = gamificationVM {
                 gvm.awardXP(15, reason: "injection_logged")
                 gvm.updateStreak(type: "injection")
-                gvm.completeQuest(QuestService.weeklyInjectionQuestID())
+                if isOnSchedule {
+                    gvm.completeQuest(QuestService.weeklyInjectionQuestID())
+                }
+                // Precision Injector badge: no missed injections for 30 days
+                if let proto = matchingProtocol {
+                    BadgeService.checkInjectionPrecisionBadge(
+                        context: modelContext,
+                        userID: userID,
+                        frequencyDays: proto.frequencyDays
+                    )
+                }
             }
         } catch {
             errorMessage = error.localizedDescription

@@ -354,8 +354,15 @@ final class InsightEngine {
         return values.reduce(0, +) / Double(values.count)
     }
 
+    /// Normalized (trimmed, case-insensitive) compound match. Containment is
+    /// safe here because callers only ever match against the single active
+    /// protocol, so one injection can never be attributed to multiple
+    /// protocols. Mirrors PKCurveEngine, which additionally resolves
+    /// multi-protocol ambiguity via best-match assignment.
     private func compoundsMatch(_ a: String, _ b: String) -> Bool {
-        let al = a.lowercased(), bl = b.lowercased()
+        let al = a.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let bl = b.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !al.isEmpty, !bl.isEmpty else { return false }
         return al == bl || al.contains(bl) || bl.contains(al)
     }
 

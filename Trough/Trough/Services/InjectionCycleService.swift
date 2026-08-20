@@ -33,16 +33,19 @@ enum InjectionCycleService {
     struct CycleInfo {
         let day: Int
         let totalDays: Int
-        var isInjectionDay: Bool { day == totalDays || day == 1 }
-        var daysUntilNext: Int { max(0, totalDays - day) }
+        /// True exactly on the due day (daysSince % freq == 0), i.e. day 1 —
+        /// the day you inject. `day == totalDays` fired a day early.
+        var isInjectionDay: Bool { day == 1 }
+        /// On injection day (day 1) the next dose is a full cycle away:
+        /// E7D → inject today → 7 days until next.
+        var daysUntilNext: Int { totalDays - day + 1 }
         var progressFraction: Double { Double(day) / Double(max(1, totalDays)) }
     }
 
     static func cycleDay(lastInjectionDate: Date, frequencyDays: Int) -> CycleInfo {
         let freq = max(1, frequencyDays)
         let daysSince = max(0, Date.now.daysSince(lastInjectionDate))
-        let cycleDay = (daysSince % freq) + 1
-        return CycleInfo(day: min(cycleDay, freq), totalDays: freq)
+        return CycleInfo(day: (daysSince % freq) + 1, totalDays: freq)
     }
 
     // MARK: - New methods
@@ -52,7 +55,9 @@ enum InjectionCycleService {
         injections: [SDInjection],
         compound: String? = nil
     ) -> Double {
-        let filtered = compound.map { c in injections.filter { $0.compoundName == c } } ?? injections
+        let filtered = compound.map { c in
+            injections.filter { compoundsEqual($0.compoundName, c) }
+        } ?? injections
         guard let latest = filtered.map(\.injectedAt).max() else { return 0 }
         return Date.now.timeIntervalSince(latest) / 86400
     }
@@ -60,7 +65,7 @@ enum InjectionCycleService {
     /// Next scheduled injection date based on protocol frequency.
     static func nextInjectionDate(for proto: SDProtocol, injections: [SDInjection]) -> Date {
         let matching = injections.filter {
-            $0.compoundName.lowercased() == proto.compoundName.lowercased()
+            compoundsEqual($0.compoundName, proto.compoundName)
         }
         guard let lastDate = matching.map(\.injectedAt).max() else {
             return Date.now
@@ -169,6 +174,14 @@ enum InjectionCycleService {
     }
 
     // MARK: - Private
+
+    /// Case-insensitive, whitespace-trimmed compound comparison — every
+    /// compound match in this file must use this so a lowercase-logged
+    /// injection drives the due date and the progress ring identically.
+    private static func compoundsEqual(_ a: String, _ b: String) -> Bool {
+        a.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            == b.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
 
     private static func nextWeekdayDate(after date: Date, weekdays: [Int]) -> Date {
         let cal = Calendar.current

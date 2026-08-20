@@ -423,10 +423,27 @@ enum TroughSchemaV1: VersionedSchema {
         @Attribute(.unique) var id: UUID
         var userID: UUID
         var currentXP: Int                 // total XP earned (never decreases)
-        var currentLevel: Int              // derived from currentXP, 1-11
-        var totalBadgesUnlocked: Int       // count of unlocked badges
+        var currentLevel: Int              // stored copy for widget/back-compat — READ `derivedLevel` instead
+        var totalBadgesUnlocked: Int       // stored copy for widget/back-compat — derive counts from SDBadge rows instead
         var createdAt: Date
         var updatedAt: Date
+
+        /// Canonical cumulative XP thresholds for levels 1–11.
+        static let xpThresholds = [0, 50, 120, 220, 360, 550, 800, 1120, 1520, 2000, 2600]
+
+        /// Level derived from an XP total via the threshold table.
+        static func level(forXP xp: Int) -> Int {
+            var level = 1
+            for (index, threshold) in xpThresholds.enumerated() where xp >= threshold {
+                level = index + 1
+            }
+            return min(level, 11) // Cap at Level 11
+        }
+
+        /// Derived at read time (CLAUDE.md: never store computed values).
+        /// `currentLevel` is kept written for widget/back-compat but readers
+        /// must use this instead.
+        var derivedLevel: Int { Self.level(forXP: currentXP) }
 
         init(
             id: UUID = .init(),

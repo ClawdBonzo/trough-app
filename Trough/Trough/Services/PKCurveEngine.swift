@@ -116,14 +116,19 @@ final class PKCurveEngine {
         var allCurves: [CompoundCurve] = []
         var totalLevels = [Double](repeating: 0, count: resolution)
 
-        for proto in protocols {
+        // Assign each injection to at most ONE protocol up front, so a loosely
+        // named injection (e.g. "Testosterone") can never be summed into both
+        // the Cypionate and the Enanthate curve.
+        let assignments: [Int?] = injections.map { bestProtocolIndex(for: $0.compoundName, in: protocols) }
+
+        for (protoIdx, proto) in protocols.enumerated() {
             let hl     = effectiveHalfLife(compound: proto.compoundName, custom: proto.customHalfLife)
             let ke     = log(2.0) / hl
             let ka     = proto.route.lowercased().contains("sub") ? 1.0 : 1.5
             let scale  = scalingFactor(for: proto.compoundName)
 
             // Historical injections for this compound (within 5 half-lives of display range)
-            let matching = injections.filter { compoundsMatch($0.compoundName, proto.compoundName) }
+            let matching = zip(injections, assignments).compactMap { inj, idx in idx == protoIdx ? inj : nil }
             var offsets: [(t: Double, dose: Double)] = matching.compactMap { inj in
                 let t = -now.timeIntervalSince(inj.injectedAt) / 86400  // negative = past
                 return t > startT - hl ? (t, inj.doseAmountMg) : nil
@@ -221,7 +226,12 @@ final class PKCurveEngine {
     ) -> Double {
         guard dt >= 0 else { return 0 }
         if withDelay {
-            guard abs(ka - ke) > 0.001 else { return 0 }
+            // When ka ≈ ke the general form divides by ~0; use the Bateman
+            // limit as ka → ke: C(t) = dose·scale·ka·t·e^(−ka·t).
+            // (e.g. SubQ ka = 1.0 with a 0.693-day half-life gives ke ≈ 1.0)
+            guard abs(ka - ke) > 0.001 else {
+                return max(0, doseMg * scale * ka * dt * exp(-ka * dt))
+            }
             let raw = doseMg * scale * (ka / (ka - ke)) * (exp(-ke * dt) - exp(-ka * dt))
             return max(0, raw)
         } else {
@@ -238,8 +248,32 @@ final class PKCurveEngine {
         return 5.5  // cypionate, enanthate, decanoate
     }
 
-    private func compoundsMatch(_ a: String, _ b: String) -> Bool {
-        let al = a.lowercased(), bl = b.lowercased()
-        return al == bl || al.contains(bl) || bl.contains(al)
+    private func normalizedCompound(_ s: String) -> String {
+        s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    /// Best-match protocol for an injection's compound name, or nil if none match.
+    /// Exact (normalized) equality always wins; otherwise one-way containment
+    /// scored by the length of the shorter (common) string, so "Testosterone"
+    /// resolves to a single protocol instead of every ester variant.
+    private func bestProtocolIndex(for injectionCompound: String, in protocols: [PKProtocolInput]) -> Int? {
+        let inj = normalizedCompound(injectionCompound)
+        guard !inj.isEmpty else { return nil }
+        var best: (index: Int, score: Int)? = nil
+        for (i, proto) in protocols.enumerated() {
+            let p = normalizedCompound(proto.compoundName)
+            let score: Int
+            if inj == p {
+                score = Int.max
+            } else if inj.contains(p) || p.contains(inj) {
+                score = min(inj.count, p.count)
+            } else {
+                continue
+            }
+            if best == nil || score > best!.score {
+                best = (index: i, score: score)
+            }
+        }
+        return best?.index
     }
 }

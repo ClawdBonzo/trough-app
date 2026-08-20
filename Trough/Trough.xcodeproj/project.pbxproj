@@ -56,6 +56,8 @@
 		CC110022DD220022CC11DD22 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD110022EE220022DD11EE22 /* OnboardingView.swift */; };
 		CSV001 /* CSVImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV002 /* CSVImportService.swift */; };
 		CSV003 /* CSVImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CSV004 /* CSVImportView.swift */; };
+		7E1A9C4B2D8F4E6A9B3C5D03 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1A9C4B2D8F4E6A9B3C5D01 /* ExportService.swift */; };
+		7E1A9C4B2D8F4E6A9B3C5D04 /* ExportDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1A9C4B2D8F4E6A9B3C5D02 /* ExportDataView.swift */; };
 		D2ADEBEB85724274955445D3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AFCC3A86424879AC535649 /* ContentView.swift */; };
 		D3FB58F7807C4509B26653F8 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7288B93B716541C89EF746DF /* SettingsViewModel.swift */; };
 		D753D23AF043408F93E68A3C /* InjectionCycleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */; };
@@ -159,6 +161,8 @@
 		CF50E6A0F79CE71E2A9D0341 /* TroughWidget.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = TroughWidget.entitlements; sourceTree = "<group>"; };
 		CSV002 /* CSVImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportService.swift; sourceTree = "<group>"; };
 		CSV004 /* CSVImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImportView.swift; sourceTree = "<group>"; };
+		7E1A9C4B2D8F4E6A9B3C5D01 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
+		7E1A9C4B2D8F4E6A9B3C5D02 /* ExportDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportDataView.swift; sourceTree = "<group>"; };
 		D3CA2ADAB7BA489D9B1DF77C /* TroughTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughTests.swift; sourceTree = "<group>"; };
 		D732B93452310F53475236BF /* TroughWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TroughWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D75C34D8565248EBABD63A93 /* TroughTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TroughTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +256,7 @@
 				PL004 /* ToastManager.swift */,
 				PL006 /* SampleDataService.swift */,
 				CSV002 /* CSVImportService.swift */,
+				7E1A9C4B2D8F4E6A9B3C5D01 /* ExportService.swift */,
 				QSVC0001 /* QuestService.swift */,
 				BSVC0001 /* BadgeService.swift */,
 				8A50C939D559912F246C0817 /* WidgetBridge.swift */,
@@ -346,6 +351,7 @@
 				CC990011FF220099CC99FF11 /* Onboarding */,
 				RC001122334455667788AA33 /* Paywall */,
 				CSVIMP01 /* Import */,
+				7E1A9C4B2D8F4E6A9B3C5D05 /* Export */,
 				GAMF0001 /* Gamification */,
 			);
 			path = Features;
@@ -470,6 +476,14 @@
 				CSV004 /* CSVImportView.swift */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		7E1A9C4B2D8F4E6A9B3C5D05 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				7E1A9C4B2D8F4E6A9B3C5D02 /* ExportDataView.swift */,
+			);
+			path = Export;
 			sourceTree = "<group>";
 		};
 		GAMF0001 /* Gamification */ = {
@@ -684,6 +698,8 @@
 				PL009 /* PrivacyPolicyView.swift in Sources */,
 				CSV001 /* CSVImportService.swift in Sources */,
 				CSV003 /* CSVImportView.swift in Sources */,
+				7E1A9C4B2D8F4E6A9B3C5D03 /* ExportService.swift in Sources */,
+				7E1A9C4B2D8F4E6A9B3C5D04 /* ExportDataView.swift in Sources */,
 				535D44ECBF1D009FC96D57DF /* SplashWaveView.swift in Sources */,
 				097B4FD38F0E09972584D215 /* DiagnosticQuizView.swift in Sources */,
 				3EA74F1AB90D33B620DE973F /* ScoreRevealView.swift in Sources */,
@@ -776,7 +792,7 @@
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -786,7 +802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "app.trough.ios AppStore";
@@ -802,10 +818,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trough.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.9;
@@ -821,7 +837,7 @@
 				CODE_SIGN_ENTITLEMENTS = TroughWidget/TroughWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = TroughWidget/Info.plist;
@@ -831,7 +847,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "app.trough.ios.widget AppStore";
@@ -850,7 +866,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = TroughWidget/TroughWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = TroughWidget/Info.plist;
@@ -860,7 +876,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -878,7 +894,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -887,7 +903,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -928,10 +944,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trough.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.9;
