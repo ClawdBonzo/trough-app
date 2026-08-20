@@ -307,8 +307,9 @@ final class InsightEngine {
         guard last14.count >= 7 else { return nil }
 
         // Check weight trend (need bodyWeightKg on checkins)
+        // last14 is newest-first, so first = newest, last = oldest
         let weights = last14.compactMap(\.bodyWeightKg)
-        let weightTrendingDown = weights.count >= 4 && weights.first! > weights.last!
+        let weightTrendingDown = weights.count >= 4 && weights.first! < weights.last!
 
         // Check energy is stable (not dropping)
         let avgEnergy = mean(last14.map(\.energyScore))

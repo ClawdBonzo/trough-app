@@ -160,6 +160,23 @@ final class BloodworkViewModel: ObservableObject {
             sortBy: [SortDescriptor(\.drawnAt, order: .reverse)]
         )
         results = (try? modelContext.fetch(desc)) ?? []
+        healLegacyPhotoPaths()
+    }
+
+    /// One-time self-heal: records saved before v1.1.4 stored absolute file
+    /// paths, which break whenever the app container UUID changes. Rewrites
+    /// them to filename-only once the file is confirmed present.
+    private func healLegacyPhotoPaths() {
+        var healed = false
+        for bw in results {
+            guard let stored = bw.photoURL, stored.contains("/") else { continue }
+            if let url = Self.photoFileURL(stored),
+               FileManager.default.fileExists(atPath: url.path) {
+                bw.photoURL = url.lastPathComponent
+                healed = true
+            }
+        }
+        if healed { try? modelContext.save() }
     }
 
     // MARK: Prepare form
@@ -292,26 +309,41 @@ final class BloodworkViewModel: ObservableObject {
     }
 
     /// Writes JPEG data to the photos directory keyed by bloodwork id.
-    /// Returns the file URL string to store in `SDBloodwork.photoURL`, or nil on failure.
+    /// Returns the FILENAME to store in `SDBloodwork.photoURL` — never an
+    /// absolute path, because the app container UUID changes on every update
+    /// and stored absolute paths go stale.
     static func savePhoto(_ data: Data, for id: UUID) -> String? {
-        let url = photoDirectory.appendingPathComponent("\(id.uuidString).jpg")
+        let filename = "\(id.uuidString).jpg"
+        let url = photoDirectory.appendingPathComponent(filename)
         do {
             try data.write(to: url, options: .atomic)
-            return url.absoluteString
+            return filename
         } catch {
             return nil
         }
     }
 
-    /// Loads photo data from a stored `photoURL` string, if the file exists.
-    static func loadPhoto(_ urlString: String?) -> Data? {
-        guard let urlString, let url = URL(string: urlString) else { return nil }
+    /// Resolves a stored `photoURL` value against the CURRENT photo directory.
+    /// Handles both the new filename-only format and legacy absolute
+    /// path/URL strings (whose container prefix is stale after app updates).
+    static func photoFileURL(_ stored: String?) -> URL? {
+        guard let stored, !stored.isEmpty else { return nil }
+        let filename = stored.contains("/")
+            ? (URL(string: stored)?.lastPathComponent ?? (stored as NSString).lastPathComponent)
+            : stored
+        guard !filename.isEmpty else { return nil }
+        return photoDirectory.appendingPathComponent(filename)
+    }
+
+    /// Loads photo data for a stored `photoURL` value, if the file exists.
+    static func loadPhoto(_ stored: String?) -> Data? {
+        guard let url = photoFileURL(stored) else { return nil }
         return try? Data(contentsOf: url)
     }
 
-    /// Removes the photo file for a stored `photoURL` string, if present.
-    static func deletePhoto(_ urlString: String?) {
-        guard let urlString, let url = URL(string: urlString) else { return }
+    /// Removes the photo file for a stored `photoURL` value, if present.
+    static func deletePhoto(_ stored: String?) {
+        guard let url = photoFileURL(stored) else { return }
         try? FileManager.default.removeItem(at: url)
     }
 

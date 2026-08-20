@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "할 일이 있어요 — 바로 그게 핵심입니다.";
 
 "projected.title" = "7일 전망";
-"projected.subtitle" = "꾸준히 추적하면 첫 주에 실질적인 개선을 경험할 수 있습니다.";
+"projected.subtitle" = "꾸준한 추적은 실제로 무엇이 변화하고 있는지 본인과 담당 의료진이 파악하는 데 도움이 됩니다.";
 "projected.today" = "오늘";
 "projected.day7" = "7일째";
 "projected.now" = "현재";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "약물 이름";
 "onboarding.selected" = "%d개 선택됨";
 "onboarding.setDoses" = "용량 설정";
-"onboarding.dosesSubtitle" = "일반적인 용량과 일정을 미리 입력해 두었습니다 — 필요에 맞게 조정하세요.";
+"onboarding.dosesSubtitle" = "처방받은 용량과 일정을 입력하세요.";
 "onboarding.schedule" = "일정";
 "onboarding.dosesReminder" = "각 약물의 일정에 따라 알림을 보내드립니다.";
 

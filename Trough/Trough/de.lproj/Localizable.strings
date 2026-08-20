@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Es gibt einiges zu tun — und genau darum geht es.";
 
 "projected.title" = "Dein 7-Tage-Ausblick";
-"projected.subtitle" = "Mit konsequentem Tracking sehen Nutzer in der ersten Woche echte Verbesserungen.";
+"projected.subtitle" = "Konsequentes Tracking hilft dir und deinem Arzt zu erkennen, was sich wirklich verändert.";
 "projected.today" = "Heute";
 "projected.day7" = "Tag 7";
 "projected.now" = "Jetzt";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Wirkstoffname";
 "onboarding.selected" = "%d ausgewählt";
 "onboarding.setDoses" = "Dosierungen festlegen";
-"onboarding.dosesSubtitle" = "Wir haben typische Dosierungen und Zeitpläne vorausgefüllt — passe sie nach Bedarf an.";
+"onboarding.dosesSubtitle" = "Gib die Dosis und den Zeitplan ein, die dir verordnet wurden.";
 "onboarding.schedule" = "Zeitplan";
 "onboarding.dosesReminder" = "Wir senden Erinnerungen basierend auf dem Zeitplan jedes Wirkstoffs.";
 

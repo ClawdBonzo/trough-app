@@ -162,4 +162,12 @@ final class InjectionsViewModel: ObservableObject {
         try? modelContext.save()
         load()
     }
+
+    /// Deletes the injection currently open in the edit sheet and closes it.
+    func deleteEditingInjection() {
+        guard let injection = editingInjection else { return }
+        editingInjection = nil
+        showingLogSheet = false
+        delete(injection)
+    }
 }

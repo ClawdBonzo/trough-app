@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Er is werk aan de winkel — en daar draait het om.";
 
 "projected.title" = "Je vooruitzicht voor 7 dagen";
-"projected.subtitle" = "Met consequent bijhouden zien gebruikers in de eerste week echte verbetering.";
+"projected.subtitle" = "Consequent bijhouden helpt jou en je arts te zien wat er werkelijk verandert.";
 "projected.today" = "Vandaag";
 "projected.day7" = "Dag 7";
 "projected.now" = "Nu";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Naam van het middel";
 "onboarding.selected" = "%d geselecteerd";
 "onboarding.setDoses" = "Stel je doses in";
-"onboarding.dosesSubtitle" = "We hebben gangbare doses en schema's vooraf ingevuld — pas ze aan waar nodig.";
+"onboarding.dosesSubtitle" = "Voer de dosis en het schema in die je arts heeft voorgeschreven.";
 "onboarding.schedule" = "Schema";
 "onboarding.dosesReminder" = "We sturen herinneringen op basis van het schema van elk middel.";
 

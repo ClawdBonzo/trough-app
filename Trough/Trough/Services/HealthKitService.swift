@@ -146,6 +146,7 @@ final class HealthKitService {
     /// Fetches HRV, sleep, steps, and resting HR in parallel and writes them onto the checkin.
     /// Only fills fields that are currently nil — never overwrites user-entered data.
     /// Called from CompletionView immediately after the checkin is saved.
+    @MainActor
     func autoPopulateCheckin(_ checkin: SDCheckin) async {
         async let hrv    = fetchTodayHRV()
         async let sleep  = fetchLastNightSleep()

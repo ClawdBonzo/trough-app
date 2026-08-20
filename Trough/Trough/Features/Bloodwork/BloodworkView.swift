@@ -171,7 +171,7 @@ struct BloodworkDetailView: View {
             AppColors.background.ignoresSafeArea()
             List {
                 // Photo (if uploaded)
-                if let urlString = bloodwork.photoURL, let url = URL(string: urlString) {
+                if let url = BloodworkViewModel.photoFileURL(bloodwork.photoURL) {
                     Section {
                         AsyncImage(url: url) { phase in
                             switch phase {

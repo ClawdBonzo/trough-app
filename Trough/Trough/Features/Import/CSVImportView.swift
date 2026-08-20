@@ -219,17 +219,37 @@ final class CSVImportViewModel: ObservableObject {
 // MARK: - Main View
 
 struct CSVImportView: View {
+    @Environment(\.modelContext) private var modelContext
+    @AppStorage("userIDString") private var userIDString = UUID().uuidString
+    private var onComplete: (() -> Void)?
+
+    init(onComplete: (() -> Void)? = nil) {
+        self.onComplete = onComplete
+    }
+
+    var body: some View {
+        // The ViewModel needs the environment's modelContext (the app's real
+        // container — never a freshly built one), so it's constructed here in
+        // body and handed to the inner view, whose @StateObject keeps the
+        // first instance for the lifetime of the flow.
+        CSVImportFlowView(
+            modelContext: modelContext,
+            userID: UUID(uuidString: userIDString) ?? UUID(),
+            onComplete: onComplete
+        )
+    }
+}
+
+private struct CSVImportFlowView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var vm: CSVImportViewModel
     @State private var showFilePicker = false
     private var onComplete: (() -> Void)?
 
-    init(onComplete: (() -> Void)? = nil) {
-        let idString = UserDefaults.standard.string(forKey: "userIDString") ?? ""
-        let id = UUID(uuidString: idString) ?? UUID()
+    init(modelContext: ModelContext, userID: UUID, onComplete: (() -> Void)?) {
         _vm = StateObject(wrappedValue: CSVImportViewModel(
-            modelContext: ModelContext(try! ModelContainer(for: Schema(TroughSchemaV1.models))),
-            userID: id
+            modelContext: modelContext,
+            userID: userID
         ))
         self.onComplete = onComplete
     }

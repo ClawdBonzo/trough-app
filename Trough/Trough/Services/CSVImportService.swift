@@ -316,6 +316,12 @@ enum CSVImportService {
         )) ?? []
         var existingDates = Set(existing.map { $0.date })
 
+        // Warn once per unmapped score column — those rows get the neutral 3.0 default
+        for key in ["energy", "mood", "libido", "sleep", "clarity"] where mapping[key] == nil {
+            warnings.append(ImportRowIssue(row: 1,
+                message: "No \(key) column mapped — all rows defaulted to 3"))
+        }
+
         // Does the body weight column name contain "lb"?
         let bwIsLbs: Bool = {
             guard let idx = mapping["bodyweight"], idx < data.headers.count else { return false }
@@ -343,8 +349,16 @@ enum CSVImportService {
             // ── Score helper (1–5, clamp out-of-range) ───────────────────────
             var rowWarnings: [String] = []
             func parseScore(_ key: String) -> Double {
-                guard let idx = mapping[key], idx < row.count, !row[idx].isEmpty else { return 3.0 }
-                guard let v = Double(row[idx].trimmingCharacters(in: .whitespaces)) else { return 3.0 }
+                guard let idx = mapping[key] else { return 3.0 } // unmapped: warned once above
+                guard idx < row.count, !row[idx].isEmpty else {
+                    rowWarnings.append("\(key) value missing — defaulted to 3")
+                    return 3.0
+                }
+                let raw = normalizeDecimalSeparators(row[idx].trimmingCharacters(in: .whitespaces))
+                guard let v = Double(raw) else {
+                    rowWarnings.append("\(key) value '\(row[idx])' not parseable — defaulted to 3")
+                    return 3.0
+                }
                 if v < 1 || v > 5 {
                     rowWarnings.append("\(key) value \(row[idx]) out of range — clamped to 1–5")
                     return max(1, min(5, v))
@@ -440,6 +454,12 @@ enum CSVImportService {
         var warnings: [ImportRowIssue] = []
         var allDates: [Date] = []
 
+        // Pre-load existing draw dates (non-sample, same-day granularity) to detect duplicates
+        let existing = (try? context.fetch(
+            FetchDescriptor<SDBloodwork>(predicate: #Predicate { !$0.isSampleData })
+        )) ?? []
+        var existingDates = Set(existing.map { $0.drawnAt.startOfDay })
+
         for (rowIdx, row) in data.rows.enumerated() {
             let rowNum = rowIdx + 2
 
@@ -450,6 +470,10 @@ enum CSVImportService {
             let rawDate = row[dateIdx].trimmingCharacters(in: .whitespaces)
             guard !rawDate.isEmpty, let date = fmt.date(from: rawDate) else {
                 errors.append(ImportRowIssue(row: rowNum, message: "Date '\(rawDate)' not parseable"))
+                skipped += 1; continue
+            }
+            guard !existingDates.contains(date.startOfDay) else {
+                warnings.append(ImportRowIssue(row: rowNum, message: "Duplicate date \(rawDate) — skipped"))
                 skipped += 1; continue
             }
 
@@ -496,6 +520,7 @@ enum CSVImportService {
                 bw.markers.append(marker)
             }
 
+            existingDates.insert(date.startOfDay)
             allDates.append(date)
             imported += 1
         }
@@ -508,12 +533,22 @@ enum CSVImportService {
 
     // MARK: - Helpers
 
+    /// Normalizes decimal separators: with no dot present, a comma between digits
+    /// is a decimal comma ("4,5" → "4.5"); with a dot present, commas between
+    /// digits are thousands separators ("1,234.5" → "1234.5").
+    static func normalizeDecimalSeparators(_ s: String) -> String {
+        let replacement = s.contains(".") ? "" : "."
+        return s.replacingOccurrences(of: #"(?<=[0-9]),(?=[0-9])"#, with: replacement,
+                                      options: .regularExpression)
+    }
+
     /// Strips non-numeric characters, returning the first valid number in a string.
-    /// Handles "350 ng/dL" → 350, "<0.1" → 0.1, "12.5%" → 12.5
+    /// Handles "350 ng/dL" → 350, "<0.1" → 0.1, "12.5%" → 12.5, "82,5" → 82.5, "-2.5" → -2.5
     static func extractNumeric(_ s: String) -> Double? {
-        guard let regex = try? NSRegularExpression(pattern: #"[0-9]+(?:\.[0-9]+)?"#) else { return nil }
-        let ns = s as NSString
-        guard let match = regex.firstMatch(in: s, range: NSRange(location: 0, length: ns.length)) else {
+        let text = normalizeDecimalSeparators(s)
+        guard let regex = try? NSRegularExpression(pattern: #"-?[0-9]+(?:\.[0-9]+)?"#) else { return nil }
+        let ns = text as NSString
+        guard let match = regex.firstMatch(in: text, range: NSRange(location: 0, length: ns.length)) else {
             return nil
         }
         return Double(ns.substring(with: match.range))

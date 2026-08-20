@@ -8,9 +8,12 @@ import RevenueCat
 struct SecondaryCompoundEntry: Identifiable {
     let id = UUID()
     var compoundName: String
-    var doseMg: Double
+    var doseText: String
     var frequencyDays: Int
     var colorHex: String
+
+    /// Parsed dose — nil until the user enters their prescribed dose.
+    var doseMg: Double? { OnboardingViewModel.parseDose(doseText) }
 }
 
 // MARK: - ViewModel
@@ -46,8 +49,22 @@ final class OnboardingViewModel: ObservableObject {
     ]
 
     @Published var primaryCompound = "Testosterone Cypionate"
-    @Published var primaryDoseMg: Double = 200
-    @Published var primaryFreqIndex = 4   // default E7D
+    // Dose ships EMPTY — the user must enter their own prescribed dose.
+    // We never suggest or pre-fill dose amounts.
+    @Published var primaryDoseText: String = ""
+    @Published var primaryFreqIndex = 4   // default E7D (neutral scheduling convenience)
+
+    /// Parsed primary dose — nil until the user enters their prescribed dose.
+    var primaryDoseMg: Double? { Self.parseDose(primaryDoseText) }
+
+    /// Parses a user-entered dose string (accepts comma or dot decimal separator).
+    nonisolated static func parseDose(_ text: String) -> Double? {
+        let normalized = text
+            .trimmingCharacters(in: .whitespaces)
+            .replacingOccurrences(of: ",", with: ".")
+        guard let value = Double(normalized), value > 0 else { return nil }
+        return value
+    }
     @Published var primaryWeekdays: Set<Int> = [2, 5]  // Mon, Thu (Calendar weekday)
 
     @Published var addSecondary = false
@@ -68,10 +85,13 @@ final class OnboardingViewModel: ObservableObject {
     struct SelectedCompound: Identifiable {
         let id = UUID()
         var name: String
-        var dose: Double
+        var doseText: String = ""
         var unit: String
         var frequencyDays: Int
         var isCustom: Bool = false
+
+        /// Parsed dose — nil until the user enters their prescribed dose.
+        var dose: Double? { OnboardingViewModel.parseDose(doseText) }
     }
 
     @Published var selectedCompounds: Set<String> = []
@@ -86,44 +106,9 @@ final class OnboardingViewModel: ObservableObject {
         return "mcg"
     }
 
-    static func defaultFrequencyDays(for compound: String) -> Int {
-        switch compound {
-        case "Semaglutide", "Tirzepatide", "Retatrutide", "Liraglutide", "Cagrilintide": return 7  // weekly
-        case "BPC-157", "Ipamorelin", "CJC-1295":       return 1  // daily
-        case "Tesamorelin", "GHK-Cu":                   return 1  // daily
-        case "TB-500":                                  return 4  // ~twice weekly
-        case "MK-677":                                    return 1  // daily
-        case "Anastrozole":                               return 4  // twice weekly (E3.5D)
-        case "Aromasin":                                  return 3  // EOD-ish
-        case "Cabergoline":                               return 7  // weekly
-        case "hCG":                                       return 3  // E3D
-        case "Letrozole":                                 return 3  // E3D
-        default:                                          return 1  // daily
-        }
-    }
-
-    static func defaultDose(for compound: String) -> Double {
-        switch compound {
-        case "Semaglutide":  return 0.25
-        case "Tirzepatide":  return 2.5
-        case "Retatrutide":  return 2.0
-        case "Liraglutide":  return 0.6
-        case "Cagrilintide": return 0.3
-        case "BPC-157":      return 250
-        case "TB-500":       return 500
-        case "CJC-1295":     return 100
-        case "Ipamorelin":   return 200
-        case "Tesamorelin":  return 2.0
-        case "GHK-Cu":       return 1.0
-        case "MK-677":       return 25
-        case "Anastrozole":  return 0.5
-        case "Aromasin":     return 12.5
-        case "Cabergoline":  return 0.25
-        case "hCG":          return 500
-        case "Letrozole":    return 2.5
-        default:             return 100
-        }
-    }
+    // Neutral scheduling default for the picker only — never a dosing suggestion.
+    // Doses are intentionally NOT pre-filled: the user enters what their provider prescribed.
+    static let neutralFrequencyDays = 7  // weekly
 
     func toggleCompound(_ name: String) {
         if selectedCompounds.contains(name) {
@@ -144,13 +129,19 @@ final class OnboardingViewModel: ObservableObject {
         compoundDoses = selectedCompounds.sorted().map { name in
             SelectedCompound(
                 name: name,
-                dose: Self.defaultDose(for: name),
+                doseText: "",
                 unit: Self.defaultUnit(for: name),
-                frequencyDays: Self.defaultFrequencyDays(for: name),
+                frequencyDays: Self.neutralFrequencyDays,
                 isCustom: !Self.compoundCategories.flatMap(\.compounds).contains(name)
             )
         }
     }
+
+    // MARK: Dose validation
+
+    var primaryDoseEntered: Bool { primaryDoseMg != nil }
+    var allSecondaryDosesEntered: Bool { secondaryEntries.allSatisfy { $0.doseMg != nil } }
+    var allCompoundDosesEntered: Bool { compoundDoses.allSatisfy { $0.dose != nil } }
 
     static let compoundFrequencyOptions: [(label: String, days: Int)] = [
         ("Daily",         1),
@@ -206,7 +197,7 @@ final class OnboardingViewModel: ObservableObject {
     var showWeekdayPicker: Bool { primaryFreq.days == 4 }  // E3.5D
 
     var autoProtocolName: String {
-        generateName(compound: primaryCompound, doseMg: primaryDoseMg, freqDays: primaryFreq.days)
+        generateName(compound: primaryCompound, doseMg: primaryDoseMg ?? 0, freqDays: primaryFreq.days)
     }
 
     // MARK: Setup
@@ -289,7 +280,7 @@ final class OnboardingViewModel: ObservableObject {
         let colors = ["#4ECDC4", "#FFE66D"]
         secondaryEntries.append(SecondaryCompoundEntry(
             compoundName: "HCG",
-            doseMg: 500,
+            doseText: "",
             frequencyDays: 3,
             colorHex: colors[secondaryEntries.count]
         ))
@@ -320,7 +311,7 @@ final class OnboardingViewModel: ObservableObject {
             let config = SDSupplementConfig(
                 userID: userID,
                 supplementName: compound.name,
-                doseAmount: compound.dose,
+                doseAmount: compound.dose ?? 0,
                 doseUnit: compound.unit,
                 frequencyDays: compound.frequencyDays,
                 isActive: true
@@ -395,7 +386,11 @@ final class OnboardingViewModel: ObservableObject {
         for compound in compoundDoses {
             let content = UNMutableNotificationContent()
             content.title = "\(compound.name) dose"
-            content.body = "Time for \(compound.name) — \(formatDose(compound.dose, unit: compound.unit))"
+            if let dose = compound.dose {
+                content.body = "Time for \(compound.name) — \(formatDose(dose, unit: compound.unit))"
+            } else {
+                content.body = "Time for \(compound.name)."
+            }
             content.sound = .default
 
             if compound.frequencyDays == 1 {
@@ -448,11 +443,12 @@ final class OnboardingViewModel: ObservableObject {
     // MARK: Private
 
     private func savePrimaryProtocol(ctx: ModelContext, userID: UUID) {
+        let dose = primaryDoseMg ?? 0
         let proto = SDProtocol(
             userID: userID,
             name: autoProtocolName,
             compoundName: primaryCompound,
-            doseAmountMg: primaryDoseMg,
+            doseAmountMg: dose,
             frequencyDays: primaryFreq.days,
             concentrationMgPerMl: 200,
             isPrimary: true,
@@ -461,24 +457,25 @@ final class OnboardingViewModel: ObservableObject {
         )
         ctx.insert(proto)
 
-        if let lastDate = lastInjectionDates[primaryCompound] {
+        if let lastDate = lastInjectionDates[primaryCompound], dose > 0 {
             let inj = SDInjection(
                 userID: userID,
                 injectedAt: lastDate,
                 compoundName: primaryCompound,
-                doseAmountMg: primaryDoseMg,
-                volumeMl: primaryDoseMg / 200
+                doseAmountMg: dose,
+                volumeMl: dose / 200
             )
             ctx.insert(inj)
         }
     }
 
     private func saveSecondaryProtocol(ctx: ModelContext, userID: UUID, entry: SecondaryCompoundEntry) {
+        let dose = entry.doseMg ?? 0
         let proto = SDProtocol(
             userID: userID,
-            name: generateName(compound: entry.compoundName, doseMg: entry.doseMg, freqDays: entry.frequencyDays),
+            name: generateName(compound: entry.compoundName, doseMg: dose, freqDays: entry.frequencyDays),
             compoundName: entry.compoundName,
-            doseAmountMg: entry.doseMg,
+            doseAmountMg: dose,
             frequencyDays: entry.frequencyDays,
             concentrationMgPerMl: entry.compoundName == "HCG" ? 1000 : 200,
             isPrimary: false,
@@ -486,13 +483,13 @@ final class OnboardingViewModel: ObservableObject {
         )
         ctx.insert(proto)
 
-        if let lastDate = lastInjectionDates[entry.compoundName] {
+        if let lastDate = lastInjectionDates[entry.compoundName], dose > 0 {
             let inj = SDInjection(
                 userID: userID,
                 injectedAt: lastDate,
                 compoundName: entry.compoundName,
-                doseAmountMg: entry.doseMg,
-                volumeMl: entry.doseMg / 200
+                doseAmountMg: dose,
+                volumeMl: dose / 200
             )
             ctx.insert(inj)
         }
@@ -524,7 +521,8 @@ final class OnboardingViewModel: ObservableObject {
         case 14: freqStr = "E14D"
         default: freqStr = "E\(freqDays)D"
         }
-        return "\(abbrev) \(Int(doseMg))mg \(freqStr)"
+        let dosePart = doseMg > 0 ? " \(Int(doseMg))mg" : ""
+        return "\(abbrev)\(dosePart) \(freqStr)"
     }
 }
 
@@ -588,6 +586,7 @@ struct OnboardingView: View {
 private struct OnboardingTrialView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var offerings: Offerings?
+    @State private var trialEligible: [String: Bool] = [:]
     @State private var isPurchasing = false
     @State private var errorMessage: String?
     @State private var selectedPlan: PlanType = .annual
@@ -613,6 +612,25 @@ private struct OnboardingTrialView: View {
 
     private var selectedPackage: Package? {
         selectedPlan == .annual ? annualPackage : monthlyPackage
+    }
+
+    /// True only when the App Store confirmed intro eligibility for the selected product.
+    private var selectedHasTrial: Bool {
+        guard let id = selectedPackage?.storeProduct.productIdentifier else { return false }
+        return trialEligible[id] ?? false
+    }
+
+    /// "SAVE N%" computed from the fetched monthly vs annual store prices.
+    /// Hidden when either product is missing or there is no actual saving.
+    private var annualSavingsBadge: String? {
+        guard let monthly = monthlyPackage?.storeProduct.price,
+              let annual = annualPackage?.storeProduct.price,
+              monthly > 0 else { return nil }
+        let fullYear = monthly * 12
+        guard fullYear > annual else { return nil }
+        let pct = Int((NSDecimalNumber(decimal: (fullYear - annual) / fullYear).doubleValue * 100).rounded())
+        guard pct > 0 else { return nil }
+        return "SAVE \(pct)%"
     }
 
     var body: some View {
@@ -652,10 +670,15 @@ private struct OnboardingTrialView: View {
                             .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundColor(.white)
 
-                        Text("Start your free trial to unlock full insights.")
+                        Text(selectedHasTrial
+                             ? "Start your free trial to unlock full insights."
+                             : "Unlock full insights with Trough Pro.")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
+
+                        DisclaimerBanner(type: .protocolScore)
+                            .padding(.horizontal, 24)
                     }
                     .scaleEffect(scoreAppeared ? 1 : 0.8)
                     .opacity(scoreAppeared ? 1 : 0)
@@ -669,7 +692,7 @@ private struct OnboardingTrialView: View {
                         TrialFeatureCell(icon: "drop.fill",                  text: "Bloodwork")
                         TrialFeatureCell(icon: "chart.line.uptrend.xyaxis",  text: "Full History")
                         TrialFeatureCell(icon: "chart.bar.doc.horizontal",   text: "Weekly Reports")
-                        TrialFeatureCell(icon: "brain.head.profile",         text: "AI Insights")
+                        TrialFeatureCell(icon: "brain.head.profile",         text: "Smart Insights")
                         TrialFeatureCell(icon: "pills.fill",                 text: "GLP-1 & Peptides")
                     }
                     .padding(.horizontal, 24)
@@ -693,7 +716,7 @@ private struct OnboardingTrialView: View {
                             title: "Annual",
                             price: annualPackage?.localizedPriceString ?? "$49.99",
                             period: "per year",
-                            badge: "SAVE 58%"
+                            badge: annualSavingsBadge
                         )
                     }
                     .padding(.horizontal, 24)
@@ -715,7 +738,7 @@ private struct OnboardingTrialView: View {
                                 if isPurchasing {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text("Start 3-Day Free Trial")
+                                    Text(selectedHasTrial ? "Start 3-Day Free Trial" : "Subscribe")
                                         .font(.headline)
                                         .foregroundColor(.white)
                                 }
@@ -741,7 +764,9 @@ private struct OnboardingTrialView: View {
                                 .foregroundColor(.secondary)
                         }
 
-                        Text("3-day free trial, then auto-renews. Cancel anytime.")
+                        Text(selectedHasTrial
+                             ? "3-day free trial, then auto-renews. Cancel anytime."
+                             : "Auto-renews. Cancel anytime.")
                             .font(.caption2)
                             .foregroundColor(.secondary.opacity(0.5))
 
@@ -769,6 +794,8 @@ private struct OnboardingTrialView: View {
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
+            let products = offerings?.current?.availablePackages.map(\.storeProduct) ?? []
+            trialEligible = await RevenueCatService.shared.trialEligibility(for: products)
         }
         .onAppear {
             scoreAppeared = true
@@ -1191,12 +1218,13 @@ private struct OptionCard: View {
 
 private struct ProtocolSetupStep: View {
     @ObservedObject var vm: OnboardingViewModel
+    @State private var showDoseValidation = false
     private let weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
     var body: some View {
         StepContainer(
             title: "Your protocol",
-            subtitle: "We'll use this to track your blood levels and schedule.",
+            subtitle: "Enter the dose and schedule your provider prescribed.",
             content: {
                 VStack(spacing: 20) {
                     // Primary compound
@@ -1214,10 +1242,9 @@ private struct ProtocolSetupStep: View {
                         HStack {
                             Text("Dose")
                             Spacer()
-                            TextField("mg", value: $vm.primaryDoseMg, format: .number)
+                            TextField("Enter your prescribed dose", text: $vm.primaryDoseText)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .frame(width: 80)
                             Text("mg").foregroundColor(.secondary)
                         }
 
@@ -1294,10 +1321,23 @@ private struct ProtocolSetupStep: View {
                             .foregroundColor(AppColors.accent)
                         }
                     }
+
+                    if showDoseValidation {
+                        Text("Enter the dose your provider prescribed to continue.")
+                            .font(.caption)
+                            .foregroundColor(AppColors.accent)
+                    }
+
+                    DisclaimerBanner(type: .standard)
                 }
             },
             primaryLabel: "Next",
             onPrimary: {
+                guard vm.primaryDoseEntered && vm.allSecondaryDosesEntered else {
+                    withAnimation { showDoseValidation = true }
+                    return
+                }
+                showDoseValidation = false
                 vm.lastInjectionDates[vm.primaryCompound] = vm.lastInjectionDates[vm.primaryCompound] ?? .now
                 for entry in vm.secondaryEntries {
                     vm.lastInjectionDates[entry.compoundName] = vm.lastInjectionDates[entry.compoundName] ?? .now
@@ -1329,10 +1369,9 @@ private struct SecondaryCompoundCard: View {
             HStack {
                 Text("Dose")
                 Spacer()
-                TextField("mg", value: $entry.doseMg, format: .number)
+                TextField("Enter your prescribed dose", text: $entry.doseText)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
-                    .frame(width: 80)
                 Text(entry.compoundName == "HCG" ? "IU" : "mg")
                     .foregroundColor(.secondary)
             }
@@ -1530,11 +1569,12 @@ private struct OnboardingFlowLayout: Layout {
 
 private struct CompoundDosesStep: View {
     @ObservedObject var vm: OnboardingViewModel
+    @State private var showDoseValidation = false
 
     var body: some View {
         StepContainer(
             title: "Set your doses",
-            subtitle: "We pre-filled typical doses and schedules — adjust as needed.",
+            subtitle: "Enter the dose and schedule your provider prescribed.",
             content: {
                 VStack(spacing: 14) {
                     ForEach($vm.compoundDoses) { $compound in
@@ -1542,10 +1582,9 @@ private struct CompoundDosesStep: View {
                             HStack {
                                 Text("Dose")
                                 Spacer()
-                                TextField(compound.unit, value: $compound.dose, format: .number)
+                                TextField("Enter your prescribed dose", text: $compound.doseText)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
-                                    .frame(width: 80)
                                 Text(compound.unit)
                                     .foregroundColor(.secondary)
                             }
@@ -1562,14 +1601,29 @@ private struct CompoundDosesStep: View {
                         }
                     }
 
+                    if showDoseValidation {
+                        Text("Enter the dose your provider prescribed to continue.")
+                            .font(.caption)
+                            .foregroundColor(AppColors.accent)
+                    }
+
                     Text("We'll send reminders based on each compound's schedule.")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
+
+                    DisclaimerBanner(type: .standard)
                 }
             },
             primaryLabel: "Next",
-            onPrimary: { vm.advance() },
+            onPrimary: {
+                guard vm.allCompoundDosesEntered else {
+                    withAnimation { showDoseValidation = true }
+                    return
+                }
+                showDoseValidation = false
+                vm.advance()
+            },
             showBack: true,
             onBack: { vm.back() }
         )
@@ -1834,6 +1888,8 @@ private struct FirstCheckinStep: View {
                     .padding()
                     .background(AppColors.card)
                     .cornerRadius(14)
+
+                    DisclaimerBanner(type: .protocolScore)
                 }
             },
             primaryLabel: "Next",

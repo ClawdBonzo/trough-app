@@ -11,7 +11,7 @@ struct PrivacyPolicyView: View {
                     privacySection(
                         icon: "lock.shield.fill",
                         title: "Your Data Never Leaves Your Device",
-                        body: "All your check-ins, injections, bloodwork, and protocol data are stored only on this device. There is no account and no cloud — nothing is ever uploaded to a server."
+                        body: "All your check-ins, injections, bloodwork, and protocol data are stored only on this device. There is no account and no cloud — your health data is never uploaded to a server. The one exception: if you subscribe to Trough Pro, anonymous subscription and receipt data is processed by Apple and RevenueCat to manage your subscription. Your health data is never part of that."
                     )
                     privacySection(
                         icon: "heart.text.square.fill",
@@ -26,7 +26,7 @@ struct PrivacyPolicyView: View {
                     privacySection(
                         icon: "hand.raised.fill",
                         title: "No Analytics, No Tracking",
-                        body: "Trough has no analytics and no tracking. We collect nothing about how you use the app, and your data is never sold, rented, or shared with anyone."
+                        body: "Trough has no analytics and no tracking. We collect nothing about how you use the app, and your data is never sold, rented, or shared with anyone. Subscriptions are validated by Apple and RevenueCat using anonymous receipt data only — no health data, no analytics, no tracking."
                     )
                     privacySection(
                         icon: "trash.fill",

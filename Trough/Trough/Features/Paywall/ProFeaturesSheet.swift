@@ -1,10 +1,12 @@
 import SwiftUI
+import RevenueCat
 
 /// Modal sheet listing what Trough Pro includes. Designed to create the "aha moment"
 /// before asking the user to open the paywall.
 struct ProFeaturesSheet: View {
     @Environment(\.dismiss) private var dismiss
     var onStartTrial: () -> Void
+    @State private var trialAvailable = false
 
     var body: some View {
         NavigationStack {
@@ -21,9 +23,11 @@ struct ProFeaturesSheet: View {
                             Text(NSLocalizedString("pro.title", comment: ""))
                                 .font(.title2.bold())
                                 .foregroundColor(.white)
-                            Text(NSLocalizedString("pro.trialIncluded", comment: ""))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                            if trialAvailable {
+                                Text(NSLocalizedString("pro.trialIncluded", comment: ""))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         .padding(.top, 8)
 
@@ -95,7 +99,7 @@ struct ProFeaturesSheet: View {
                             dismiss()
                             onStartTrial()
                         } label: {
-                            Text(NSLocalizedString("paywall.startTrial", comment: ""))
+                            Text(trialAvailable ? NSLocalizedString("paywall.startTrial", comment: "") : "Subscribe")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -107,6 +111,12 @@ struct ProFeaturesSheet: View {
                     }
                     .padding()
                 }
+            }
+            .task {
+                guard let offering = await RevenueCatService.shared.fetchOfferings()?.current else { return }
+                let products = offering.availablePackages.map(\.storeProduct)
+                let eligibility = await RevenueCatService.shared.trialEligibility(for: products)
+                trialAvailable = eligibility.values.contains(true)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

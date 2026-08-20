@@ -69,7 +69,10 @@ final class DailyCheckinViewModel: ObservableObject {
     private var modelContext: ModelContext?
     private(set) var userID: UUID = UUID()
     private(set) var existingCheckin: SDCheckin? = nil
-    let date: Date = Date.now.startOfDay
+    /// Always evaluated fresh — a stored value captured at VM creation would
+    /// go stale if the app stays resident across midnight, landing a morning
+    /// check-in on yesterday's date.
+    var date: Date { Date.now.startOfDay }
 
     /// Injected by the parent view — used to award XP and update streaks on check-in save.
     weak var gamificationVM: GamificationViewModel?
@@ -88,13 +91,17 @@ final class DailyCheckinViewModel: ObservableObject {
 
     // MARK: Load helpers
 
-    private func loadExisting() {
-        guard let ctx = modelContext else { return }
-        let targetDate = date
+    /// Fetches the real (non-sample) check-in for a given day, if any.
+    private func fetchCheckin(on targetDate: Date) -> SDCheckin? {
+        guard let ctx = modelContext else { return nil }
         let pred = #Predicate<SDCheckin> { $0.date == targetDate && !$0.isSampleData }
         var desc = FetchDescriptor<SDCheckin>(predicate: pred)
         desc.fetchLimit = 1
-        guard let checkin = try? ctx.fetch(desc).first else { return }
+        return try? ctx.fetch(desc).first
+    }
+
+    private func loadExisting() {
+        guard let checkin = fetchCheckin(on: date) else { return }
         existingCheckin = checkin
         energyScore           = checkin.energyScore
         moodScore             = checkin.moodScore
@@ -178,6 +185,13 @@ final class DailyCheckinViewModel: ObservableObject {
     /// Called from BinaryTapsView — saves to SwiftData then navigates to completion.
     func save() {
         guard let ctx = modelContext else { return }
+        // Pin "today" once for the whole save, and re-resolve the existing
+        // check-in in case the app has been resident across midnight since
+        // setup() — otherwise a morning save would overwrite yesterday's entry.
+        let saveDate = date
+        if existingCheckin?.date != saveDate {
+            existingCheckin = fetchCheckin(on: saveDate)
+        }
         // FIXED: convert lbs input to kg for storage if US locale
         let rawWeight = Double(bodyWeightInput)
         let bwKg = rawWeight.map { usesMetricWeight ? $0 : $0 / 2.20462 }
@@ -211,7 +225,7 @@ final class DailyCheckinViewModel: ObservableObject {
         } else {
             let checkin = SDCheckin(
                 userID: userID,
-                date: date,
+                date: saveDate,
                 energyScore: energyScore,
                 moodScore: moodScore,
                 libidoScore: libidoScore,
@@ -241,7 +255,7 @@ final class DailyCheckinViewModel: ObservableObject {
         }
 
         if let kg = bwKg {
-            Task { try? await HealthKitService.shared.writeBodyWeight(kg: kg, date: date) }
+            Task { try? await HealthKitService.shared.writeBodyWeight(kg: kg, date: saveDate) }
         }
 
         if let checkin = savedCheckin {

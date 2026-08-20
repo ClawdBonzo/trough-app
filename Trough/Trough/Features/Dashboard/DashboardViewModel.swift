@@ -555,7 +555,7 @@ final class DashboardViewModel: ObservableObject {
 
             // Fetch recent check-ins — sort ONLY by stored date property
             let recentDescriptor = FetchDescriptor<SDCheckin>(
-                predicate: #Predicate { $0.date >= sevenDaysAgo },
+                predicate: #Predicate { $0.date >= sevenDaysAgo && !$0.isSampleData },
                 sortBy: [SortDescriptor(\.date, order: .reverse)]
             )
             let recentCheckins = try modelContext.fetch(recentDescriptor)
@@ -569,7 +569,7 @@ final class DashboardViewModel: ObservableObject {
             // Compare against previous period (last 30 days before the recent week)
             let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
             let pastDescriptor = FetchDescriptor<SDCheckin>(
-                predicate: #Predicate { $0.date >= thirtyDaysAgo && $0.date < sevenDaysAgo },
+                predicate: #Predicate { $0.date >= thirtyDaysAgo && $0.date < sevenDaysAgo && !$0.isSampleData },
                 sortBy: [SortDescriptor(\.date, order: .reverse)]
             )
             let pastCheckins = try modelContext.fetch(pastDescriptor)

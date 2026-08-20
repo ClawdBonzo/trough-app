@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Tenemos trabajo por hacer — y de eso se trata.";
 
 "projected.title" = "Tu panorama de 7 días";
-"projected.subtitle" = "Con seguimiento constante, los usuarios ven mejoras reales en la primera semana.";
+"projected.subtitle" = "Un seguimiento constante te ayuda a ti y a tu médico a ver qué está cambiando realmente.";
 "projected.today" = "Hoy";
 "projected.day7" = "Día 7";
 "projected.now" = "Ahora";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Nombre del compuesto";
 "onboarding.selected" = "%d seleccionados";
 "onboarding.setDoses" = "Configura tus dosis";
-"onboarding.dosesSubtitle" = "Prellenamos dosis y horarios típicos — ajusta según necesites.";
+"onboarding.dosesSubtitle" = "Introduce la dosis y el horario que te recetó tu médico.";
 "onboarding.schedule" = "Horario";
 "onboarding.dosesReminder" = "Te enviaremos recordatorios según el horario de cada compuesto.";
 

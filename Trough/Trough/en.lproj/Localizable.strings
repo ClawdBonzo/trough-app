@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "We've got work to do — and that's the point.";
 
 "projected.title" = "Your 7-Day Outlook";
-"projected.subtitle" = "With consistent tracking, users see real improvement in the first week.";
+"projected.subtitle" = "Consistent tracking helps you and your provider see what's really changing.";
 "projected.today" = "Today";
 "projected.day7" = "Day 7";
 "projected.now" = "Now";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Compound name";
 "onboarding.selected" = "%d selected";
 "onboarding.setDoses" = "Set your doses";
-"onboarding.dosesSubtitle" = "We pre-filled typical doses and schedules — adjust as needed.";
+"onboarding.dosesSubtitle" = "Enter the dose and schedule your provider prescribed.";
 "onboarding.schedule" = "Schedule";
 "onboarding.dosesReminder" = "We'll send reminders based on each compound's schedule.";
 

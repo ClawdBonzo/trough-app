@@ -171,7 +171,7 @@ struct DashboardView: View {
             .fullScreenCover(isPresented: $showTrialEndedSheet) {
                 TrialEndedView(
                     streak: vm.streak,
-                    totalCheckins: vm.streak,  // approximate with streak length
+                    totalCheckins: vm.totalCheckins,
                     latestScore: vm.protocolScore > 0 ? Int(vm.protocolScore) : nil,
                     onSubscribe: {
                         showTrialEndedSheet = false

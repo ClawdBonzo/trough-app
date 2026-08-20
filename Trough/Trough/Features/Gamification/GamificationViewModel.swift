@@ -159,7 +159,7 @@ final class GamificationViewModel: ObservableObject {
 
         if lastDay == today {
             return // Already counted today
-        } else if let lastDay = lastDay, lastDay.addingTimeInterval(86400) == today {
+        } else if let lastDay = lastDay, Calendar.current.date(byAdding: .day, value: 1, to: lastDay) == today {
             // Streak continues
             streak.currentCount += 1
             updateFlameLevel(streak)

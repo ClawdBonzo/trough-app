@@ -8,6 +8,7 @@ struct InjectionsView: View {
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @EnvironmentObject private var gamificationVM: GamificationViewModel
     @StateObject private var vm = InjectionsViewModel()
+    @State private var injectionPendingDelete: SDInjection?
 
     var body: some View {
         NavigationStack {
@@ -52,6 +53,22 @@ struct InjectionsView: View {
             .sheet(isPresented: $vm.showingLogSheet, onDismiss: { vm.load() }) {
                 LogInjectionSheet(vm: vm)
             }
+            .confirmationDialog(
+                "Delete this injection?",
+                isPresented: Binding(
+                    get: { injectionPendingDelete != nil },
+                    set: { if !$0 { injectionPendingDelete = nil } }
+                ),
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    if let inj = injectionPendingDelete { vm.delete(inj) }
+                    injectionPendingDelete = nil
+                }
+                Button("Cancel", role: .cancel) { injectionPendingDelete = nil }
+            } message: {
+                Text("This can't be undone.")
+            }
             .onAppear {
                 let uid = UUID(uuidString: userIDString) ?? UUID()
                 vm.setup(context: modelContext, userID: uid)
@@ -85,8 +102,10 @@ struct InjectionsView: View {
                     ForEach(items, id: \.id) { inj in
                         InjectionRow(injection: inj, color: vm.color(for: inj.compoundName))
                             .onTapGesture { vm.prepareEditForm(injection: inj) }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) { vm.delete(inj) } label: {
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    injectionPendingDelete = inj
+                                } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
                             }
@@ -299,6 +318,7 @@ private struct DayCell: View {
 struct LogInjectionSheet: View {
     @ObservedObject var vm: InjectionsViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showDeleteConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -310,9 +330,22 @@ struct LogInjectionSheet: View {
                         dateSection
                         siteSection
                         notesSection
+                        if vm.editingInjection != nil {
+                            deleteButton
+                        }
                     }
                     .padding(16)
                 }
+            }
+            .confirmationDialog(
+                "Delete this injection?",
+                isPresented: $showDeleteConfirm,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) { vm.deleteEditingInjection() }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This can't be undone.")
             }
             .navigationTitle(vm.editingInjection != nil ? "Edit Injection" : "Log Injection")
             .navigationBarTitleDisplayMode(.inline)
@@ -392,6 +425,20 @@ struct LogInjectionSheet: View {
         SectionCard(title: "Notes (optional)") {
             TextField("Any notes about this injection…", text: $vm.formNotes, axis: .vertical)
                 .lineLimit(3...6)
+        }
+    }
+
+    private var deleteButton: some View {
+        Button(role: .destructive) {
+            showDeleteConfirm = true
+        } label: {
+            Label("Delete Injection", systemImage: "trash")
+                .font(.subheadline.bold())
+                .foregroundColor(AppColors.accent)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(AppColors.card)
+                .cornerRadius(12)
         }
     }
 }

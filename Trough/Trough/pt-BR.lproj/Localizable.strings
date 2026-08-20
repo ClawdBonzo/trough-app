@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Temos trabalho pela frente — e esse e o ponto.";
 
 "projected.title" = "Sua Perspectiva de 7 Dias";
-"projected.subtitle" = "Com acompanhamento consistente, usuarios veem melhora real na primeira semana.";
+"projected.subtitle" = "Um acompanhamento consistente ajuda você e seu médico a ver o que está realmente mudando.";
 "projected.today" = "Hoje";
 "projected.day7" = "Dia 7";
 "projected.now" = "Agora";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Nome do composto";
 "onboarding.selected" = "%d selecionado(s)";
 "onboarding.setDoses" = "Defina suas doses";
-"onboarding.dosesSubtitle" = "Preenchemos doses e cronogramas tipicos — ajuste conforme necessario.";
+"onboarding.dosesSubtitle" = "Insira a dose e o cronograma que seu médico prescreveu.";
 "onboarding.schedule" = "Cronograma";
 "onboarding.dosesReminder" = "Vamos enviar lembretes com base no cronograma de cada composto.";
 

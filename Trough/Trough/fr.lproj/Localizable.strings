@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Du travail nous attend — et c'est tout l'intérêt.";
 
 "projected.title" = "Vos perspectives sur 7 jours";
-"projected.subtitle" = "Avec un suivi régulier, les utilisateurs constatent une vraie amélioration dès la première semaine.";
+"projected.subtitle" = "Un suivi régulier vous aide, vous et votre médecin, à voir ce qui change vraiment.";
 "projected.today" = "Aujourd'hui";
 "projected.day7" = "Jour 7";
 "projected.now" = "Maintenant";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Nom du produit";
 "onboarding.selected" = "%d sélectionné(s)";
 "onboarding.setDoses" = "Définissez vos doses";
-"onboarding.dosesSubtitle" = "Nous avons prérempli des doses et plannings types — ajustez selon vos besoins.";
+"onboarding.dosesSubtitle" = "Saisissez la dose et le planning prescrits par votre médecin.";
 "onboarding.schedule" = "Planning";
 "onboarding.dosesReminder" = "Nous enverrons des rappels selon le planning de chaque produit.";
 

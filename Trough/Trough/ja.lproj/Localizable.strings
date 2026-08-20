@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "やるべきことがあります — それこそが目的です。";
 
 "projected.title" = "7日間の見通し";
-"projected.subtitle" = "継続的に記録すると、最初の1週間で実際の改善が見られます。";
+"projected.subtitle" = "継続的な記録は、実際に何が変化しているかをあなたと主治医が把握するのに役立ちます。";
 "projected.today" = "今日";
 "projected.day7" = "7日目";
 "projected.now" = "現在";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "化合物名";
 "onboarding.selected" = "%d件選択中";
 "onboarding.setDoses" = "用量を設定";
-"onboarding.dosesSubtitle" = "一般的な用量とスケジュールを事前入力しました — 必要に応じて調整してください。";
+"onboarding.dosesSubtitle" = "処方された用量とスケジュールを入力してください。";
 "onboarding.schedule" = "スケジュール";
 "onboarding.dosesReminder" = "各化合物のスケジュールに基づいてリマインダーを送信します。";
 

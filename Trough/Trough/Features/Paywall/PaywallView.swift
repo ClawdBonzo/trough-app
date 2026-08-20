@@ -38,16 +38,7 @@ struct PaywallView: View {
             }
         }
 
-        var hasTrial: Bool { true }
-
         var isBestValue: Bool { self == .monthly }
-
-        var savingsTag: String? {
-            switch self {
-            case .yearly:   return "Save 58%"
-            default:        return nil
-            }
-        }
 
         // Gold badge color for best value, teal for savings
         var badgeColor: Color {
@@ -56,6 +47,7 @@ struct PaywallView: View {
     }
 
     @State private var offerings: Offerings? = nil
+    @State private var trialEligible: [String: Bool] = [:]
     @State private var selected: Plan = .monthly
     @State private var isPurchasing = false
     @State private var isRestoring = false
@@ -73,14 +65,33 @@ struct PaywallView: View {
         package(for: plan).map { $0.storeProduct.localizedPriceString } ?? plan.fallbackPrice
     }
 
+    /// True only when the App Store confirmed intro eligibility for this plan's product.
+    private func hasTrial(for plan: Plan) -> Bool {
+        trialEligible[plan.productID] ?? false
+    }
+
+    /// "Save N%" computed from the fetched monthly vs annual store prices.
+    /// Hidden when either product is missing or there is no actual saving.
+    private var yearlySavingsTag: String? {
+        guard let monthly = package(for: .monthly)?.storeProduct.price,
+              let yearly = package(for: .yearly)?.storeProduct.price,
+              monthly > 0 else { return nil }
+        let fullYear = monthly * 12
+        guard fullYear > yearly else { return nil }
+        let pct = Int((NSDecimalNumber(decimal: (fullYear - yearly) / fullYear).doubleValue * 100).rounded())
+        guard pct > 0 else { return nil }
+        return "Save \(pct)%"
+    }
+
     private var ctaLabel: String {
-        "Start 3-Day Free Trial"
+        hasTrial(for: selected) ? "Start 3-Day Free Trial" : "Subscribe"
     }
 
     private var ctaSubLabel: String? {
+        let prefix = hasTrial(for: selected) ? "then " : ""
         switch selected {
-        case .monthly: return "then \(price(for: .monthly))/mo · auto-renews · cancel anytime"
-        case .yearly:  return "then \(price(for: .yearly))/yr · auto-renews · cancel anytime"
+        case .monthly: return "\(prefix)\(price(for: .monthly))/mo · auto-renews · cancel anytime"
+        case .yearly:  return "\(prefix)\(price(for: .yearly))/yr · auto-renews · cancel anytime"
         }
     }
 
@@ -149,6 +160,8 @@ struct PaywallView: View {
         }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
+            let products = offerings?.current?.availablePackages.map(\.storeProduct) ?? []
+            trialEligible = await RevenueCatService.shared.trialEligibility(for: products)
         }
         .onChange(of: purchaseSuccess) { _, v in if v { dismiss() } }
         .onChange(of: restoreSuccess) { _, v in if v { dismiss() } }
@@ -216,6 +229,8 @@ struct PaywallView: View {
                 PlanCard(
                     plan: plan,
                     price: price(for: plan),
+                    hasTrial: hasTrial(for: plan),
+                    savingsTag: plan == .yearly ? yearlySavingsTag : nil,
                     isSelected: selected == plan
                 ) {
                     withAnimation(.easeInOut(duration: 0.18)) { selected = plan }
@@ -340,6 +355,8 @@ struct PaywallView: View {
 private struct PlanCard: View {
     let plan: PaywallView.Plan
     let price: String
+    let hasTrial: Bool
+    let savingsTag: String?
     let isSelected: Bool
     let onTap: () -> Void
 
@@ -396,13 +413,13 @@ private struct PlanCard: View {
 
                     // Trial / savings tags
                     VStack(alignment: .leading, spacing: 4) {
-                        if plan.hasTrial {
+                        if hasTrial {
                             trialBadge
                         }
-                        if let savings = plan.savingsTag {
+                        if let savings = savingsTag {
                             savingsBadge(savings)
                         }
-                        if !plan.hasTrial && plan.savingsTag == nil {
+                        if !hasTrial && savingsTag == nil {
                             // spacer to keep card height consistent
                             Color.clear.frame(height: 16)
                         }

@@ -81,7 +81,7 @@
 "scoreReveal.encourage.veryLow" = "Vi har jobb att göra — och det är poängen.";
 
 "projected.title" = "Din 7-dagarsprognos";
-"projected.subtitle" = "Med konsekvent spårning ser användare verklig förbättring redan första veckan.";
+"projected.subtitle" = "Konsekvent spårning hjälper dig och din läkare att se vad som faktiskt förändras.";
 "projected.today" = "Idag";
 "projected.day7" = "Dag 7";
 "projected.now" = "Nu";
@@ -128,7 +128,7 @@
 "onboarding.compoundName" = "Preparatnamn";
 "onboarding.selected" = "%d valda";
 "onboarding.setDoses" = "Ställ in dina doser";
-"onboarding.dosesSubtitle" = "Vi har förifyllt typiska doser och scheman — justera efter behov.";
+"onboarding.dosesSubtitle" = "Ange den dos och det schema som din läkare har ordinerat.";
 "onboarding.schedule" = "Schema";
 "onboarding.dosesReminder" = "Vi skickar påminnelser baserat på varje preparats schema.";
 

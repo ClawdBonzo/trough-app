@@ -54,6 +54,24 @@ final class RevenueCatService {
         }
     }
 
+    // MARK: Trial / intro offer eligibility
+
+    /// Returns per-product trial/intro eligibility. A product maps to `true` only when
+    /// the App Store confirms the user is eligible AND the product actually carries an
+    /// introductory offer. Missing products and errors default to `false` (no trial copy).
+    func trialEligibility(for products: [StoreProduct]) async -> [String: Bool] {
+        guard RevenueCatService.isConfigured, !products.isEmpty else { return [:] }
+        let ids = products.map(\.productIdentifier)
+        let eligibility = await Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: ids)
+        var result: [String: Bool] = [:]
+        for product in products {
+            let status = eligibility[product.productIdentifier]?.status
+            result[product.productIdentifier] =
+                (status == .eligible) && product.introductoryDiscount != nil
+        }
+        return result
+    }
+
     // MARK: Purchase
 
     /// Returns updated CustomerInfo. Throws on error; callers should check `.userCancelled`.

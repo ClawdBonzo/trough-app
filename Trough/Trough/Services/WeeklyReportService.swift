@@ -174,9 +174,10 @@ enum WeeklyReportService {
                 var bwDesc = FetchDescriptor<SDBloodwork>(sortBy: [SortDescriptor(\.drawnAt, order: .reverse)])
                 bwDesc.fetchLimit = 25
                 let recentBW = (try? context.fetch(bwDesc)) ?? []
-                let fshValues = recentBW.flatMap(\.markers).filter { $0.markerName == "FSH" }
-                    .sorted { $0.bloodworkID < $1.bloodworkID }
-                if let latestFSH = fshValues.last {
+                let latestFSH = recentBW.lazy
+                    .compactMap { bw in bw.markers.first { $0.markerName == "FSH" } }
+                    .first
+                if let latestFSH {
                     parts.append("FSH \(String(format: "%.1f", latestFSH.value)) IU/L")
                 }
                 if let result = InjectionCycleService.fertilityRecoveryEstimate(
