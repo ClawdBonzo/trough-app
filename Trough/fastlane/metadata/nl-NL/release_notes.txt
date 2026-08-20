@@ -1,5 +1,6 @@
-• Nieuwe widget op het beginscherm: zie je streak, levelvoortgang en volgende injectie in één oogopslag
-• Nieuwe Live Activity: een injectie-aftelling op je toegangsscherm en in het Dynamic Island
-• Sneller dashboard met vloeiendere grafieken en snellere inzichten
-• Verbeterde level- en streakvoortgang op je beginscherm
-• Bugfixes en stabiliteitsverbeteringen
+• Exporteer je gegevens: CSV-bestanden van check-ins en bloedwaarden, plus een pdf-rapport voor je arts (Pro)
+• Nieuw: herinneringen op injectiedag — een seintje precies wanneer een dosis gepland staat
+• Quests en badges volgen nu je echte voortgang, met eerlijkere XP en streaks
+• Tik op de widget om direct naar check-in of injecties te gaan; hij ververst nu om middernacht
+• De app spreekt nu je taal op alle hoofdschermen
+• Veel verbeteringen: betrouwbaardere CSV-import, streaks die de zomertijd overleven, verwijderbare injectielogs en meer

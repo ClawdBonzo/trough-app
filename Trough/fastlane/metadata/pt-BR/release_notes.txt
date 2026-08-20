@@ -1,5 +1,6 @@
-• Novo widget na tela de início: veja sua sequência, seu progresso de nível e sua próxima aplicação num relance
-• Nova Atividade ao Vivo: contagem regressiva da aplicação na Tela Bloqueada e na Ilha Dinâmica
-• Painel mais rápido, com gráficos mais fluidos e insights mais ágeis
-• Progresso de nível e sequência aprimorado na tela inicial
-• Correções de bugs e melhorias de estabilidade
+• Exporte seus dados: arquivos CSV de check-ins e exames de sangue, além de um relatório em PDF para o médico (Pro)
+• Novos lembretes no dia da injeção — um aviso exatamente quando a dose está prevista
+• Missões e emblemas agora acompanham seu progresso real, com XP e sequências mais justas
+• Toque no widget para ir direto ao check-in ou às injeções; ele agora atualiza à meia-noite
+• O app agora fala seu idioma em todas as telas principais
+• Muitas correções: importação de CSV mais confiável, sequências que sobrevivem ao horário de verão, registros de injeção excluíveis e mais

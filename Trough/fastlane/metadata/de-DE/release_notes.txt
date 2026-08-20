@@ -1,5 +1,6 @@
-• Neues Home-Bildschirm-Widget: Streak, Level-Fortschritt und nächste Injektion auf einen Blick
-• Neue Live-Aktivität: Injektions-Countdown auf dem Sperrbildschirm und in der Dynamic Island
-• Schnelleres Dashboard mit flüssigeren Diagrammen und schnelleren Insights
-• Verbesserte Level- und Streak-Anzeige direkt auf der Startseite
-• Fehlerbehebungen und Stabilitätsverbesserungen
+• Exportiere deine Daten: Check-in- und Blutwert-CSVs sowie ein PDF-Bericht für den Arztbesuch (Pro)
+• Neu: Erinnerungen am Injektionstag — ein Hinweis genau dann, wenn eine Dosis fällig ist
+• Quests und Abzeichen erfassen jetzt deinen echten Fortschritt, mit faireren XP und Streaks
+• Tippe aufs Widget, um direkt zum Check-in oder zu den Injektionen zu springen; es aktualisiert sich jetzt um Mitternacht
+• Die App spricht jetzt auf allen Hauptbildschirmen deine Sprache
+• Viele Fehlerbehebungen: zuverlässigerer CSV-Import, Streaks überstehen die Zeitumstellung, Injektionen lassen sich löschen u. v. m.

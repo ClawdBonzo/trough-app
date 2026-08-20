@@ -17,13 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.3</string>
-	<key>CFBundleVersion</key>
-	<string>66</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>NSSupportsLiveActivities</key>
-	<true/>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -35,6 +29,10 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -45,6 +43,8 @@
 	<string>Trough may log body weight entries you record during daily check-ins back to Apple Health so your data stays consistent across apps.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Trough reads photos from your library to import lab result images.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>REVENUECAT_API_KEY</key>
 	<string>$(REVENUECAT_API_KEY)</string>
 	<key>REVENUECAT_TEST_KEY</key>

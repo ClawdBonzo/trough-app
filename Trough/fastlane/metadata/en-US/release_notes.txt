@@ -1,5 +1,6 @@
-• New home-screen widget: see your check-in streak, level progress, and next injection at a glance
-• New Live Activity: an injection countdown on your Lock Screen and Dynamic Island
-• Faster dashboard with smoother charts and quicker insights
-• Polished level & streak progress on your home tab
-• Bug fixes and stability improvements
+• Export your data: check-in and bloodwork CSV files, plus a doctor-visit PDF report (Pro)
+• New injection-day reminders — get a nudge on the day a dose is due
+• Quests and badges now track your real progress, with fairer XP and streaks
+• Tap the widget to jump straight to check-in or injections; it now refreshes at midnight
+• The app now speaks your language on every main screen
+• Lots of fixes: more reliable CSV import, streaks that survive daylight saving time, deletable injection logs, and more

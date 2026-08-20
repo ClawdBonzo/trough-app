@@ -1,5 +1,6 @@
-• Ny widget på hemskärmen: se din streak, dina nivåframsteg och din nästa injektion med en blick
-• Ny Live-aktivitet: en nedräkning till injektionen på låsskärmen och i Dynamic Island
-• Snabbare översikt med mjukare diagram och snabbare insikter
-• Förbättrad nivå- och streakvisning direkt på hemfliken
-• Buggfixar och stabilitetsförbättringar
+• Exportera dina data: CSV-filer för check-ins och blodprov, plus en PDF-rapport till läkarbesöket (Pro)
+• Nytt: påminnelser på injektionsdagen — en notis precis när en dos ska tas
+• Uppdrag och märken följer nu dina verkliga framsteg, med rättvisare XP och streaks
+• Tryck på widgeten för att gå direkt till check-in eller injektioner; den uppdateras nu vid midnatt
+• Appen talar nu ditt språk på alla huvudskärmar
+• Många fixar: pålitligare CSV-import, streaks som klarar sommartid, raderbara injektionsloggar och mer

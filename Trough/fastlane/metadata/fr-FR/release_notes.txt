@@ -1,5 +1,6 @@
-• Nouveau widget sur l'écran d'accueil : votre série, votre progression de niveau et votre prochaine injection en un coup d'œil
-• Nouvelle activité en direct : compte à rebours d'injection sur l'écran verrouillé et la Dynamic Island
-• Tableau de bord plus rapide, graphiques plus fluides et analyses accélérées
-• Progression de niveau et de série améliorée sur l'accueil
-• Corrections de bugs et améliorations de stabilité
+• Exportez vos données : fichiers CSV des check-ins et bilans sanguins, plus un rapport PDF pour votre médecin (Pro)
+• Nouveaux rappels le jour d'injection — une notification pile quand une dose est due
+• Les quêtes et badges suivent désormais votre progression réelle, avec des XP et des séries plus justes
+• Touchez le widget pour ouvrir directement le check-in ou les injections ; il se met à jour à minuit
+• L'app parle désormais votre langue sur tous les écrans principaux
+• De nombreux correctifs : import CSV plus fiable, séries insensibles au changement d'heure, injections supprimables, et plus

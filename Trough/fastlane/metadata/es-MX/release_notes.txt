@@ -1,5 +1,6 @@
-• Nuevo widget en la pantalla de inicio: consulta tu racha, tu progreso de nivel y tu próxima inyección de un vistazo
-• Nueva Live Activity: cuenta regresiva para la inyección en la pantalla de bloqueo y la Isla Dinámica
-• Panel más rápido, con gráficas más fluidas e insights más ágiles
-• Progreso de nivel y racha mejorado en la pantalla de inicio
-• Corrección de errores y mejoras de estabilidad
+• Exporta tus datos: archivos CSV de check-ins y análisis de sangre, más un informe PDF para tu médico (Pro)
+• Nuevos recordatorios del día de inyección: recibe un aviso justo cuando toca una dosis
+• Las misiones y las insignias ahora siguen tu progreso real, con XP y rachas más justas
+• Toca el widget para ir directo al check-in o a las inyecciones; ahora se actualiza a medianoche
+• La app ahora habla tu idioma en todas las pantallas principales
+• Muchas correcciones: importación CSV más fiable, rachas que sobreviven al cambio de hora, registros de inyección eliminables y más
