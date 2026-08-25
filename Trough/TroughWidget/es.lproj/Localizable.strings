@@ -1,0 +1,21 @@
+/* TroughWidget — Spanish (es) */
+
+/* Widget gallery */
+"widget.displayName" = "Racha y nivel";
+"widget.description" = "Tu racha de check-ins, tu progreso de nivel y la próxima inyección.";
+
+/* Streak widget */
+"widget.dayStreak" = "días de racha";
+"widget.dayCheckInStreak" = "días de racha de check-ins";
+"widget.checkInToday" = "Haz tu check-in hoy";
+"widget.level" = "Nivel %d";
+"widget.levelLine" = "Nv. %d · %@";
+"widget.xpToNext" = "Faltan %d XP";
+"widget.tapToCheckIn" = "Toca para el check-in →";
+"widget.injectionDueToday" = "Inyección hoy";
+"widget.injectionInOneDay" = "Inyección en 1 día";
+"widget.injectionInDays" = "Inyección en %d días";
+
+/* Live Activity */
+"widget.untilNext" = "para la próxima";
+"widget.injection" = "Inyección";

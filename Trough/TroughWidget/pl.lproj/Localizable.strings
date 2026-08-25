@@ -1,0 +1,21 @@
+/* TroughWidget — Polish (pl) */
+
+/* Widget gallery */
+"widget.displayName" = "Seria i poziom";
+"widget.description" = "Twoja seria check-inów, postęp poziomu i następny zastrzyk.";
+
+/* Streak widget */
+"widget.dayStreak" = "dni z rzędu";
+"widget.dayCheckInStreak" = "dni check-inów z rzędu";
+"widget.checkInToday" = "Zrób dziś check-in";
+"widget.level" = "Poziom %d";
+"widget.levelLine" = "Poz. %d · %@";
+"widget.xpToNext" = "Jeszcze %d XP";
+"widget.tapToCheckIn" = "Stuknij, aby zrobić check-in →";
+"widget.injectionDueToday" = "Zastrzyk dzisiaj";
+"widget.injectionInOneDay" = "Zastrzyk za 1 dzień";
+"widget.injectionInDays" = "Zastrzyk za %d dni";
+
+/* Live Activity */
+"widget.untilNext" = "do następnego";
+"widget.injection" = "Zastrzyk";

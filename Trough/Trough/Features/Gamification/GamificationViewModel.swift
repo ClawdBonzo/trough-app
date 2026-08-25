@@ -181,6 +181,12 @@ final class GamificationViewModel: ObservableObject {
             completeQuest(QuestService.weeklyStreakQuestID())
         }
 
+        // Review prompt: check-in streak milestones (each trigger id fires at
+        // most once per install; ReviewPromptService owns all throttling).
+        if type == "checkin", [3, 7, 14, 30].contains(streak.currentCount) {
+            ReviewPromptService.shared.requestIfAppropriate(trigger: "streak\(streak.currentCount)")
+        }
+
         loadStreakState()
         checkBadgeUnlocks()
     }

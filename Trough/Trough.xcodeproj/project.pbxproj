@@ -48,6 +48,7 @@
 		BB3AEE2599124499B5CA4165 /* BloodworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */; };
 		BCLV0002 /* BadgeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCLV0001 /* BadgeCollectionView.swift */; };
 		BSVC0002 /* BadgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BSVC0001 /* BadgeService.swift */; };
+		RPSV0002 /* ReviewPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = RPSV0001 /* ReviewPromptService.swift */; };
 		BW001122334455667788AA01 /* BloodworkEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA02 /* BloodworkEntryView.swift */; };
 		BW001122334455667788AA03 /* BloodworkTrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BW001122334455667788AA04 /* BloodworkTrendsView.swift */; };
 		C4BC621630004B6BB55EFB30 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D5A6C0FAE14AC0335B81128 /* Foundation.framework */; };
@@ -77,6 +78,7 @@
 		PRFT001122334455667788B1 /* ProFeaturesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = PRFT001122334455667788B2 /* ProFeaturesSheet.swift */; };
 		PRIV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */; };
 		WPRV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = WPRV0011223344556677889900 /* PrivacyInfo.xcprivacy */; };
+		WL10N001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = WL10N002 /* Localizable.strings */; };
 		QLST0002 /* QuestListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = QLST0001 /* QuestListView.swift */; };
 		QSVC0002 /* QuestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = QSVC0001 /* QuestService.swift */; };
 		RC00112233445566778899CC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = RC00112233445566778899BB /* RevenueCat */; };
@@ -154,6 +156,7 @@
 		BB11CC22DD440033BB11CC22 /* DisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerBanner.swift; sourceTree = "<group>"; };
 		BCLV0001 /* BadgeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCollectionView.swift; sourceTree = "<group>"; };
 		BSVC0001 /* BadgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeService.swift; sourceTree = "<group>"; };
+		RPSV0001 /* ReviewPromptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPromptService.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA02 /* BloodworkEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkEntryView.swift; sourceTree = "<group>"; };
 		BW001122334455667788AA04 /* BloodworkTrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkTrendsView.swift; sourceTree = "<group>"; };
 		CAA373401C1E67DA5D538FBC /* TroughStreakWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TroughStreakWidget.swift; sourceTree = "<group>"; };
@@ -188,6 +191,19 @@
 		L10N012 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		L10N013 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		L10N014 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		L10N015 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		L10N016 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N004 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N005 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N006 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N007 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N008 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N009 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N010 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		WL10N011 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N012 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		WL10N013 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		LUVC0001 /* LevelUpCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpCelebrationView.swift; sourceTree = "<group>"; };
 		PL001AFILEREF0000000000 /* PeptideLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideLogView.swift; sourceTree = "<group>"; };
 		PL004 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
@@ -259,6 +275,7 @@
 				7E1A9C4B2D8F4E6A9B3C5D01 /* ExportService.swift */,
 				QSVC0001 /* QuestService.swift */,
 				BSVC0001 /* BadgeService.swift */,
+				RPSV0001 /* ReviewPromptService.swift */,
 				8A50C939D559912F246C0817 /* WidgetBridge.swift */,
 				1E9B39D5A6C4328CA98B8AF8 /* LiveActivityService.swift */,
 			);
@@ -445,6 +462,7 @@
 				04F1EB29D3651A04823A2272 /* Info.plist */,
 				WPRV0011223344556677889900 /* PrivacyInfo.xcprivacy */,
 				CF50E6A0F79CE71E2A9D0341 /* TroughWidget.entitlements */,
+				WL10N002 /* Localizable.strings */,
 			);
 			name = TroughWidget;
 			path = TroughWidget;
@@ -598,6 +616,8 @@
 				sv,
 				ja,
 				ko,
+				it,
+				pl,
 				Base,
 			);
 			mainGroup = 2D6C384FF21A40698B048A4C;
@@ -631,6 +651,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				WPRV0011223344556677889901 /* PrivacyInfo.xcprivacy in Resources */,
+				WL10N001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,6 +733,7 @@
 				BCLV0002 /* BadgeCollectionView.swift in Sources */,
 				QSVC0002 /* QuestService.swift in Sources */,
 				BSVC0002 /* BadgeService.swift in Sources */,
+				RPSV0002 /* ReviewPromptService.swift in Sources */,
 				5C69331B249D8D106F95A842 /* WidgetSharedData.swift in Sources */,
 				B5C1243E21948B32084E8679 /* WidgetBridge.swift in Sources */,
 				99935FF5AF001BC4579B6DCE /* LiveActivityService.swift in Sources */,
@@ -756,6 +778,26 @@
 				L10N012 /* sv */,
 				L10N013 /* ja */,
 				L10N014 /* ko */,
+				L10N015 /* it */,
+				L10N016 /* pl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		WL10N002 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				WL10N003 /* en */,
+				WL10N004 /* de */,
+				WL10N005 /* es */,
+				WL10N006 /* fr */,
+				WL10N007 /* ja */,
+				WL10N008 /* ko */,
+				WL10N009 /* nl */,
+				WL10N010 /* pt-BR */,
+				WL10N011 /* sv */,
+				WL10N012 /* it */,
+				WL10N013 /* pl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -792,7 +834,7 @@
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -802,7 +844,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "app.trough.ios AppStore";
@@ -818,10 +860,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trough.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.9;
@@ -837,7 +879,7 @@
 				CODE_SIGN_ENTITLEMENTS = TroughWidget/TroughWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = TroughWidget/Info.plist;
@@ -847,7 +889,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "app.trough.ios.widget AppStore";
@@ -866,7 +908,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = TroughWidget/TroughWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				DEVELOPMENT_TEAM = 3N9RY9EG8V;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = TroughWidget/Info.plist;
@@ -876,7 +918,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -894,7 +936,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Trough/Trough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Trough/Info.plist;
@@ -903,7 +945,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.trough.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -944,10 +986,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 68;
+				CURRENT_PROJECT_VERSION = 69;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trough.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.9;

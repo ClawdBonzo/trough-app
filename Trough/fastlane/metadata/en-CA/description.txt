@@ -1,11 +1,12 @@
-Know your Protocol Score in 7 days.
+Track TRT injections, testosterone levels, bloodwork, and peptides — all in one private app.
 
-Trough is the private, offline-first TRT and hormone tracking app built for men on testosterone replacement therapy.
+Trough is the offline-first tracker for men on testosterone replacement therapy and hormone therapy. Log every shot, follow your estimated levels between doses, and know your Protocol Score in 7 days.
 
 TRACK YOUR PROTOCOL
 • Log injections with dose, site rotation, and compound
 • Full support for Testosterone Cypionate, Enanthate, Propionate, Undecanoate, and multi-ester stacking
 • Track GLP-1s (Semaglutide, Tirzepatide), peptides, and ancillaries (Anastrozole, hCG, and more)
+• Injection-day reminders so you never miss a dose
 
 DAILY WELLNESS CHECK-IN
 • Rate energy, mood, libido, sleep quality, and mental clarity in 30 seconds
@@ -17,12 +18,16 @@ PK CURVES (Pro)
 • Estimated peak, trough, and current levels with confidence bands
 
 BLOODWORK TRACKING (Pro)
-• Log lab results with custom reference ranges
+• Log lab results — total and free testosterone, estradiol (E2), and more — with custom reference ranges
 • Visual trends with color-coded bands
 
 PEPTIDES & ADJUNCTS (Pro)
 • Track peptides, GLP-1 agonists, and ancillary compounds
 • Correlate them with your wellness metrics and bloodwork
+
+EXPORT & SHARE (Pro)
+• Export check-in and bloodwork data as CSV
+• Generate a doctor-visit PDF report to bring to your next appointment
 
 PRIVATE BY DESIGN
 • 100% on-device. No account, no cloud, no tracking.

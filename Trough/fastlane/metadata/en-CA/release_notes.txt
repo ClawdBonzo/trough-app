@@ -1,6 +1,4 @@
-• Export your data: check-in and bloodwork CSV files, plus a doctor-visit PDF report (Pro)
-• New injection-day reminders — get a nudge on the day a dose is due
-• Quests and badges now track your real progress, with fairer XP and streaks
-• Tap the widget to jump straight to check-in or injections; it now refreshes at midnight
-• The app now speaks your language on every main screen
-• Lots of fixes: more reliable CSV import, streaks that survive daylight saving time, deletable injection logs, and more
+• Trough now speaks Italian and Polish
+• You can now rate Trough right from Settings
+• Home-screen widget now in your language
+• Refinements and bug fixes throughout

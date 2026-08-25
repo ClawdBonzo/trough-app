@@ -459,6 +459,7 @@
 "settings.deleteAccount.confirm" = "모두 삭제";
 "settings.deleting" = "삭제 중...";
 "settings.recommend" = "친구에게 Trough 추천하기";
+"settings.rateApp" = "Trough 평가하기";
 "settings.shareSubject" = "Trough를 확인해 보세요";
 "settings.shareBody" = "Trough로 TRT 프로토콜을 추적하고 있는데 정말 잘 만들어졌어요.";
 "settings.privacyPolicy" = "개인정보 및 데이터 정책";

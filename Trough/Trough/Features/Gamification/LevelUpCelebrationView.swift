@@ -218,6 +218,12 @@ struct LevelUpCelebrationView: View {
 
     private func dismiss() {
         dismissTask?.cancel()
+        // Ask for a review only once the celebration is going away — prompting
+        // over the modal would be swallowed. The service delays 1.5s and
+        // throttles, so double-dismiss taps are harmless.
+        if case .levelUp = event {
+            ReviewPromptService.shared.requestIfAppropriate(trigger: "levelup")
+        }
         let animation: Animation = reduceMotion
             ? .easeOut(duration: 0.1)
             : .easeOut(duration: 0.25)

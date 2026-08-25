@@ -246,6 +246,18 @@ final class DailyCheckinViewModel: ObservableObject {
         }
         try? ctx.save()
 
+        // Lifetime check-in counter (review-prompt eligibility). Existing users
+        // get the counter seeded from the real fetch count on their first save
+        // after updating — that count already includes the check-in just saved,
+        // so seed and increment are mutually exclusive.
+        if ReviewPromptService.shared.needsCheckinCountSeed {
+            let pred = #Predicate<SDCheckin> { !$0.isSampleData }
+            let count = (try? ctx.fetchCount(FetchDescriptor<SDCheckin>(predicate: pred))) ?? 0
+            ReviewPromptService.shared.seedLifetimeCheckinCount(count)
+        } else if isNewCheckin {
+            ReviewPromptService.shared.incrementLifetimeCheckinCount()
+        }
+
         // Gamification: streak + quests are idempotent and run on every save,
         // but XP is awarded for NEW check-ins only — re-saving today's entry
         // must not re-award.

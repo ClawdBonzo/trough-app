@@ -1,0 +1,21 @@
+/* TroughWidget — Base English (en) */
+
+/* Widget gallery */
+"widget.displayName" = "Streak & Level";
+"widget.description" = "Your check-in streak, level progress, and next injection.";
+
+/* Streak widget */
+"widget.dayStreak" = "day streak";
+"widget.dayCheckInStreak" = "day check-in streak";
+"widget.checkInToday" = "Check in today";
+"widget.level" = "Level %d";
+"widget.levelLine" = "Lvl %d · %@";
+"widget.xpToNext" = "%d XP to next";
+"widget.tapToCheckIn" = "Tap to check in →";
+"widget.injectionDueToday" = "Injection due today";
+"widget.injectionInOneDay" = "Injection in 1 day";
+"widget.injectionInDays" = "Injection in %d days";
+
+/* Live Activity */
+"widget.untilNext" = "until next";
+"widget.injection" = "Injection";

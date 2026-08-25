@@ -45,6 +45,9 @@ struct SettingsView: View {
     @State private var showCSVImport = false
     @State private var showExport = false
     @AppStorage("injectionReminderEnabled") private var injectionReminderEnabled = false
+    // Same key other code reads via UserDefaults("reminderEnabled") — @AppStorage
+    // makes the toggle and its dependent rows refresh when it changes.
+    @AppStorage("reminderEnabled") private var checkinReminderEnabled = false
 
     var body: some View {
         NavigationStack {
@@ -223,9 +226,9 @@ struct SettingsView: View {
     private var remindersSection: some View {
         Section(NSLocalizedString("settings.reminders", comment: "")) {
             Toggle(NSLocalizedString("settings.dailyCheckinReminder", comment: ""), isOn: Binding(
-                get: { UserDefaults.standard.bool(forKey: "reminderEnabled") },
+                get: { checkinReminderEnabled },
                 set: { enabled in
-                    UserDefaults.standard.set(enabled, forKey: "reminderEnabled")
+                    checkinReminderEnabled = enabled
                     if enabled {
                         rescheduleReminders()
                     } else {
@@ -240,7 +243,7 @@ struct SettingsView: View {
             ))
             .tint(AppColors.accent)
 
-            if UserDefaults.standard.bool(forKey: "reminderEnabled") {
+            if checkinReminderEnabled {
                 DatePicker(NSLocalizedString("onboarding.reminderTime", comment: ""), selection: Binding(
                     get: {
                         var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
@@ -307,6 +310,7 @@ struct SettingsView: View {
                 .tint(AppColors.accent)
             }
         }
+        .listRowBackground(AppColors.card)
     }
 
     // MARK: - Reminder scheduling
@@ -507,6 +511,10 @@ struct SettingsView: View {
 
     private var recommendSection: some View {
         Section {
+            Link(destination: ReviewPromptService.writeReviewURL) {
+                Label(NSLocalizedString("settings.rateApp", comment: ""), systemImage: "star.fill")
+                    .foregroundColor(AppColors.accent)
+            }
             ShareLink(
                 item: URL(string: "https://apps.apple.com/app/id6760955550")!,
                 subject: Text(NSLocalizedString("settings.shareSubject", comment: "")),
@@ -516,11 +524,15 @@ struct SettingsView: View {
                     .foregroundColor(AppColors.accent)
             }
         }
+        .listRowBackground(AppColors.card)
     }
 
     private var legalSection: some View {
         Section(NSLocalizedString("settings.privacyLegal", comment: "")) {
-            Link(destination: URL(string: "https://gwlabs.app/privacy") ?? URL(string: "https://gwlabs.app")!) {
+            // In-app policy (the app is fully offline by design; the previous
+            // external link's page was returning 404). Uses the existing
+            // navigationDestination(for: String.self) "privacy" route.
+            NavigationLink(value: "privacy") {
                 Label(NSLocalizedString("settings.privacyPolicy", comment: ""), systemImage: "lock.shield")
             }
             .foregroundColor(.primary)

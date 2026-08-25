@@ -1,0 +1,21 @@
+/* TroughWidget — Dutch (nl) */
+
+/* Widget gallery */
+"widget.displayName" = "Reeks & level";
+"widget.description" = "Je check-in-reeks, levelvoortgang en volgende injectie.";
+
+/* Streak widget */
+"widget.dayStreak" = "dagen op rij";
+"widget.dayCheckInStreak" = "dagen op rij ingecheckt";
+"widget.checkInToday" = "Check vandaag in";
+"widget.level" = "Level %d";
+"widget.levelLine" = "Lvl %d · %@";
+"widget.xpToNext" = "Nog %d XP";
+"widget.tapToCheckIn" = "Tik om in te checken →";
+"widget.injectionDueToday" = "Injectie vandaag";
+"widget.injectionInOneDay" = "Injectie over 1 dag";
+"widget.injectionInDays" = "Injectie over %d dagen";
+
+/* Live Activity */
+"widget.untilNext" = "tot de volgende";
+"widget.injection" = "Injectie";

@@ -25,7 +25,7 @@ struct InjectionLiveActivity: Widget {
                     Text(context.state.nextInjectionDate, style: .relative)
                         .font(.callout.bold().monospacedDigit())
                         .foregroundColor(.white)
-                    Text("until next")
+                    Text(NSLocalizedString("widget.untilNext", comment: "Caption under countdown to next injection"))
                         .font(.caption2)
                         .foregroundColor(.white.opacity(0.6))
                 }
@@ -36,7 +36,7 @@ struct InjectionLiveActivity: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("Injection", systemImage: "syringe.fill")
+                    Label(NSLocalizedString("widget.injection", comment: "Dynamic Island expanded leading label"), systemImage: "syringe.fill")
                         .font(.caption)
                         .foregroundColor(WColors.accent)
                 }

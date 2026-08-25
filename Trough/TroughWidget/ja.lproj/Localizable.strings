@@ -1,0 +1,21 @@
+/* TroughWidget — Japanese (ja) */
+
+/* Widget gallery */
+"widget.displayName" = "連続記録とレベル";
+"widget.description" = "チェックインの連続日数、レベルの進捗、次回の注射を表示します。";
+
+/* Streak widget */
+"widget.dayStreak" = "日連続";
+"widget.dayCheckInStreak" = "日連続チェックイン";
+"widget.checkInToday" = "今日チェックインしよう";
+"widget.level" = "レベル%d";
+"widget.levelLine" = "Lv.%d · %@";
+"widget.xpToNext" = "次まであと%d XP";
+"widget.tapToCheckIn" = "タップしてチェックイン →";
+"widget.injectionDueToday" = "今日は注射日";
+"widget.injectionInOneDay" = "注射まであと1日";
+"widget.injectionInDays" = "注射まであと%d日";
+
+/* Live Activity */
+"widget.untilNext" = "次回まで";
+"widget.injection" = "注射";

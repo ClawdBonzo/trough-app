@@ -459,6 +459,7 @@
 "settings.deleteAccount.confirm" = "Radera allt";
 "settings.deleting" = "Raderar...";
 "settings.recommend" = "Rekommendera Trough till en vän";
+"settings.rateApp" = "Betygsätt Trough";
 "settings.shareSubject" = "Kolla in Trough";
 "settings.shareBody" = "Jag har använt Trough för att spåra mitt TRT-protokoll — det är riktigt välgjort.";
 "settings.privacyPolicy" = "Integritets- och datapolicy";

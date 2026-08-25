@@ -1,6 +1,4 @@
-• Exporte seus dados: arquivos CSV de check-ins e exames de sangue, além de um relatório em PDF para o médico (Pro)
-• Novos lembretes no dia da injeção — um aviso exatamente quando a dose está prevista
-• Missões e emblemas agora acompanham seu progresso real, com XP e sequências mais justas
-• Toque no widget para ir direto ao check-in ou às injeções; ele agora atualiza à meia-noite
-• O app agora fala seu idioma em todas as telas principais
-• Muitas correções: importação de CSV mais confiável, sequências que sobrevivem ao horário de verão, registros de injeção excluíveis e mais
+• O Trough agora fala italiano e polonês
+• Avalie o Trough direto nos Ajustes
+• O widget agora no seu idioma
+• Melhorias e correções

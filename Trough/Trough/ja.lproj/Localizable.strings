@@ -459,6 +459,7 @@
 "settings.deleteAccount.confirm" = "すべて削除";
 "settings.deleting" = "削除中...";
 "settings.recommend" = "Troughを友達に勧める";
+"settings.rateApp" = "Troughを評価する";
 "settings.shareSubject" = "Troughをチェック";
 "settings.shareBody" = "TroughでTRTプロトコルを記録しています — 本当によくできたアプリです。";
 "settings.privacyPolicy" = "プライバシー・データポリシー";

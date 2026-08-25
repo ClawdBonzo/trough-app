@@ -81,7 +81,11 @@ struct ExportDataView: View {
                         .foregroundColor(AppColors.accent)
                 }
             }
-            .sheet(item: $shareFile) { file in
+            .sheet(item: $shareFile, onDismiss: {
+                // The user just generated and shared an export — a good moment
+                // to ask for a review. Once-per-trigger makes this first-time only.
+                ReviewPromptService.shared.requestIfAppropriate(trigger: "firstExport")
+            }) { file in
                 ShareSheet(items: [file.url])
             }
             .fullScreenCover(isPresented: $showPaywall) {

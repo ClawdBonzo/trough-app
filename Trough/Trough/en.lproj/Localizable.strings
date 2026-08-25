@@ -459,6 +459,7 @@
 "settings.deleteAccount.confirm" = "Delete Everything";
 "settings.deleting" = "Deleting...";
 "settings.recommend" = "Recommend Trough to a Friend";
+"settings.rateApp" = "Rate Trough";
 "settings.shareSubject" = "Check out Trough";
 "settings.shareBody" = "I've been using Trough to track my TRT protocol — it's really well done.";
 "settings.privacyPolicy" = "Privacy & Data Policy";

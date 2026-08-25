@@ -400,6 +400,7 @@
 "settings.deleteAccount.confirm" = "Alles löschen";
 "settings.deleting" = "Wird gelöscht...";
 "settings.recommend" = "Trough einem Freund empfehlen";
+"settings.rateApp" = "Trough bewerten";
 "settings.shareSubject" = "Schau dir Trough an";
 "settings.shareBody" = "Ich nutze Trough, um mein TRT-Protokoll zu verfolgen — wirklich gut gemacht.";
 "settings.privacyPolicy" = "Datenschutzrichtlinie";

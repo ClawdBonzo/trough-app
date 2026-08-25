@@ -1,1 +1,1 @@
-Track your TRT protocol with real-time PK curves, daily wellness scoring, bloodwork trends, peptides, and HealthKit sync. Offline-first. Your data stays on your device.
+Private, on-device TRT tracking: model your levels with PK curves, log bloodwork and doses, and export a doctor-ready PDF for your next appointment. No account, no cloud.

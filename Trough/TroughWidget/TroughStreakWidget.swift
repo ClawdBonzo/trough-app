@@ -52,8 +52,8 @@ struct TroughStreakWidget: Widget {
             TroughStreakView(snapshot: entry.snapshot)
                 .containerBackground(WColors.background, for: .widget)
         }
-        .configurationDisplayName("Streak & Level")
-        .description("Your check-in streak, level progress, and next injection.")
+        .configurationDisplayName(NSLocalizedString("widget.displayName", comment: "Widget gallery title"))
+        .description(NSLocalizedString("widget.description", comment: "Widget gallery description"))
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -81,7 +81,7 @@ struct TroughStreakView: View {
                 Text("🔥")
                     .font(.title3)
             }
-            Text("day streak")
+            Text(NSLocalizedString("widget.dayStreak", comment: "Caption under streak count (small widget)"))
                 .font(.caption2)
                 .foregroundColor(.secondary)
 
@@ -89,7 +89,7 @@ struct TroughStreakView: View {
 
             levelRow
             if !snapshot.checkedInToday {
-                Text("Check in today")
+                Text(NSLocalizedString("widget.checkInToday", comment: "Prompt when not yet checked in (small widget)"))
                     .font(.caption2.bold())
                     .foregroundColor(WColors.accent)
             }
@@ -107,7 +107,7 @@ struct TroughStreakView: View {
                         .foregroundColor(WColors.accent)
                     Text("🔥").font(.title2)
                 }
-                Text("day check-in streak")
+                Text(NSLocalizedString("widget.dayCheckInStreak", comment: "Caption under streak count (medium widget)"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer(minLength: 4)
@@ -121,7 +121,7 @@ struct TroughStreakView: View {
             Divider().overlay(WColors.secondary)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("Level \(snapshot.level)")
+                Text(String(format: NSLocalizedString("widget.level", comment: "Level heading, %d = level number"), snapshot.level))
                     .font(.headline)
                     .foregroundColor(.white)
                 Text(snapshot.levelName)
@@ -129,11 +129,11 @@ struct TroughStreakView: View {
                     .foregroundColor(.secondary)
                 ProgressView(value: snapshot.levelProgress)
                     .tint(WColors.accent)
-                Text("\(snapshot.xpToNext) XP to next")
+                Text(String(format: NSLocalizedString("widget.xpToNext", comment: "XP remaining to next level, %d = XP amount"), snapshot.xpToNext))
                     .font(.caption2)
                     .foregroundColor(.secondary)
                 if !snapshot.checkedInToday {
-                    Text("Tap to check in →")
+                    Text(NSLocalizedString("widget.tapToCheckIn", comment: "Tap prompt when not yet checked in (medium widget)"))
                         .font(.caption2.bold())
                         .foregroundColor(WColors.accent)
                 }
@@ -146,7 +146,7 @@ struct TroughStreakView: View {
 
     private var levelRow: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text("Lvl \(snapshot.level) · \(snapshot.levelName)")
+            Text(String(format: NSLocalizedString("widget.levelLine", comment: "Compact level line, %d = level, %@ = level name"), snapshot.level, snapshot.levelName))
                 .font(.caption2.bold())
                 .foregroundColor(.white)
                 .lineLimit(1)
@@ -156,8 +156,8 @@ struct TroughStreakView: View {
     }
 
     private func injectionText(_ days: Int) -> String {
-        if days <= 0 { return "Injection due today" }
-        if days == 1 { return "Injection in 1 day" }
-        return "Injection in \(days) days"
+        if days <= 0 { return NSLocalizedString("widget.injectionDueToday", comment: "Injection is due today") }
+        if days == 1 { return NSLocalizedString("widget.injectionInOneDay", comment: "Injection due tomorrow") }
+        return String(format: NSLocalizedString("widget.injectionInDays", comment: "Injection due in %d days"), days)
     }
 }

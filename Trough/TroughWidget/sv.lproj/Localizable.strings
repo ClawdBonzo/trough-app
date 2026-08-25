@@ -1,0 +1,21 @@
+/* TroughWidget — Swedish (sv) */
+
+/* Widget gallery */
+"widget.displayName" = "Svit & nivå";
+"widget.description" = "Din incheckningssvit, dina nivåframsteg och nästa injektion.";
+
+/* Streak widget */
+"widget.dayStreak" = "dagars svit";
+"widget.dayCheckInStreak" = "dagars incheckningssvit";
+"widget.checkInToday" = "Checka in idag";
+"widget.level" = "Nivå %d";
+"widget.levelLine" = "Niv. %d · %@";
+"widget.xpToNext" = "%d XP kvar";
+"widget.tapToCheckIn" = "Tryck för att checka in →";
+"widget.injectionDueToday" = "Injektion idag";
+"widget.injectionInOneDay" = "Injektion om 1 dag";
+"widget.injectionInDays" = "Injektion om %d dagar";
+
+/* Live Activity */
+"widget.untilNext" = "till nästa";
+"widget.injection" = "Injektion";

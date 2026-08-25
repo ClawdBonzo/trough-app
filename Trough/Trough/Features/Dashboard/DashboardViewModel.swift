@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import StoreKit
 
 // MARK: - Supporting types
 
@@ -658,32 +657,11 @@ final class DashboardViewModel: ObservableObject {
 
     // MARK: - Review Prompt
 
-    /// Call this after check-in or milestone to potentially prompt for App Store review.
+    /// Call this after check-in dismissal — prompts for an App Store review at a
+    /// high-score moment. All throttling lives in ReviewPromptService.
     func checkReviewPrompt() {
-        let hasPrompted = UserDefaults.standard.bool(forKey: "hasPromptedReview")
-        guard !hasPrompted else { return }
-
-        // Trigger at positive moments: score ≥ 75, streak at 14+, or score improving
-        let shouldPrompt: Bool
-        if streak >= 14 {
-            shouldPrompt = true
-        } else if protocolScore >= 75 {
-            shouldPrompt = true
-        } else {
-            shouldPrompt = false
-        }
-
-        if shouldPrompt {
-            UserDefaults.standard.set(true, forKey: "hasPromptedReview")
-            requestAppReview()
-        }
-    }
-
-    private func requestAppReview() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                SKStoreReviewController.requestReview(in: scene)
-            }
+        if protocolScore >= 75 {
+            ReviewPromptService.shared.requestIfAppropriate(trigger: "highScore")
         }
     }
 

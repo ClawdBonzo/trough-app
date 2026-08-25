@@ -1,0 +1,21 @@
+/* TroughWidget — Korean (ko) */
+
+/* Widget gallery */
+"widget.displayName" = "연속 기록 & 레벨";
+"widget.description" = "체크인 연속 기록, 레벨 진행 상황, 다음 주사를 보여줍니다.";
+
+/* Streak widget */
+"widget.dayStreak" = "일 연속";
+"widget.dayCheckInStreak" = "일 연속 체크인";
+"widget.checkInToday" = "오늘 체크인하세요";
+"widget.level" = "레벨 %d";
+"widget.levelLine" = "Lv.%d · %@";
+"widget.xpToNext" = "다음까지 %d XP";
+"widget.tapToCheckIn" = "탭해서 체크인 →";
+"widget.injectionDueToday" = "오늘 주사 예정";
+"widget.injectionInOneDay" = "주사까지 1일";
+"widget.injectionInDays" = "주사까지 %d일";
+
+/* Live Activity */
+"widget.untilNext" = "다음 주사까지";
+"widget.injection" = "주사";
