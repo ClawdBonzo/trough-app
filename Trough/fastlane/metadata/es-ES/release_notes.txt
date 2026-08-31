@@ -1,4 +1,3 @@
-• Trough ahora habla italiano y polaco
-• Valora Trough directamente desde Ajustes
-• El widget, ahora en tu idioma
-• Mejoras y correcciones
+• Corregido un problema de importación CSV que podía confundir columnas de análisis
+• Los recordatorios quincenales de suplementos ahora llegan en las semanas correctas
+• Mejoras de estabilidad

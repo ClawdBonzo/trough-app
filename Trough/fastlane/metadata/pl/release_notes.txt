@@ -1,3 +1,3 @@
-• Trough mówi teraz po polsku — cała aplikacja jest w pełni przetłumaczona
-• Oceń aplikację bezpośrednio z poziomu Ustawień
-• Poprawki błędów i drobne ulepszenia stabilności
+• Naprawiono błąd importu CSV, który mógł pomylić kolumny badań
+• Przypomnienia o suplementach co dwa tygodnie przychodzą teraz we właściwych tygodniach
+• Poprawki stabilności

@@ -1,4 +1,3 @@
-• Trough talar nu italienska och polska
-• Betygsätt Trough direkt från Inställningar
-• Widgeten finns nu på ditt språk
-• Förbättringar och buggfixar
+• Åtgärdade ett CSV-importfel som kunde blanda ihop blodprovskolumner
+• Varannan veckas kosttillskottspåminnelser kommer nu rätt veckor
+• Stabilitetsförbättringar

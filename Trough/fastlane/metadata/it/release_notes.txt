@@ -1,3 +1,3 @@
-• Trough ora parla italiano — app completamente tradotta
-• Valuta Trough direttamente dalle Impostazioni
-• Miglioramenti e correzioni di bug
+• Risolto un problema di importazione CSV che poteva confondere le colonne delle analisi
+• I promemoria quindicinali degli integratori ora arrivano nelle settimane giuste
+• Miglioramenti di stabilità

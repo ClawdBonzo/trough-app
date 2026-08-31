@@ -1,4 +1,3 @@
-• Trough now speaks Italian and Polish
-• You can now rate Trough right from Settings
-• Home-screen widget now in your language
-• Refinements and bug fixes throughout
+• Fixed a CSV import issue that could mismatch bloodwork columns
+• Biweekly supplement reminders now arrive on the right weeks
+• Stability improvements

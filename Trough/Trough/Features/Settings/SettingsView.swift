@@ -10,8 +10,8 @@ import UserNotifications
 /// WeeklyReportService, plus any other category).
 ///
 /// - "daily-checkin"                        — daily check-in reminder
-/// - "compound-<name>"                      — repeating supplement/compound reminder (daily/weekly/biweekly)
-/// - "compound-<name>-<n>"                  — finite occurrences for non-standard frequencies, n = 1...30
+/// - "compound-<name>"                      — repeating supplement/compound reminder (daily/weekly)
+/// - "compound-<name>-<n>"                  — finite occurrences for all other frequencies (incl. biweekly), n = 1...30
 /// - "injection_reminder_<protocolID>_<n>"  — injection-day reminders, n = 1...30
 /// - "streak_at_risk", "streak_day7_upsell" — engagement (WeeklyReportService; not managed here)
 enum ReminderID {
@@ -379,7 +379,7 @@ struct SettingsView: View {
                 daily.minute = minute
                 let t = UNCalendarNotificationTrigger(dateMatching: daily, repeats: true)
                 center.add(UNNotificationRequest(identifier: ReminderID.compound(compound.supplementName), content: compContent, trigger: t))
-            } else if compound.frequencyDays == 7 || compound.frequencyDays == 14 {
+            } else if compound.frequencyDays == 7 {
                 // Anchor to the weekday the schedule started on — not today's weekday.
                 var weekly = DateComponents()
                 weekly.hour = hour
@@ -388,8 +388,10 @@ struct SettingsView: View {
                 let t = UNCalendarNotificationTrigger(dateMatching: weekly, repeats: true)
                 center.add(UNNotificationRequest(identifier: ReminderID.compound(compound.supplementName), content: compContent, trigger: t))
             } else {
-                // Every N days: schedule the next 30 future occurrences anchored
-                // to the supplement's start date (refreshed on each reschedule).
+                // Every N days (incl. biweekly/14 — a weekly repeating trigger
+                // would fire every week): schedule the next 30 future occurrences
+                // anchored to the supplement's start date (refreshed on each
+                // reschedule).
                 let dates = Self.upcomingOccurrences(
                     anchoredTo: compound.startDate,
                     stepDays: compound.frequencyDays,

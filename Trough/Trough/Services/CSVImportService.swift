@@ -193,7 +193,18 @@ enum CSVImportService {
             let matches = testSamples.filter { formatter.date(from: $0) != nil }.count
             if matches > 0 { scores[fmt] = matches }
         }
-        guard let (bestFmt, bestScore) = scores.max(by: { $0.value < $1.value }), bestScore > 0 else {
+        // Deterministic tie-break: walk formats in declaration order so an
+        // earlier-declared format wins ties (Dictionary iteration order is
+        // randomized, so scores.max(by:) would flip-flop between runs).
+        var bestFmt: String?
+        var bestScore = 0
+        for fmt in formats {
+            if let s = scores[fmt], s > bestScore {
+                bestScore = s
+                bestFmt = fmt
+            }
+        }
+        guard let bestFmt, bestScore > 0 else {
             return .unknown
         }
 
@@ -255,8 +266,30 @@ enum CSVImportService {
 
         var mapping = ColumnMapping()
         var used = Set<Int>()
+        var matchedKeys = Set<String>()
 
+        // Pass 1: resolve EXACT alias matches globally across every definition
+        // before any fuzzy matching, so an earlier def cannot fuzzy-steal a
+        // header that a later def matches exactly (e.g. the "sleep" alias "sq"
+        // fuzzy-claiming the bloodwork header "e2").
         for def in defs {
+            for (idx, header) in headers.enumerated() {
+                guard !used.contains(idx) else { continue }
+                let norm = normalize(header)
+                guard !norm.isEmpty else { continue }
+                if def.aliases.contains(norm) {
+                    used.insert(idx)
+                    mapping[def.key] = idx
+                    mapping.confidence[def.key] = 1.0
+                    matchedKeys.insert(def.key)
+                    break
+                }
+            }
+        }
+
+        // Pass 2: fuzzy-match still-unmatched definitions against
+        // still-unclaimed headers only.
+        for def in defs where !matchedKeys.contains(def.key) {
             var bestIdx: Int?
             var bestScore: Double = 0
 
@@ -264,13 +297,6 @@ enum CSVImportService {
                 guard !used.contains(idx) else { continue }
                 let norm = normalize(header)
                 guard !norm.isEmpty else { continue }
-
-                // Exact alias match
-                if def.aliases.contains(norm) {
-                    bestIdx = idx
-                    bestScore = 1.0
-                    break
-                }
 
                 // Fuzzy: Levenshtein ≤ 2  OR  Dice ≥ 0.7
                 for alias in def.aliases {

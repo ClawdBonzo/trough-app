@@ -1,4 +1,3 @@
-• Trough parle désormais italien et polonais
-• Notez Trough directement depuis les Réglages
-• Le widget s'affiche maintenant dans votre langue
-• Améliorations et correctifs
+• Correction d'un problème d'import CSV qui pouvait confondre des colonnes de bilans
+• Les rappels de compléments toutes les deux semaines arrivent désormais les bonnes semaines
+• Améliorations de stabilité

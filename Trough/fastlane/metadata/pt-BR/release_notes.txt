@@ -1,4 +1,3 @@
-• O Trough agora fala italiano e polonês
-• Avalie o Trough direto nos Ajustes
-• O widget agora no seu idioma
-• Melhorias e correções
+• Corrigido um problema de importação CSV que podia confundir colunas de exames
+• Lembretes quinzenais de suplementos agora chegam nas semanas certas
+• Melhorias de estabilidade

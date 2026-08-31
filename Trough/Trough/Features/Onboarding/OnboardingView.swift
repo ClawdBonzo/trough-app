@@ -413,9 +413,9 @@ final class OnboardingViewModel: ObservableObject {
                 let trigger = UNCalendarNotificationTrigger(dateMatching: daily, repeats: true)
                 center.add(UNNotificationRequest(identifier: ReminderID.compound(compound.name), content: content, trigger: trigger))
 
-            } else if compound.frequencyDays == 7 || compound.frequencyDays == 14 {
-                // Weekly/biweekly: anchor to the schedule's own weekday (last
-                // injection date when known) — never blindly to today's weekday.
+            } else if compound.frequencyDays == 7 {
+                // Weekly: anchor to the schedule's own weekday (last injection
+                // date when known) — never blindly to today's weekday.
                 let weekday = Calendar.current.component(.weekday, from: refDate)
                 var weekly = DateComponents()
                 weekly.hour = hour
@@ -425,7 +425,8 @@ final class OnboardingViewModel: ObservableObject {
                 center.add(UNNotificationRequest(identifier: ReminderID.compound(compound.name), content: content, trigger: trigger))
 
             } else {
-                // Every N days (E2D, E3D, E3.5D): schedule the next 30 future
+                // Every N days (E2D, E3D, biweekly/E14D — a weekly repeating
+                // trigger would fire every week): schedule the next 30 future
                 // occurrences as individual notifications (refreshed whenever
                 // reminders are recomputed in Settings).
                 let cal = Calendar.current

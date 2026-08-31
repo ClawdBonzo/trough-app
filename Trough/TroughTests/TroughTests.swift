@@ -313,12 +313,11 @@ final class CSVImportServiceTests: XCTestCase {
 
     func testUnambiguousISODateDetected() {
         // NOTE: modern ICU leniently parses "2026-01-05" with BOTH "yyyy-MM-dd"
-        // and "yyyy/MM/dd", and detectDateFormat breaks the tie via Dictionary
-        // iteration order (scores.max), so the exact format string returned is
-        // nondeterministic between the two. Both parse identically, so the
-        // meaningful contract is: unambiguous ISO-style samples are .detected
-        // (never .ambiguous/.unknown) and the chosen format parses them to the
-        // right calendar day.
+        // and "yyyy/MM/dd". detectDateFormat breaks such score ties
+        // deterministically by format declaration order (earlier wins), so the
+        // contract is: unambiguous ISO-style samples are .detected (never
+        // .ambiguous/.unknown) and the chosen format parses them to the right
+        // calendar day.
         let result = CSVImportService.detectDateFormat(samples: ["2026-01-05", "2026-01-06", "2026-02-11"])
         guard case .detected(let fmt) = result else {
             return XCTFail("Expected .detected for ISO dates, got \(result)")
@@ -335,6 +334,23 @@ final class CSVImportServiceTests: XCTestCase {
         XCTAssertEqual(comps.day, 5, "Detected format must read year-month-day order")
     }
 
+    func testDateFormatDetectionIsDeterministic() {
+        // "2026-01-05" ties between "yyyy-MM-dd" and "yyyy/MM/dd" under lenient
+        // ICU parsing; the tie must resolve identically on every call (fixed in
+        // v1.3.1: declaration-order tie-break instead of Dictionary iteration).
+        let samples = ["2026-01-05", "2026-01-06", "2026-02-11"]
+        var results: Set<String> = []
+        for _ in 0..<5 {
+            guard case .detected(let fmt) = CSVImportService.detectDateFormat(samples: samples) else {
+                return XCTFail("Expected .detected for ISO dates")
+            }
+            results.insert(fmt)
+        }
+        XCTAssertEqual(results.count, 1, "Repeated calls must return the same format, got \(results)")
+        XCTAssertEqual(results.first, "yyyy-MM-dd",
+                       "Earlier-declared format must win the tie")
+    }
+
     func testSlashDatesWithLowDayAreAmbiguous() {
         let result = CSVImportService.detectDateFormat(samples: ["01/02/2026", "03/04/2026"])
         guard case .ambiguous = result else {
@@ -344,23 +360,20 @@ final class CSVImportServiceTests: XCTestCase {
 
     // MARK: Column auto-detection
 
-    /// REAL BUG (documented, not papered over): CSVImportService.detectColumns
-    /// walks its alias definitions in a fixed order and lets an EARLIER def
-    /// claim a header via fuzzy matching before a LATER def gets to exact-match
-    /// it. Header "e2" is an exact alias of the bloodwork "e2" def, but the
-    /// check-in "sleep" def runs first and fuzzy-claims it through its 2-char
-    /// alias "sq" (Levenshtein("e2","sq") = 2 <= 2 -> score 0.6). The estradiol
-    /// column of a bloodwork CSV is therefore auto-mapped to the check-in sleep
-    /// field and silently dropped by importBloodwork. Fix direction: exact alias
-    /// matches should be resolved globally (all defs) before any fuzzy pass.
-    func testExactAliasLosesToEarlierFuzzyMatch_knownBug() {
+    /// Regression test (fixed in v1.3.1): detectColumns used to walk its alias
+    /// definitions in a fixed order and let an EARLIER def claim a header via
+    /// fuzzy matching before a LATER def could exact-match it — the check-in
+    /// "sleep" def fuzzy-claimed the bloodwork header "e2" through its 2-char
+    /// alias "sq" (Levenshtein("e2","sq") = 2 <= 2 -> score 0.6), so estradiol
+    /// columns were silently dropped. Exact alias matches are now resolved
+    /// globally across all defs before any fuzzy pass.
+    func testExactAliasWinsOverEarlierFuzzyMatch() {
         let mapping = CSVImportService.detectColumns(headers: ["date", "totalt", "e2"])
         XCTAssertEqual(mapping["date"], 0)
         XCTAssertEqual(mapping["totalt"], 1)
-        XCTExpectFailure("Known bug: 'sleep' def fuzzy-steals the 'e2' header via alias 'sq' before the exact 'e2' alias is considered") {
-            XCTAssertEqual(mapping["e2"], 2, "'e2' is an exact alias and must map to the e2 field")
-            XCTAssertNil(mapping["sleep"], "A bloodwork header must not map to a check-in score field")
-        }
+        XCTAssertEqual(mapping["e2"], 2, "'e2' is an exact alias and must map to the e2 field")
+        XCTAssertEqual(mapping.confidence["e2"], 1.0, "Exact alias match must have confidence 1.0")
+        XCTAssertNil(mapping["sleep"], "A bloodwork header must not map to a check-in score field")
     }
 
     // MARK: End-to-end check-in import + duplicate skip

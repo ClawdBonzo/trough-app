@@ -1,4 +1,3 @@
-• Trough spreekt nu Italiaans en Pools
-• Beoordeel Trough direct vanuit Instellingen
-• De widget nu in jouw taal
-• Verfijningen en bugfixes
+• CSV-importprobleem opgelost waardoor bloedwaardekolommen verkeerd konden worden gekoppeld
+• Tweewekelijkse supplementherinneringen komen nu in de juiste weken
+• Stabiliteitsverbeteringen

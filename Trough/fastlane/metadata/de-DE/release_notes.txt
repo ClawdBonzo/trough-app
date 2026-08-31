@@ -1,4 +1,3 @@
-• Trough spricht jetzt Italienisch und Polnisch
-• Bewerte Trough direkt in den Einstellungen
-• Das Widget jetzt in deiner Sprache
-• Feinschliff und Fehlerbehebungen
+• CSV-Import behoben: Blutwert-Spalten konnten falsch zugeordnet werden
+• Zweiwöchentliche Supplement-Erinnerungen kommen jetzt in den richtigen Wochen
+• Stabilitätsverbesserungen
