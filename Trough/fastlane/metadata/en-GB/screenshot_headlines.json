@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Your whole protocol. *One glance.*",
+    "sub": "Doses, check-ins, streaks and blood tests together on one calm dashboard."
+  },
+  "2": {
+    "headline": "30 seconds a day. *Streaks that stick.*",
+    "sub": "Tap through a quick check-in, earn XP and keep the flame going."
+  },
+  "3": {
+    "headline": "See your levels *between jabs.*",
+    "sub": "An estimated curve from your own injection log, with your next dose in view."
+  },
+  "4": {
+    "headline": "Every jab. *Stamped and rotated.*",
+    "sub": "Log it in seconds, collect the stamp, get a site suggestion for next time."
+  },
+  "5": {
+    "headline": "Earn your *protocol rank.*",
+    "sub": "Levels and badges for logging and consistency, from Paper to Diamond."
+  },
+  "6": {
+    "headline": "Your bloods, *finally organised.*",
+    "sub": "Every result in one place, with each marker's history across tests."
+  },
+  "7": {
+    "headline": "Private by design. *No account.*",
+    "sub": "Your log stays on your iPhone. No sign-up, no ads, nothing to sync.",
+    "chips": [
+      "No account",
+      "Stays on your iPhone",
+      "No ads"
+    ]
+  }
+}

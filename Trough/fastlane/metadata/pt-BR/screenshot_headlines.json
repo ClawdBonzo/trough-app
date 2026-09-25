@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Seu protocolo inteiro. *Num relance.*",
+    "sub": "Doses, check-ins, sequências e exames juntos em um painel limpo."
+  },
+  "2": {
+    "headline": "30 segundos por dia. *Sequência firme.*",
+    "sub": "Faça um check-in rápido, ganhe XP e mantenha a chama acesa."
+  },
+  "3": {
+    "headline": "Seus níveis *entre as doses.*",
+    "sub": "Uma curva estimada a partir do seu registro de aplicações, com a próxima dose à vista."
+  },
+  "4": {
+    "headline": "Cada aplicação. *Carimbada e no rodízio.*",
+    "sub": "Registre em segundos, ganhe o carimbo e receba o próximo local sugerido."
+  },
+  "5": {
+    "headline": "Conquiste seu *ranking de protocolo.*",
+    "sub": "Níveis e medalhas pela sua constância, do Papel ao Diamante."
+  },
+  "6": {
+    "headline": "Seus exames, *enfim organizados.*",
+    "sub": "Todos os laudos num só lugar, com a evolução de cada marcador."
+  },
+  "7": {
+    "headline": "Privado por padrão. *Sem conta.*",
+    "sub": "Seu registro fica no seu iPhone. Sem cadastro, sem anúncios, nada para sincronizar.",
+    "chips": [
+      "Sem conta",
+      "Fica no seu iPhone",
+      "Sem anúncios"
+    ]
+  }
+}

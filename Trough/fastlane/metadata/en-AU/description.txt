@@ -1,41 +1,58 @@
-Track TRT injections, testosterone levels, bloodwork, and peptides — all in one private app.
+Log every TRT injection, see your estimated testosterone levels between doses, and keep your blood test results organised, all in one private app.
 
-Trough is the offline-first tracker for men on testosterone replacement therapy and hormone therapy. Log every shot, follow your estimated levels between doses, and know your Protocol Score in 7 days.
+Trough is a testosterone and injection tracker built for men on TRT and male HRT. Log every jab in seconds, get a site-rotation suggestion for the next one, and check in daily in 30 seconds. No account, no ads.
 
-TRACK YOUR PROTOCOL
-• Log injections with dose, site rotation, and compound
-• Full support for Testosterone Cypionate, Enanthate, Propionate, Undecanoate, and multi-ester stacking
-• Track GLP-1s (Semaglutide, Tirzepatide), peptides, and ancillaries (Anastrozole, hCG, and more)
-• Injection-day reminders so you never miss a dose
+NEW IN 1.4
+• All-new design, from the dashboard to the injection log
+• Check-in streaks, 11 levels and a protocol rank from Paper to Diamond
+• 42 badges to earn for logging and consistency
+• Daily challenges and celebrations when you hit a milestone
+• Share cards for your streak, rank and badges
+• Home Screen and Lock Screen widgets, including a next-badge widget
 
-DAILY WELLNESS CHECK-IN
-• Rate energy, mood, libido, sleep quality, and mental clarity in 30 seconds
-• Builds your personal Protocol Score — a single number that shows how your protocol is working
-• Track trends over time as you dial in your routine
+INJECTION TRACKER
+• Log dose, compound, and injection site in seconds
+• Calendar view of every shot you've logged
+• Site-rotation suggestions for your next injection
+• Injection-day reminders and a Live Activity countdown to your next dose
+• Testosterone cypionate, enanthate, propionate, undecanoate and multi-ester protocols
 
-PK CURVES (Pro)
-• Real pharmacokinetic modelling using the Bateman equation with absorption delay
-• Estimated peak, trough, and current levels with confidence bands
+ESTIMATED LEVELS (PK CURVES, PRO)
+• See an estimated blood-level curve between doses, built from your own injection log
+• Estimated peak, trough, and current level. These are model estimates, not lab results.
 
-BLOODWORK TRACKING (Pro)
-• Log lab results — total and free testosterone, estradiol (E2), and more — with custom reference ranges
-• Visual trends with colour-coded bands
+DAILY CHECK-IN + PROTOCOL SCORE
+• Rate energy, mood, libido, sleep, and mental clarity in about 30 seconds
+• Your answers roll up into a Protocol Score from 0 to 100, so you can see trends over time
 
-PEPTIDES & ADJUNCTS (Pro)
-• Track peptides, GLP-1 agonists, and ancillary compounds
-• Correlate them with your wellness metrics and bloodwork
+BLOOD TEST TRACKING (PRO)
+• 19 markers, including total and free testosterone, oestradiol (E2), haematocrit, and PSA
+• Reference ranges and trend charts for each marker across lab draws
+• Attach lab photos and doctor notes
 
-EXPORT & SHARE (Pro)
-• Export check-in and bloodwork data as CSV
-• Generate a doctor-visit PDF report to bring to your next appointment
+PEPTIDES, GLP-1s & ADJUNCTS (PRO)
+• 34 presets for peptides, GLP-1s, and adjuncts like hCG and anastrozole
+• Schedules and reminders alongside your testosterone protocol
+
+APPLE HEALTH, EXPORT & DOCTOR VISITS
+• Reads HRV, resting heart rate, sleep, steps, and weight from Apple Health; writes weight
+• CSV import and export
+• Doctor-visit PDF report to bring to your next appointment (Pro)
 
 PRIVATE BY DESIGN
-• 100% on-device. No account, no cloud, no tracking.
-• Your data never leaves your iPhone
+• No account and no sign-up. No ads.
+• Your health log is stored on your iPhone, not on our servers
+• Available in 11 languages. Requires iPhone with iOS 17 or later.
 
-Start your 3-day free trial to unlock all Pro features. Cancel anytime.
+TROUGH PRO
+Trough is free to download. Trough Pro unlocks estimated PK curves, blood test tracking, peptides and GLP-1s, and the doctor-visit PDF. Monthly and yearly plans are available, with a free trial for eligible new subscribers.
 
-Trough Pro is an auto-renewing subscription. Payment is charged to your Apple ID and renews automatically unless cancelled at least 24 hours before the end of the period. Manage or cancel in Settings.
+• Payment is charged to your Apple ID account at confirmation of purchase
+• Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period
+• Your account is charged for renewal within 24 hours before the end of the current period
+• Manage or cancel anytime in your Apple ID account settings
+
+Trough is a tracking tool, not a medical device, and does not provide medical advice. Always speak to your GP or specialist before changing your protocol.
 
 Terms of Use: https://gwlabs.app/terms
 Privacy Policy: https://gwlabs.app/privacy

@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Hela ditt protokoll. *En blick.*",
+    "sub": "Doser, incheckningar, sviter och blodprov samlat på en lugn översikt."
+  },
+  "2": {
+    "headline": "30 sekunder om dagen. *Sviten lever.*",
+    "sub": "Checka in snabbt, samla XP och håll lågan vid liv."
+  },
+  "3": {
+    "headline": "Dina nivåer *mellan doserna.*",
+    "sub": "En uppskattad kurva från din egen injektionslogg, med nästa dos i sikte."
+  },
+  "4": {
+    "headline": "Varje spruta. *Stämplad och roterad.*",
+    "sub": "Logga på sekunder, ta stämpeln och få förslag på nästa ställe."
+  },
+  "5": {
+    "headline": "Ta din *protokollrang.*",
+    "sub": "Nivåer och märken för att logga och hålla i, från Papper till Diamant."
+  },
+  "6": {
+    "headline": "Dina blodprov, *äntligen i ordning.*",
+    "sub": "Alla provsvar på ett ställe, med historiken för varje markör."
+  },
+  "7": {
+    "headline": "Privat från grunden. *Inget konto.*",
+    "sub": "Din logg stannar på din iPhone. Ingen inloggning, ingen reklam, inget att synka.",
+    "chips": [
+      "Inget konto",
+      "Stannar på din iPhone",
+      "Ingen reklam"
+    ]
+  }
+}

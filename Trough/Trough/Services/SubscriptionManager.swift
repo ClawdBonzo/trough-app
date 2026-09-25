@@ -33,6 +33,18 @@ final class SubscriptionManager: ObservableObject {
     // MARK: Refresh
 
     func refresh() async {
+        #if DEBUG
+        // `-TRSeedDemo` (App Store screenshots): the demo profile is Pro. DEBUG-only.
+        if DemoMode.pretendsPro {
+            isSubscribed = true
+            isInTrial = false
+            isInGracePeriod = false
+            trialDaysRemaining = nil
+            graceDaysRemaining = nil
+            isLoading = false
+            return
+        }
+        #endif
         isLoading = true
 
         // Guard: if RevenueCat isn't configured, skip all checks

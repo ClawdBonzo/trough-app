@@ -1,33 +1,58 @@
-Trough ist der private, geräteinterne Begleiter für Männer mit Testosteronersatztherapie (TRT), Hormonoptimierung und Peptidprotokollen. Erfasse jede Injektion, protokolliere dein Befinden und sieh, wie dein Protokoll wirklich wirkt – ganz ohne Konto und ohne dass deine Daten je dein Telefon verlassen.
+Erfasse jede TRT-Injektion, sieh deine geschätzten Testosteronspiegel zwischen den Spritzen und behalte deine Blutwerte im Blick – in einer privaten App.
 
-WARUM TROUGH
-Die meisten Tracking-Apps wurden für Medikamentenerinnerungen oder Fitness-Protokolle entwickelt. Trough wurde speziell für TRT und Hormontherapie gebaut – die Wirkstoffe, die Ester, das Timing und die Art, wie sich all das anfühlt.
+Trough ist dein Testosteron- und Spritzen-Tracker für die Testosterontherapie (TRT) und Hormontherapie. Injektion in Sekunden eintragen, Vorschlag für die nächste Injektionsstelle bekommen, täglich in 30 Sekunden einchecken. Kein Konto, keine Werbung.
 
-ALLES AN EINEM ORT
-• Erfasse Injektionen, Cremes und Pellets mit Dosis, Ester und Injektionsstelle
-• Verfolge Testosteron, hCG, GLP-1 und dutzende weitere Wirkstoffe
-• Tägliche Check-ins für Energie, Stimmung, Libido, Schlaf und mehr
-• Blutwert-Tracking für Gesamt-/freies Testosteron, Östradiol, Hämatokrit und mehr
+NEU IN 1.4
+• Komplett neues Design – vom Dashboard bis zum Injektionsprotokoll
+• Check-in-Serien, 11 Level und ein Protokoll-Rang von Papier bis Diamant
+• 42 Abzeichen für regelmäßiges Erfassen und Dranbleiben
+• Tägliche Challenges und kleine Feiern bei jedem Meilenstein
+• Teilbare Karten für Serie, Rang und Abzeichen
+• Widgets für Home- und Sperrbildschirm, inklusive Widget für dein nächstes Abzeichen
 
-PROTOCOL SCORE
-Sieh mit einem einzigen Wert von 0–100, wie gut dein Protokoll eingestellt ist – er verbindet dein Befinden mit der Konstanz deiner Dosierung. Beobachte, wie er steigt, während du optimierst.
+INJEKTIONEN & SPRITZEN
+• Dosis, Wirkstoff und Injektionsstelle in Sekunden erfassen
+• Kalender mit allen erfassten Injektionen
+• Vorschläge zur Rotation der Injektionsstelle
+• Erinnerungen am Spritzentag und Live-Aktivität mit Countdown zur nächsten Dosis
+• Testosteron-Cypionat, -Enantat, -Propionat, -Undecanoat und Mehrfach-Ester-Protokolle
 
-PHARMAKOKINETIK (PK)
-Trough modelliert den Anstieg und Abfall deiner Hormone zwischen den Injektionen anhand echter pharmakokinetischer Kurven, sodass du deine geschätzten Spiegel an jedem Tag sehen und verstehen kannst, warum das Timing zählt.
+GESCHÄTZTE SPIEGEL (PK-KURVEN, PRO)
+• Geschätzte Spiegelkurve zwischen den Injektionen, berechnet aus deinem eigenen Protokoll
+• Geschätzter Höchst-, Tal- und aktueller Wert. Das sind Modellschätzungen, keine Laborwerte.
+
+TÄGLICHER CHECK-IN + PROTOCOL SCORE
+• Energie, Stimmung, Libido, Schlaf und mentale Klarheit in rund 30 Sekunden bewerten
+• Daraus entsteht dein Protocol Score von 0 bis 100 – so siehst du Trends über die Zeit
+
+BLUTWERTE (PRO)
+• 19 Marker, u. a. Gesamt- und freies Testosteron, Östradiol (E2), Hämatokrit und PSA
+• Referenzbereiche und Verlaufsdiagramme für jeden Marker über alle Blutabnahmen
+• Fotos vom Laborbefund und Notizen vom Arzttermin anhängen
+
+PEPTIDE, GLP-1 & BEGLEITMEDIKATION (PRO)
+• 34 Vorlagen für Peptide, GLP-1 und Begleitmittel wie hCG und Anastrozol
+• Pläne und Erinnerungen parallel zu deinem Testosteron-Protokoll
+
+APPLE HEALTH, EXPORT & ARZTTERMIN
+• Liest HRV, Ruhepuls, Schlaf, Schritte und Gewicht aus Apple Health; schreibt Gewicht
+• CSV-Import und -Export
+• PDF-Bericht für den Arzttermin (Pro)
 
 PRIVAT VON GRUND AUF
-Kein Konto. Keine Cloud. Kein Tracking. Deine Gesundheitsdaten leben ausschließlich auf deinem Gerät, Punkt. Es wird niemals etwas hochgeladen.
+• Kein Konto, keine Registrierung, keine Werbung
+• Dein Gesundheitsprotokoll wird auf deinem iPhone gespeichert, nicht auf unseren Servern
+• In 11 Sprachen verfügbar. Erfordert ein iPhone mit iOS 17 oder neuer.
 
 TROUGH PRO
-Schalte mit Trough Pro erweiterte PK-Modellierung, unbegrenzte Wirkstoffe, die vollständige Blutwert-Historie und mehr frei.
+Trough ist kostenlos. Trough Pro schaltet geschätzte PK-Kurven, Blutwerte, Peptide und GLP-1 sowie den PDF-Arztbericht frei. Monats- und Jahresabo verfügbar, mit kostenloser Testphase für berechtigte Neukunden.
 
-• Monats- und Jahresabonnements verfügbar
-• Die Zahlung wird bei Kaufbestätigung deinem Apple-ID-Konto belastet
-• Das Abonnement verlängert sich automatisch, sofern die automatische Verlängerung nicht mindestens 24 Stunden vor Ende des laufenden Zeitraums deaktiviert wird
-• Dein Konto wird innerhalb von 24 Stunden vor Ende des laufenden Zeitraums für die Verlängerung belastet
-• Verwalte oder kündige jederzeit in den Einstellungen deines App-Store-Kontos
+• Die Zahlung wird bei Kaufbestätigung über deinen Apple-Account abgerechnet
+• Das Abo verlängert sich automatisch, sofern es nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt wird
+• Die Verlängerung wird innerhalb von 24 Stunden vor Ende des aktuellen Zeitraums berechnet
+• Verwalten oder kündigen jederzeit in den Einstellungen deines Apple-Accounts
 
-Trough ist ein Tracking-Tool und bietet keine medizinische Beratung. Konsultiere stets deinen Arzt oder medizinisches Fachpersonal.
+Trough ist ein Tracking-Tool, kein Medizinprodukt, und ersetzt keine ärztliche Beratung. Sprich immer mit deinem Arzt, bevor du etwas an deinem Protokoll änderst.
 
 Nutzungsbedingungen: https://gwlabs.app/terms
 Datenschutz: https://gwlabs.app/privacy

@@ -1,1 +1,1 @@
-hormone,peptide,bloodwork,shot,dose,levels,labs,hrt,test,e2,estradiol,cycle,jab,bloods,glp-1,syringe
+peptide,hormone,jab,shot,dose,levels,bloods,results,glp-1,oestradiol,e2,hrt,male,reminder,diary

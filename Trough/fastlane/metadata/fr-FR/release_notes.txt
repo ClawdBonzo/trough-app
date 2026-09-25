@@ -1,3 +1,8 @@
-• Correction d'un problème d'import CSV qui pouvait confondre des colonnes de bilans
-• Les rappels de compléments toutes les deux semaines arrivent désormais les bonnes semaines
-• Améliorations de stabilité
+Trough 1.4 est notre plus grosse mise à jour à ce jour.
+
+• Design entièrement repensé dans toute l'app, et nouvelle icône
+• Séries de bilans, 11 niveaux et un rang de protocole du Papier au Diamant
+• 42 badges, défis quotidiens et célébrations
+• Cartes à partager pour votre série, votre rang et vos badges
+• Nouveaux widgets pour l'écran d'accueil et l'écran verrouillé, dont un widget « prochain badge »
+• Améliorations de performance et de stabilité

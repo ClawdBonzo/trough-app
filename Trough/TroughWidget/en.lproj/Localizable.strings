@@ -19,3 +19,35 @@
 /* Live Activity */
 "widget.untilNext" = "until next";
 "widget.injection" = "Injection";
+
+/* ===== 1.4 widgets — English source; other locales translated separately ===== */
+
+/* Streak widget (restyle) */
+"widget.kicker.streak" = "Streak";
+"widget.kicker.checkInStreak" = "Check-in streak";
+"widget.checkedInToday" = "Checked in today";
+"widget.levelShort" = "L%d";
+
+/* Next badge widget */
+"widget.nextBadge.displayName" = "Next Badge";
+"widget.nextBadge.description" = "The badge you're closest to, and how many to go.";
+"widget.kicker.nextBadge" = "Next badge";
+"widget.badge.toGo" = "%d to go";
+"widget.badge.progress" = "%1$d of %2$d";
+"widget.badge.allEarned" = "Every badge earned";
+"widget.badge.allEarnedSub" = "The full collection. Keep the streak alive.";
+"widget.badge.openApp" = "Open Trough to start collecting.";
+
+/* Lock Screen: streak */
+"widget.lock.displayName" = "Streak";
+"widget.lock.description" = "Your check-in streak and next injection, on the Lock Screen.";
+"widget.lock.streak" = "%d-day streak";
+"widget.lock.inlineCheckIn" = "%d-day streak · check in";
+
+/* Lock Screen: next injection */
+"widget.injLock.displayName" = "Next Injection";
+"widget.injLock.description" = "Days until your next scheduled injection.";
+"widget.injLock.today" = "Today";
+"widget.injLock.daysShort" = "%dd";
+"widget.injLock.none" = "No injection scheduled";
+/* ===== end 1.4 widgets ===== */

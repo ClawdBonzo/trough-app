@@ -8,7 +8,7 @@ struct SupplementConfigView: View {
 
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            TRBackground()
             List {
                 if vm.allSupplements.isEmpty {
                     emptySection
@@ -20,6 +20,7 @@ struct SupplementConfigView: View {
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
+            .listRowSeparatorTint(TR.Palette.hairline)
         }
         .navigationTitle(NSLocalizedString("supplements.title", comment: ""))
         .navigationBarTitleDisplayMode(.large)
@@ -33,51 +34,45 @@ struct SupplementConfigView: View {
 
     private var emptySection: some View {
         Section {
-            VStack(spacing: 12) {
-                Image(systemName: "pills.circle")
-                    .font(.system(size: 40))
-                    .foregroundColor(AppColors.accent.opacity(0.4))
-                Text(NSLocalizedString("supplements.noSupplements", comment: ""))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                Text(NSLocalizedString("supplements.addHint", comment: ""))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
+            GlassEmptyState(
+                systemImage: "pills.fill",
+                title: NSLocalizedString("supplements.noSupplements", comment: ""),
+                message: NSLocalizedString("supplements.addHint", comment: ""),
+                tint: TR.Palette.teal
+            )
+            .padding(.vertical, -12)
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(Color.clear)
     }
 
     private var stackSection: some View {
         Section(NSLocalizedString("supplements.yourStack", comment: "")) {
             ForEach(vm.allSupplements, id: \.id) { s in
                 HStack(spacing: 12) {
+                    GlassIconTile(systemImage: "pills.fill", tint: s.isActive ? TR.Palette.teal : TR.Palette.textTertiary)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(s.supplementName)
-                            .font(.subheadline)
-                            .foregroundColor(s.isActive ? .white : .secondary)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(s.isActive ? TR.Palette.textPrimary : TR.Palette.textSecondary)
                         Text(doseLabel(s))
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                     Spacer()
                     Toggle("", isOn: Binding(
                         get: { s.isActive },
                         set: { _ in vm.toggleSupplementActive(s) }
                     ))
-                    .tint(AppColors.accent)
+                    .tint(TR.Palette.coral)
                     .labelsHidden()
                 }
-                .padding(.vertical, 2)
+                .padding(.vertical, 4)
             }
             .onDelete { offsets in
                 offsets.forEach { vm.deleteSupplement(vm.allSupplements[$0]) }
             }
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 
     private var addSection: some View {
@@ -86,11 +81,12 @@ struct SupplementConfigView: View {
                 vm.prepareAddSupplementForm()
                 vm.showingAddSupplement = true
             } label: {
-                Label(NSLocalizedString("supplements.addSupplement", comment: ""), systemImage: "plus.circle.fill")
-                    .foregroundColor(AppColors.accent)
+                Label(NSLocalizedString("supplements.addSupplement", comment: ""), systemImage: "plus")
             }
+            .buttonStyle(.trPrimary)
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
     }
 
     private var disclaimerSection: some View {
@@ -121,12 +117,13 @@ struct SupplementAddSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
                 Form {
                     presetSection
                     doseSection
                 }
                 .scrollContentBackground(.hidden)
+                .tint(TR.Palette.coral)
             }
             .navigationTitle(NSLocalizedString("supplements.addSupplement", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
@@ -136,7 +133,8 @@ struct SupplementAddSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(NSLocalizedString("common.add", comment: "")) { vm.saveSupplement() }
-                        .foregroundColor(AppColors.accent)
+                        .fontWeight(.bold)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
             .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
@@ -165,7 +163,7 @@ struct SupplementAddSheet: View {
                     .autocorrectionDisabled()
             }
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 
     private var doseSection: some View {
@@ -181,9 +179,9 @@ struct SupplementAddSheet: View {
             HStack {
                 TextField(NSLocalizedString("supplements.every", comment: ""), text: $vm.formSupplFreq)
                     .keyboardType(.numberPad)
-                Text(NSLocalizedString("unit.days", comment: "")).foregroundColor(.secondary)
+                Text(NSLocalizedString("unit.days", comment: "")).foregroundStyle(TR.Palette.textSecondary)
             }
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 }

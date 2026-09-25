@@ -11,105 +11,118 @@ struct ProFeaturesSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground(glow: TR.Palette.coral, glowOpacity: 0.2)
+                ProSunsetGlow()
 
                 ScrollView {
-                    VStack(spacing: 24) {
+                    VStack(spacing: 22) {
                         // Header
-                        VStack(spacing: 8) {
-                            Image(systemName: "star.fill")
-                                .font(.system(size: 36))
-                                .foregroundColor(AppColors.softCTA)
+                        VStack(spacing: 10) {
+                            OnboardingIconTile(systemImage: "star.fill",
+                                               colors: [TR.Palette.gold, TR.Palette.tangerine, TR.Palette.coral],
+                                               size: 60)
+                                .trPopOnAppear()
                             Text(NSLocalizedString("pro.title", comment: ""))
-                                .font(.title2.bold())
-                                .foregroundColor(.white)
+                                .font(TR.Font.display(.title2, weight: .black))
+                                .foregroundStyle(TR.Palette.textPrimary)
+                                .multilineTextAlignment(.center)
+                                .accessibilityAddTraits(.isHeader)
                             if trialAvailable {
-                                Text(NSLocalizedString("pro.trialIncluded", comment: ""))
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                TRPill(Text(NSLocalizedString("pro.trialIncluded", comment: "")),
+                                       systemImage: "gift.fill", tint: TR.Palette.teal)
                             }
                         }
                         .padding(.top, 8)
+                        .trRevealOnAppear()
 
                         // Feature list
                         VStack(alignment: .leading, spacing: 16) {
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "waveform.path.ecg",
                                 title: NSLocalizedString("pro.pkCurves", comment: ""),
-                                detail: NSLocalizedString("pro.pkCurvesDesc", comment: "")
+                                detail: NSLocalizedString("pro.pkCurvesDesc", comment: ""),
+                                tint: OnboardingTint.coral
                             )
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "chart.line.uptrend.xyaxis",
                                 title: NSLocalizedString("pro.trendHistory", comment: ""),
-                                detail: NSLocalizedString("pro.trendHistoryDesc", comment: "")
+                                detail: NSLocalizedString("pro.trendHistoryDesc", comment: ""),
+                                tint: OnboardingTint.gold
                             )
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "drop.fill",
                                 title: NSLocalizedString("pro.bloodwork", comment: ""),
-                                detail: NSLocalizedString("pro.bloodworkDesc", comment: "")
+                                detail: NSLocalizedString("pro.bloodworkDesc", comment: ""),
+                                tint: OnboardingTint.sky
                             )
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "chart.bar.doc.horizontal",
                                 title: NSLocalizedString("pro.reports", comment: ""),
-                                detail: NSLocalizedString("pro.reportsDesc", comment: "")
+                                detail: NSLocalizedString("pro.reportsDesc", comment: ""),
+                                tint: OnboardingTint.lilac
                             )
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "pills.fill",
                                 title: NSLocalizedString("pro.peptides", comment: ""),
-                                detail: NSLocalizedString("pro.peptidesDesc", comment: "")
+                                detail: NSLocalizedString("pro.peptidesDesc", comment: ""),
+                                tint: OnboardingTint.mint
                             )
-                            ProFeatureItem(
-                                icon: "figure.walk.circle",
+                            OnboardingFeatureRow(
+                                icon: "figure.walk.circle.fill",
                                 title: NSLocalizedString("pro.siteRotation", comment: ""),
-                                detail: NSLocalizedString("pro.siteRotationDesc", comment: "")
+                                detail: NSLocalizedString("pro.siteRotationDesc", comment: ""),
+                                tint: OnboardingTint.teal
                             )
-                            ProFeatureItem(
+                            OnboardingFeatureRow(
                                 icon: "bell.badge.fill",
                                 title: NSLocalizedString("pro.reminders", comment: ""),
-                                detail: NSLocalizedString("pro.remindersDesc", comment: "")
+                                detail: NSLocalizedString("pro.remindersDesc", comment: ""),
+                                tint: [TR.Palette.tangerine, TR.Palette.coral]
                             )
                         }
-                        .padding(16)
-                        .background(AppColors.card)
-                        .cornerRadius(16)
+                        .trCard(tint: TR.Palette.coral, padding: 16)
+                        .trRevealOnAppear(delay: 0.1)
 
                         // Always free callout
-                        HStack(spacing: 10) {
-                            Image(systemName: "heart.text.square.fill")
-                                .foregroundColor(.green)
+                        HStack(spacing: 12) {
+                            OnboardingIconTile(systemImage: "heart.text.square.fill", colors: OnboardingTint.mint, size: 36)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(NSLocalizedString("pro.alwaysFree", comment: ""))
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(.white)
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundStyle(TR.Palette.textPrimary)
                                 Text(NSLocalizedString("pro.alwaysFreeDesc", comment: ""))
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(TR.Palette.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
+                            Spacer(minLength: 0)
                         }
-                        .padding(12)
-                        .background(AppColors.card)
-                        .cornerRadius(12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.green.opacity(0.3), lineWidth: 1)
-                        )
-
-                        // CTA
-                        Button {
-                            dismiss()
-                            onStartTrial()
-                        } label: {
-                            Text(trialAvailable ? NSLocalizedString("paywall.startTrial", comment: "") : "Subscribe")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(AppColors.softCTA)
-                                .cornerRadius(14)
-                        }
-                        .buttonStyle(.plain)
+                        .trCard(tint: TR.Palette.mint, padding: 14)
+                        .accessibilityElement(children: .combine)
+                        .trRevealOnAppear(delay: 0.16)
                     }
-                    .padding()
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 16)
+                }
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    // CTA — opens the paywall, which shows price, period and renewal terms.
+                    Button {
+                        dismiss()
+                        onStartTrial()
+                    } label: {
+                        Text(trialAvailable
+                             ? NSLocalizedString("paywall.startTrial", comment: "")
+                             : NSLocalizedString("dashboard.trial.subscribeButton", comment: ""))
+                    }
+                    .buttonStyle(.trPrimary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                    .background {
+                        LinearGradient(colors: [TR.Palette.background.opacity(0), TR.Palette.background],
+                                       startPoint: .top, endPoint: .center)
+                            .ignoresSafeArea()
+                    }
                 }
             }
             .task {
@@ -122,37 +135,16 @@ struct ProFeaturesSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { dismiss() } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.secondary)
+                        Image(systemName: "xmark")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .frame(width: 30, height: 30)
+                            .background(TR.Palette.surfaceRaised.opacity(0.8), in: Circle())
                     }
+                    .accessibilityLabel(Text(onbLoc("onb14.close", "Close")))
                 }
             }
         }
-    }
-}
-
-// MARK: - Feature Item
-
-private struct ProFeatureItem: View {
-    let icon: String
-    let title: String
-    let detail: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundColor(AppColors.softCTA)
-                .frame(width: 28)
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
-                Text(detail)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
+        .preferredColorScheme(.dark)
     }
 }

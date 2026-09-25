@@ -655,14 +655,21 @@ final class DashboardViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Review Prompt
+    // MARK: - Derived (read-time) helpers for the 1.4 dashboard
 
-    /// Call this after check-in dismissal — prompts for an App Store review at a
-    /// high-score moment. All throttling lives in ReviewPromptService.
-    func checkReviewPrompt() {
-        if protocolScore >= 75 {
-            ReviewPromptService.shared.requestIfAppropriate(trigger: "highScore")
-        }
+    /// Days until the primary protocol's next injection (0 = due today). Nil without a protocol.
+    var daysUntilNextInjection: Int? {
+        guard let proto = activeProtocol else { return nil }
+        if injectionOverdueDays > 0 { return 0 }
+        return max(0, proto.frequencyDays - daysSinceLastInjection)
+    }
+
+    /// True when there are check-ins in days 8–14, so a week-over-week delta is meaningful.
+    var hasPriorWeek: Bool { recentCheckins.count > 7 }
+
+    /// Last 7 check-ins, oldest → newest, for the score card's mini bars.
+    var weekScores: [(date: Date, score: Double)] {
+        recentCheckins.prefix(7).reversed().map { ($0.date, $0.protocolScore) }
     }
 
 }

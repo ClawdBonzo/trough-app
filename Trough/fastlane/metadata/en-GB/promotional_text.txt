@@ -1,1 +1,1 @@
-Private, on-device TRT tracking: model your levels with PK curves, log bloodwork and doses, and export a doctor-ready PDF for your next appointment. No account, no cloud.
+Trough 1.4 is here: a fresh design, check-in streaks, 42 badges and a protocol rank from Paper to Diamond, plus new Home and Lock Screen widgets. Still no account.

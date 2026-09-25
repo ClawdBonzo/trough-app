@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Tutto il protocollo. *In un colpo d'occhio.*",
+    "sub": "Dosi, check-in, serie ed esami insieme in una dashboard pulita."
+  },
+  "2": {
+    "headline": "30 secondi al giorno. *Una serie che dura.*",
+    "sub": "Un check-in veloce, XP guadagnati e la fiamma sempre accesa."
+  },
+  "3": {
+    "headline": "I tuoi livelli *tra una dose e l'altra.*",
+    "sub": "Una curva stimata dal tuo diario delle iniezioni, con la prossima dose in vista."
+  },
+  "4": {
+    "headline": "Ogni iniezione. *Timbrata e ruotata.*",
+    "sub": "Registrala in pochi secondi, prendi il timbro e il punto suggerito per la prossima."
+  },
+  "5": {
+    "headline": "Conquista il tuo *grado di protocollo.*",
+    "sub": "Livelli e badge per la tua costanza, da Carta a Diamante."
+  },
+  "6": {
+    "headline": "I tuoi esami, *finalmente in ordine.*",
+    "sub": "Tutti i referti in un posto, con l'andamento di ogni marcatore."
+  },
+  "7": {
+    "headline": "Privata per scelta. *Senza account.*",
+    "sub": "Il tuo diario resta sul tuo iPhone. Niente registrazione, niente pubblicità, niente sync.",
+    "chips": [
+      "Senza account",
+      "Resta sul tuo iPhone",
+      "Niente pubblicità"
+    ]
+  }
+}

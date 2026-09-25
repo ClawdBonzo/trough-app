@@ -28,13 +28,29 @@ struct ExportDataView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground(glow: TR.Palette.sky)
 
                 ScrollView {
-                    VStack(spacing: 16) {
+                    VStack(spacing: 14) {
+                        HStack(spacing: 14) {
+                            GlassIconTile(systemImage: "square.and.arrow.up.fill", tint: TR.Palette.sky, size: 48, filled: true)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(NSLocalizedString("export.hero.title", value: "Your data, your files", comment: "Export screen hero title"))
+                                    .font(TR.Font.display(.title3))
+                                    .foregroundStyle(TR.Palette.textPrimary)
+                                Text(NSLocalizedString("export.hero.subtitle", value: "Generated on this device, shared only where you choose.", comment: "Export screen hero subtitle"))
+                                    .font(.subheadline)
+                                    .foregroundStyle(TR.Palette.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                        .trCard(tint: TR.Palette.sky)
+
                         exportRow(
                             option: .checkinsCSV,
                             icon: "checkmark.circle.fill",
+                            tint: TR.Palette.teal,
                             title: NSLocalizedString("export.checkins.title", comment: ""),
                             subtitle: NSLocalizedString("export.checkins.subtitle", comment: ""),
                             locked: false
@@ -43,6 +59,7 @@ struct ExportDataView: View {
                         exportRow(
                             option: .bloodworkCSV,
                             icon: "drop.fill",
+                            tint: TR.Palette.coral,
                             title: NSLocalizedString("export.bloodwork.title", comment: ""),
                             subtitle: NSLocalizedString("export.bloodwork.subtitle", comment: ""),
                             locked: false
@@ -51,6 +68,7 @@ struct ExportDataView: View {
                         exportRow(
                             option: .doctorPDF,
                             icon: "doc.richtext.fill",
+                            tint: TR.Palette.gold,
                             title: NSLocalizedString("export.doctor.title", comment: ""),
                             subtitle: NSLocalizedString("export.doctor.subtitle", comment: ""),
                             locked: !subscriptionManager.isSubscribed
@@ -60,17 +78,19 @@ struct ExportDataView: View {
                         HStack(alignment: .top, spacing: 8) {
                             Image(systemName: "hand.raised.fill")
                                 .font(.caption)
-                                .foregroundColor(AppColors.textSecondary)
+                                .foregroundStyle(TR.Palette.textTertiary)
                             Text(NSLocalizedString("export.sensitiveNote", comment: ""))
                                 .font(.caption)
-                                .foregroundColor(AppColors.textSecondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 4)
+                        .padding(.horizontal, 6)
 
                         DisclaimerBanner(type: .bloodwork)
                     }
-                    .padding()
+                    .padding(.horizontal, TR.Metrics.gutter)
+                    .padding(.vertical, 12)
                 }
             }
             .navigationTitle(NSLocalizedString("export.title", comment: ""))
@@ -78,7 +98,8 @@ struct ExportDataView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(NSLocalizedString("common.done", comment: "")) { dismiss() }
-                        .foregroundColor(AppColors.accent)
+                        .fontWeight(.bold)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
             .sheet(item: $shareFile, onDismiss: {
@@ -106,6 +127,7 @@ struct ExportDataView: View {
 
     private func exportRow(option: ExportOption,
                            icon: String,
+                           tint: Color,
                            title: String,
                            subtitle: String,
                            locked: Bool) -> some View {
@@ -117,41 +139,37 @@ struct ExportDataView: View {
             }
         } label: {
             HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(AppColors.accent)
-                    .frame(width: 30)
+                GlassIconTile(systemImage: icon, tint: tint, size: 40)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(TR.Palette.textPrimary)
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                         .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Spacer(minLength: 4)
 
                 if generatingOption == option {
                     ProgressView()
-                        .tint(AppColors.accent)
+                        .tint(TR.Palette.coral)
                 } else if locked {
-                    Image(systemName: "lock.fill")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    TRPill(Text(verbatim: "Pro"), systemImage: "lock.fill", tint: TR.Palette.gold)
                 } else {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(TR.Palette.textSecondary)
+                        .frame(width: 34, height: 34)
+                        .background(TR.Palette.surfaceRaised, in: Circle())
                 }
             }
-            .padding()
-            .background(AppColors.card)
-            .cornerRadius(16)
+            .trCard(tint: tint, padding: 14)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.trPressable)
         .disabled(generatingOption != nil)
         .accessibilityHint(locked ? "Opens Pro free trial" : "Generates the file, then opens the share sheet")
     }

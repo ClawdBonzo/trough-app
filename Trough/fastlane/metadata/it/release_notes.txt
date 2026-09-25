@@ -1,3 +1,8 @@
-• Risolto un problema di importazione CSV che poteva confondere le colonne delle analisi
-• I promemoria quindicinali degli integratori ora arrivano nelle settimane giuste
-• Miglioramenti di stabilità
+Trough 1.4 è il nostro aggiornamento più grande di sempre.
+
+• Design completamente nuovo in tutta l'app, e una nuova icona
+• Serie di check-in, 11 livelli e un grado di protocollo da Carta a Diamante
+• 42 badge, sfide quotidiane e festeggiamenti
+• Card da condividere per serie, grado e badge
+• Nuovi widget per la schermata Home e di blocco, incluso quello per il prossimo badge
+• Miglioramenti di prestazioni e stabilità

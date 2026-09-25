@@ -1,36 +1,58 @@
-Poznaj swój Protocol Score w 7 dni.
+Zapisuj każdy zastrzyk TRT, sprawdzaj szacowany poziom testosteronu między dawkami i miej wyniki badań krwi w porządku – wszystko w jednej prywatnej aplikacji.
 
-Trough to prywatna, w pełni offline'owa aplikacja do śledzenia TRT i hormonów, stworzona dla mężczyzn na terapii zastępczej testosteronem.
+Trough to dziennik testosteronu i zastrzyków dla mężczyzn na TRT lub terapii hormonalnej. Zapisz iniekcję w kilka sekund, dostań podpowiedź miejsca na następny zastrzyk i zrób codzienny check-in w 30 sekund. Bez konta i bez reklam.
 
-ŚLEDŹ SWÓJ PROTOKÓŁ
-• Zapisuj zastrzyki z dawką, rotacją miejsc wkłucia i preparatem
-• Pełne wsparcie dla cypionatu, enantatu, propionatu i undekanianu testosteronu oraz łączenia wielu estrów
-• Śledź GLP-1 (semaglutyd, tirzepatyd), peptydy i środki dodatkowe (anastrozol, hCG i więcej)
+NOWOŚCI W 1.4
+• Zupełnie nowy wygląd – od pulpitu po dziennik zastrzyków
+• Serie check-inów, 11 poziomów i ranga protokołu od Papieru do Diamentu
+• 42 odznaki za regularne zapisywanie
+• Codzienne wyzwania i świętowanie każdego kamienia milowego
+• Karty do udostępniania serii, rangi i odznak
+• Widżety na ekran początkowy i ekran blokady, w tym widżet z następną odznaką
 
-CODZIENNY CHECK-IN SAMOPOCZUCIA
-• Oceń energię, nastrój, libido, jakość snu i jasność umysłu w 30 sekund
-• Buduje twój osobisty Protocol Score — jedną liczbę, która pokazuje, jak działa twój protokół
-• Śledź trendy w czasie, gdy dopracowujesz swoją rutynę
+DZIENNIK ZASTRZYKÓW
+• Dawka, preparat i miejsce iniekcji zapisane w kilka sekund
+• Kalendarz wszystkich zastrzyków
+• Podpowiedzi rotacji miejsc wkłucia
+• Przypomnienia w dniu zastrzyku i Aktywność na żywo z odliczaniem do następnej dawki
+• Cypionian, enantan, propionian i undekanian testosteronu oraz protokoły z kilkoma estrami
 
-KRZYWE PK (Pro)
-• Prawdziwe modelowanie farmakokinetyczne z użyciem równania Batemana z opóźnieniem wchłaniania
-• Szacowany szczyt, dołek i aktualny poziom z pasmami ufności
+SZACOWANY POZIOM (KRZYWE PK, PRO)
+• Szacowana krzywa stężenia we krwi między dawkami, liczona z Twojego dziennika zastrzyków
+• Szacowany szczyt, dołek i obecny poziom. To szacunki modelu, a nie wyniki badań.
 
-ŚLEDZENIE BADAŃ KRWI (Pro)
-• Zapisuj wyniki laboratoryjne z własnymi zakresami referencyjnymi
-• Wizualne trendy z kolorowymi pasmami
+CODZIENNY CHECK-IN + PROTOCOL SCORE
+• Oceń energię, nastrój, libido, sen i jasność umysłu w około 30 sekund
+• Z odpowiedzi powstaje Protocol Score od 0 do 100, dzięki któremu widzisz trendy w czasie
 
-PEPTYDY I WSPOMAGANIE (Pro)
-• Śledź peptydy, agonistów GLP-1 i preparaty dodatkowe
-• Koreluj je ze wskaźnikami samopoczucia i badaniami krwi
+BADANIA KRWI (PRO)
+• 19 markerów, m.in. testosteron całkowity i wolny, estradiol (E2), hematokryt i PSA
+• Zakresy referencyjne i wykresy każdego markera z kolejnych pobrań
+• Dołącz zdjęcia wyników i notatki od lekarza
 
-PRYWATNOŚĆ W STANDARDZIE
-• 100% na urządzeniu. Bez konta, bez chmury, bez śledzenia.
-• Twoje dane nigdy nie opuszczają twojego iPhone'a
+PEPTYDY, GLP-1 I LEKI WSPOMAGAJĄCE (PRO)
+• 34 gotowe szablony peptydów, GLP-1 i leków wspomagających, np. hCG i anastrozolu
+• Harmonogramy i przypomnienia obok protokołu testosteronu
 
-Rozpocznij 3-dniowy darmowy okres próbny, aby odblokować wszystkie funkcje Pro. Anuluj w każdej chwili.
+APPLE ZDROWIE, EKSPORT I WIZYTA U LEKARZA
+• Odczytuje HRV, tętno spoczynkowe, sen, kroki i wagę z aplikacji Zdrowie; zapisuje wagę
+• Import i eksport CSV
+• Raport PDF na następną wizytę u lekarza (Pro)
 
-Trough Pro to subskrypcja odnawiana automatycznie. Opłata jest pobierana z konta Apple ID i odnawia się automatycznie, chyba że anulujesz ją co najmniej 24 godziny przed końcem okresu. Zarządzaj subskrypcją lub anuluj ją w Ustawieniach.
+PRYWATNOŚĆ OD PODSTAW
+• Bez konta, bez rejestracji, bez reklam
+• Twój dziennik zdrowia jest przechowywany na Twoim iPhonie, a nie na naszych serwerach
+• Dostępna w 11 językach. Wymaga iPhone'a z iOS 17 lub nowszym.
 
-Warunki użytkowania: https://gwlabs.app/terms
+TROUGH PRO
+Trough jest darmowy. Trough Pro odblokowuje szacowane krzywe PK, badania krwi, peptydy i GLP-1 oraz raport PDF dla lekarza. Subskrypcja miesięczna lub roczna, z darmowym okresem próbnym dla uprawnionych nowych subskrybentów.
+
+• Płatność zostanie pobrana z konta Apple po potwierdzeniu zakupu
+• Subskrypcja odnawia się automatycznie, jeśli nie zostanie anulowana co najmniej 24 godziny przed końcem bieżącego okresu
+• Opłata za odnowienie jest pobierana w ciągu 24 godzin przed końcem bieżącego okresu
+• Zarządzaj subskrypcją lub anuluj ją w dowolnym momencie w ustawieniach konta Apple
+
+Trough to narzędzie do zapisywania danych, a nie wyrób medyczny, i nie udziela porad medycznych. Zawsze porozmawiaj z lekarzem, zanim zmienisz swój protokół.
+
+Warunki korzystania: https://gwlabs.app/terms
 Polityka prywatności: https://gwlabs.app/privacy

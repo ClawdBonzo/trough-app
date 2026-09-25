@@ -9,7 +9,7 @@ struct PeptideLogView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
                 Form {
                     compoundSection
                     doseSection
@@ -20,6 +20,7 @@ struct PeptideLogView: View {
                     notesSection
                 }
                 .scrollContentBackground(.hidden)
+                .tint(TR.Palette.coral)
             }
             .navigationTitle(vm.editingLog != nil ? NSLocalizedString("peptides.editLog", comment: "") : NSLocalizedString("peptides.logDose", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
@@ -29,7 +30,8 @@ struct PeptideLogView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(NSLocalizedString("common.save", comment: "")) { vm.saveForm() }
-                        .foregroundColor(AppColors.accent)
+                        .fontWeight(.bold)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
             .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
@@ -57,8 +59,15 @@ struct PeptideLogView: View {
                 TextField(NSLocalizedString("peptides.compoundName", comment: ""), text: $vm.formCustomName)
                     .autocorrectionDisabled()
             }
+
+            let category = PeptideCategory.of(vm.effectiveCompoundName)
+            HStack(spacing: 10) {
+                GlassIconTile(systemImage: category.symbol, tint: category.tint, size: 28)
+                TRKicker(Text(category.title), color: category.tint)
+            }
+            .accessibilityElement(children: .combine)
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 
     private var doseSection: some View {
@@ -79,7 +88,7 @@ struct PeptideLogView: View {
             .pickerStyle(.menu)
             DatePicker(NSLocalizedString("peptides.dateTime", comment: ""), selection: $vm.formDate)
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 
     private var siteSection: some View {
@@ -95,7 +104,7 @@ struct PeptideLogView: View {
             TextField(NSLocalizedString("peptides.batchLot", comment: ""), text: $vm.formBatch)
                 .autocorrectionDisabled()
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 
     private var notesSection: some View {
@@ -104,6 +113,6 @@ struct PeptideLogView: View {
                 .frame(minHeight: 60)
                 .scrollContentBackground(.hidden)
         }
-        .listRowBackground(AppColors.card)
+        .listRowBackground(TR.Palette.surface)
     }
 }

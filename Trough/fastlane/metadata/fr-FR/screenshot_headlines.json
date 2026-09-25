@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Tout votre protocole. *En un coup d'œil.*",
+    "sub": "Doses, bilans, séries et analyses réunis sur un tableau de bord épuré."
+  },
+  "2": {
+    "headline": "30 secondes par jour. *La série continue.*",
+    "sub": "Un bilan rapide, des XP gagnés et la flamme qui reste allumée."
+  },
+  "3": {
+    "headline": "Vos taux *entre deux injections.*",
+    "sub": "Une courbe estimée d'après votre journal d'injections, avec la prochaine dose en vue."
+  },
+  "4": {
+    "headline": "Chaque injection. *Tamponnée, alternée.*",
+    "sub": "Notée en quelques secondes, tampon à la clé et suggestion du prochain site."
+  },
+  "5": {
+    "headline": "Gagnez votre *rang de protocole.*",
+    "sub": "Niveaux et badges pour votre régularité, du Papier au Diamant."
+  },
+  "6": {
+    "headline": "Vos analyses, *enfin rangées.*",
+    "sub": "Tous vos bilans au même endroit, avec l'évolution de chaque marqueur."
+  },
+  "7": {
+    "headline": "Privé par nature. *Sans compte.*",
+    "sub": "Votre journal reste sur votre iPhone. Pas d'inscription, pas de pub, rien à synchroniser.",
+    "chips": [
+      "Sans compte",
+      "Reste sur l'iPhone",
+      "Sans pub"
+    ]
+  }
+}

@@ -5,6 +5,7 @@ import RevenueCat
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
 
     enum Plan: CaseIterable {
@@ -39,11 +40,6 @@ struct PaywallView: View {
         }
 
         var isBestValue: Bool { self == .monthly }
-
-        // Gold badge color for best value, teal for savings
-        var badgeColor: Color {
-            self == .monthly ? Color(hex: "#D4A017") : Color(hex: "#0AB4A6")
-        }
     }
 
     @State private var offerings: Offerings? = nil
@@ -101,67 +97,57 @@ struct PaywallView: View {
 
     var body: some View {
         ZStack {
-            // Background gradient
-            LinearGradient(
-                colors: [Color(hex: "#0D0D1A"), Color(hex: "#1A1A2E"), Color(hex: "#0F1A2E")],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-
-            // Subtle radial glow top-center
-            RadialGradient(
-                colors: [Color(hex: "#E94560").opacity(0.12), .clear],
-                center: .init(x: 0.5, y: 0.0),
-                startRadius: 0,
-                endRadius: 260
-            )
-            .ignoresSafeArea()
+            TRBackground(glow: TR.Palette.coral, glowOpacity: 0.2)
+            ProSunsetGlow()
 
             VStack(spacing: 0) {
-                // Dismiss handle
-                Capsule()
-                    .fill(Color.white.opacity(0.15))
-                    .frame(width: 36, height: 4)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
-
                 // Close button top-right
                 HStack {
                     Spacer()
                     Button { dismiss() } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(Color.white.opacity(0.4))
+                        Image(systemName: "xmark")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .frame(width: 32, height: 32)
+                            .background(TR.Palette.surfaceRaised.opacity(0.8), in: Circle())
+                            .overlay(Circle().strokeBorder(TR.Palette.hairline))
+                            .frame(width: TR.Metrics.minTap, height: TR.Metrics.minTap)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text(onbLoc("onb14.close", "Close")))
+                }
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
+
+                ScrollView {
+                    VStack(spacing: 20) {
+                        header
+                            .trRevealOnAppear()
+
+                        featureList
+                            .trRevealOnAppear(delay: 0.1)
+
+                        planGrid
+                            .padding(.top, 4)
+                            .trRevealOnAppear(delay: 0.18)
                     }
                     .padding(.horizontal, 20)
+                    .padding(.bottom, 12)
                 }
 
-                // Compact header
-                compactHeader
-                    .padding(.top, 4)
-
-                // Feature bullets (compact)
-                featureBullets
-                    .padding(.top, 12)
-                    .padding(.horizontal, 20)
-
-                // Plan cards
-                planGrid
-                    .padding(.top, 14)
-                    .padding(.horizontal, 16)
-
-                // CTA
                 ctaSection
-                    .padding(.top, 14)
                     .padding(.horizontal, 20)
-
-                // Footer
-                footer
                     .padding(.top, 10)
-                    .padding(.bottom, 16)
+
+                footer
+                    .padding(.top, 8)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 12)
             }
         }
+        .preferredColorScheme(.dark)
+        .onAppear { ReviewPromptService.paywallShownThisSession = true }
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
             let products = offerings?.current?.availablePackages.map(\.storeProduct) ?? []
@@ -171,73 +157,67 @@ struct PaywallView: View {
         .onChange(of: restoreSuccess) { _, v in if v { dismiss() } }
     }
 
-    // MARK: - Compact Header
+    // MARK: - Header
 
-    private var compactHeader: some View {
-        VStack(spacing: 6) {
-            HStack(spacing: 10) {
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(
-                        LinearGradient(colors: [Color(hex: "#E94560"), Color(hex: "#D4A017")],
-                                       startPoint: .top, endPoint: .bottom)
-                    )
-                Text("Trough Pro")
-                    .font(.system(size: 26, weight: .black, design: .rounded))
-                    .foregroundColor(.white)
-            }
+    private var header: some View {
+        VStack(spacing: 10) {
+            OnboardingIconTile(systemImage: "waveform.path.ecg",
+                               colors: [TR.Palette.coralLight, TR.Palette.coral, Color(trHex: 0x5B2A6E)],
+                               size: 64)
+                .trPopOnAppear()
+            TRKicker(Text(verbatim: "Trough Pro"), color: TR.Palette.gold)
             Text(NSLocalizedString("paywall.tagline", comment: ""))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                .font(TR.Font.display(.title2, weight: .black))
+                .foregroundStyle(TR.Palette.textPrimary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, 20)
+        .padding(.top, 4)
     }
 
-    // MARK: - Feature Bullets
+    // MARK: - Features
 
-    private var featureBullets: some View {
-        HStack(spacing: 0) {
-            featurePill(icon: "drop.fill",   text: NSLocalizedString("bloodwork.title", comment: ""))
-            featurePill(icon: "waveform.path.ecg", text: NSLocalizedString("pro.pkCurves", comment: ""))
-            featurePill(icon: "pills.fill",  text: NSLocalizedString("peptides.peptides", comment: ""))
-            featurePill(icon: "chart.bar.fill", text: NSLocalizedString("bloodwork.trends", comment: ""))
+    private var featureList: some View {
+        VStack(spacing: 14) {
+            OnboardingFeatureRow(icon: "waveform.path.ecg",
+                                 title: NSLocalizedString("pro.pkCurves", comment: ""),
+                                 detail: NSLocalizedString("pro.pkCurvesDesc", comment: ""),
+                                 tint: OnboardingTint.coral)
+            OnboardingFeatureRow(icon: "drop.fill",
+                                 title: NSLocalizedString("pro.bloodwork", comment: ""),
+                                 detail: NSLocalizedString("pro.bloodworkDesc", comment: ""),
+                                 tint: OnboardingTint.sky)
+            OnboardingFeatureRow(icon: "chart.line.uptrend.xyaxis",
+                                 title: NSLocalizedString("pro.trendHistory", comment: ""),
+                                 detail: NSLocalizedString("pro.trendHistoryDesc", comment: ""),
+                                 tint: OnboardingTint.gold)
+            OnboardingFeatureRow(icon: "pills.fill",
+                                 title: NSLocalizedString("pro.peptides", comment: ""),
+                                 detail: NSLocalizedString("pro.peptidesDesc", comment: ""),
+                                 tint: OnboardingTint.mint)
+            OnboardingFeatureRow(icon: "chart.bar.doc.horizontal",
+                                 title: NSLocalizedString("pro.reports", comment: ""),
+                                 detail: NSLocalizedString("pro.reportsDesc", comment: ""),
+                                 tint: OnboardingTint.lilac)
         }
-        .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color.white.opacity(0.04))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.white.opacity(0.08), lineWidth: 1)
-                )
-        )
+        .trCard(tint: TR.Palette.coral, padding: 16)
     }
 
-    private func featurePill(icon: String, text: String) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(AppColors.accent)
-            Text(text)
-                .font(.system(size: 10, weight: .medium))
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - Plan Grid (2x2)
+    // MARK: - Plans
 
     private var planGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             ForEach(Plan.allCases, id: \.productID) { plan in
-                PlanCard(
-                    plan: plan,
+                ProPlanCard(
+                    title: plan.label,
                     price: price(for: plan),
-                    hasTrial: hasTrial(for: plan),
-                    savingsTag: plan == .yearly ? yearlySavingsTag : nil,
+                    period: plan.period,
+                    ribbon: plan.isBestValue ? NSLocalizedString("paywall.bestValue", comment: "") : nil,
+                    trialText: hasTrial(for: plan) ? ProTrialCopy.badge(for: package(for: plan)?.storeProduct) : nil,
+                    savingsText: plan == .yearly ? yearlySavingsTag : nil,
                     isSelected: selected == plan
                 ) {
-                    withAnimation(.easeInOut(duration: 0.18)) { selected = plan }
+                    withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.snappy)) { selected = plan }
                 }
             }
         }
@@ -255,37 +235,24 @@ struct PaywallView: View {
                     if isPurchasing {
                         ProgressView().tint(.white)
                     } else {
-                        VStack(spacing: 2) {
-                            Text(ctaLabel)
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.white)
-                            if let sub = ctaSubLabel {
-                                Text(sub)
-                                    .font(.caption)
-                                    .foregroundColor(.white.opacity(0.7))
-                            }
-                        }
+                        Text(ctaLabel)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    LinearGradient(
-                        colors: [Color(hex: "#E94560"), Color(hex: "#C0304A")],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .cornerRadius(16)
-                .shadow(color: Color(hex: "#E94560").opacity(0.35), radius: 10, y: 4)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.trPrimary)
             .disabled(isPurchasing || isRestoring || package(for: selected) == nil)
+
+            if let sub = ctaSubLabel {
+                Text(sub)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
 
             if let error = errorMessage {
                 Text(error)
                     .font(.caption)
-                    .foregroundColor(AppColors.accent)
+                    .foregroundStyle(TR.Palette.coralLight)
                     .multilineTextAlignment(.center)
             }
         }
@@ -294,27 +261,35 @@ struct PaywallView: View {
     // MARK: - Footer
 
     private var footer: some View {
-        HStack(spacing: 20) {
-            Button {
-                Task { await doRestore() }
-            } label: {
-                Group {
-                    if isRestoring { ProgressView().tint(.secondary) }
-                    else { Text(NSLocalizedString("paywall.restore", comment: "")) }
-                }
-                .font(.caption)
-                .foregroundColor(.secondary)
-            }
-            .buttonStyle(.plain)
+        VStack(spacing: 6) {
+            Text(onbLoc("onb14.paywall.autoRenew", "Payment is charged to your Apple ID at confirmation. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings."))
+                .font(.caption2)
+                .foregroundStyle(TR.Palette.textTertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
-            if let url = URL(string: "https://gwlabs.app/privacy") {
-                Link(NSLocalizedString("paywall.privacy", comment: ""), destination: url)
-                    .font(.caption).foregroundColor(.secondary)
+            HStack(spacing: 20) {
+                Button {
+                    Task { await doRestore() }
+                } label: {
+                    Group {
+                        if isRestoring { ProgressView().tint(TR.Palette.textSecondary) }
+                        else { Text(NSLocalizedString("paywall.restore", comment: "")) }
+                    }
+                    .frame(minHeight: 32)
+                }
+                .buttonStyle(.plain)
+
+                if let url = URL(string: "https://gwlabs.app/privacy") {
+                    Link(NSLocalizedString("paywall.privacy", comment: ""), destination: url)
+                }
+                if let url = URL(string: "https://gwlabs.app/terms") {
+                    Link(NSLocalizedString("paywall.terms", comment: ""), destination: url)
+                }
             }
-            if let url = URL(string: "https://gwlabs.app/terms") {
-                Link(NSLocalizedString("paywall.terms", comment: ""), destination: url)
-                    .font(.caption).foregroundColor(.secondary)
-            }
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(TR.Palette.textSecondary)
+            .tint(TR.Palette.textSecondary)
         }
     }
 
@@ -354,126 +329,181 @@ struct PaywallView: View {
     }
 }
 
-// MARK: - PlanCard
+// MARK: - Trial copy
 
-private struct PlanCard: View {
-    let plan: PaywallView.Plan
+/// Trial wording derived from the StoreKit intro offer (never hardcoded), with a 7-day
+/// fallback matching the live offer when the product hasn't loaded. Only shown when the App
+/// Store confirmed eligibility (callers gate on `trialEligibility`).
+enum ProTrialCopy {
+    static let fallbackDays = 7
+
+    /// Free-trial length in days from the product's introductory offer.
+    static func trialDays(for product: StoreProduct?) -> Int {
+        guard let discount = product?.introductoryDiscount, discount.paymentMode == .freeTrial else {
+            return fallbackDays
+        }
+        let period = discount.subscriptionPeriod
+        switch period.unit {
+        case .day:  return period.value
+        case .week: return period.value * 7
+        default:    return fallbackDays
+        }
+    }
+
+    /// "7-day free trial"
+    static func badge(for product: StoreProduct?) -> String {
+        String(format: onbLoc("onb14.trialBadge", "%d-day free trial"), trialDays(for: product))
+    }
+
+    /// "7-day free trial, then auto-renews. Cancel anytime."
+    static func legal(for product: StoreProduct?) -> String {
+        String(format: onbLoc("onb14.trialLegal", "%d-day free trial, then auto-renews. Cancel anytime."), trialDays(for: product))
+    }
+}
+
+// MARK: - Sunset glow
+
+/// Hero backdrop light for Pro surfaces: plum, coral and tangerine pools at the top.
+struct ProSunsetGlow: View {
+    var body: some View {
+        GeometryReader { proxy in
+            let w = max(proxy.size.width, 1)
+            ZStack {
+                RadialGradient(colors: [Color(trHex: 0x5B2A6E).opacity(0.55), .clear],
+                               center: UnitPoint(x: 0.5, y: -0.02), startRadius: 0, endRadius: w * 0.95)
+                RadialGradient(colors: [TR.Palette.coral.opacity(0.32), .clear],
+                               center: UnitPoint(x: 0.18, y: 0.04), startRadius: 0, endRadius: w * 0.7)
+                RadialGradient(colors: [TR.Palette.tangerine.opacity(0.2), .clear],
+                               center: UnitPoint(x: 0.88, y: 0.12), startRadius: 0, endRadius: w * 0.6)
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+// MARK: - Plan card
+
+/// Subscription plan card: price/period from StoreKit, optional ribbon (best value / save %),
+/// trial and savings pills, and a coral → gold gradient ring when selected.
+struct ProPlanCard: View {
+    let title: String
     let price: String
-    let hasTrial: Bool
-    let savingsTag: String?
+    let period: String
+    var ribbon: String? = nil
+    var trialText: String? = nil
+    var savingsText: String? = nil
     let isSelected: Bool
     let onTap: () -> Void
 
-    private var borderColor: Color {
-        if isSelected {
-            return plan.isBestValue ? Color(hex: "#D4A017") : AppColors.accent
-        }
-        return Color.white.opacity(0.1)
-    }
+    private let shape = RoundedRectangle(cornerRadius: 20, style: .continuous)
 
     var body: some View {
         Button(action: onTap) {
-            ZStack(alignment: .topTrailing) {
-                // Card background — glassmorphism
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(
-                        LinearGradient(
-                            colors: isSelected
-                                ? [Color.white.opacity(0.08), Color.white.opacity(0.04)]
-                                : [Color.white.opacity(0.04), Color.white.opacity(0.02)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(borderColor, lineWidth: isSelected ? 1.5 : 1)
-                    )
-
-                // Card content
-                VStack(alignment: .leading, spacing: 8) {
-                    // Plan label row
-                    HStack {
-                        Text(plan.label)
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(.white)
-                        Spacer()
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .center) {
+                    TRKicker(Text(verbatim: title), color: isSelected ? TR.Palette.textPrimary : TR.Palette.textSecondary)
+                    Spacer(minLength: 4)
+                    ZStack {
+                        Circle()
+                            .strokeBorder(isSelected ? Color.clear : TR.Palette.textTertiary, lineWidth: 1.5)
                         if isSelected {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 14))
-                                .foregroundColor(plan.isBestValue ? Color(hex: "#D4A017") : AppColors.accent)
+                            Circle().fill(TR.Gradients.cta)
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 10, weight: .heavy))
+                                .foregroundStyle(.white)
                         }
                     }
+                    .frame(width: 20, height: 20)
+                    .accessibilityHidden(true)
+                }
 
-                    // Price
-                    HStack(alignment: .lastTextBaseline, spacing: 2) {
-                        Text(price)
-                            .font(.system(size: 20, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(plan.period)
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.secondary)
+                HStack(alignment: .lastTextBaseline, spacing: 2) {
+                    Text(price)
+                        .font(TR.Font.number(22))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Text(period)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textSecondary)
+                        .lineLimit(1)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    if let trialText {
+                        tag(trialText, systemImage: "gift.fill", color: TR.Palette.teal)
                     }
-
-                    // Trial / savings tags
-                    VStack(alignment: .leading, spacing: 4) {
-                        if hasTrial {
-                            trialBadge
-                        }
-                        if let savings = savingsTag {
-                            savingsBadge(savings)
-                        }
-                        if !hasTrial && savingsTag == nil {
-                            // spacer to keep card height consistent
-                            Color.clear.frame(height: 16)
-                        }
+                    if let savingsText {
+                        tag(savingsText, systemImage: "arrow.down.circle.fill", color: TR.Palette.gold)
                     }
                 }
-                .padding(14)
-
-                // BEST VALUE ribbon top-right
-                if plan.isBestValue {
-                    bestValueBadge
-                        .offset(x: -10, y: -10)
+                Spacer(minLength: 0)
+            }
+            .padding(14)
+            .padding(.top, ribbon == nil ? 0 : 4)
+            .frame(maxWidth: .infinity, minHeight: (trialText == nil && savingsText == nil) ? 96 : 124, alignment: .topLeading)
+            .background {
+                ZStack {
+                    shape.fill(TR.Palette.surface)
+                    if isSelected {
+                        shape.fill(RadialGradient(colors: [TR.Palette.coral.opacity(0.24), .clear],
+                                                  center: .topLeading, startRadius: 0, endRadius: 200))
+                    }
+                    shape.fill(LinearGradient(colors: [.white.opacity(0.05), .clear], startPoint: .top, endPoint: .center))
                 }
             }
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: 120)
+            .overlay {
+                if isSelected {
+                    shape.strokeBorder(
+                        AngularGradient(colors: [TR.Palette.coralLight, TR.Palette.coral, TR.Palette.tangerine, TR.Palette.gold, TR.Palette.coralLight],
+                                        center: .center),
+                        lineWidth: 2
+                    )
+                } else {
+                    shape.strokeBorder(TR.Palette.hairline, lineWidth: 1)
+                }
+            }
+            .shadow(color: isSelected ? TR.Palette.coral.opacity(0.35) : .black.opacity(0.25), radius: isSelected ? 16 : 10, y: 6)
+            .overlay(alignment: .top) {
+                if let ribbon {
+                    Text(ribbon)
+                        .font(.system(size: 10, weight: .black, design: .rounded))
+                        .tracking(0.6)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Color(trHex: 0x3A2600))
+                        .lineLimit(1)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(TR.Gradients.xp, in: Capsule())
+                        .overlay(Capsule().strokeBorder(.white.opacity(0.35), lineWidth: 0.5))
+                        .shadow(color: TR.Palette.gold.opacity(0.45), radius: 6, y: 2)
+                        .offset(y: -10)
+                }
+            }
+            .scaleEffect(isSelected ? 1.0 : 0.98)
         }
-        .buttonStyle(.plain)
-        .scaleEffect(isSelected ? 1.02 : 1.0)
-        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .buttonStyle(.trPressable)
+        .padding(.top, ribbon == nil ? 0 : 6)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
-    private var trialBadge: some View {
-        Text(NSLocalizedString("paywall.trialBadge", comment: ""))
-            .font(.system(size: 10, weight: .semibold))
-            .foregroundColor(Color(hex: "#0AB4A6"))
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(Color(hex: "#0AB4A6").opacity(0.15))
-            .clipShape(Capsule())
-            .overlay(Capsule().stroke(Color(hex: "#0AB4A6").opacity(0.3), lineWidth: 0.5))
-    }
-
-    private func savingsBadge(_ text: String) -> some View {
-        Text(text)
-            .font(.system(size: 10, weight: .semibold))
-            .foregroundColor(Color(hex: "#0AB4A6"))
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(Color(hex: "#0AB4A6").opacity(0.15))
-            .clipShape(Capsule())
-    }
-
-    private var bestValueBadge: some View {
-        Text(NSLocalizedString("paywall.bestValue", comment: ""))
-            .font(.system(size: 8, weight: .black))
-            .foregroundColor(.black)
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(Color(hex: "#D4A017"))
-            .clipShape(Capsule())
+    private func tag(_ text: String, systemImage: String, color: Color) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: systemImage)
+                .font(.system(size: 9, weight: .bold))
+            Text(text)
+                .font(.system(size: 11, weight: .bold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 7)
+        .padding(.vertical, 3)
+        .background(color.opacity(0.14), in: Capsule())
+        .overlay(Capsule().strokeBorder(color.opacity(0.3), lineWidth: 0.5))
     }
 }
 

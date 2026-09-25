@@ -1,1 +1,1 @@
-testosteron,trt,hormon,injektion,blodprov,peptid,glp-1,hcg,estradiol,e2,dos,protokoll,man,halsa
+spruta,hormon,hormonbehandling,testosteronbehandling,peptid,glp-1,östradiol,e2,påminnelse,dos,logg

@@ -1,3 +1,8 @@
-• CSV-Import behoben: Blutwert-Spalten konnten falsch zugeordnet werden
-• Zweiwöchentliche Supplement-Erinnerungen kommen jetzt in den richtigen Wochen
-• Stabilitätsverbesserungen
+Trough 1.4 ist unser bisher größtes Update.
+
+• Komplett neues Design in der ganzen App – plus neues App-Icon
+• Check-in-Serien, 11 Level und ein Protokoll-Rang von Papier bis Diamant
+• 42 Abzeichen, tägliche Challenges und Feiern bei Meilensteinen
+• Teilbare Karten für Serie, Rang und Abzeichen
+• Neue Widgets für Home- und Sperrbildschirm, inkl. Widget für dein nächstes Abzeichen
+• Verbesserungen bei Leistung und Stabilität

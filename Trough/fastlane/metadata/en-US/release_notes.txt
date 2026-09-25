@@ -1,3 +1,8 @@
-• Fixed a CSV import issue that could mismatch bloodwork columns
-• Biweekly supplement reminders now arrive on the right weeks
-• Stability improvements
+Trough 1.4 is our biggest update yet.
+
+• All-new design across the whole app, plus a new icon
+• Check-in streaks, 11 levels and a protocol rank from Paper to Diamond
+• 42 badges to earn, daily challenges and celebrations
+• Share cards for your streak, rank and badges
+• New Home Screen and Lock Screen widgets, including a next-badge widget
+• Performance and stability improvements

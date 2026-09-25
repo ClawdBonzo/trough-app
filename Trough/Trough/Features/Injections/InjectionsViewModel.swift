@@ -19,6 +19,8 @@ final class InjectionsViewModel: ObservableObject {
     @Published var formSite: String = ""
     @Published var formNotes: String = ""
     @Published var editingInjection: SDInjection?
+    /// Set after a NEW injection is saved — drives the 1.4 stamp-slam overlay.
+    @Published var slamInjection: SDInjection?
 
     private var modelContext: ModelContext?
     private(set) var userID: UUID = UUID()
@@ -158,6 +160,7 @@ final class InjectionsViewModel: ObservableObject {
             try modelContext.save()
             showingLogSheet = false
             load()
+            if isNewInjection { slamInjection = savedInjection }
 
             // Gamification: XP keyed per injection id ("injection:<uuid>") so
             // edits never re-pay; the injection streak counts on-schedule

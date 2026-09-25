@@ -1,3 +1,8 @@
-• Åtgärdade ett CSV-importfel som kunde blanda ihop blodprovskolumner
-• Varannan veckas kosttillskottspåminnelser kommer nu rätt veckor
-• Stabilitetsförbättringar
+Trough 1.4 är vår största uppdatering hittills.
+
+• Helt ny design i hela appen, och en ny symbol
+• Incheckningssviter, 11 nivåer och en protokollrang från Papper till Diamant
+• 42 märken, dagliga utmaningar och firanden
+• Delningskort för din svit, rang och dina märken
+• Nya widgetar för hemskärmen och låsskärmen, bland annat en för ditt nästa märke
+• Förbättrad prestanda och stabilitet

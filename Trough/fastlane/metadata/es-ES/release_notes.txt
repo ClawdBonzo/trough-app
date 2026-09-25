@@ -1,3 +1,8 @@
-• Corregido un problema de importación CSV que podía confundir columnas de análisis
-• Los recordatorios quincenales de suplementos ahora llegan en las semanas correctas
-• Mejoras de estabilidad
+Trough 1.4 es nuestra mayor actualización hasta ahora.
+
+• Diseño totalmente nuevo en toda la app y un icono nuevo
+• Rachas de registro, 11 niveles y un rango de protocolo de Papel a Diamante
+• 42 insignias, retos diarios y celebraciones
+• Tarjetas para compartir tu racha, tu rango y tus insignias
+• Nuevos widgets para la pantalla de inicio y la de bloqueo, incluido uno con tu próxima insignia
+• Mejoras de rendimiento y estabilidad

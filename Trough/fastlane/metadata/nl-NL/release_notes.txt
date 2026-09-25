@@ -1,3 +1,8 @@
-• CSV-importprobleem opgelost waardoor bloedwaardekolommen verkeerd konden worden gekoppeld
-• Tweewekelijkse supplementherinneringen komen nu in de juiste weken
-• Stabiliteitsverbeteringen
+Trough 1.4 is onze grootste update tot nu toe.
+
+• Volledig nieuw design in de hele app, plus een nieuw icoon
+• Check-in-reeksen, 11 levels en een protocolrang van Papier tot Diamant
+• 42 badges, dagelijkse uitdagingen en vieringen
+• Deelkaarten voor je reeks, rang en badges
+• Nieuwe widgets voor beginscherm en toegangsscherm, waaronder een widget voor je volgende badge
+• Verbeteringen in snelheid en stabiliteit

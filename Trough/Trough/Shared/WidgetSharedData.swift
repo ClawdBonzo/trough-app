@@ -24,6 +24,15 @@ enum TroughShared {
         // widget builds may still read them from the shared store.
         static let checkedInDate      = "w_checkedInDate"       // Date the check-in flag was written
         static let nextInjectionDate  = "w_nextInjectionDate"   // Date the next injection is due
+        // Additive v1.4 keys (Next badge widget + rank-cover strip). Same rule:
+        // never delete or rename.
+        static let nextBadgeName      = "w_nextBadgeName"       // String, localized title ("" == every badge earned; absent == not written yet)
+        static let nextBadgeSymbol    = "w_nextBadgeSymbol"     // String, SF Symbol name
+        static let nextBadgeRemaining = "w_nextBadgeRemaining"  // Int, units left to earn it
+        static let nextBadgeProgress  = "w_nextBadgeProgress"   // Double, 0...1
+        static let nextBadgeCurrent   = "w_nextBadgeCurrent"    // Int
+        static let nextBadgeTarget    = "w_nextBadgeTarget"     // Int
+        static let rankCover          = "w_rankCover"           // String, TR.RankCover raw value ("paper"…"diamond")
     }
 }
 
@@ -41,6 +50,35 @@ struct WidgetSnapshot {
     var checkedInDate: Date? = nil     // when the check-in flag was written
     var nextInjectionDate: Date? = nil // when the next injection is due
     var updatedAt: Date? = nil         // last write of any snapshot field
+    // Additive (v1.4): next badge + rank cover. nil name == not written yet;
+    // "" == every badge earned.
+    var nextBadgeName: String? = nil
+    var nextBadgeSymbol: String? = nil
+    var nextBadgeRemaining: Int = 0
+    var nextBadgeProgress: Double = 0  // 0...1
+    var nextBadgeCurrent: Int = 0
+    var nextBadgeTarget: Int = 0
+    /// Rank-cover raw value ("paper"…"diamond"). nil for snapshots written
+    /// before 1.4 — derive from `level` with `rankCoverKey`.
+    var rankCover: String? = nil
+
+    /// Rank cover for this snapshot: the stored value, else derived from level
+    /// (L1–2 paper, 3–4 bronze, 5–6 silver, 7–8 gold, 9–10 platinum, 11 diamond).
+    var rankCoverKey: String {
+        if let rankCover, !rankCover.isEmpty { return rankCover }
+        return Self.rankCoverKey(forLevel: level)
+    }
+
+    static func rankCoverKey(forLevel level: Int) -> String {
+        switch level {
+        case ..<3: return "paper"
+        case 3...4: return "bronze"
+        case 5...6: return "silver"
+        case 7...8: return "gold"
+        case 9...10: return "platinum"
+        default: return "diamond"
+        }
+    }
 
     /// Stored values with the date-sensitive fields resolved for "now".
     /// Most callers want this.
@@ -63,6 +101,13 @@ struct WidgetSnapshot {
         s.checkedInDate     = d.object(forKey: TroughShared.Key.checkedInDate) as? Date
         s.nextInjectionDate = d.object(forKey: TroughShared.Key.nextInjectionDate) as? Date
         s.updatedAt         = d.object(forKey: TroughShared.Key.updatedAt) as? Date
+        s.nextBadgeName      = d.string(forKey: TroughShared.Key.nextBadgeName)
+        s.nextBadgeSymbol    = d.string(forKey: TroughShared.Key.nextBadgeSymbol)
+        s.nextBadgeRemaining = d.integer(forKey: TroughShared.Key.nextBadgeRemaining)
+        s.nextBadgeProgress  = min(1, max(0, d.double(forKey: TroughShared.Key.nextBadgeProgress)))
+        s.nextBadgeCurrent   = d.integer(forKey: TroughShared.Key.nextBadgeCurrent)
+        s.nextBadgeTarget    = d.integer(forKey: TroughShared.Key.nextBadgeTarget)
+        s.rankCover          = d.string(forKey: TroughShared.Key.rankCover)
         return s
     }
 

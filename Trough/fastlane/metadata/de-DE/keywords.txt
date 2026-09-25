@@ -1,1 +1,1 @@
-trt,testosteron,hormon,peptide,injektion,blutwerte,hcg,glp-1,östradiol,e2,protokoll,pk
+spritze,tagebuch,tracker,hormon,hormontherapie,peptid,glp-1,östradiol,e2,dosis,erinnerung,spiegel

@@ -257,7 +257,7 @@ private struct CSVImportFlowView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground(glow: TR.Palette.mint)
                 stepContent
             }
             .navigationTitle(navTitle)
@@ -266,6 +266,7 @@ private struct CSVImportFlowView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     if vm.step != .report {
                         Button("Cancel") { dismiss() }
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -312,18 +313,18 @@ private struct CSVImportFlowView: View {
             EmptyView()
         case .typePicker:
             Button("Next") { vm.step = .preview }
-                .fontWeight(.semibold)
-                .foregroundColor(AppColors.accent)
+                .fontWeight(.bold)
+                .foregroundStyle(TR.Palette.coral)
         case .preview:
             Button("Next") { vm.step = .columnMapping }
-                .fontWeight(.semibold)
-                .foregroundColor(AppColors.accent)
+                .fontWeight(.bold)
+                .foregroundStyle(TR.Palette.coral)
         case .columnMapping:
             Button("Import") {
                 Task { await vm.runImport() }
             }
-            .fontWeight(.semibold)
-            .foregroundColor(vm.hasDateMapped ? AppColors.accent : .secondary)
+            .fontWeight(.bold)
+            .foregroundStyle(vm.hasDateMapped ? TR.Palette.coral : TR.Palette.textTertiary)
             .disabled(!vm.hasDateMapped)
         case .importing, .report:
             EmptyView()
@@ -360,42 +361,24 @@ private struct FilePickerStep: View {
     let errorMessage: String?
 
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 16) {
             Spacer()
-            Image(systemName: "doc.text")
-                .font(.system(size: 60))
-                .foregroundColor(AppColors.accent.opacity(0.7))
-
-            VStack(spacing: 8) {
-                Text("Select a CSV File")
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
-                Text("Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters.")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
-            }
-
-            Button {
-                showFilePicker = true
-            } label: {
-                Label("Choose File", systemImage: "folder")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(AppColors.accent)
-                    .cornerRadius(14)
-            }
-            .padding(.horizontal, 32)
+            GlassEmptyState(
+                systemImage: "tablecells",
+                title: NSLocalizedString("Select a CSV File", comment: ""),
+                message: NSLocalizedString("Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters.", comment: ""),
+                buttonTitle: NSLocalizedString("Choose File", comment: ""),
+                tint: TR.Palette.coral,
+                action: { showFilePicker = true }
+            )
 
             if let err = errorMessage {
-                Text(err)
+                Label(err, systemImage: "info.circle")
                     .font(.caption)
-                    .foregroundColor(AppColors.accent)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
+                    .foregroundStyle(TR.Palette.textSecondary)
+                    .multilineTextAlignment(.leading)
+                    .trCard(padding: 12)
+                    .padding(.horizontal, TR.Metrics.gutter)
             }
 
             Spacer()
@@ -412,9 +395,10 @@ private struct ImportTypeStep: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("What does your spreadsheet contain?")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .padding(.top, 8)
+                .font(TR.Font.display(.title3))
+                .foregroundStyle(TR.Palette.textPrimary)
+                .multilineTextAlignment(.center)
+                .padding(.top, 12)
 
             VStack(spacing: 12) {
                 ForEach(CSVImportType.allCases) { type in
@@ -425,7 +409,7 @@ private struct ImportTypeStep: View {
                     )
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, TR.Metrics.gutter)
 
             Spacer()
         }
@@ -440,37 +424,33 @@ private struct TypeOptionRow: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: 16) {
-                Image(systemName: type.icon)
-                    .font(.title3)
-                    .foregroundColor(isSelected ? AppColors.accent : .secondary)
-                    .frame(width: 28)
+            HStack(spacing: 14) {
+                GlassIconTile(systemImage: type.icon, tint: isSelected ? TR.Palette.coral : TR.Palette.textSecondary,
+                              size: 40, filled: isSelected)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(type.rawValue)
-                        .font(.headline)
-                        .foregroundColor(isSelected ? .white : .secondary)
+                        .font(TR.Font.display(.headline, weight: .bold))
+                        .foregroundStyle(isSelected ? TR.Palette.textPrimary : TR.Palette.textSecondary)
                     Text(typeDescription(type))
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
+                        .multilineTextAlignment(.leading)
                 }
 
                 Spacer()
 
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(AppColors.accent)
-                }
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isSelected ? TR.Palette.coral : TR.Palette.textTertiary)
             }
-            .padding(16)
-            .background(isSelected ? AppColors.accent.opacity(0.12) : AppColors.card)
-            .cornerRadius(12)
+            .trCard(tint: isSelected ? TR.Palette.coral : nil)
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? AppColors.accent.opacity(0.5) : Color.clear, lineWidth: 1)
+                RoundedRectangle(cornerRadius: TR.Metrics.cardRadius, style: .continuous)
+                    .strokeBorder(isSelected ? TR.Palette.coral.opacity(0.6) : Color.clear, lineWidth: 1.5)
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.trPressable)
     }
 
     private func typeDescription(_ t: CSVImportType) -> String {
@@ -496,15 +476,15 @@ private struct PreviewStep: View {
                         ForEach(parse.headers, id: \.self) { header in
                             Text(header)
                                 .font(.caption.bold())
-                                .foregroundColor(AppColors.accent)
+                                .foregroundStyle(TR.Palette.coralLight)
                                 .lineLimit(1)
                                 .frame(width: 120, alignment: .leading)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 8)
-                                .background(AppColors.card)
+                                .background(TR.Palette.surfaceRaised)
                         }
                     }
-                    Divider().background(Color.white.opacity(0.1))
+                    Divider().background(TR.Palette.hairline)
 
                     // First 5 data rows
                     ForEach(Array(parse.rows.prefix(5).enumerated()), id: \.offset) { (rowIdx, row) in
@@ -513,17 +493,20 @@ private struct PreviewStep: View {
                                 let cell = colIdx < row.count ? row[colIdx] : ""
                                 Text(cell.isEmpty ? "—" : cell)
                                     .font(.caption)
-                                    .foregroundColor(cell.isEmpty ? .secondary : .white)
+                                    .foregroundStyle(cell.isEmpty ? TR.Palette.textTertiary : TR.Palette.textPrimary)
                                     .lineLimit(1)
                                     .frame(width: 120, alignment: .leading)
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 7)
-                                    .background(rowIdx % 2 == 0 ? AppColors.card.opacity(0.5) : Color.clear)
+                                    .background(rowIdx % 2 == 0 ? TR.Palette.surface : TR.Palette.surface.opacity(0.4))
                             }
                         }
                         Divider().background(Color.white.opacity(0.05))
                     }
                 }
+                .clipShape(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous).strokeBorder(TR.Palette.hairline, lineWidth: 1))
+                .padding(TR.Metrics.gutter)
             }
         }
 
@@ -531,10 +514,10 @@ private struct PreviewStep: View {
             HStack {
                 Image(systemName: "info.circle")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textTertiary)
                 Text("\(parse.rows.count) rows · \(parse.headers.count) columns · delimiter: \(delimiterLabel(parse.delimiter))")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
@@ -567,24 +550,22 @@ private struct ColumnMappingStep: View {
                         selected: $vm.resolvedDateFormat,
                         sample: sampleDateString()
                     )
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, TR.Metrics.gutter)
                 }
 
                 // Date not mapped warning
                 if !vm.hasDateMapped {
                     HStack(spacing: 8) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.yellow)
-                            .font(.caption)
+                        Image(systemName: "calendar.badge.exclamationmark")
+                            .foregroundStyle(TR.Palette.gold)
+                            .font(.subheadline)
                         Text("Map the Date column to proceed.")
-                            .font(.caption)
-                            .foregroundColor(.yellow)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(TR.Palette.textPrimary)
                     }
-                    .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.yellow.opacity(0.08))
-                    .cornerRadius(10)
-                    .padding(.horizontal, 16)
+                    .trCard(tint: TR.Palette.gold, padding: 12)
+                    .padding(.horizontal, TR.Metrics.gutter)
                 }
 
                 // Field rows
@@ -596,17 +577,16 @@ private struct ColumnMappingStep: View {
                             selectedIndex: selectedBinding(key: def.id)
                         )
                         if def.id != vm.fieldDefs(for: vm.importType).last?.id {
-                            Divider().background(Color.white.opacity(0.06))
+                            Divider().background(TR.Palette.hairline)
                         }
                     }
                 }
-                .background(AppColors.card)
-                .cornerRadius(12)
-                .padding(.horizontal, 16)
+                .trCard(padding: 0)
+                .padding(.horizontal, TR.Metrics.gutter)
 
                 Text("Green = auto-detected  ·  Yellow = not mapped")
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textTertiary)
                     .padding(.bottom, 8)
             }
             .padding(.top, 12)
@@ -647,22 +627,21 @@ private struct FieldMappingRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
                     Text(def.label)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textPrimary)
                     if def.isRequired {
                         Text("required")
-                            .font(.caption2)
-                            .foregroundColor(AppColors.accent)
-                            .padding(.horizontal, 5)
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(TR.Palette.coralLight)
+                            .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(AppColors.accent.opacity(0.15))
-                            .cornerRadius(4)
+                            .background(TR.Palette.coral.opacity(0.15), in: Capsule())
                     }
                 }
                 if isMapped, selectedIndex < headers.count {
                     Text(headers[selectedIndex])
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                 }
             }
 
@@ -676,16 +655,16 @@ private struct FieldMappingRow: View {
                 }
             }
             .pickerStyle(.menu)
-            .tint(isMapped ? AppColors.accent : .secondary)
+            .tint(isMapped ? TR.Palette.coral : TR.Palette.textSecondary)
             .padding(.trailing, 8)
         }
         .padding(.vertical, 10)
     }
 
     private var dotColor: Color {
-        if isMapped { return .green }
-        if def.isRequired { return AppColors.accent }
-        return .yellow
+        if isMapped { return TR.Palette.mint }
+        if def.isRequired { return TR.Palette.coral }
+        return TR.Palette.gold
     }
 }
 
@@ -699,14 +678,14 @@ private struct DateAmbiguityBanner: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
                 Image(systemName: "calendar.badge.exclamationmark")
-                    .foregroundColor(.yellow)
+                    .foregroundStyle(TR.Palette.gold)
                 Text("Ambiguous date format")
                     .font(.caption.bold())
-                    .foregroundColor(.yellow)
+                    .foregroundStyle(TR.Palette.gold)
             }
             Text("Both day-first and month-first formats matched. Confirm which is correct:")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(TR.Palette.textSecondary)
 
             // Show what the sample parses to under each format
             HStack(spacing: 10) {
@@ -718,30 +697,28 @@ private struct DateAmbiguityBanner: View {
                         VStack(spacing: 3) {
                             Text(fmt)
                                 .font(.caption2.bold())
-                                .foregroundColor(selected == fmt ? .white : .secondary)
+                                .foregroundStyle(selected == fmt ? TR.Palette.textPrimary : TR.Palette.textSecondary)
                             if !parsed.isEmpty {
                                 Text(parsed)
                                     .font(.caption2)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(TR.Palette.textSecondary)
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(selected == fmt ? AppColors.accent.opacity(0.2) : Color.white.opacity(0.05))
-                        .cornerRadius(8)
+                        .padding(.vertical, 10)
+                        .frame(minHeight: TR.Metrics.minTap)
+                        .background(selected == fmt ? TR.Palette.coral.opacity(0.2) : TR.Palette.surfaceRaised,
+                                    in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(selected == fmt ? AppColors.accent : Color.clear, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous)
+                                .strokeBorder(selected == fmt ? TR.Palette.coral : TR.Palette.hairline, lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
                 }
             }
         }
-        .padding(14)
-        .background(Color.yellow.opacity(0.06))
-        .cornerRadius(12)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.yellow.opacity(0.2), lineWidth: 1))
+        .trCard(tint: TR.Palette.gold, padding: 14)
     }
 
     private func parseSample(_ s: String, format: String) -> String {
@@ -764,14 +741,16 @@ private struct ImportingStep: View {
             Spacer()
 
             VStack(spacing: 16) {
-                ProgressView(value: progress)
-                    .tint(AppColors.accent)
-                    .scaleEffect(x: 1, y: 2)
-                    .padding(.horizontal, 32)
+                TRRing(progress: progress, lineWidth: 12, colors: [TR.Palette.coral, TR.Palette.tangerine, TR.Palette.gold]) {
+                    Text("\(Int((min(max(progress, 0), 1)) * 100))%")
+                        .font(TR.Font.number(28))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                }
+                .frame(width: 140, height: 140)
 
                 Text(progress >= 1.0 ? "Finishing up…" : "Importing records…")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
 
             Spacer()
@@ -801,28 +780,28 @@ struct ImportReportView: View {
 
                 // ── Success banner ───────────────────────────────────────────
                 VStack(spacing: 12) {
-                    Image(systemName: allErrors.isEmpty ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                        .font(.system(size: 52))
-                        .foregroundColor(allErrors.isEmpty ? .green : .yellow)
+                    GlassIconTile(systemImage: allErrors.isEmpty ? "checkmark" : "exclamationmark",
+                                  tint: allErrors.isEmpty ? TR.Palette.mint : TR.Palette.gold,
+                                  size: 64, filled: true)
+                        .trGlow(allErrors.isEmpty ? TR.Palette.mint : TR.Palette.gold, radius: 14, opacity: 0.4)
 
                     Text(allErrors.isEmpty ? "Import Complete" : "Imported with Issues")
-                        .font(.title3.bold())
-                        .foregroundColor(.white)
+                        .font(TR.Font.display(.title2))
+                        .foregroundStyle(TR.Palette.textPrimary)
 
                     Text("Imported \(vm.totalImported) record\(vm.totalImported == 1 ? "" : "s")")
-                        .font(.headline)
-                        .foregroundColor(AppColors.accent)
+                        .font(TR.Font.display(.headline, weight: .bold))
+                        .foregroundStyle(TR.Palette.coralLight)
 
                     if !vm.dateRangeString.isEmpty {
                         Text(vm.dateRangeString)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding(24)
-                .background(AppColors.card)
-                .cornerRadius(16)
+                .padding(.vertical, 8)
+                .trCard(tint: allErrors.isEmpty ? TR.Palette.mint : TR.Palette.gold, padding: 20)
 
                 // ── Per-type breakdown ───────────────────────────────────────
                 if let cr = vm.checkinsResult {
@@ -847,7 +826,7 @@ struct ImportReportView: View {
                     IssueSection(
                         title: "\(allWarnings.count) Warning\(allWarnings.count == 1 ? "" : "s")",
                         icon: "exclamationmark.triangle",
-                        color: .yellow,
+                        color: TR.Palette.gold,
                         issues: allWarnings,
                         isExpanded: $showWarnings
                     )
@@ -858,7 +837,7 @@ struct ImportReportView: View {
                     IssueSection(
                         title: "\(allErrors.count) Row\(allErrors.count == 1 ? "" : "s") Skipped",
                         icon: "xmark.circle",
-                        color: AppColors.accent,
+                        color: TR.Palette.lilac,
                         issues: allErrors,
                         isExpanded: $showErrors
                     )
@@ -866,15 +845,10 @@ struct ImportReportView: View {
 
                 // ── Done button ──────────────────────────────────────────────
                 Button("Done") { onDone() }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(AppColors.accent)
-                    .cornerRadius(14)
+                    .buttonStyle(.trPrimary)
                     .padding(.top, 8)
             }
-            .padding(16)
+            .padding(TR.Metrics.gutter)
         }
     }
 }
@@ -887,29 +861,25 @@ private struct ResultBreakdownRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            Image(systemName: icon)
-                .foregroundColor(AppColors.accent)
-                .frame(width: 22)
+            GlassIconTile(systemImage: icon, tint: TR.Palette.coral)
 
             Text(label)
-                .foregroundColor(.white)
-                .font(.subheadline)
+                .foregroundStyle(TR.Palette.textPrimary)
+                .font(.subheadline.weight(.semibold))
 
             Spacer()
 
             Text("\(imported) imported")
-                .font(.caption)
-                .foregroundColor(.green)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(TR.Palette.mint)
 
             if skipped > 0 {
                 Text("\(skipped) skipped")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
         }
-        .padding(14)
-        .background(AppColors.card)
-        .cornerRadius(12)
+        .trCard(padding: 14)
     }
 }
 
@@ -928,46 +898,47 @@ private struct IssueSection: View {
             } label: {
                 HStack {
                     Image(systemName: icon)
-                        .foregroundColor(color)
+                        .foregroundStyle(color)
                         .font(.caption)
                     Text(title)
                         .font(.caption.bold())
-                        .foregroundColor(color)
+                        .foregroundStyle(color)
                     Spacer()
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(TR.Palette.textTertiary)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 12)
+                .frame(minHeight: TR.Metrics.minTap)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
 
             if isExpanded {
-                Divider().background(Color.white.opacity(0.07))
+                Divider().background(TR.Palette.hairline)
                 VStack(spacing: 0) {
                     ForEach(issues) { issue in
                         HStack(alignment: .top, spacing: 8) {
                             Text("Row \(issue.row):")
                                 .font(.caption2.bold())
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textTertiary)
                                 .frame(width: 52, alignment: .leading)
                             Text(issue.message)
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 7)
                         if issue.id != issues.last?.id {
-                            Divider().background(Color.white.opacity(0.04))
+                            Divider().background(TR.Palette.hairline)
                                 .padding(.leading, 74)
                         }
                     }
                 }
             }
         }
-        .background(AppColors.card)
-        .cornerRadius(12)
+        .trCard(padding: 0)
     }
 }

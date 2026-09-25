@@ -1,1 +1,1 @@
-Śledź swój protokół TRT: krzywe PK, dzienny wynik samopoczucia, trendy badań krwi, peptydy i synchronizacja z HealthKit. Twoje dane zostają na twoim urządzeniu.
+Trough 1.4 już jest: zupełnie nowy wygląd, serie check-inów, 42 odznaki i ranga protokołu od Papieru do Diamentu. Do tego nowe widżety na ekran początkowy i blokady.

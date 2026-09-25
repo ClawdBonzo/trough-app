@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Todo tu protocolo. *De un vistazo.*",
+    "sub": "Dosis, registros, rachas y analíticas juntos en un panel claro."
+  },
+  "2": {
+    "headline": "30 segundos al día. *Rachas que enganchan.*",
+    "sub": "Un registro rápido, XP para ti y la llama siempre encendida."
+  },
+  "3": {
+    "headline": "Tus niveles *entre dosis.*",
+    "sub": "Una curva estimada con tu registro de inyecciones y la próxima dosis a la vista."
+  },
+  "4": {
+    "headline": "Cada pinchazo. *Sellado y rotado.*",
+    "sub": "Apúntalo en segundos, consigue el sello y recibe una zona sugerida para la próxima."
+  },
+  "5": {
+    "headline": "Gánate tu *rango de protocolo.*",
+    "sub": "Niveles e insignias por tu constancia, de Papel a Diamante."
+  },
+  "6": {
+    "headline": "Tus analíticas, *por fin en orden.*",
+    "sub": "Todos tus resultados en un sitio, con la evolución de cada marcador."
+  },
+  "7": {
+    "headline": "Privada por diseño. *Sin cuenta.*",
+    "sub": "Tu registro se queda en tu iPhone. Sin registro, sin anuncios, nada que sincronizar.",
+    "chips": [
+      "Sin cuenta",
+      "Se queda en tu iPhone",
+      "Sin anuncios"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Je hele protocol. *In één oogopslag.*",
+    "sub": "Doses, check-ins, reeksen en bloedwaarden samen op één rustig dashboard."
+  },
+  "2": {
+    "headline": "30 seconden per dag. *Een reeks die blijft.*",
+    "sub": "Even inchecken, XP verdienen en het vlammetje brandend houden."
+  },
+  "3": {
+    "headline": "Je waarden *tussen twee prikken.*",
+    "sub": "Een geschatte curve uit je eigen injectielogboek, met je volgende dosis in beeld."
+  },
+  "4": {
+    "headline": "Elke prik. *Gestempeld en gewisseld.*",
+    "sub": "In seconden vastgelegd, stempel erbij en een voorstel voor de volgende plek."
+  },
+  "5": {
+    "headline": "Verdien je *protocolrang.*",
+    "sub": "Levels en badges voor bijhouden en volhouden, van Papier tot Diamant."
+  },
+  "6": {
+    "headline": "Je bloedwaarden, *eindelijk op orde.*",
+    "sub": "Al je uitslagen op één plek, met het verloop van elke marker."
+  },
+  "7": {
+    "headline": "Privé vanaf de basis. *Geen account.*",
+    "sub": "Je logboek blijft op je iPhone. Geen aanmelding, geen advertenties, niets te syncen.",
+    "chips": [
+      "Geen account",
+      "Blijft op je iPhone",
+      "Geen advertenties"
+    ]
+  }
+}

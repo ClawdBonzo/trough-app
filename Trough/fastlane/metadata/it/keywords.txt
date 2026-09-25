@@ -1,1 +1,1 @@
-iniezioni,ormoni,peptidi,analisi,sangue,esami,livelli,terapia,dosaggio,siringa,estradiolo,hcg,glp-1
+terapia,ormonale,ormoni,esami,sangue,peptidi,glp-1,estradiolo,e2,promemoria,siringa,dosaggio,livelli

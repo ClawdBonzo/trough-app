@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Dein ganzes Protokoll. *Auf einen Blick.*",
+    "sub": "Dosen, Check-ins, Serien und Blutwerte zusammen auf einem ruhigen Dashboard."
+  },
+  "2": {
+    "headline": "30 Sekunden am Tag. *Die Serie hält.*",
+    "sub": "Kurz einchecken, XP sammeln und die Flamme am Brennen halten."
+  },
+  "3": {
+    "headline": "Deine Spiegel *zwischen den Spritzen.*",
+    "sub": "Eine geschätzte Kurve aus deinem Injektionsprotokoll, mit der nächsten Dosis im Blick."
+  },
+  "4": {
+    "headline": "Jede Spritze. *Gestempelt, rotiert.*",
+    "sub": "In Sekunden erfassen, Stempel sammeln, Vorschlag für die nächste Stelle bekommen."
+  },
+  "5": {
+    "headline": "Hol dir deinen *Protokoll-Rang.*",
+    "sub": "Level und Abzeichen fürs Erfassen und Dranbleiben – von Papier bis Diamant."
+  },
+  "6": {
+    "headline": "Deine Blutwerte. *Endlich sortiert.*",
+    "sub": "Alle Befunde an einem Ort, mit dem Verlauf jedes Markers über alle Abnahmen."
+  },
+  "7": {
+    "headline": "Privat von Grund auf. *Kein Konto.*",
+    "sub": "Dein Protokoll bleibt auf deinem iPhone. Keine Anmeldung, keine Werbung, kein Sync.",
+    "chips": [
+      "Kein Konto",
+      "Bleibt auf dem iPhone",
+      "Keine Werbung"
+    ]
+  }
+}

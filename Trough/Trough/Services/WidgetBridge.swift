@@ -14,6 +14,8 @@ enum WidgetBridge {
         d.set(levelName, forKey: TroughShared.Key.levelName)
         d.set(progress,  forKey: TroughShared.Key.levelProgress)
         d.set(xpToNext,  forKey: TroughShared.Key.xpToNext)
+        // Additive v1.4: rank cover for the widget's colour strip (derived from level).
+        d.set(TR.RankCover.forLevel(level).rawValue, forKey: TroughShared.Key.rankCover)
         d.set(Date(),    forKey: TroughShared.Key.updatedAt)
         reload()
     }
@@ -48,6 +50,38 @@ enum WidgetBridge {
             d.removeObject(forKey: TroughShared.Key.nextInjectionDate)
         }
 
+        d.set(Date(), forKey: TroughShared.Key.updatedAt)
+        reload()
+    }
+
+    /// Additive v1.4: the badge the user is closest to, for the "Next badge"
+    /// widget. Pass `name: nil` when every (non-secret) badge is earned — the
+    /// widget then shows its "every badge earned" state. Titles only: never pass
+    /// doses, compounds or lab values.
+    /// - Parameters:
+    ///   - name: localized badge title.
+    ///   - symbol: SF Symbol name (`BadgeDef.symbol`).
+    ///   - current: progress toward the target (already clamped to `target`).
+    ///   - target: units needed to earn it.
+    static func updateNextBadge(name: String?, symbol: String?, current: Int, target: Int) {
+        guard let d = TroughShared.defaults else { return }
+        if let name, target > 0 {
+            let clamped = min(max(current, 0), target)
+            d.set(name, forKey: TroughShared.Key.nextBadgeName)
+            d.set(symbol ?? "rosette", forKey: TroughShared.Key.nextBadgeSymbol)
+            d.set(clamped, forKey: TroughShared.Key.nextBadgeCurrent)
+            d.set(target, forKey: TroughShared.Key.nextBadgeTarget)
+            d.set(target - clamped, forKey: TroughShared.Key.nextBadgeRemaining)
+            d.set(Double(clamped) / Double(target), forKey: TroughShared.Key.nextBadgeProgress)
+        } else {
+            // Empty name == "every badge earned" (absent == not written yet).
+            d.set("", forKey: TroughShared.Key.nextBadgeName)
+            for key in [TroughShared.Key.nextBadgeSymbol,
+                        TroughShared.Key.nextBadgeCurrent, TroughShared.Key.nextBadgeTarget,
+                        TroughShared.Key.nextBadgeRemaining, TroughShared.Key.nextBadgeProgress] {
+                d.removeObject(forKey: key)
+            }
+        }
         d.set(Date(), forKey: TroughShared.Key.updatedAt)
         reload()
     }

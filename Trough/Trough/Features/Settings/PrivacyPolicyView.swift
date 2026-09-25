@@ -5,9 +5,22 @@ import SwiftUI
 struct PrivacyPolicyView: View {
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            TRBackground(glow: TR.Palette.teal)
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 14) {
+                    // Hero
+                    VStack(alignment: .leading, spacing: 10) {
+                        GlassIconTile(systemImage: "lock.shield.fill", tint: TR.Palette.teal, size: 48, filled: true)
+                        Text(NSLocalizedString("privacy.hero.title", value: "Private by design", comment: "Privacy screen hero title"))
+                            .font(TR.Font.display(.title2))
+                            .foregroundStyle(TR.Palette.textPrimary)
+                        Text(NSLocalizedString("privacy.hero.subtitle", value: "No account. No cloud. Your data stays on this device.", comment: "Privacy screen hero subtitle"))
+                            .font(.subheadline)
+                            .foregroundStyle(TR.Palette.textSecondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .trCard(tint: TR.Palette.teal)
+
                     privacySection(
                         icon: "lock.shield.fill",
                         title: "Your Data Never Leaves Your Device",
@@ -34,24 +47,26 @@ struct PrivacyPolicyView: View {
                         body: "You can delete any entry at any time. Because everything lives on your device, deleting the app permanently and irreversibly erases all of your data."
                     )
 
-                    Divider()
-                        .background(Color.secondary.opacity(0.2))
-
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("Full Policy & Terms")
-                            .font(.headline)
-                            .foregroundColor(.white)
+                            .font(TR.Font.display(.headline))
+                            .foregroundStyle(TR.Palette.textPrimary)
                         Link("Privacy Policy → gwlabs.app/privacy",
                              destination: URL(string: "https://gwlabs.app/privacy")!)
-                            .font(.subheadline)
-                            .foregroundColor(AppColors.accent)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(TR.Palette.coralLight)
+                            .frame(minHeight: TR.Metrics.minTap)
                         Link("Terms of Use → gwlabs.app/terms",
                              destination: URL(string: "https://gwlabs.app/terms")!)
-                            .font(.subheadline)
-                            .foregroundColor(AppColors.accent)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(TR.Palette.coralLight)
+                            .frame(minHeight: TR.Metrics.minTap)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .trCard()
                 }
-                .padding(24)
+                .padding(.horizontal, TR.Metrics.gutter)
+                .padding(.vertical, 12)
             }
         }
         .navigationTitle("Privacy & Data")
@@ -59,20 +74,20 @@ struct PrivacyPolicyView: View {
     }
 
     private func privacySection(icon: String, title: String, body: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 10) {
-                Image(systemName: icon)
-                    .foregroundColor(AppColors.accent)
-                    .frame(width: 22)
-                    .accessibilityHidden(true)
+        HStack(alignment: .top, spacing: 12) {
+            GlassIconTile(systemImage: icon, tint: TR.Palette.teal, size: 36)
+            VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(TR.Font.display(.headline, weight: .bold))
+                    .foregroundStyle(TR.Palette.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                Text(body)
+                    .font(.subheadline)
+                    .foregroundStyle(TR.Palette.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Text(body)
-                .font(.subheadline)
-                .foregroundColor(Color(hex: "#A0A0C0"))
-                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
         }
+        .trCard()
     }
 }

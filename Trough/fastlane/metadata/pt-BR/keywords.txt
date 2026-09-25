@@ -1,1 +1,1 @@
-testosterona,hormônio,trt,injeção,exames,peptídeo,glp-1,protocolo,estradiol,hcg,e2,clomid
+exames,sangue,peptídeo,glp-1,estradiol,e2,lembrete,seringa,aplicação,dose,níveis,hormônio,terapia

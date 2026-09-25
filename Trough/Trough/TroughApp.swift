@@ -40,6 +40,17 @@ struct TroughApp: App {
         // Attempt to create the ModelContainer. If schema/migration fails,
         // fall back to a fresh store (delete corrupted DB) rather than crashing.
         let schema = Schema(TroughSchemaV1.models)
+        #if DEBUG
+        // App Store screenshot / demo launch arguments (Services/DemoMode.swift).
+        // `-TRSeedDemo` runs on a seeded in-memory store; the real store is never opened.
+        DemoMode.prepareDefaults()
+        if DemoMode.seedsDemo {
+            container = DemoMode.makeContainer(schema: schema)
+            containerTier = .primary
+            RevenueCatService.configure(apiKey: rcAPIKey)
+            return
+        }
+        #endif
         do {
             container = try ModelContainer(
                 for: schema,
@@ -89,6 +100,9 @@ struct TroughApp: App {
                 .preferredColorScheme(.dark)
                 .task { await subscriptionManager.refresh() }
                 .modifier(StorageFallbackAlert(tier: containerTier))
+                #if DEBUG
+                .task { StoreAssetExporter.scheduleIfRequested(container: container) }
+                #endif
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {

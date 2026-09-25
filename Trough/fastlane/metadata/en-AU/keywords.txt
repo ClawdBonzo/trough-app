@@ -1,1 +1,1 @@
-hormone,peptide,bloodwork,shot,dose,levels,labs,hrt,test,e2,estradiol,cycle,jab,bloods,glp-1,syringe
+pathology,labs,syringe,needle,schedule,calendar,site,rotation,cypionate,enanthate,estradiol,pk,men

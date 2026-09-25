@@ -252,11 +252,16 @@ final class OnboardingViewModel: ObservableObject {
         case 7:  nextIndex = 8                                      // healthKit → reminders
         default: nextIndex = stepIndex
         }
-        withAnimation(.easeInOut(duration: 0.3)) { stepIndex = nextIndex }
+        withAnimation(Self.stepAnimation) { stepIndex = nextIndex }
         // Re-enable after animation completes
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
             self?.isAdvancing = false
         }
+    }
+
+    /// Step transition: TR.Motion.gentle, or a short cross-fade with Reduce Motion.
+    private static var stepAnimation: Animation {
+        TR.Motion.respecting(UIAccessibility.isReduceMotionEnabled, TR.Motion.gentle)
     }
 
     func back() {
@@ -270,7 +275,7 @@ final class OnboardingViewModel: ObservableObject {
         case 8: prevIndex = 7                                        // reminders → healthKit
         default: prevIndex = stepIndex - 1
         }
-        withAnimation(.easeInOut(duration: 0.3)) { stepIndex = prevIndex }
+        withAnimation(Self.stepAnimation) { stepIndex = prevIndex }
     }
 
     // MARK: Secondary compounds
@@ -564,14 +569,19 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            TRBackground()
+            // Splash glow for the audience step, full-bleed behind the pager.
+            GlowBackdrop(colors: [TR.Palette.coral, TR.Palette.lilac, TR.Palette.tangerine], intensity: 0.28)
+                .opacity(vm.stepIndex == 0 ? 1 : 0)
+                .animation(TR.Motion.gentle, value: vm.stepIndex)
 
             VStack(spacing: 0) {
                 // Progress bar
                 if vm.stepIndex > 0 {
-                    ProgressBar(current: vm.stepIndex, total: 8)
+                    OnboardingProgressBar(current: vm.stepIndex, total: 8)
                         .padding(.horizontal, 24)
-                        .padding(.top, 16)
+                        .padding(.top, 12)
+                        .transition(.opacity)
                 }
 
                 // Step content via TabView
@@ -593,6 +603,7 @@ struct OnboardingView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
+        .preferredColorScheme(.dark)
         .onAppear { vm.setup(context: modelContext) }
         .fullScreenCover(isPresented: $showTrialPaywall) {
             OnboardingTrialView(firstScore: vm.firstProtocolScore) {
@@ -602,17 +613,17 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - Onboarding Trial Prompt (full-screen, no scroll)
+// MARK: - Onboarding Trial Prompt (Protocol Passport first, then the trial offer)
 
 private struct OnboardingTrialView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var offerings: Offerings?
     @State private var trialEligible: [String: Bool] = [:]
     @State private var isPurchasing = false
     @State private var errorMessage: String?
     @State private var selectedPlan: PlanType = .annual
-    @State private var scoreAppeared = false
-    @State private var contentAppeared = false
+    @State private var showPassport = true
 
     let firstScore: Int
     let onContinue: () -> Void
@@ -641,6 +652,11 @@ private struct OnboardingTrialView: View {
         return trialEligible[id] ?? false
     }
 
+    private func hasTrial(_ package: Package?) -> Bool {
+        guard let id = package?.storeProduct.productIdentifier else { return false }
+        return trialEligible[id] ?? false
+    }
+
     /// "SAVE N%" computed from the fetched monthly vs annual store prices.
     /// Hidden when either product is missing or there is no actual saving.
     private var annualSavingsBadge: String? {
@@ -655,222 +671,169 @@ private struct OnboardingTrialView: View {
     }
 
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                AppColors.background.ignoresSafeArea()
-
-                RadialGradient(
-                    colors: [AppColors.accent.opacity(0.15), Color.clear],
-                    center: .top,
-                    startRadius: 0,
-                    endRadius: geo.size.height * 0.6
-                )
-                .ignoresSafeArea()
-
-                VStack(spacing: 0) {
-                    Spacer(minLength: 0)
-
-                    // MARK: Score hero
-                    VStack(spacing: 8) {
-                        ZStack {
-                            Circle()
-                                .stroke(Color.white.opacity(0.08), lineWidth: 10)
-                                .frame(width: 90, height: 90)
-                            Circle()
-                                .trim(from: 0, to: scoreAppeared ? CGFloat(firstScore) / 100.0 : 0)
-                                .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                .frame(width: 90, height: 90)
-                                .rotationEffect(.degrees(-90))
-                                .animation(.spring(response: 1.0, dampingFraction: 0.7).delay(0.2), value: scoreAppeared)
-                            Text("\(firstScore)")
-                                .font(.system(size: 30, weight: .black, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-
-                        Text(NSLocalizedString("onboarding.yourProtocolScore", comment: ""))
-                            .font(.system(size: 22, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-
-                        Text(selectedHasTrial
-                             ? NSLocalizedString("onboarding.trialUnlock", comment: "")
-                             : NSLocalizedString("onboarding.proUnlock", comment: ""))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-
-                        DisclaimerBanner(type: .protocolScore)
-                            .padding(.horizontal, 24)
-                    }
-                    .scaleEffect(scoreAppeared ? 1 : 0.8)
-                    .opacity(scoreAppeared ? 1 : 0)
-                    .animation(.spring(response: 0.55, dampingFraction: 0.72), value: scoreAppeared)
-
-                    Spacer(minLength: 0)
-
-                    // MARK: Feature grid
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                        TrialFeatureCell(icon: "waveform.path.ecg",         text: NSLocalizedString("pro.pkCurves", comment: ""))
-                        TrialFeatureCell(icon: "drop.fill",                  text: NSLocalizedString("bloodwork.title", comment: ""))
-                        TrialFeatureCell(icon: "chart.line.uptrend.xyaxis",  text: NSLocalizedString("paywall.featureHistory", comment: ""))
-                        TrialFeatureCell(icon: "chart.bar.doc.horizontal",   text: NSLocalizedString("paywall.featureReports", comment: ""))
-                        TrialFeatureCell(icon: "brain.head.profile",         text: NSLocalizedString("paywall.featureAI", comment: ""))
-                        TrialFeatureCell(icon: "pills.fill",                 text: NSLocalizedString("paywall.feat.peptides", comment: ""))
-                    }
-                    .padding(.horizontal, 24)
-                    .opacity(contentAppeared ? 1 : 0)
-                    .offset(y: contentAppeared ? 0 : 16)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.25), value: contentAppeared)
-
-                    Spacer(minLength: 0)
-
-                    // MARK: Plan selector
-                    HStack(spacing: 10) {
-                        trialPlanButton(
-                            plan: .monthly,
-                            title: NSLocalizedString("paywall.monthly", comment: ""),
-                            price: monthlyPackage?.localizedPriceString ?? "$9.99",
-                            period: NSLocalizedString("paywall.perMonth", comment: ""),
-                            badge: nil
-                        )
-                        trialPlanButton(
-                            plan: .annual,
-                            title: NSLocalizedString("paywall.annual", comment: ""),
-                            price: annualPackage?.localizedPriceString ?? "$49.99",
-                            period: NSLocalizedString("paywall.perYear", comment: ""),
-                            badge: annualSavingsBadge
-                        )
-                    }
-                    .padding(.horizontal, 24)
-                    .opacity(contentAppeared ? 1 : 0)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.35), value: contentAppeared)
-
-                    Spacer(minLength: 0)
-
-                    // MARK: CTA
-                    VStack(spacing: 10) {
-                        Button {
-                            guard let pkg = selectedPackage else {
-                                onContinue()
-                                return
-                            }
-                            Task { await startTrial(package: pkg) }
-                        } label: {
-                            Group {
-                                if isPurchasing {
-                                    ProgressView().tint(.white)
-                                } else {
-                                    Text(selectedHasTrial
-                                         ? NSLocalizedString("onboarding.startTrial", comment: "")
-                                         : NSLocalizedString("dashboard.trial.subscribeButton", comment: ""))
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(AppColors.accent)
-                            .cornerRadius(16)
-                        }
-                        .buttonStyle(.plain)
-                        .disabled(isPurchasing)
-
-                        if let error = errorMessage {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundColor(AppColors.accent)
-                                .multilineTextAlignment(.center)
-                        }
-
-                        Button { onContinue() } label: {
-                            Text(NSLocalizedString("onboarding.maybeLater", comment: ""))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Text(selectedHasTrial
-                             ? NSLocalizedString("onboarding.trialLegal", comment: "")
-                             : NSLocalizedString("onboarding.subscribeLegal", comment: ""))
-                            .font(.caption2)
-                            .foregroundColor(.secondary.opacity(0.5))
-
-                        HStack(spacing: 20) {
-                            Link(NSLocalizedString("paywall.privacy", comment: ""), destination: URL(string: "https://gwlabs.app/privacy")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
-                            Link(NSLocalizedString("paywall.terms", comment: ""), destination: URL(string: "https://gwlabs.app/terms")!)
-                                .font(.caption2).foregroundColor(.secondary.opacity(0.4))
-                            Button(NSLocalizedString("paywall.restore", comment: "")) {
-                                Task {
-                                    _ = try? await RevenueCatService.shared.restorePurchases()
-                                    await subscriptionManager.refresh()
-                                    if subscriptionManager.isSubscribed { onContinue() }
-                                }
-                            }
-                            .font(.caption2).foregroundColor(.secondary.opacity(0.4))
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .opacity(contentAppeared ? 1 : 0)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.75).delay(0.45), value: contentAppeared)
-                    .padding(.bottom, 20)
+        ZStack {
+            if showPassport {
+                OnboardingPassportReveal {
+                    withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.gentle)) { showPassport = false }
                 }
+                .transition(.asymmetric(insertion: .opacity, removal: .opacity.combined(with: .move(edge: .leading))))
+            } else {
+                trialOffer
+                    .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .trailing)), removal: .opacity))
             }
         }
+        .preferredColorScheme(.dark)
         .task {
             offerings = await RevenueCatService.shared.fetchOfferings()
             let products = offerings?.current?.availablePackages.map(\.storeProduct) ?? []
             trialEligible = await RevenueCatService.shared.trialEligibility(for: products)
         }
-        .onAppear {
-            scoreAppeared = true
-            contentAppeared = true
+    }
+
+    // MARK: Trial offer
+
+    private var trialOffer: some View {
+        ZStack {
+            TRBackground(glow: TR.Palette.coral, glowOpacity: 0.22)
+            ProSunsetGlow()
+
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // MARK: Score hero
+                        VStack(spacing: 10) {
+                            TRRing(progress: Double(firstScore) / 100.0, lineWidth: 10) {
+                                CountUp(firstScore)
+                                    .font(TR.Font.number(30))
+                                    .foregroundStyle(TR.Palette.textPrimary)
+                            }
+                            .frame(width: 104, height: 104)
+                            .trPopOnAppear()
+
+                            Text(NSLocalizedString("onboarding.yourProtocolScore", comment: ""))
+                                .font(TR.Font.display(.title2, weight: .black))
+                                .foregroundStyle(TR.Palette.textPrimary)
+                                .multilineTextAlignment(.center)
+
+                            Text(selectedHasTrial
+                                 ? NSLocalizedString("onboarding.trialUnlock", comment: "")
+                                 : NSLocalizedString("onboarding.proUnlock", comment: ""))
+                                .font(.subheadline)
+                                .foregroundStyle(TR.Palette.textSecondary)
+                                .multilineTextAlignment(.center)
+
+                            DisclaimerBanner(type: .protocolScore)
+                        }
+                        .trRevealOnAppear()
+
+                        // MARK: Feature grid
+                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                            TrialFeatureCell(icon: "waveform.path.ecg",         tint: OnboardingTint.coral, text: NSLocalizedString("pro.pkCurves", comment: ""))
+                            TrialFeatureCell(icon: "drop.fill",                  tint: OnboardingTint.sky,   text: NSLocalizedString("bloodwork.title", comment: ""))
+                            TrialFeatureCell(icon: "chart.line.uptrend.xyaxis",  tint: OnboardingTint.gold,  text: NSLocalizedString("paywall.featureHistory", comment: ""))
+                            TrialFeatureCell(icon: "chart.bar.doc.horizontal",   tint: OnboardingTint.teal,  text: NSLocalizedString("paywall.featureReports", comment: ""))
+                            TrialFeatureCell(icon: "brain.head.profile",         tint: OnboardingTint.lilac, text: NSLocalizedString("paywall.featureAI", comment: ""))
+                            TrialFeatureCell(icon: "pills.fill",                 tint: OnboardingTint.mint,  text: NSLocalizedString("paywall.feat.peptides", comment: ""))
+                        }
+                        .trRevealOnAppear(delay: 0.12)
+
+                        // MARK: Plan selector
+                        HStack(alignment: .top, spacing: 10) {
+                            ProPlanCard(
+                                title: NSLocalizedString("paywall.monthly", comment: ""),
+                                price: monthlyPackage?.localizedPriceString ?? "$9.99",
+                                period: NSLocalizedString("paywall.perMonth", comment: ""),
+                                trialText: hasTrial(monthlyPackage) ? ProTrialCopy.badge(for: monthlyPackage?.storeProduct) : nil,
+                                isSelected: selectedPlan == .monthly
+                            ) { select(.monthly) }
+                            ProPlanCard(
+                                title: NSLocalizedString("paywall.annual", comment: ""),
+                                price: annualPackage?.localizedPriceString ?? "$49.99",
+                                period: NSLocalizedString("paywall.perYear", comment: ""),
+                                ribbon: annualSavingsBadge,
+                                trialText: hasTrial(annualPackage) ? ProTrialCopy.badge(for: annualPackage?.storeProduct) : nil,
+                                isSelected: selectedPlan == .annual
+                            ) { select(.annual) }
+                        }
+                        .padding(.top, 6)
+                        .trRevealOnAppear(delay: 0.2)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 28)
+                    .padding(.bottom, 24)
+                }
+
+                // MARK: CTA
+                VStack(spacing: 8) {
+                    Button {
+                        guard let pkg = selectedPackage else {
+                            onContinue()
+                            return
+                        }
+                        Task { await startTrial(package: pkg) }
+                    } label: {
+                        Group {
+                            if isPurchasing {
+                                ProgressView().tint(.white)
+                            } else {
+                                Text(selectedHasTrial
+                                     ? NSLocalizedString("onboarding.startTrial", comment: "")
+                                     : NSLocalizedString("dashboard.trial.subscribeButton", comment: ""))
+                            }
+                        }
+                    }
+                    .buttonStyle(.trPrimary)
+                    .disabled(isPurchasing)
+
+                    if let error = errorMessage {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(TR.Palette.coral)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    Button { onContinue() } label: {
+                        Text(NSLocalizedString("onboarding.maybeLater", comment: ""))
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .frame(minHeight: 36)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    Text(selectedHasTrial
+                         ? ProTrialCopy.legal(for: selectedPackage?.storeProduct)
+                         : NSLocalizedString("onboarding.subscribeLegal", comment: ""))
+                        .font(.caption2)
+                        .foregroundStyle(TR.Palette.textTertiary)
+                        .multilineTextAlignment(.center)
+
+                    HStack(spacing: 20) {
+                        Link(NSLocalizedString("paywall.privacy", comment: ""), destination: URL(string: "https://gwlabs.app/privacy")!)
+                        Link(NSLocalizedString("paywall.terms", comment: ""), destination: URL(string: "https://gwlabs.app/terms")!)
+                        Button(NSLocalizedString("paywall.restore", comment: "")) {
+                            Task {
+                                _ = try? await RevenueCatService.shared.restorePurchases()
+                                await subscriptionManager.refresh()
+                                if subscriptionManager.isSubscribed { onContinue() }
+                            }
+                        }
+                    }
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textTertiary)
+                    .tint(TR.Palette.textTertiary)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 10)
+                .padding(.bottom, 12)
+            }
         }
     }
 
-    @ViewBuilder
-    private func trialPlanButton(
-        plan: PlanType,
-        title: String,
-        price: String,
-        period: String,
-        badge: String?
-    ) -> some View {
-        Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                selectedPlan = plan
-            }
-        } label: {
-            VStack(spacing: 4) {
-                HStack(spacing: 4) {
-                    Text(title)
-                        .font(.subheadline.bold())
-                        .foregroundColor(selectedPlan == plan ? .white : .secondary)
-                    if let badge {
-                        Text(badge)
-                            .font(.system(size: 8, weight: .black))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 2)
-                            .background(AppColors.accent)
-                            .clipShape(Capsule())
-                    }
-                }
-                Text(price)
-                    .font(.title3.bold())
-                    .foregroundColor(selectedPlan == plan ? .white : .secondary)
-                Text(period)
-                    .font(.caption2)
-                    .foregroundColor(selectedPlan == plan ? .white.opacity(0.6) : .secondary.opacity(0.5))
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(AppColors.card)
-            .cornerRadius(14)
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(selectedPlan == plan ? AppColors.accent : Color.clear, lineWidth: 2)
-            )
+    private func select(_ plan: PlanType) {
+        withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.snappy)) {
+            selectedPlan = plan
         }
-        .buttonStyle(.plain)
     }
 
     private func startTrial(package: Package) async {
@@ -893,94 +856,25 @@ private struct OnboardingTrialView: View {
 
 private struct TrialFeatureCell: View {
     let icon: String
+    var tint: [Color] = OnboardingTint.coral
     let text: String
 
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(AppColors.accent)
-                .frame(width: 18)
+        HStack(spacing: 10) {
+            OnboardingIconTile(systemImage: icon, colors: tint, size: 28)
             Text(text)
-                .font(.subheadline)
-                .foregroundColor(.white)
-            Spacer()
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(TR.Palette.textPrimary)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+            Spacer(minLength: 0)
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 10)
         .padding(.vertical, 9)
-        .background(AppColors.card)
-        .cornerRadius(11)
-    }
-}
-
-// MARK: - Progress Bar
-
-private struct ProgressBar: View {
-    let current: Int
-    let total: Int
-
-    var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Capsule().fill(Color.white.opacity(0.1)).frame(height: 4)
-                Capsule()
-                    .fill(AppColors.accent)
-                    .frame(width: geo.size.width * min(1, Double(current) / Double(total)), height: 4)
-                    .animation(.spring(), value: current)
-            }
-        }
-        .frame(height: 4)
-    }
-}
-
-// MARK: - Step container
-
-private struct StepContainer<Content: View>: View {
-    let title: String
-    let subtitle: String
-    @ViewBuilder let content: () -> Content
-    let primaryLabel: String
-    let onPrimary: () -> Void
-    var showBack: Bool = false
-    var onBack: (() -> Void)? = nil
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(title)
-                        .font(.system(size: 28, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-
-                content()
-
-                Spacer(minLength: 24)
-
-                VStack(spacing: 12) {
-                    Button(action: onPrimary) {
-                        Text(primaryLabel)
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(AppColors.accent)
-                            .foregroundColor(.white)
-                            .cornerRadius(14)
-                    }
-                    if showBack, let back = onBack {
-                        Button(action: back) {
-                            Text(NSLocalizedString("common.back", comment: ""))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-            }
-            .padding(24)
-        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(TR.Palette.surface.opacity(0.85), in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous).strokeBorder(TR.Palette.hairline))
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -988,6 +882,7 @@ private struct StepContainer<Content: View>: View {
 
 private struct AudienceStep: View {
     @ObservedObject var vm: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var logoScale: CGFloat = 0.4
     @State private var logoOpacity: Double = 0
@@ -1004,104 +899,100 @@ private struct AudienceStep: View {
     @State private var pulsing = false
 
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                // Ambient glow behind logo
-                RadialGradient(
-                    colors: [AppColors.accent.opacity(0.22), Color.clear],
-                    center: UnitPoint(x: 0.5, y: 0.28),
-                    startRadius: 0,
-                    endRadius: geo.size.width * 0.55
-                )
-                .opacity(glowOpacity)
-                .ignoresSafeArea()
+        ZStack {
+            VStack(spacing: 0) {
+                Spacer()
 
-                VStack(spacing: 0) {
-                    Spacer()
+                // MARK: Logo — single source of truth
+                ZStack {
+                    Circle()
+                        .fill(RadialGradient(colors: [TR.Palette.coral.opacity(0.35), TR.Palette.coral.opacity(0)],
+                                             center: .center, startRadius: 0, endRadius: 70))
+                        .frame(width: 140, height: 140)
+                        .scaleEffect(pulsing ? 1.12 : 1.0)
+                        .animation(
+                            reduceMotion ? nil : .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
+                            value: pulsing
+                        )
 
-                    // MARK: Logo — single source of truth
-                    ZStack {
-                        Circle()
-                            .fill(AppColors.accent.opacity(0.12))
-                            .frame(width: 92, height: 92)
-                            .scaleEffect(pulsing ? 1.12 : 1.0)
-                            .animation(
-                                .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
-                                value: pulsing
-                            )
-
-                        Image("AppIcon-Logo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 72, height: 72)
-                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                    }
-                    .scaleEffect(logoScale)
-                    .opacity(logoOpacity)
-
-                    // MARK: Title — no duplicate text logo
-                    VStack(spacing: 6) {
-                        Text(NSLocalizedString("onboarding.whatBringsYou", comment: ""))
-                            .font(.system(size: 26, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(NSLocalizedString("onboarding.personalizeExperience", comment: ""))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.top, 22)
-                    .offset(y: titleOffset)
-                    .opacity(titleOpacity)
-
-                    // MARK: Choices
-                    VStack(spacing: 14) {
-                        AudienceButton(
-                            title: NSLocalizedString("onboarding.imOnTRT", comment: ""),
-                            subtitle: NSLocalizedString("onboarding.trtSubtitle", comment: ""),
-                            icon: "syringe.fill",
-                            isSelected: vm.userType == "trt"
-                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "trt" } }
-                        .offset(y: button1Offset)
-                        .opacity(button1Opacity)
-
-                        AudienceButton(
-                            title: NSLocalizedString("onboarding.naturalTitle", comment: ""),
-                            subtitle: NSLocalizedString("onboarding.naturalSubtitle", comment: ""),
-                            icon: "figure.run",
-                            isSelected: vm.userType == "natural"
-                        ) { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { vm.userType = "natural" } }
-                        .offset(y: button2Offset)
-                        .opacity(button2Opacity)
-                    }
-                    .padding(.top, 26)
-
-                    // MARK: CTA
-                    Button(action: { vm.advance() }) {
-                        Text(NSLocalizedString("common.continue", comment: ""))
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(AppColors.accent)
-                            .foregroundColor(.white)
-                            .cornerRadius(14)
-                    }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
-                    .padding(.top, 28)
-                    .offset(y: ctaOffset)
-                    .opacity(ctaOpacity)
-
-                    Spacer()
+                    Image("AppIcon-Logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 84, height: 84)
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(.white.opacity(0.18), lineWidth: 1))
+                        .shadow(color: TR.Palette.coral.opacity(0.5), radius: 18, y: 8)
+                        .accessibilityHidden(true)
                 }
-                .padding(.horizontal, 28)
+                .scaleEffect(logoScale)
+                .opacity(logoOpacity)
+
+                // MARK: Title — no duplicate text logo
+                VStack(spacing: 8) {
+                    Text(NSLocalizedString("onboarding.whatBringsYou", comment: ""))
+                        .font(TR.Font.display(.title, weight: .black))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .accessibilityAddTraits(.isHeader)
+                    Text(NSLocalizedString("onboarding.personalizeExperience", comment: ""))
+                        .font(.subheadline)
+                        .foregroundStyle(TR.Palette.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.top, 18)
+                .offset(y: titleOffset)
+                .opacity(titleOpacity)
+
+                // MARK: Choices
+                VStack(spacing: 12) {
+                    OnboardingOptionCard(
+                        icon: "syringe.fill",
+                        title: NSLocalizedString("onboarding.imOnTRT", comment: ""),
+                        subtitle: NSLocalizedString("onboarding.trtSubtitle", comment: ""),
+                        tint: OnboardingTint.coral,
+                        isSelected: vm.userType == "trt"
+                    ) { withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.snappy)) { vm.userType = "trt" } }
+                    .offset(y: button1Offset)
+                    .opacity(button1Opacity)
+
+                    OnboardingOptionCard(
+                        icon: "figure.run",
+                        title: NSLocalizedString("onboarding.naturalTitle", comment: ""),
+                        subtitle: NSLocalizedString("onboarding.naturalSubtitle", comment: ""),
+                        tint: OnboardingTint.teal,
+                        isSelected: vm.userType == "natural"
+                    ) { withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.snappy)) { vm.userType = "natural" } }
+                    .offset(y: button2Offset)
+                    .opacity(button2Opacity)
+                }
+                .padding(.top, 26)
+
+                // MARK: CTA
+                Button(action: { vm.advance() }) {
+                    Text(NSLocalizedString("common.continue", comment: ""))
+                }
+                .buttonStyle(.trPrimary)
+                .padding(.top, 26)
+                .offset(y: ctaOffset)
+                .opacity(ctaOpacity)
+
+                Spacer()
             }
+            .padding(.horizontal, 24)
         }
         .onAppear { runEntranceAnimation() }
     }
 
     private func runEntranceAnimation() {
+        guard !reduceMotion else {
+            logoScale = 1; logoOpacity = 1; glowOpacity = 1
+            titleOffset = 0; titleOpacity = 1; subtitleOpacity = 1
+            button1Offset = 0; button1Opacity = 1; button2Offset = 0; button2Opacity = 1
+            ctaOffset = 0; ctaOpacity = 1
+            return
+        }
         // Logo: spring scale in
-        withAnimation(.spring(response: 0.6, dampingFraction: 0.65).delay(0.05)) {
+        withAnimation(TR.Motion.pop.delay(0.05)) {
             logoScale = 1.0
             logoOpacity = 1.0
         }
@@ -1137,42 +1028,6 @@ private struct AudienceStep: View {
     }
 }
 
-private struct AudienceButton: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let isSelected: Bool
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(isSelected ? AppColors.accent : .secondary)
-                    .frame(width: 36)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title).font(.headline).foregroundColor(.white)
-                    Text(subtitle).font(.caption).foregroundColor(.secondary)
-                }
-                Spacer()
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(AppColors.accent)
-                }
-            }
-            .padding(16)
-            .background(isSelected ? AppColors.accent.opacity(0.1) : AppColors.card)
-            .cornerRadius(14)
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? AppColors.accent.opacity(0.5) : Color.clear, lineWidth: 1.5)
-            )
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 // MARK: - Step 1: Import Data
 
 private struct ImportDataStep: View {
@@ -1180,17 +1035,21 @@ private struct ImportDataStep: View {
     @State private var showCSVImport = false
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.haveData", comment: ""),
             subtitle: NSLocalizedString("onboarding.importSubtitle", comment: ""),
+            systemImage: "tray.and.arrow.down.fill",
+            tint: OnboardingTint.sky,
             content: {
-                VStack(spacing: 14) {
-                    OptionCard(icon: "doc.text", title: NSLocalizedString("onboarding.importSpreadsheet", comment: ""),
-                               subtitle: NSLocalizedString("onboarding.importCSV", comment: "")) {
+                VStack(spacing: 12) {
+                    OnboardingOptionCard(icon: "doc.text.fill", title: NSLocalizedString("onboarding.importSpreadsheet", comment: ""),
+                                         subtitle: NSLocalizedString("onboarding.importCSV", comment: ""),
+                                         tint: OnboardingTint.sky) {
                         showCSVImport = true
                     }
-                    OptionCard(icon: "sparkles", title: NSLocalizedString("onboarding.startFresh", comment: ""),
-                               subtitle: NSLocalizedString("onboarding.startFreshGuide", comment: "")) {
+                    OnboardingOptionCard(icon: "sparkles", title: NSLocalizedString("onboarding.startFresh", comment: ""),
+                                         subtitle: NSLocalizedString("onboarding.startFreshGuide", comment: ""),
+                                         tint: OnboardingTint.gold) {
                         vm.advance()
                     }
                 }
@@ -1209,34 +1068,6 @@ private struct ImportDataStep: View {
     }
 }
 
-private struct OptionCard: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(AppColors.accent)
-                    .frame(width: 36)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title).font(.headline).foregroundColor(.white)
-                    Text(subtitle).font(.caption).foregroundColor(.secondary)
-                }
-                Spacer()
-                Image(systemName: "chevron.right").foregroundColor(.secondary)
-            }
-            .padding(16)
-            .background(AppColors.card)
-            .cornerRadius(14)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 // MARK: - Step 2: Protocol Setup
 
 private struct ProtocolSetupStep: View {
@@ -1245,22 +1076,24 @@ private struct ProtocolSetupStep: View {
     private let weekdayNames = Calendar.current.shortWeekdaySymbols
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.yourProtocol", comment: ""),
             subtitle: NSLocalizedString("onboarding.dosesSubtitle", comment: ""),
+            systemImage: "syringe.fill",
+            tint: OnboardingTint.coral,
             content: {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 18) {
                     // Primary compound
-                    FormCard(title: NSLocalizedString("onboarding.primaryCompound", comment: "")) {
+                    OnboardingFormCard(title: NSLocalizedString("onboarding.primaryCompound", comment: ""), systemImage: "cross.vial.fill") {
                         Picker(NSLocalizedString("common.compound", comment: ""), selection: $vm.primaryCompound) {
                             ForEach(OnboardingViewModel.primaryCompounds, id: \.self) {
                                 Text($0).tag($0)
                             }
                         }
                         .pickerStyle(.menu)
-                        .tint(AppColors.accent)
+                        .tint(TR.Palette.coral)
 
-                        Divider().background(Color.white.opacity(0.07))
+                        OnboardingDivider()
 
                         HStack {
                             Text(NSLocalizedString("common.dose", comment: ""))
@@ -1268,10 +1101,10 @@ private struct ProtocolSetupStep: View {
                             TextField(NSLocalizedString("onboarding.enterPrescribedDose", comment: ""), text: $vm.primaryDoseText)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                            Text(NSLocalizedString("common.mg", comment: "")).foregroundColor(.secondary)
+                            Text(NSLocalizedString("common.mg", comment: "")).foregroundStyle(TR.Palette.textSecondary)
                         }
 
-                        Divider().background(Color.white.opacity(0.07))
+                        OnboardingDivider()
 
                         Picker(NSLocalizedString("onboarding.frequency", comment: ""), selection: $vm.primaryFreqIndex) {
                             ForEach(OnboardingViewModel.frequencies.indices, id: \.self) { i in
@@ -1279,31 +1112,25 @@ private struct ProtocolSetupStep: View {
                             }
                         }
                         .pickerStyle(.menu)
-                        .tint(AppColors.accent)
+                        .tint(TR.Palette.coral)
 
                         if vm.showWeekdayPicker {
-                            Divider().background(Color.white.opacity(0.07))
+                            OnboardingDivider()
                             VStack(alignment: .leading, spacing: 8) {
                                 Text(NSLocalizedString("onboarding.injectionDays", comment: ""))
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
-                                HStack(spacing: 6) {
+                                    .foregroundStyle(TR.Palette.textSecondary)
+                                HStack(spacing: 5) {
                                     ForEach(1...7, id: \.self) { wd in
                                         let name = weekdayNames[wd - 1]
                                         let selected = vm.primaryWeekdays.contains(wd)
-                                        Button(name) {
+                                        OnboardingDayChip(name: name, isSelected: selected) {
                                             if selected {
                                                 vm.primaryWeekdays.remove(wd)
                                             } else {
                                                 vm.primaryWeekdays.insert(wd)
                                             }
                                         }
-                                        .font(.caption.bold())
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 5)
-                                        .background(selected ? AppColors.accent : AppColors.background)
-                                        .foregroundColor(selected ? .white : .secondary)
-                                        .clipShape(Capsule())
                                     }
                                 }
                             }
@@ -1311,44 +1138,36 @@ private struct ProtocolSetupStep: View {
                     }
 
                     // Protocol name preview
-                    HStack {
-                        Image(systemName: "tag")
-                            .foregroundColor(.secondary)
-                        Text(vm.autoProtocolName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+                    TRPill(Text(verbatim: vm.autoProtocolName), systemImage: "tag.fill", tint: TR.Palette.coral)
 
                     // Secondary compounds
-                    Toggle(NSLocalizedString("onboarding.addSecondary", comment: ""), isOn: $vm.addSecondary.animation())
-                        .tint(AppColors.accent)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
+                    Toggle(NSLocalizedString("onboarding.addSecondary", comment: ""), isOn: $vm.addSecondary.animation(TR.Motion.gentle))
+                        .tint(TR.Palette.coral)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                        .trCard(padding: 14)
 
                     if vm.addSecondary {
                         if vm.secondaryEntries.isEmpty {
-                            Button(NSLocalizedString("onboarding.addCompound", comment: "")) {
+                            addButton(NSLocalizedString("onboarding.addCompound", comment: "")) {
                                 vm.addSecondaryEntry()
                             }
-                            .font(.subheadline)
-                            .foregroundColor(AppColors.accent)
                         }
                         ForEach($vm.secondaryEntries) { $entry in
                             SecondaryCompoundCard(entry: $entry)
                         }
-                        if vm.secondaryEntries.count < 2 {
-                            Button(NSLocalizedString("onboarding.addAnother", comment: "")) {
+                        if vm.secondaryEntries.count < 2 && !vm.secondaryEntries.isEmpty {
+                            addButton(NSLocalizedString("onboarding.addAnother", comment: "")) {
                                 vm.addSecondaryEntry()
                             }
-                            .font(.caption)
-                            .foregroundColor(AppColors.accent)
                         }
                     }
 
                     if showDoseValidation {
-                        Text(NSLocalizedString("onboarding.doseValidation", comment: ""))
-                            .font(.caption)
-                            .foregroundColor(AppColors.accent)
+                        Label(NSLocalizedString("onboarding.doseValidation", comment: ""), systemImage: "exclamationmark.circle.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(TR.Palette.coralLight)
+                            .transition(.opacity)
                     }
 
                     DisclaimerBanner(type: .standard)
@@ -1371,13 +1190,24 @@ private struct ProtocolSetupStep: View {
             onBack: { vm.back() }
         )
     }
+
+    private func addButton(_ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Label(title, systemImage: "plus.circle.fill")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(TR.Palette.coral)
+                .frame(minHeight: TR.Metrics.minTap)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
 }
 
 private struct SecondaryCompoundCard: View {
     @Binding var entry: SecondaryCompoundEntry
 
     var body: some View {
-        FormCard(title: NSLocalizedString("onboarding.secondaryCompound", comment: "")) {
+        OnboardingFormCard(title: NSLocalizedString("onboarding.secondaryCompound", comment: "")) {
             HStack {
                 Circle().fill(Color(hex: entry.colorHex)).frame(width: 10, height: 10)
                 Picker(NSLocalizedString("common.compound", comment: ""), selection: $entry.compoundName) {
@@ -1386,9 +1216,9 @@ private struct SecondaryCompoundCard: View {
                     }
                 }
                 .pickerStyle(.menu)
-                .tint(AppColors.accent)
+                .tint(TR.Palette.coral)
             }
-            Divider().background(Color.white.opacity(0.07))
+            OnboardingDivider()
             HStack {
                 Text(NSLocalizedString("common.dose", comment: ""))
                 Spacer()
@@ -1396,58 +1226,54 @@ private struct SecondaryCompoundCard: View {
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
                 Text(entry.compoundName == "HCG" ? "IU" : NSLocalizedString("common.mg", comment: ""))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
         }
     }
 }
 
-private struct FormCard<Content: View>: View {
-    let title: String
-    @ViewBuilder let content: () -> Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.caption.bold())
-                .foregroundColor(.secondary)
-                .textCase(.uppercase)
-            content()
-        }
-        .padding(14)
-        .background(AppColors.card)
-        .cornerRadius(12)
-    }
-}
-
-// MARK: - Step 3: Peptides
-
 // MARK: - Step 3: Compound Select (multi-select chips)
 
 private struct CompoundSelectStep: View {
     @ObservedObject var vm: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showCustomField = false
 
+    private func categoryIcon(_ index: Int) -> String {
+        switch index {
+        case 0: return "syringe"
+        case 1: return "cross.vial.fill"
+        default: return "pills.fill"
+        }
+    }
+
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.whatElse", comment: ""),
             subtitle: NSLocalizedString("onboarding.tapAllApply", comment: ""),
+            systemImage: "square.stack.3d.up.fill",
+            tint: OnboardingTint.lilac,
             content: {
                 VStack(alignment: .leading, spacing: 20) {
-                    ForEach(OnboardingViewModel.compoundCategories) { category in
+                    ForEach(Array(OnboardingViewModel.compoundCategories.enumerated()), id: \.element.id) { index, category in
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(category.name)
-                                .font(.caption.bold())
-                                .foregroundColor(.secondary)
-                                .textCase(.uppercase)
+                            HStack(spacing: 6) {
+                                Image(systemName: categoryIcon(index))
+                                    .font(.caption.weight(.bold))
+                                    .foregroundStyle(TR.Palette.lilac)
+                                    .accessibilityHidden(true)
+                                TRKicker(Text(verbatim: category.name))
+                            }
 
                             OnboardingFlowLayout(spacing: 8) {
                                 ForEach(category.compounds, id: \.self) { compound in
-                                    CompoundChip(
+                                    OnboardingChip(
                                         name: compound,
                                         isSelected: vm.selectedCompounds.contains(compound)
                                     ) {
-                                        vm.toggleCompound(compound)
+                                        withAnimation(TR.Motion.respecting(reduceMotion, TR.Motion.snappy)) {
+                                            vm.toggleCompound(compound)
+                                        }
                                     }
                                 }
                             }
@@ -1460,13 +1286,10 @@ private struct CompoundSelectStep: View {
                     }.sorted()
                     if !customNames.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text(NSLocalizedString("common.custom", comment: ""))
-                                .font(.caption.bold())
-                                .foregroundColor(.secondary)
-                                .textCase(.uppercase)
+                            TRKicker(Text(NSLocalizedString("common.custom", comment: "")))
                             OnboardingFlowLayout(spacing: 8) {
                                 ForEach(customNames, id: \.self) { name in
-                                    CompoundChip(name: name, isSelected: true) {
+                                    OnboardingChip(name: name, isSelected: true) {
                                         vm.toggleCompound(name)
                                     }
                                 }
@@ -1476,43 +1299,38 @@ private struct CompoundSelectStep: View {
 
                     // Add custom button / field
                     if showCustomField {
-                        HStack {
+                        HStack(spacing: 10) {
                             TextField(NSLocalizedString("onboarding.compoundName", comment: ""), text: $vm.customCompoundName)
-                                .padding(10)
-                                .background(AppColors.background)
-                                .cornerRadius(8)
-                                .foregroundColor(.white)
+                                .padding(.horizontal, 14)
+                                .frame(minHeight: TR.Metrics.minTap)
+                                .background(TR.Palette.surfaceRaised, in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous).strokeBorder(TR.Palette.hairline))
+                                .foregroundStyle(TR.Palette.textPrimary)
                             Button(NSLocalizedString("common.add", comment: "")) {
                                 vm.addCustomCompound()
                                 if vm.customCompoundName.isEmpty {
                                     showCustomField = false
                                 }
                             }
-                            .font(.subheadline.bold())
-                            .foregroundColor(AppColors.accent)
+                            .buttonStyle(TRSecondaryButtonStyle(tint: TR.Palette.coral, fullWidth: false))
                         }
                     } else {
                         Button {
                             showCustomField = true
                         } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "plus.circle.fill")
-                                Text(NSLocalizedString("onboarding.addCustomCompound", comment: ""))
-                            }
-                            .font(.subheadline)
-                            .foregroundColor(AppColors.accent)
+                            Label(NSLocalizedString("onboarding.addCustomCompound", comment: ""), systemImage: "plus.circle.fill")
+                                .font(.subheadline.weight(.bold))
+                                .foregroundStyle(TR.Palette.coral)
+                                .frame(minHeight: TR.Metrics.minTap)
+                                .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                     }
 
                     if !vm.selectedCompounds.isEmpty {
-                        HStack(spacing: 6) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                            Text(String(format: NSLocalizedString("onboarding.selected", comment: ""), vm.selectedCompounds.count))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.top, 4)
+                        TRPill(Text(String(format: NSLocalizedString("onboarding.selected", comment: ""), vm.selectedCompounds.count)),
+                               systemImage: "checkmark.circle.fill", tint: TR.Palette.mint)
+                            .transition(.scale.combined(with: .opacity))
                     }
                 }
             },
@@ -1526,70 +1344,6 @@ private struct CompoundSelectStep: View {
     }
 }
 
-private struct CompoundChip: View {
-    let name: String
-    let isSelected: Bool
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            Text(name)
-                .font(.subheadline)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(isSelected ? AppColors.accent.opacity(0.2) : AppColors.card)
-                .foregroundColor(isSelected ? AppColors.accent : .white)
-                .cornerRadius(20)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(isSelected ? AppColors.accent : Color.white.opacity(0.1), lineWidth: 1)
-                )
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// Simple flow layout for chips
-private struct OnboardingFlowLayout: Layout {
-    var spacing: CGFloat = 8
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = arrange(proposal: proposal, subviews: subviews)
-        return result.size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = arrange(proposal: ProposedViewSize(width: bounds.width, height: bounds.height), subviews: subviews)
-        for (index, position) in result.positions.enumerated() {
-            subviews[index].place(at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y), proposal: .unspecified)
-        }
-    }
-
-    private func arrange(proposal: ProposedViewSize, subviews: Subviews) -> (size: CGSize, positions: [CGPoint]) {
-        let maxWidth = proposal.width ?? .infinity
-        var positions: [CGPoint] = []
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        var rowHeight: CGFloat = 0
-        var maxX: CGFloat = 0
-
-        for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
-            if x + size.width > maxWidth, x > 0 {
-                x = 0
-                y += rowHeight + spacing
-                rowHeight = 0
-            }
-            positions.append(CGPoint(x: x, y: y))
-            rowHeight = max(rowHeight, size.height)
-            x += size.width + spacing
-            maxX = max(maxX, x)
-        }
-
-        return (CGSize(width: maxX, height: y + rowHeight), positions)
-    }
-}
-
 // MARK: - Step 4: Compound Doses
 
 private struct CompoundDosesStep: View {
@@ -1597,13 +1351,15 @@ private struct CompoundDosesStep: View {
     @State private var showDoseValidation = false
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.setDoses", comment: ""),
             subtitle: NSLocalizedString("onboarding.dosesSubtitle", comment: ""),
+            systemImage: "list.bullet.clipboard.fill",
+            tint: OnboardingTint.lilac,
             content: {
                 VStack(spacing: 14) {
                     ForEach($vm.compoundDoses) { $compound in
-                        FormCard(title: compound.name) {
+                        OnboardingFormCard(title: compound.name) {
                             HStack {
                                 Text(NSLocalizedString("common.dose", comment: ""))
                                 Spacer()
@@ -1611,10 +1367,10 @@ private struct CompoundDosesStep: View {
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                 Text(compound.unit)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(TR.Palette.textSecondary)
                             }
 
-                            Divider().background(Color.white.opacity(0.07))
+                            OnboardingDivider()
 
                             Picker(NSLocalizedString("onboarding.schedule", comment: ""), selection: $compound.frequencyDays) {
                                 ForEach(OnboardingViewModel.compoundFrequencyOptions, id: \.days) { opt in
@@ -1622,19 +1378,19 @@ private struct CompoundDosesStep: View {
                                 }
                             }
                             .pickerStyle(.menu)
-                            .tint(AppColors.accent)
+                            .tint(TR.Palette.coral)
                         }
                     }
 
                     if showDoseValidation {
-                        Text(NSLocalizedString("onboarding.doseValidation", comment: ""))
-                            .font(.caption)
-                            .foregroundColor(AppColors.accent)
+                        Label(NSLocalizedString("onboarding.doseValidation", comment: ""), systemImage: "exclamationmark.circle.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(TR.Palette.coralLight)
                     }
 
                     Text(NSLocalizedString("onboarding.dosesReminder", comment: ""))
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                         .multilineTextAlignment(.center)
 
                     DisclaimerBanner(type: .standard)
@@ -1655,7 +1411,7 @@ private struct CompoundDosesStep: View {
     }
 }
 
-// MARK: - Step 4: Last Injection
+// MARK: - Step 5: Last Injection
 
 private struct LastInjectionStep: View {
     @ObservedObject var vm: OnboardingViewModel
@@ -1667,13 +1423,15 @@ private struct LastInjectionStep: View {
     }
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.lastInjection", comment: ""),
             subtitle: NSLocalizedString("onboarding.lastInjectionSubtitle", comment: ""),
+            systemImage: "clock.arrow.circlepath",
+            tint: OnboardingTint.teal,
             content: {
                 VStack(spacing: 14) {
                     ForEach(compounds, id: \.self) { compound in
-                        FormCard(title: compound) {
+                        OnboardingFormCard(title: compound, systemImage: "syringe.fill") {
                             DatePicker(
                                 NSLocalizedString("onboarding.dateAndTime", comment: ""),
                                 selection: Binding(
@@ -1683,7 +1441,7 @@ private struct LastInjectionStep: View {
                                 in: ...Date.now,
                                 displayedComponents: [.date, .hourAndMinute]
                             )
-                            .tint(AppColors.accent)
+                            .tint(TR.Palette.coral)
                         }
                     }
                 }
@@ -1696,7 +1454,7 @@ private struct LastInjectionStep: View {
     }
 }
 
-// MARK: - Step 5: Reminders
+// MARK: - Step 8: Reminders
 
 private struct RemindersStep: View {
     @ObservedObject var vm: OnboardingViewModel
@@ -1721,17 +1479,33 @@ private struct RemindersStep: View {
     }
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.reminders", comment: ""),
             subtitle: NSLocalizedString("onboarding.remindersSubtitle", comment: ""),
+            systemImage: "bell.badge.fill",
+            tint: OnboardingTint.gold,
             content: {
                 VStack(spacing: 16) {
-                    Toggle(NSLocalizedString("onboarding.enableReminders", comment: ""), isOn: $vm.reminderEnabled)
-                        .tint(AppColors.accent)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
+                    Toggle(NSLocalizedString("onboarding.enableReminders", comment: ""), isOn: $vm.reminderEnabled.animation(TR.Motion.gentle))
+                        .tint(TR.Palette.coral)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                        .trCard(tint: vm.reminderEnabled ? TR.Palette.gold : nil, padding: 14)
 
                     if vm.reminderEnabled {
+                        // Streak nudge: reminders are what keep a check-in streak alive.
+                        HStack(spacing: 10) {
+                            Image(systemName: "flame.fill")
+                                .font(.subheadline.weight(.bold))
+                                .foregroundStyle(TR.Gradients.xp)
+                                .accessibilityHidden(true)
+                            Text(onbLoc("onb14.reminders.streakNudge", "A daily nudge is the easiest way to keep your check-in streak alive."))
+                                .font(.caption)
+                                .foregroundStyle(TR.Palette.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
                         // Mode toggle: simple vs per-compound
                         Picker(NSLocalizedString("onboarding.reminders", comment: ""), selection: $vm.reminderMode) {
                             Text(NSLocalizedString("onboarding.sameTimeAll", comment: "")).tag("simple")
@@ -1741,87 +1515,81 @@ private struct RemindersStep: View {
 
                         if vm.reminderMode == "simple" {
                             // ── Simple mode: one frequency + one time ──
-                            FormCard(title: NSLocalizedString("onboarding.reminderFrequency", comment: "")) {
+                            OnboardingFormCard(title: NSLocalizedString("onboarding.reminderFrequency", comment: ""), systemImage: "repeat") {
                                 Picker(NSLocalizedString("onboarding.reminderFrequency", comment: ""), selection: $vm.reminderFreqIndex) {
                                     ForEach(OnboardingViewModel.reminderFrequencies.indices, id: \.self) { i in
                                         Text(OnboardingViewModel.reminderFrequencies[i].label).tag(i)
                                     }
                                 }
                                 .pickerStyle(.menu)
-                                .tint(AppColors.accent)
+                                .tint(TR.Palette.coral)
 
                                 if showCustomDays {
-                                    Divider().background(Color.white.opacity(0.07))
+                                    OnboardingDivider()
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text(NSLocalizedString("onboarding.selectDays", comment: ""))
                                             .font(.caption)
-                                            .foregroundColor(.secondary)
-                                        HStack(spacing: 6) {
+                                            .foregroundStyle(TR.Palette.textSecondary)
+                                        HStack(spacing: 5) {
                                             ForEach(1...7, id: \.self) { wd in
                                                 let name = weekdayNames[wd - 1]
                                                 let selected = vm.reminderCustomDays.contains(wd)
-                                                Button(name) {
+                                                OnboardingDayChip(name: name, isSelected: selected) {
                                                     if selected {
                                                         vm.reminderCustomDays.remove(wd)
                                                     } else {
                                                         vm.reminderCustomDays.insert(wd)
                                                     }
                                                 }
-                                                .font(.caption.bold())
-                                                .padding(.horizontal, 8)
-                                                .padding(.vertical, 5)
-                                                .background(selected ? AppColors.accent : AppColors.background)
-                                                .foregroundColor(selected ? .white : .secondary)
-                                                .clipShape(Capsule())
                                             }
                                         }
                                     }
                                 }
                             }
 
-                            FormCard(title: NSLocalizedString("onboarding.reminderTime", comment: "")) {
+                            OnboardingFormCard(title: NSLocalizedString("onboarding.reminderTime", comment: ""), systemImage: "clock.fill") {
                                 DatePicker(NSLocalizedString("common.time", comment: ""), selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
-                                    .tint(AppColors.accent)
+                                    .tint(TR.Palette.coral)
                             }
                         } else {
                             // ── Per-compound mode: each compound gets its own time ──
-                            FormCard(title: NSLocalizedString("onboarding.dailyCheckin", comment: "")) {
+                            OnboardingFormCard(title: NSLocalizedString("onboarding.dailyCheckin", comment: ""), systemImage: "checkmark.circle.fill") {
                                 DatePicker(NSLocalizedString("common.time", comment: ""), selection: $vm.reminderTime, displayedComponents: .hourAndMinute)
-                                    .tint(AppColors.accent)
+                                    .tint(TR.Palette.coral)
                             }
 
                             if !vm.compoundDoses.isEmpty {
                                 ForEach(vm.compoundDoses, id: \.name) { compound in
-                                    FormCard(title: compound.name) {
+                                    OnboardingFormCard(title: compound.name) {
                                         HStack {
                                             Text(freqLabel(for: compound))
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundStyle(TR.Palette.textSecondary)
                                             Spacer()
                                         }
                                         DatePicker(NSLocalizedString("common.time", comment: ""), selection: vm.reminderTimeFor(compound.name), displayedComponents: .hourAndMinute)
-                                            .tint(AppColors.accent)
+                                            .tint(TR.Palette.coral)
                                     }
                                 }
                             }
 
                             // Show TRT protocol reminder too
-                            FormCard(title: vm.autoProtocolName.isEmpty ? NSLocalizedString("onboarding.trtInjection", comment: "") : vm.autoProtocolName) {
+                            OnboardingFormCard(title: vm.autoProtocolName.isEmpty ? NSLocalizedString("onboarding.trtInjection", comment: "") : vm.autoProtocolName, systemImage: "syringe.fill") {
                                 HStack {
                                     Text(vm.primaryFreq.label)
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(TR.Palette.textSecondary)
                                     Spacer()
                                 }
                                 DatePicker(NSLocalizedString("common.time", comment: ""), selection: vm.reminderTimeFor(vm.primaryCompound), displayedComponents: .hourAndMinute)
-                                    .tint(AppColors.accent)
+                                    .tint(TR.Palette.coral)
                             }
                         }
                     }
 
                     Text(NSLocalizedString("onboarding.changeInSettings", comment: ""))
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textTertiary)
                 }
             },
             primaryLabel: NSLocalizedString("onboarding.getStarted", comment: ""),
@@ -1838,81 +1606,62 @@ private struct FirstCheckinStep: View {
     @ObservedObject var vm: OnboardingViewModel
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.howFeeling", comment: ""),
             subtitle: NSLocalizedString("onboarding.firstCheckinSubtitle", comment: ""),
+            systemImage: "waveform.path.ecg",
+            tint: OnboardingTint.coral,
             content: {
-                VStack(spacing: 20) {
-                    MetricSlider(label: "⚡ " + NSLocalizedString("checkin.energy", comment: ""), value: $vm.firstCheckinEnergy)
-                    MetricSlider(label: "😌 " + NSLocalizedString("checkin.mood", comment: ""), value: $vm.firstCheckinMood)
-                    MetricSlider(label: "🔥 " + NSLocalizedString("checkin.libido", comment: ""), value: $vm.firstCheckinLibido)
-                    MetricSlider(label: "🌙 " + NSLocalizedString("checkin.sleepQuality", comment: ""), value: $vm.firstCheckinSleep)
-                    MetricSlider(label: "🧠 " + NSLocalizedString("checkin.mentalClarity", comment: ""), value: $vm.firstCheckinClarity)
+                VStack(spacing: 18) {
+                    VStack(spacing: 18) {
+                        OnboardingMetricSlider(systemImage: "bolt.fill", tint: OnboardingTint.gold,
+                                               label: NSLocalizedString("checkin.energy", comment: ""), value: $vm.firstCheckinEnergy)
+                        OnboardingMetricSlider(systemImage: "face.smiling.inverse", tint: OnboardingTint.teal,
+                                               label: NSLocalizedString("checkin.mood", comment: ""), value: $vm.firstCheckinMood)
+                        OnboardingMetricSlider(systemImage: "flame.fill", tint: OnboardingTint.coral,
+                                               label: NSLocalizedString("checkin.libido", comment: ""), value: $vm.firstCheckinLibido)
+                        OnboardingMetricSlider(systemImage: "moon.stars.fill", tint: OnboardingTint.lilac,
+                                               label: NSLocalizedString("checkin.sleepQuality", comment: ""), value: $vm.firstCheckinSleep)
+                        OnboardingMetricSlider(systemImage: "brain.head.profile", tint: OnboardingTint.sky,
+                                               label: NSLocalizedString("checkin.mentalClarity", comment: ""), value: $vm.firstCheckinClarity)
+                    }
+                    .trCard(padding: 16)
 
                     // Body metrics
-                    VStack(spacing: 12) {
-                        Text(NSLocalizedString("onboarding.bodyMetrics", comment: ""))
-                            .font(.caption.bold())
-                            .foregroundColor(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .leading, spacing: 10) {
+                        TRKicker(Text(NSLocalizedString("onboarding.bodyMetrics", comment: "")))
 
                         HStack(spacing: 12) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(NSLocalizedString("onboarding.weight", comment: ""))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                HStack {
-                                    TextField("185", text: $vm.bodyWeightLbs)
-                                        .keyboardType(.decimalPad)
-                                        .font(.title3.bold())
-                                        .foregroundColor(.white)
-                                    Text(NSLocalizedString("unit.lbs", comment: ""))
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(12)
-                            .background(AppColors.card)
-                            .cornerRadius(10)
-
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(NSLocalizedString("onboarding.bodyFat", comment: ""))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                HStack {
-                                    TextField("18", text: $vm.bodyFatPercent)
-                                        .keyboardType(.decimalPad)
-                                        .font(.title3.bold())
-                                        .foregroundColor(.white)
-                                    Text("%")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(12)
-                            .background(AppColors.card)
-                            .cornerRadius(10)
+                            bodyField(title: NSLocalizedString("onboarding.weight", comment: ""), placeholder: "185",
+                                      text: $vm.bodyWeightLbs, unit: NSLocalizedString("unit.lbs", comment: ""))
+                            bodyField(title: NSLocalizedString("onboarding.bodyFat", comment: ""), placeholder: "18",
+                                      text: $vm.bodyFatPercent, unit: "%")
                         }
                     }
 
                     // Live Protocol Score preview
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("onboarding.protocolScoreLabel", comment: ""))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text("\(vm.firstProtocolScore)")
-                                .font(.system(size: 36, weight: .black, design: .rounded))
-                                .foregroundColor(AppColors.accent)
+                    HStack(spacing: 16) {
+                        TRRing(progress: Double(vm.firstProtocolScore) / 100.0, lineWidth: 7) {
+                            EmptyView()
                         }
-                        Spacer()
-                        Text(NSLocalizedString("onboarding.outOf100", comment: ""))
-                            .font(.title3)
-                            .foregroundColor(.secondary)
+                        .frame(width: 54, height: 54)
+                        VStack(alignment: .leading, spacing: 2) {
+                            TRKicker(Text(NSLocalizedString("onboarding.protocolScoreLabel", comment: "")))
+                            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                Text("\(vm.firstProtocolScore)")
+                                    .font(TR.Font.number(36))
+                                    .foregroundStyle(TR.Gradients.cta)
+                                    .contentTransition(.numericText(value: Double(vm.firstProtocolScore)))
+                                    .animation(TR.Motion.snappy, value: vm.firstProtocolScore)
+                                Text(NSLocalizedString("onboarding.outOf100", comment: ""))
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(TR.Palette.textSecondary)
+                            }
+                        }
+                        Spacer(minLength: 0)
                     }
-                    .padding()
-                    .background(AppColors.card)
-                    .cornerRadius(14)
+                    .trCard(tint: TR.Palette.coral, padding: 16)
+                    .accessibilityElement(children: .combine)
 
                     DisclaimerBanner(type: .protocolScore)
                 }
@@ -1923,25 +1672,24 @@ private struct FirstCheckinStep: View {
             onBack: { vm.back() }
         )
     }
-}
 
-private struct MetricSlider: View {
-    let label: String
-    @Binding var value: Double
-
-    var body: some View {
-        HStack {
-            Text(label)
-                .font(.subheadline)
-                .foregroundColor(.white)
-                .frame(width: 150, alignment: .leading)
-            Slider(value: $value, in: 1...5, step: 1)
-                .tint(AppColors.accent)
-            Text("\(Int(value))")
-                .font(.headline)
-                .foregroundColor(AppColors.accent)
-                .frame(width: 30)
+    private func bodyField(title: String, placeholder: String, text: Binding<String>, unit: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(TR.Palette.textSecondary)
+            HStack {
+                TextField(placeholder, text: text)
+                    .keyboardType(.decimalPad)
+                    .font(TR.Font.number(.title3, weight: .bold))
+                    .foregroundStyle(TR.Palette.textPrimary)
+                Text(unit)
+                    .font(.caption)
+                    .foregroundStyle(TR.Palette.textSecondary)
+            }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(padding: 12)
     }
 }
 
@@ -1952,21 +1700,30 @@ private struct HealthKitStep: View {
     @AppStorage("hkPermissionRequested") private var hkPermissionRequested = false
 
     var body: some View {
-        StepContainer(
+        OnboardingStepContainer(
             title: NSLocalizedString("onboarding.superchargeHK", comment: ""),
             subtitle: NSLocalizedString("onboarding.hkSubtitle", comment: ""),
+            systemImage: "heart.text.square.fill",
+            tint: [Color(trHex: 0xFF6B81), Color(trHex: 0xE0245E)],
             content: {
                 VStack(spacing: 16) {
-                    HKFeatureRow(icon: "bed.double.fill", title: NSLocalizedString("onboarding.hkSleep", comment: ""), desc: NSLocalizedString("onboarding.hkSleepDesc", comment: ""))
-                    HKFeatureRow(icon: "figure.walk", title: NSLocalizedString("onboarding.hkSteps", comment: ""), desc: NSLocalizedString("onboarding.hkStepsDesc", comment: ""))
-                    HKFeatureRow(icon: "heart.fill", title: NSLocalizedString("onboarding.hkHRV", comment: ""), desc: NSLocalizedString("onboarding.hkHRVDesc", comment: ""))
-                    HKFeatureRow(icon: "scalemass.fill", title: NSLocalizedString("onboarding.hkWeight", comment: ""), desc: NSLocalizedString("onboarding.hkWeightDesc", comment: ""))
+                    VStack(spacing: 16) {
+                        OnboardingFeatureRow(icon: "bed.double.fill", title: NSLocalizedString("onboarding.hkSleep", comment: ""),
+                                             detail: NSLocalizedString("onboarding.hkSleepDesc", comment: ""), tint: OnboardingTint.lilac)
+                        OnboardingFeatureRow(icon: "figure.walk", title: NSLocalizedString("onboarding.hkSteps", comment: ""),
+                                             detail: NSLocalizedString("onboarding.hkStepsDesc", comment: ""), tint: OnboardingTint.teal)
+                        OnboardingFeatureRow(icon: "heart.fill", title: NSLocalizedString("onboarding.hkHRV", comment: ""),
+                                             detail: NSLocalizedString("onboarding.hkHRVDesc", comment: ""), tint: OnboardingTint.coral)
+                        OnboardingFeatureRow(icon: "scalemass.fill", title: NSLocalizedString("onboarding.hkWeight", comment: ""),
+                                             detail: NSLocalizedString("onboarding.hkWeightDesc", comment: ""), tint: OnboardingTint.sky)
+                    }
+                    .trCard(padding: 16)
 
-                    Text(NSLocalizedString("onboarding.hkPrivacy", comment: ""))
+                    Label(NSLocalizedString("onboarding.hkPrivacy", comment: ""), systemImage: "lock.shield.fill")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                         .multilineTextAlignment(.center)
-                        .padding(.top, 8)
+                        .padding(.top, 4)
                 }
             },
             primaryLabel: NSLocalizedString("onboarding.enableHK", comment: ""),
@@ -1980,32 +1737,5 @@ private struct HealthKitStep: View {
             showBack: true,
             onBack: { vm.back() }
         )
-    }
-}
-
-private struct HKFeatureRow: View {
-    let icon: String
-    let title: String
-    let desc: String
-
-    var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundColor(AppColors.accent)
-                .frame(width: 36)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
-                Text(desc)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-        }
-        .padding(12)
-        .background(AppColors.card)
-        .cornerRadius(12)
     }
 }

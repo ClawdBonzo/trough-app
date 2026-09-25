@@ -1,36 +1,58 @@
-Lär känna din Protocol Score på 7 dagar.
+Logga varje TRT-injektion, se dina uppskattade testosteronnivåer mellan doserna och håll ordning på dina blodprov – allt i en privat app.
 
-Trough är den privata, offline-först-appen för spårning av TRT och hormoner, byggd för män som går på testosteronersättningsbehandling.
+Trough är en testosteron- och injektionsdagbok för män som går på TRT eller hormonbehandling. Logga en spruta på några sekunder, få förslag på nästa injektionsställe och checka in varje dag på 30 sekunder. Inget konto, ingen reklam.
 
-FÖLJ DITT PROTOKOLL
-• Logga injektioner med dos, rotation av injektionsställe och preparat
-• Fullt stöd för testosteroncypionat, enantat, propionat, undekanoat och stackning av flera estrar
-• Följ GLP-1-preparat (semaglutid, tirzepatid), peptider och tilläggspreparat (anastrozol, hCG med mera)
+NYTT I 1.4
+• Helt ny design, från översikten till injektionsloggen
+• Incheckningssviter, 11 nivåer och en protokollrang från Papper till Diamant
+• 42 märken att samla genom att logga regelbundet
+• Dagliga utmaningar och firanden vid varje milstolpe
+• Delningskort för din svit, rang och dina märken
+• Widgetar för hemskärmen och låsskärmen, bland annat en för ditt nästa märke
 
-DAGLIGT HÄLSOKOLL
-• Skatta energi, humör, libido, sömnkvalitet och mental skärpa på 30 sekunder
-• Bygger din personliga Protocol Score – en enda siffra som visar hur ditt protokoll fungerar
-• Följ trender över tid medan du finjusterar din rutin
+INJEKTIONSLOGG
+• Logga dos, preparat och injektionsställe på några sekunder
+• Kalender med alla dina injektioner
+• Förslag på rotation av injektionsställen
+• Påminnelser på injektionsdagen och en Live Activity som räknar ner till nästa dos
+• Testosteroncypionat, -enantat, -propionat, -undekanoat och protokoll med flera estrar
 
-PK-KURVOR (Pro)
-• Verklig farmakokinetisk modellering med Bateman-ekvationen och absorptionsfördröjning
-• Uppskattade topp-, dal- och aktuella nivåer med konfidensband
+UPPSKATTADE NIVÅER (PK-KURVOR, PRO)
+• En uppskattad kurva över nivån i blodet mellan doserna, beräknad från din egen logg
+• Uppskattad topp, dal och aktuell nivå. Det här är modelluppskattningar, inte labbsvar.
 
-BLODPROVSSPÅRNING (Pro)
-• Logga provsvar med egna referensintervall
-• Visuella trender med färgkodade band
+DAGLIG INCHECKNING + PROTOKOLLPOÄNG
+• Betygsätt energi, humör, libido, sömn och mental skärpa på ungefär 30 sekunder
+• Svaren blir en protokollpoäng från 0 till 100 så att du ser trender över tid
 
-PEPTIDER & TILLÄGGSPREPARAT (Pro)
-• Följ peptider, GLP-1-agonister och tilläggspreparat
-• Korrelera dem med dina välmåendemått och blodprov
+BLODPROV (PRO)
+• 19 markörer, bland annat totalt och fritt testosteron, östradiol (E2), hematokrit och PSA
+• Referensintervall och trenddiagram för varje markör över alla provtagningar
+• Bifoga foton på provsvar och anteckningar från läkaren
+
+PEPTIDER, GLP-1 OCH TILLÄGG (PRO)
+• 34 förinställningar för peptider, GLP-1 och tillägg som hCG och anastrozol
+• Scheman och påminnelser bredvid ditt testosteronprotokoll
+
+APPLE HÄLSA, EXPORT OCH LÄKARBESÖK
+• Läser HRV, vilopuls, sömn, steg och vikt från Hälsa; sparar vikt
+• CSV-import och -export
+• PDF-rapport att ta med till nästa läkarbesök (Pro)
 
 PRIVAT FRÅN GRUNDEN
-• 100 % på enheten. Inget konto, inget moln, ingen spårning.
-• Dina data lämnar aldrig din iPhone
+• Inget konto, ingen registrering, ingen reklam
+• Din hälsologg sparas på din iPhone, inte på våra servrar
+• Finns på 11 språk. Kräver iPhone med iOS 17 eller senare.
 
-Starta din 3 dagars gratis provperiod för att låsa upp alla Pro-funktioner. Avbryt när du vill.
+TROUGH PRO
+Trough är gratis. Trough Pro låser upp uppskattade PK-kurvor, blodprov, peptider och GLP-1 samt PDF-rapporten för läkaren. Månads- och årsabonnemang finns, med gratis provperiod för nya abonnenter som uppfyller villkoren.
 
-Trough Pro är en automatiskt förnyad prenumeration. Betalningen dras från ditt Apple ID och förnyas automatiskt om den inte avbryts minst 24 timmar före periodens slut. Hantera eller avbryt i Inställningar.
+• Betalningen debiteras ditt Apple-konto när köpet bekräftas
+• Abonnemanget förnyas automatiskt om det inte sägs upp minst 24 timmar innan den aktuella perioden tar slut
+• Förnyelsen debiteras inom 24 timmar innan den aktuella perioden tar slut
+• Hantera eller säg upp när du vill i inställningarna för ditt Apple-konto
+
+Trough är ett loggverktyg, inte en medicinteknisk produkt, och ger inga medicinska råd. Prata alltid med din läkare innan du ändrar ditt protokoll.
 
 Användarvillkor: https://gwlabs.app/terms
 Integritetspolicy: https://gwlabs.app/privacy

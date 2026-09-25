@@ -1,0 +1,35 @@
+{
+  "1": {
+    "headline": "Cały protokół. *W jednym spojrzeniu.*",
+    "sub": "Dawki, check-iny, serie i wyniki razem na jednym przejrzystym pulpicie."
+  },
+  "2": {
+    "headline": "30 sekund dziennie. *Seria trwa.*",
+    "sub": "Szybki check-in, zdobyte XP i płomień, który nie gaśnie."
+  },
+  "3": {
+    "headline": "Twój poziom *między dawkami.*",
+    "sub": "Szacowana krzywa z Twojego dziennika zastrzyków, z następną dawką na widoku."
+  },
+  "4": {
+    "headline": "Każdy zastrzyk. *Z pieczątką i rotacją.*",
+    "sub": "Zapisz w kilka sekund, zgarnij stempel i podpowiedź miejsca na następny raz."
+  },
+  "5": {
+    "headline": "Zdobądź swoją *rangę protokołu.*",
+    "sub": "Poziomy i odznaki za regularność, od Papieru do Diamentu."
+  },
+  "6": {
+    "headline": "Twoje wyniki, *wreszcie w porządku.*",
+    "sub": "Wszystkie badania w jednym miejscu, z historią każdego markera."
+  },
+  "7": {
+    "headline": "Prywatnie od podstaw. *Bez konta.*",
+    "sub": "Twój dziennik zostaje na iPhonie. Bez rejestracji, bez reklam, bez synchronizacji.",
+    "chips": [
+      "Bez konta",
+      "Zostaje na iPhonie",
+      "Bez reklam"
+    ]
+  }
+}

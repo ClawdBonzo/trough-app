@@ -16,17 +16,23 @@ struct BloodworkEntryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
-                Form {
-                    panelInfoSection
-                    ForEach(vm.formSections(), id: \.title) { section in
-                        markerSection(title: section.title, entries: section.entries)
+                TRBackground()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: TR.Metrics.sectionSpacing) {
+                        panelInfoSection
+                        ForEach(vm.formSections(), id: \.title) { section in
+                            markerSection(title: section.title, entries: section.entries)
+                        }
+                        photoSection
+                        notesSection
+                        doctorNotesSection
+                        DisclaimerBanner(type: .bloodwork)
                     }
-                    photoSection
-                    notesSection
-                    doctorNotesSection
+                    .padding(.horizontal, TR.Metrics.gutter)
+                    .padding(.vertical, 12)
+                    .padding(.bottom, 24)
                 }
-                .scrollContentBackground(.hidden)
+                .scrollDismissesKeyboard(.interactively)
             }
             .sheet(isPresented: Binding(
                 get: { editingRangeMarkerIndex != nil },
@@ -41,6 +47,7 @@ struct BloodworkEntryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .foregroundStyle(TR.Palette.textSecondary)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -48,8 +55,8 @@ struct BloodworkEntryView: View {
                         vm.saveForm()
                         if vm.errorMessage == nil { dismiss() }
                     }
-                    .fontWeight(.semibold)
-                    .foregroundColor(AppColors.accent)
+                    .fontWeight(.bold)
+                    .foregroundStyle(TR.Palette.coral)
                 }
             }
             .alert("Error", isPresented: Binding(
@@ -86,70 +93,88 @@ struct BloodworkEntryView: View {
     // MARK: Panel Info
 
     private var panelInfoSection: some View {
-        Section("Panel Info") {
-            DatePicker("Draw Date", selection: $vm.formDrawnAt, displayedComponents: .date)
-                .tint(AppColors.accent)
-            HStack {
-                Image(systemName: "building.2")
-                    .foregroundColor(.secondary)
-                    .frame(width: 20)
-                TextField("Lab Name (optional)", text: $vm.formLabName)
+        VStack(alignment: .leading, spacing: 8) {
+            TRKicker(Text("Panel Info")).padding(.leading, 6)
+            VStack(alignment: .leading, spacing: 14) {
+                GlassField(label: NSLocalizedString("Draw Date", comment: ""), systemImage: "calendar") {
+                    DatePicker("Draw Date", selection: $vm.formDrawnAt, displayedComponents: .date)
+                        .labelsHidden()
+                        .tint(TR.Palette.coral)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                GlassField(label: NSLocalizedString("bloodwork.entry.lab", value: "Lab", comment: "Lab name field label"), systemImage: "building.2") {
+                    TextField("Lab Name (optional)", text: $vm.formLabName)
+                }
             }
+            .trCard(tint: TR.Palette.coral)
         }
-        .listRowBackground(AppColors.card)
     }
 
     // MARK: Marker section
 
     private func markerSection(title: String, entries: [BloodworkViewModel.MarkerEntry]) -> some View {
-        Section(title) {
-            ForEach(entries) { entry in
+        GlassSection(title) {
+            ForEach(Array(entries.enumerated()), id: \.element.id) { i, entry in
+                if i > 0 { GlassDivider(leadingInset: 14) }
                 markerRow(for: entry)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 12)
             }
         }
-        .listRowBackground(AppColors.card)
     }
 
     private func markerRow(for entry: BloodworkViewModel.MarkerEntry) -> some View {
         let idx = vm.formMarkers.firstIndex(where: { $0.id == entry.id })
 
-        return VStack(spacing: 4) {
+        return VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 10) {
-                // In-range indicator
+                // In-range indicator (neutral tints)
                 Circle()
                     .fill(rangeColor(for: entry))
                     .frame(width: 8, height: 8)
+                    .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 1) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(entry.name)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textPrimary)
                     HStack(spacing: 4) {
                         Text("Ref: \(entry.rangeLow, specifier: "%.1f")–\(entry.rangeHigh, specifier: "%.1f")")
                             .font(.caption2)
-                            .foregroundColor(entry.hasCustomRange ? .green : .secondary)
+                            .foregroundStyle(entry.hasCustomRange ? TR.Palette.teal : TR.Palette.textTertiary)
                         if entry.hasCustomRange {
                             Image(systemName: "pencil.circle.fill")
-                                .font(.system(size: 9))
-                                .foregroundColor(.green)
+                                .font(.caption2)
+                                .foregroundStyle(TR.Palette.teal)
                         }
                     }
                 }
 
-                Spacer()
+                Spacer(minLength: 8)
 
-                HStack(spacing: 4) {
-                    if let i = idx {
+                if let i = idx {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                         TextField("–", text: $vm.formMarkers[i].value)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 72)
-                            .foregroundColor(.white)
+                            .font(TR.Font.number(.title3, weight: .heavy))
+                            .foregroundStyle(TR.Palette.textPrimary)
+                            .frame(width: 76)
+                        Text(entry.unit)
+                            .font(.caption)
+                            .foregroundStyle(TR.Palette.textTertiary)
+                            .frame(width: 46, alignment: .leading)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
-                    Text(entry.unit)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .frame(width: 52, alignment: .leading)
+                    .padding(.horizontal, 10)
+                    .frame(minHeight: 48)
+                    .background(TR.Palette.surfaceRaised,
+                                in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous)
+                        .strokeBorder(entry.valueDouble == nil ? TR.Palette.hairline : rangeColor(for: entry).opacity(0.4), lineWidth: 1))
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(entry.name), \(entry.unit)")
                 }
             }
 
@@ -160,91 +185,102 @@ struct BloodworkEntryView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 10))
-                        Text("Edit reference range")
                             .font(.caption2)
+                        Text("Edit reference range")
+                            .font(.caption2.weight(.semibold))
                     }
-                    .foregroundColor(AppColors.accent.opacity(0.7))
+                    .foregroundStyle(TR.Palette.coralLight.opacity(0.85))
+                    .frame(minHeight: 28)
                 }
                 .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 18)
             }
         }
-        .padding(.vertical, 2)
     }
 
     private func rangeColor(for entry: BloodworkViewModel.MarkerEntry) -> Color {
-        guard let inRange = entry.isInRange else { return Color.secondary.opacity(0.3) }
-        return inRange ? Color(hex: "#27AE60") : AppColors.accent
+        guard let v = entry.valueDouble else { return TR.Palette.textTertiary.opacity(0.5) }
+        return MarkerRangeStatus(value: v, low: entry.rangeLow, high: entry.rangeHigh).tint
     }
 
     // MARK: Photo section
 
     private var photoSection: some View {
-        Section("Photo") {
-            if let img = photoImage {
-                HStack {
-                    Image(uiImage: img)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 80, height: 60)
-                        .cornerRadius(8)
-                        .clipped()
-                    Spacer()
-                    Button(role: .destructive) {
-                        photoImage = nil
-                        pickerItem = nil
-                    } label: {
-                        Label("Remove", systemImage: "trash")
-                            .font(.caption)
+        GlassSection("Photo") {
+            VStack(alignment: .leading, spacing: 12) {
+                if let img = photoImage {
+                    HStack(spacing: 12) {
+                        Image(uiImage: img)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 88, height: 66)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(.white.opacity(0.14), lineWidth: 1))
+                        Spacer()
+                        Button(role: .destructive) {
+                            photoImage = nil
+                            pickerItem = nil
+                        } label: {
+                            Label("Remove", systemImage: "trash")
+                                .font(.caption.weight(.semibold))
+                        }
+                        .buttonStyle(TRSecondaryButtonStyle(tint: TR.Palette.textSecondary, fullWidth: false))
                     }
                 }
-            }
 
-            PhotosPicker(selection: $pickerItem, matching: .images) {
-                Label("Choose from Library", systemImage: "photo.on.rectangle")
-                    .foregroundColor(AppColors.accent)
-            }
+                HStack(spacing: 10) {
+                    PhotosPicker(selection: $pickerItem, matching: .images) {
+                        Label("Choose from Library", systemImage: "photo.on.rectangle")
+                            .font(.subheadline.weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                            .foregroundStyle(TR.Palette.textPrimary)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .background(TR.Palette.surfaceRaised, in: Capsule())
+                            .overlay(Capsule().strokeBorder(TR.Palette.hairline, lineWidth: 1))
+                    }
 
-            Button {
-                showCamera = true
-            } label: {
-                Label("Take Photo", systemImage: "camera")
-                    .foregroundColor(AppColors.accent)
+                    Button {
+                        showCamera = true
+                    } label: {
+                        Label("Take Photo", systemImage: "camera")
+                            .font(.subheadline.weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                    }
+                    .buttonStyle(TRSecondaryButtonStyle())
+                }
             }
+            .padding(14)
         }
-        .listRowBackground(AppColors.card)
     }
 
     // MARK: Notes section
 
     private var notesSection: some View {
-        Section("Notes") {
+        GlassSection("Notes") {
             TextField("Optional notes about this panel...", text: $vm.formNotes, axis: .vertical)
                 .lineLimit(3...6)
-                .foregroundColor(.white)
+                .foregroundStyle(TR.Palette.textPrimary)
+                .padding(14)
         }
-        .listRowBackground(AppColors.card)
     }
 
     // MARK: Doctor Notes section
 
     private var doctorNotesSection: some View {
-        Section {
-            TextField("Notes for your doctor about this panel...", text: $vm.formDoctorNotes, axis: .vertical)
-                .lineLimit(3...8)
-                .foregroundColor(.white)
-        } header: {
-            HStack(spacing: 6) {
-                Image(systemName: "stethoscope")
-                Text("Notes for Doctor")
+        GlassSection(NSLocalizedString("Notes for Doctor", comment: ""),
+                     footer: NSLocalizedString("Included in your exported report for doctor visits.", comment: ""),
+                     tint: TR.Palette.sky) {
+            HStack(alignment: .top, spacing: 12) {
+                GlassIconTile(systemImage: "stethoscope", tint: TR.Palette.sky)
+                TextField("Notes for your doctor about this panel...", text: $vm.formDoctorNotes, axis: .vertical)
+                    .lineLimit(3...8)
+                    .foregroundStyle(TR.Palette.textPrimary)
+                    .padding(.top, 5)
             }
-        } footer: {
-            Text("Included in your exported report for doctor visits.")
-                .font(.caption2)
+            .padding(14)
         }
-        .listRowBackground(AppColors.card)
     }
 }
 
@@ -257,49 +293,49 @@ struct RangeEditSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
                 Form {
                     Section {
                         Text(entry.name)
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundStyle(TR.Palette.textPrimary)
                         Text("Default: \(entry.defaultRangeLow, specifier: "%.1f")–\(entry.defaultRangeHigh, specifier: "%.1f") \(entry.unit)")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
-                    .listRowBackground(AppColors.card)
+                    .listRowBackground(TR.Palette.surface)
 
                     Section("Your Lab's Reference Range") {
                         HStack {
                             Text("Low")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
                             Spacer()
                             TextField(String(format: "%.1f", entry.defaultRangeLow), text: $entry.customRangeLow)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                                 .frame(width: 100)
-                                .foregroundColor(.white)
+                                .foregroundStyle(TR.Palette.textPrimary)
                             Text(entry.unit)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
                                 .frame(width: 52, alignment: .leading)
                         }
                         HStack {
                             Text("High")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
                             Spacer()
                             TextField(String(format: "%.1f", entry.defaultRangeHigh), text: $entry.customRangeHigh)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
                                 .frame(width: 100)
-                                .foregroundColor(.white)
+                                .foregroundStyle(TR.Palette.textPrimary)
                             Text(entry.unit)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textSecondary)
                                 .frame(width: 52, alignment: .leading)
                         }
                     }
-                    .listRowBackground(AppColors.card)
+                    .listRowBackground(TR.Palette.surface)
 
                     if entry.hasCustomRange {
                         Section {
@@ -307,9 +343,9 @@ struct RangeEditSheet: View {
                                 entry.customRangeLow = ""
                                 entry.customRangeHigh = ""
                             }
-                            .foregroundColor(AppColors.accent)
+                            .foregroundStyle(TR.Palette.coral)
                         }
-                        .listRowBackground(AppColors.card)
+                        .listRowBackground(TR.Palette.surface)
                     }
                 }
                 .scrollContentBackground(.hidden)
@@ -319,7 +355,7 @@ struct RangeEditSheet: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
-                        .foregroundColor(AppColors.accent)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
         }

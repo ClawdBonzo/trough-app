@@ -14,6 +14,7 @@ import UserNotifications
 /// - "compound-<name>-<n>"                  — finite occurrences for all other frequencies (incl. biweekly), n = 1...30
 /// - "injection_reminder_<protocolID>_<n>"  — injection-day reminders, n = 1...30
 /// - "streak_at_risk", "streak_day7_upsell" — engagement (WeeklyReportService; not managed here)
+/// - "weekly_recap"                         — Sunday weekly recap, counts only (EngagementNotifications; not managed here)
 enum ReminderID {
     static let checkin = "daily-checkin"
     static let compoundPrefix = "compound-"
@@ -52,23 +53,26 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
-                List {
-                    protocolSection
-                    supplementsSection
-                    if userType == "trt" {
-                        trackingSection
+                TRBackground()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: TR.Metrics.sectionSpacing) {
+                        if !subscriptionManager.isSubscribed {
+                            proSection
+                        }
+                        protocolSection
+                        supplementsSection
+                        if userType == "trt" {
+                            trackingSection
+                        }
+                        remindersSection
+                        importSection
+                        recommendSection
+                        legalSection
                     }
-                    importSection
-                    if !subscriptionManager.isSubscribed {
-                        proSection
-                    }
-                    remindersSection
-                    recommendSection
-                    legalSection
+                    .padding(.horizontal, TR.Metrics.gutter)
+                    .padding(.top, 8)
+                    .padding(.bottom, 32)
                 }
-                .listStyle(.insetGrouped)
-                .scrollContentBackground(.hidden)
             }
             .navigationTitle(NSLocalizedString("settings.title", comment: ""))
             .sheet(isPresented: $vm.showingAddProtocol) { ProtocolFormView(vm: vm) }
@@ -112,205 +116,263 @@ struct SettingsView: View {
     // MARK: - Sections
 
     private var protocolSection: some View {
-        Section(NSLocalizedString("settings.activeProtocol", comment: "")) {
-            if let proto = vm.currentProtocol {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(proto.name)
-                        .font(.subheadline.bold())
-                    Text("\(proto.doseAmountMg, specifier: "%.0f") mg \(proto.compoundName)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(String(format: NSLocalizedString("settings.everyDaysConcentration", comment: ""),
-                                proto.frequencyDays, proto.concentrationMgPerMl))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        GlassSection(NSLocalizedString("settings.activeProtocol", comment: ""), tint: TR.Palette.coral) {
+            HStack(alignment: .top, spacing: 12) {
+                GlassIconTile(systemImage: "syringe.fill", tint: TR.Palette.coral, size: 40, filled: true)
+                if let proto = vm.currentProtocol {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(proto.name)
+                            .font(TR.Font.display(.headline))
+                            .foregroundStyle(TR.Palette.textPrimary)
+                        Text("\(proto.doseAmountMg, specifier: "%.0f") mg \(proto.compoundName)")
+                            .font(.subheadline)
+                            .foregroundStyle(TR.Palette.textSecondary)
+                        Text(String(format: NSLocalizedString("settings.everyDaysConcentration", comment: ""),
+                                    proto.frequencyDays, proto.concentrationMgPerMl))
+                            .font(.caption)
+                            .foregroundStyle(TR.Palette.textTertiary)
+                    }
+                } else {
+                    Text(NSLocalizedString("settings.noActiveProtocol", comment: ""))
+                        .font(.subheadline)
+                        .foregroundStyle(TR.Palette.textSecondary)
+                        .padding(.top, 10)
                 }
-            } else {
-                Text(NSLocalizedString("settings.noActiveProtocol", comment: ""))
-                    .foregroundColor(.secondary)
+                Spacer(minLength: 0)
             }
-            Button(NSLocalizedString("settings.setNewProtocol", comment: "")) {
+            .padding(14)
+
+            GlassDivider(leadingInset: 14)
+
+            Button {
                 vm.showingAddProtocol = true
+            } label: {
+                GlassRowLabel(systemImage: "plus", tint: TR.Palette.coral,
+                              title: NSLocalizedString("settings.setNewProtocol", comment: ""),
+                              titleColor: TR.Palette.coralLight)
             }
-            .foregroundColor(AppColors.accent)
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
     }
 
     private var supplementsSection: some View {
-        Section(NSLocalizedString("settings.supplements", comment: "")) {
+        GlassSection(NSLocalizedString("settings.supplements", comment: "")) {
             NavigationLink {
                 SupplementConfigView(vm: vm)
             } label: {
-                HStack {
-                    Label(NSLocalizedString("settings.manageSupplements", comment: ""), systemImage: "pills.fill")
-                    Spacer()
+                GlassRowLabel(systemImage: "pills.fill", tint: TR.Palette.teal,
+                              title: NSLocalizedString("settings.manageSupplements", comment: "")) {
                     let activeCount = vm.allSupplements.filter(\.isActive).count
-                    if activeCount > 0 {
-                        Text(String(format: NSLocalizedString("settings.active", comment: ""), activeCount))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    HStack(spacing: 8) {
+                        if activeCount > 0 {
+                            Text(String(format: NSLocalizedString("settings.active", comment: ""), activeCount))
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(TR.Palette.textSecondary)
+                        }
+                        GlassChevron()
                     }
                 }
             }
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
     }
 
     private var trackingSection: some View {
-        Section(NSLocalizedString("settings.trackingPrefs", comment: "")) {
-            Toggle(NSLocalizedString("settings.trackBodyWeight", comment: ""), isOn: $trackBodyWeight)
-                .tint(AppColors.accent)
+        GlassSection(NSLocalizedString("settings.trackingPrefs", comment: "")) {
+            GlassRowLabel(systemImage: "scalemass.fill", tint: TR.Palette.sky,
+                          title: NSLocalizedString("settings.trackBodyWeight", comment: "")) {
+                Toggle(NSLocalizedString("settings.trackBodyWeight", comment: ""), isOn: $trackBodyWeight)
+                    .labelsHidden()
+                    .tint(TR.Palette.coral)
+            }
         }
-        .listRowBackground(AppColors.card)
     }
 
     private var proSection: some View {
-        Section {
-            Button { showProFeatures = true } label: {
-                HStack {
-                    Label(NSLocalizedString("settings.proFeatures", comment: ""), systemImage: "star.fill")
-                        .foregroundColor(AppColors.softCTA)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    TRKicker(Text(NSLocalizedString("settings.pro.kicker", value: "Trough Pro", comment: "Settings Pro upsell kicker")),
+                             color: .white.opacity(0.85))
+                    Text(NSLocalizedString("settings.pro.title", value: "Unlock the full lab", comment: "Settings Pro upsell title"))
+                        .font(TR.Font.display(.title2))
+                        .foregroundStyle(.white)
+                    Text(NSLocalizedString("settings.pro.subtitle", value: "Doctor reports and every Pro feature — all on-device.", comment: "Settings Pro upsell subtitle"))
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.85))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                Spacer(minLength: 8)
+                Image(systemName: "star.fill")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(TR.Palette.gold)
+                    .frame(width: 52, height: 52)
+                    .background(Circle().fill(.white.opacity(0.14)))
+                    .overlay(Circle().strokeBorder(.white.opacity(0.25), lineWidth: 1))
+                    .accessibilityHidden(true)
             }
-            .buttonStyle(.plain)
+
             Button { showPaywall = true } label: {
                 Text(NSLocalizedString("dashboard.startFreeTrial", comment: ""))
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(AppColors.softCTA)
-                    .cornerRadius(10)
             }
-            .buttonStyle(.plain)
-            .listRowBackground(Color.clear)
+            .buttonStyle(TRPrimaryButtonStyle(colors: [.white, Color.white.opacity(0.9)], foreground: TR.Palette.coralDeep))
+
+            Button { showProFeatures = true } label: {
+                HStack(spacing: 6) {
+                    Text(NSLocalizedString("settings.proFeatures", comment: ""))
+                    Image(systemName: "chevron.right").font(.caption.weight(.heavy))
+                }
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: TR.Metrics.minTap)
+            }
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
+        .padding(18)
+        .background {
+            let shape = RoundedRectangle(cornerRadius: TR.Metrics.cardRadius, style: .continuous)
+            ZStack {
+                shape.fill(LinearGradient(colors: TR.Gradients.sunsetColors, startPoint: .topLeading, endPoint: .bottomTrailing))
+                shape.fill(RadialGradient(colors: [TR.Palette.gold.opacity(0.35), .clear], center: .topTrailing, startRadius: 0, endRadius: 220))
+            }
+            .shadow(color: TR.Palette.coral.opacity(0.35), radius: 18, y: 10)
+        }
+        .overlay(RoundedRectangle(cornerRadius: TR.Metrics.cardRadius, style: .continuous).strokeBorder(.white.opacity(0.18), lineWidth: 1))
+        .holoSheen(period: 6, intensity: 0.18)
     }
 
     private var importSection: some View {
-        Section(NSLocalizedString("settings.dataImport", comment: "")) {
+        GlassSection(NSLocalizedString("settings.dataImport", comment: "")) {
             Button {
                 showCSVImport = true
             } label: {
-                HStack {
-                    Label(NSLocalizedString("settings.importSpreadsheet", comment: ""), systemImage: "doc.text")
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                GlassRowLabel(systemImage: "tablecells", tint: TR.Palette.mint,
+                              title: NSLocalizedString("settings.importSpreadsheet", comment: ""))
             }
-            .foregroundColor(.primary)
+            .buttonStyle(.trPressable)
+            GlassDivider()
             Button {
                 showExport = true
             } label: {
-                HStack {
-                    Label(NSLocalizedString("export.title", comment: ""), systemImage: "square.and.arrow.up")
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                GlassRowLabel(systemImage: "square.and.arrow.up", tint: TR.Palette.sky,
+                              title: NSLocalizedString("export.title", comment: ""))
             }
-            .foregroundColor(.primary)
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
     }
 
     private var remindersSection: some View {
-        Section(NSLocalizedString("settings.reminders", comment: "")) {
-            Toggle(NSLocalizedString("settings.dailyCheckinReminder", comment: ""), isOn: Binding(
-                get: { checkinReminderEnabled },
-                set: { enabled in
-                    checkinReminderEnabled = enabled
-                    if enabled {
-                        rescheduleReminders()
-                    } else {
-                        // Remove only this category (check-in + compound reminders) —
-                        // never other categories like streak or injection-day.
-                        removePendingReminders(
-                            exact: [ReminderID.checkin],
-                            prefixes: [ReminderID.compoundPrefix]
-                        )
+        GlassSection(NSLocalizedString("settings.reminders", comment: "")) {
+            GlassRowLabel(systemImage: "bell.fill", tint: TR.Palette.coral,
+                          title: NSLocalizedString("settings.dailyCheckinReminder", comment: "")) {
+                Toggle(NSLocalizedString("settings.dailyCheckinReminder", comment: ""), isOn: Binding(
+                    get: { checkinReminderEnabled },
+                    set: { enabled in
+                        checkinReminderEnabled = enabled
+                        if enabled {
+                            rescheduleReminders()
+                        } else {
+                            // Remove only this category (check-in + compound reminders) —
+                            // never other categories like streak or injection-day.
+                            removePendingReminders(
+                                exact: [ReminderID.checkin],
+                                prefixes: [ReminderID.compoundPrefix]
+                            )
+                        }
                     }
-                }
-            ))
-            .tint(AppColors.accent)
+                ))
+                .labelsHidden()
+                .tint(TR.Palette.coral)
+            }
 
             if checkinReminderEnabled {
-                DatePicker(NSLocalizedString("onboarding.reminderTime", comment: ""), selection: Binding(
-                    get: {
-                        var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
-                        comps.hour = UserDefaults.standard.integer(forKey: "reminderHour")
-                        comps.minute = UserDefaults.standard.integer(forKey: "reminderMinute")
-                        return Calendar.current.date(from: comps) ?? .now
-                    },
-                    set: { date in
-                        let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
-                        UserDefaults.standard.set(comps.hour ?? 9, forKey: "reminderHour")
-                        UserDefaults.standard.set(comps.minute ?? 0, forKey: "reminderMinute")
-                        rescheduleReminders()
-                    }
-                ), displayedComponents: .hourAndMinute)
-                .tint(AppColors.accent)
+                GlassDivider()
+                GlassRowLabel(systemImage: "clock.fill", tint: TR.Palette.lilac,
+                              title: NSLocalizedString("onboarding.reminderTime", comment: "")) {
+                    DatePicker(NSLocalizedString("onboarding.reminderTime", comment: ""), selection: Binding(
+                        get: {
+                            var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+                            comps.hour = UserDefaults.standard.integer(forKey: "reminderHour")
+                            comps.minute = UserDefaults.standard.integer(forKey: "reminderMinute")
+                            return Calendar.current.date(from: comps) ?? .now
+                        },
+                        set: { date in
+                            let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
+                            UserDefaults.standard.set(comps.hour ?? 9, forKey: "reminderHour")
+                            UserDefaults.standard.set(comps.minute ?? 0, forKey: "reminderMinute")
+                            rescheduleReminders()
+                        }
+                    ), displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .tint(TR.Palette.coral)
+                }
 
                 // Show active compound reminders
                 let compounds = vm.supplements.filter { $0.isActive }
                 if !compounds.isEmpty {
                     ForEach(compounds, id: \.id) { compound in
-                        HStack {
-                            Image(systemName: "bell.fill")
+                        GlassDivider()
+                        HStack(spacing: 12) {
+                            Image(systemName: "bell.badge.fill")
                                 .font(.caption)
-                                .foregroundColor(AppColors.accent)
+                                .foregroundStyle(TR.Palette.textTertiary)
+                                .frame(width: 32)
                             Text(compound.supplementName)
                                 .font(.subheadline)
+                                .foregroundStyle(TR.Palette.textSecondary)
                             Spacer()
                             Text(String(format: NSLocalizedString("frequency.everyNDays", comment: ""), compound.frequencyDays))
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(TR.Palette.textTertiary)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                    }
+                }
+            }
+
+            GlassDivider()
+
+            GlassRowLabel(systemImage: "syringe.fill", tint: TR.Palette.tangerine,
+                          title: NSLocalizedString("settings.injectionReminders", comment: "")) {
+                Toggle(NSLocalizedString("settings.injectionReminders", comment: ""), isOn: Binding(
+                    get: { injectionReminderEnabled },
+                    set: { enabled in
+                        injectionReminderEnabled = enabled
+                        if enabled {
+                            rescheduleInjectionReminders()
+                        } else {
+                            removePendingReminders(prefixes: [ReminderID.injectionPrefix])
                         }
                     }
-                }
+                ))
+                .labelsHidden()
+                .tint(TR.Palette.coral)
             }
-
-            Toggle(NSLocalizedString("settings.injectionReminders", comment: ""), isOn: Binding(
-                get: { injectionReminderEnabled },
-                set: { enabled in
-                    injectionReminderEnabled = enabled
-                    if enabled {
-                        rescheduleInjectionReminders()
-                    } else {
-                        removePendingReminders(prefixes: [ReminderID.injectionPrefix])
-                    }
-                }
-            ))
-            .tint(AppColors.accent)
 
             if injectionReminderEnabled {
-                DatePicker(NSLocalizedString("settings.injectionReminderTime", comment: ""), selection: Binding(
-                    get: {
-                        var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
-                        comps.hour = UserDefaults.standard.object(forKey: "injectionReminderHour") as? Int ?? 9
-                        comps.minute = UserDefaults.standard.object(forKey: "injectionReminderMinute") as? Int ?? 0
-                        return Calendar.current.date(from: comps) ?? .now
-                    },
-                    set: { date in
-                        let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
-                        UserDefaults.standard.set(comps.hour ?? 9, forKey: "injectionReminderHour")
-                        UserDefaults.standard.set(comps.minute ?? 0, forKey: "injectionReminderMinute")
-                        rescheduleInjectionReminders()
-                    }
-                ), displayedComponents: .hourAndMinute)
-                .tint(AppColors.accent)
+                GlassDivider()
+                GlassRowLabel(systemImage: "clock.fill", tint: TR.Palette.lilac,
+                              title: NSLocalizedString("settings.injectionReminderTime", comment: "")) {
+                    DatePicker(NSLocalizedString("settings.injectionReminderTime", comment: ""), selection: Binding(
+                        get: {
+                            var comps = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+                            comps.hour = UserDefaults.standard.object(forKey: "injectionReminderHour") as? Int ?? 9
+                            comps.minute = UserDefaults.standard.object(forKey: "injectionReminderMinute") as? Int ?? 0
+                            return Calendar.current.date(from: comps) ?? .now
+                        },
+                        set: { date in
+                            let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
+                            UserDefaults.standard.set(comps.hour ?? 9, forKey: "injectionReminderHour")
+                            UserDefaults.standard.set(comps.minute ?? 0, forKey: "injectionReminderMinute")
+                            rescheduleInjectionReminders()
+                        }
+                    ), displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .tint(TR.Palette.coral)
+                }
             }
         }
-        .listRowBackground(AppColors.card)
     }
 
     // MARK: - Reminder scheduling
@@ -512,38 +574,56 @@ struct SettingsView: View {
     }
 
     private var recommendSection: some View {
-        Section {
+        GlassSection(NSLocalizedString("settings.spreadWord", value: "Spread the word", comment: "Settings section: rate/share"), tint: TR.Palette.gold) {
             Link(destination: ReviewPromptService.writeReviewURL) {
-                Label(NSLocalizedString("settings.rateApp", comment: ""), systemImage: "star.fill")
-                    .foregroundColor(AppColors.accent)
+                GlassRowLabel(systemImage: "star.fill", tint: TR.Palette.gold,
+                              title: NSLocalizedString("settings.rateApp", comment: ""),
+                              subtitle: NSLocalizedString("settings.rateApp.subtitle", value: "It really helps a small, private app", comment: "Subtitle under Rate Trough")) {
+                    HStack(spacing: 2) {
+                        ForEach(0..<5, id: \.self) { _ in
+                            Image(systemName: "star.fill").font(.system(size: 9, weight: .bold))
+                        }
+                    }
+                    .foregroundStyle(TR.Palette.gold)
+                    .accessibilityHidden(true)
+                }
             }
+            .buttonStyle(.trPressable)
+            GlassDivider()
             ShareLink(
                 item: URL(string: "https://apps.apple.com/app/id6760955550")!,
                 subject: Text(NSLocalizedString("settings.shareSubject", comment: "")),
                 message: Text(NSLocalizedString("settings.shareBody", comment: ""))
             ) {
-                Label(NSLocalizedString("settings.recommend", comment: ""), systemImage: "heart.fill")
-                    .foregroundColor(AppColors.accent)
+                GlassRowLabel(systemImage: "heart.fill", tint: TR.Palette.coral,
+                              title: NSLocalizedString("settings.recommend", comment: "")) {
+                    GlassChevron(systemImage: "square.and.arrow.up")
+                }
             }
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
     }
 
     private var legalSection: some View {
-        Section(NSLocalizedString("settings.privacyLegal", comment: "")) {
+        GlassSection(NSLocalizedString("settings.privacyLegal", comment: ""),
+                     footer: NSLocalizedString("settings.onDeviceFooter", value: "Everything you log stays on this device. No account, no cloud.", comment: "Settings footer about on-device privacy")) {
             // In-app policy (the app is fully offline by design; the previous
             // external link's page was returning 404). Uses the existing
             // navigationDestination(for: String.self) "privacy" route.
             NavigationLink(value: "privacy") {
-                Label(NSLocalizedString("settings.privacyPolicy", comment: ""), systemImage: "lock.shield")
+                GlassRowLabel(systemImage: "lock.shield.fill", tint: TR.Palette.teal,
+                              title: NSLocalizedString("settings.privacyPolicy", comment: ""))
             }
-            .foregroundColor(.primary)
+            .buttonStyle(.trPressable)
+            GlassDivider()
             Link(destination: URL(string: "https://gwlabs.app/terms") ?? URL(string: "https://gwlabs.app")!) {
-                Label(NSLocalizedString("settings.termsOfUse", comment: ""), systemImage: "doc.text")
+                GlassRowLabel(systemImage: "doc.text.fill", tint: TR.Palette.textSecondary,
+                              title: NSLocalizedString("settings.termsOfUse", comment: "")) {
+                    GlassChevron(systemImage: "arrow.up.right")
+                }
             }
-            .foregroundColor(.primary)
+            .buttonStyle(.trPressable)
         }
-        .listRowBackground(AppColors.card)
     }
 }
 
@@ -561,7 +641,7 @@ struct ProtocolFormView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
                 Form {
                     Section {
                         TextField(NSLocalizedString("settings.protocolName", comment: ""), text: $vm.formProtoName)
@@ -569,25 +649,26 @@ struct ProtocolFormView: View {
                             ForEach(compounds, id: \.self) { Text($0) }
                         }
                     }
-                    .listRowBackground(AppColors.card)
+                    .listRowBackground(TR.Palette.surface)
 
                     Section {
                         HStack {
                             TextField(NSLocalizedString("common.dose", comment: ""), text: $vm.formDoseMg).keyboardType(.decimalPad)
-                            Text(NSLocalizedString("common.mg", comment: "")).foregroundColor(.secondary)
+                            Text(NSLocalizedString("common.mg", comment: "")).foregroundStyle(TR.Palette.textSecondary)
                         }
                         HStack {
                             TextField(NSLocalizedString("onboarding.frequency", comment: ""), text: $vm.formFrequencyDays).keyboardType(.numberPad)
-                            Text(NSLocalizedString("unit.days", comment: "")).foregroundColor(.secondary)
+                            Text(NSLocalizedString("unit.days", comment: "")).foregroundStyle(TR.Palette.textSecondary)
                         }
                         HStack {
                             TextField(NSLocalizedString("onboarding.concentration", comment: ""), text: $vm.formConcentration).keyboardType(.decimalPad)
-                            Text("mg/mL").foregroundColor(.secondary)
+                            Text("mg/mL").foregroundStyle(TR.Palette.textSecondary)
                         }
                     }
-                    .listRowBackground(AppColors.card)
+                    .listRowBackground(TR.Palette.surface)
                 }
                 .scrollContentBackground(.hidden)
+                .tint(TR.Palette.coral)
             }
             .navigationTitle(NSLocalizedString("settings.newProtocol", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
@@ -595,7 +676,8 @@ struct ProtocolFormView: View {
                 ToolbarItem(placement: .cancellationAction) { Button(NSLocalizedString("common.cancel", comment: "")) { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(NSLocalizedString("common.save", comment: "")) { vm.saveProtocol() }
-                        .foregroundColor(AppColors.accent)
+                        .fontWeight(.bold)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
         }

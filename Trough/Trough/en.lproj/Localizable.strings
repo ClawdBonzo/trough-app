@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "You can always change this in Settings.";
 "onboarding.getStarted" = "Get started";
 
-"onboarding.startTrial" = "Start 3-Day Free Trial";
+"onboarding.startTrial" = "Start 7-Day Free Trial";
 "onboarding.trialSubtitle" = "Unlock full insights and track your progress to 85+.";
-"onboarding.noCharge" = "No charge for 3 days. Cancel anytime in Settings → Subscriptions.";
+"onboarding.noCharge" = "No charge for 7 days. Cancel anytime in Settings → Subscriptions.";
 "onboarding.maybeLater" = "Maybe later";
 
 /* Frequency labels */
@@ -487,19 +487,19 @@
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
 "paywall.heroSubtitle" = "Go from 42 → 85 Protocol Score.";
-"paywall.subtitle" = "Everything. Free for 3 days.";
+"paywall.subtitle" = "Everything. Free for 7 days.";
 "paywall.monthly" = "Monthly";
 "paywall.annual" = "Annual";
 "paywall.save40" = "Save 58%";
 "paywall.startTrial" = "Start Free Trial";
-"paywall.startTrialFull" = "Start Free Trial — 3 days free, then %@";
+"paywall.startTrialFull" = "Start Free Trial — 7 days free, then %@";
 "paywall.restorePurchases" = "Restore";
 "paywall.privacyPolicy" = "Privacy";
 "paywall.termsOfUse" = "Terms";
 
 /* Pro features */
 "pro.title" = "What You Get With Pro";
-"pro.trialIncluded" = "3-day free trial included";
+"pro.trialIncluded" = "7-day free trial included";
 "pro.pkCurves" = "PK Curves";
 "pro.pkCurvesDesc" = "See your estimated blood levels with confidence bands and multi-ester stacking";
 "pro.trendHistory" = "Full Trend History";
@@ -904,3 +904,271 @@
 "notif.recap.title" = "Your week in Trough";
 /* ===== end 1.4 gamification (engine) ===== */
 
+
+// MARK: 1.4 achievements
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@, locked, %d of %d";
+"ach.badge.a11y.unlocked" = "%@, %@, unlocked";
+"ach.badge.howEarned" = "How you earned it";
+"ach.badge.secretHint" = "A secret badge. It happens when it happens — keep logging.";
+"ach.badge.share" = "Show it off";
+"ach.badge.unlockedOn" = "Unlocked %@";
+"ach.badges.count" = "%d of %d";
+"ach.badges.title" = "Badge wall";
+"ach.cat.adjuncts" = "Adjuncts";
+"ach.cat.bloodwork" = "Bloodwork records";
+"ach.cat.checkins" = "Check-ins";
+"ach.cat.health" = "Apple Health";
+"ach.cat.injections" = "Injection log";
+"ach.cat.levels" = "Levels";
+"ach.cat.notes" = "Notes";
+"ach.cat.secrets" = "Secrets";
+"ach.cat.specials" = "Specials";
+"ach.cat.streaks" = "Streaks";
+"ach.celebrate.carryOn" = "Carry on";
+"ach.celebrate.kicker.badge" = "BADGE UNLOCKED";
+"ach.celebrate.kicker.quest" = "QUEST COMPLETE";
+"ach.celebrate.kicker.rank" = "NEW RANK";
+"ach.celebrate.kicker.streak" = "STREAK";
+"ach.celebrate.moreBadges" = "+%d more badges";
+"ach.celebrate.quest.line" = "Nicely done. Another one for the log.";
+"ach.celebrate.rank.line" = "Level %d · %@ cover. It's on every card you share.";
+"ach.celebrate.streak.line.hundred" = "Triple digits. Consistency, on the record.";
+"ach.celebrate.streak.line.month" = "A month without missing a day. That's a routine.";
+"ach.celebrate.streak.line.week" = "A full week of check-ins. The habit is forming.";
+"ach.celebrate.streak.line.year" = "A year of daily check-ins. Legendary.";
+"ach.celebrate.streak.title" = "%d days straight";
+"ach.celebrate.totalXP" = "%d XP total";
+"ach.challenge.done" = "Done for today. Nice.";
+"ach.challenge.kicker" = "Today's challenge";
+"ach.chip.badges" = "%d/%d badges";
+"ach.chip.streak" = "%d-day streak";
+"ach.chip.weeks" = "%d wks on time";
+"ach.flame.0" = "Unlit";
+"ach.flame.1" = "Spark";
+"ach.flame.2" = "Kindled";
+"ach.flame.3" = "Blazing";
+"ach.flame.4" = "Inferno";
+"ach.flame.5" = "White-hot";
+"ach.levelN" = "Level %d";
+"ach.more.app" = "App";
+"ach.more.tracking" = "Tracking";
+"ach.passport.kicker" = "Protocol passport";
+"ach.passport.toNext" = "%d XP to %@";
+"ach.passport.topRank" = "Top rank";
+"ach.persona.kicker" = "Your protocol persona";
+"ach.persona.locked" = "Your logging style is revealed after %d check-ins (%d so far).";
+"ach.persona.lockedTitle" = "Still taking notes";
+"ach.quest.done" = "Completed";
+"ach.quest.open" = "Not done yet";
+"ach.quests.empty" = "New quests arrive tomorrow.";
+"ach.quests.title" = "Quests";
+"ach.rank.level" = "LEVEL";
+"ach.share" = "Share";
+"ach.share.badge.kicker" = "Badge unlocked";
+"ach.share.cta" = "How consistent are you?";
+"ach.share.footer" = "Private protocol log · App Store";
+"ach.share.format" = "Format";
+"ach.share.format.square" = "Square";
+"ach.share.format.story" = "Story";
+"ach.share.message" = "How consistent are you? I keep my protocol log private with Trough — TRT Tracker.";
+"ach.share.privacy" = "Cards show ranks, streaks and badges only — never doses or lab values.";
+"ach.share.rank.kicker" = "My protocol rank";
+"ach.share.stat.badges" = "badges";
+"ach.share.stat.best" = "best streak";
+"ach.share.stat.dayStreak" = "day streak";
+"ach.share.stat.level" = "level";
+"ach.share.stat.weeks" = "on-time weeks";
+"ach.share.streak.kicker" = "My check-in streak";
+"ach.share.streak.line" = "%d-day check-in streak";
+"ach.share.title.badge" = "Share this badge";
+"ach.share.title.rank" = "Share your rank";
+"ach.share.title.streak" = "Share your streak";
+"ach.streaks.best" = "best %d";
+"ach.streaks.checkin" = "Check-in streak";
+"ach.streaks.injection" = "On-time injections";
+"ach.streaks.title" = "Streaks";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "day";
+"ach.unit.days" = "days";
+"ach.unit.week" = "week";
+"ach.unit.weeks" = "weeks";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+/* ===== end 1.4 achievements ===== */
+
+// MARK: 1.4 dashboard
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "Next badge";
+"dash.badge.moreCheckins" = "%d more check-ins";
+"dash.badge.moreDays" = "%d more days";
+"dash.badge.moreInjections" = "%d more injections";
+"dash.badge.morePanels" = "%d more bloodwork panels";
+"dash.badge.moreWeeks" = "%d more on-schedule weeks";
+"dash.badge.reachLevel" = "Reach level %d";
+"dash.badge.toGo" = "%d to go";
+"dash.challenge.done" = "Complete — see you tomorrow";
+"dash.challenge.kicker" = "Daily challenge";
+"dash.hero.a11y" = "Level %1$d, %2$@. %3$d XP to next level. %4$d-day check-in streak. %5$d of %6$d badges.";
+"dash.hero.a11yHint" = "Opens achievements";
+"dash.hero.lv" = "LV";
+"dash.hero.maxRank" = "Top rank reached";
+"dash.hero.onScheduleWeeks" = "%d wk on time";
+"dash.hero.rankKicker" = "Rank · %@";
+"dash.hero.streakDays" = "%d-day streak";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "%1$d XP to %2$@";
+"dash.insight.kicker" = "Insight";
+"dash.persona.kicker" = "Your logging style";
+"dash.personalBest.sub" = "Your highest self-rated score this month.";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "Getting started";
+"dash.score.avg7" = "7-day avg %.0f";
+"dash.score.noData" = "No check-ins yet";
+"dash.score.vsLastWeek" = "vs last wk";
+"dash.section.progress" = "Progress";
+"dash.section.today" = "Today";
+"dash.section.trends" = "Trends";
+"dash.stats.avgMood" = "Avg mood";
+"dash.stats.avgSleep" = "Avg sleep";
+"dash.today.checkedIn" = "Checked in ✓";
+"dash.today.checkedInSub" = "Tap to review today's log";
+"dash.today.cycle" = "Cycle";
+"dash.today.day" = "day";
+"dash.today.dayWord" = "Day";
+"dash.today.days" = "days";
+"dash.today.daysLate" = "days late";
+"dash.today.dueToday" = "Today";
+"dash.today.nextShot" = "Next injection";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "Your last 7 days at a glance";
+"pk.legend.combined" = "Combined";
+"pk.legend.estimated" = "Estimated level";
+"pk.legend.peak" = "Peak window";
+"pk.legend.trough" = "Approaching trough";
+"pk.legend.variation" = "±20% variation";
+"pk.toggle.absorption" = "Absorption delay";
+"pk.toggle.bands" = "Show bands";
+/* ===== end 1.4 dashboard ===== */
+
+// MARK: 1.4 onboarding-paywall
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "Step %1$d of %2$d";
+"onb14.close" = "Close";
+"onb14.reminders.streakNudge" = "A daily nudge is the easiest way to keep your check-in streak alive.";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "Protocol Passport";
+"onb14.passport.levelCover" = "Level %1$d · %2$@";
+"onb14.passport.badges" = "Badges";
+"onb14.passport.a11y" = "Level %1$d, %2$@. %3$d of %4$d badges.";
+"onb14.passport.ready" = "You're all set";
+"onb14.passport.title" = "Your Protocol Passport";
+"onb14.passport.subtitle" = "Every check-in, injection log and streak earns XP and stamps a badge into your passport.";
+"onb14.passport.nextUp" = "Next up";
+"onb14.passport.firstBadge" = "Your first badge is one check-in away";
+"onb14.passport.pillLevels" = "11 levels";
+"onb14.passport.pillBadges" = "%d badges";
+"onb14.passport.pillStreaks" = "Streaks";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "%d-day free trial";
+"onb14.trialLegal" = "%d-day free trial, then auto-renews. Cancel anytime.";
+"onb14.paywall.autoRenew" = "Payment is charged to your Apple ID at confirmation. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings.";
+/* ===== end 1.4 onboarding & paywall ===== */
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "Lab";
+"bloodwork.addPanel" = "Add panel";
+"bloodwork.deleteConfirm" = "Delete this panel?";
+"bloodwork.delete" = "Delete Panel";
+"bloodwork.summary.onePanel" = "1 panel logged";
+"bloodwork.summary.panels" = "%d panels logged";
+"bloodwork.summary.lastDrawn" = "last drawn %@";
+"bloodwork.summary.kicker" = "Lab log";
+"bloodwork.stat.panels" = "Panels";
+"bloodwork.stat.markers" = "Markers tracked";
+"bloodwork.stat.photos" = "Lab photos";
+"bloodwork.markerCount" = "%d markers";
+"bloodwork.doctorNotes" = "Doctor notes";
+"bloodwork.notes" = "Notes";
+"bloodwork.moreMarkers" = "+%d more";
+"bloodwork.viewPanel" = "View panel";
+"bloodwork.labPhoto" = "Lab photo attached";
+"bloodwork.labPhotoTitle" = "Lab photo";
+"bloodwork.range.within" = "Within ref";
+"bloodwork.range.below" = "Below ref";
+"bloodwork.range.above" = "Above ref";
+"bloodwork.range.none" = "No ref range";
+"bloodwork.refShort" = "Ref %@";
+"peptides.categories" = "Categories";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / Ancillary";
+"peptides.cat.gh" = "GH secretagogue";
+"peptides.cat.healing" = "Healing";
+"peptides.cat.longevity" = "Longevity";
+"peptides.cat.specialty" = "Specialty";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "Unlock the full lab";
+"settings.pro.subtitle" = "Doctor reports and every Pro feature — all on-device.";
+"settings.spreadWord" = "Spread the word";
+"settings.rateApp.subtitle" = "It really helps a small, private app";
+"settings.onDeviceFooter" = "Everything you log stays on this device. No account, no cloud.";
+"privacy.hero.title" = "Private by design";
+"privacy.hero.subtitle" = "No account. No cloud. Your data stays on this device.";
+"export.hero.title" = "Your data, your files";
+"export.hero.subtitle" = "Generated on this device, shared only where you choose.";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "Step 1 of 2";
+"checkin14.streakDays" = "%d-day streak";
+"checkin14.scoreKicker" = "Score";
+"checkin14.scoreHint" = "Updates live as you rate your day.";
+"checkin14.earnXP" = "Earn +20 XP";
+"checkin14.updatingToday" = "Updating today";
+"checkin14.step2" = "Step 2 of 2";
+"checkin14.close" = "Close";
+"checkin14.savedTitle" = "Check-in logged!";
+"checkin14.savedSubtitle" = "Another day on the record. Nice consistency.";
+"checkin14.updatedSubtitle" = "Today's check-in is up to date.";
+"checkin14.xpEarnedA11y" = "20 XP earned";
+"checkin14.updatedPill" = "Check-in updated";
+"checkin14.streakKicker" = "Check-in streak";
+"checkin14.day" = "day";
+"checkin14.days" = "days";
+"checkin14.bestStreak" = "Best: %d days";
+"checkin14.todaysQuests" = "Today's quests";
+"checkin14.dailyChallenge" = "Daily challenge";
+"checkin14.questDone" = "Done";
+"checkin14.questOpen" = "Not done yet";
+"checkin14.appleHealth" = "From Apple Health";
+"checkin14.insightKicker" = "Today's insight";
+"checkin14.rating.1" = "Very low";
+"checkin14.rating.2" = "Low";
+"checkin14.rating.3" = "Okay";
+"checkin14.rating.4" = "Good";
+"checkin14.rating.5" = "Great";
+"inj14.streakKicker" = "On-schedule streak";
+"inj14.week" = "week";
+"inj14.weeks" = "weeks";
+"inj14.stampsCollected" = "%d stamps collected";
+"inj14.nextSite" = "Next site in rotation";
+"inj14.fab" = "Log";
+"inj14.logTitle" = "Stamp log";
+"inj14.tip" = "Tap a stamp to edit · hold for more";
+"inj14.stampHint" = "Opens the injection to edit";
+"inj14.thisWeek" = "This week";
+"inj14.weekN" = "Week %d";
+"inj14.onSchedule" = "on schedule";
+"inj14.prevMonth" = "Previous month";
+"inj14.nextMonth" = "Next month";
+"inj14.stampIt" = "Stamp it";
+"inj14.site.never" = "Never used";
+"inj14.site.today" = "Used today";
+"inj14.site.daysAgo" = "%dd ago";
+"inj14.site.suggested" = "Suggested next";
+"inj14.side.left" = "L";
+"inj14.side.right" = "R";
+"inj14.stampA11y" = "Injection stamp: %@";
+"inj14.stamped" = "Stamped!";
+"inj14.streakWeeksPill" = "%d-week streak";

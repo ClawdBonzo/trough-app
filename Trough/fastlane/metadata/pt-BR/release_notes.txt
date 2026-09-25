@@ -1,3 +1,8 @@
-• Corrigido um problema de importação CSV que podia confundir colunas de exames
-• Lembretes quinzenais de suplementos agora chegam nas semanas certas
-• Melhorias de estabilidade
+O Trough 1.4 é a nossa maior atualização até agora.
+
+• Visual totalmente novo em todo o app, e um ícone novo
+• Sequências de registros, 11 níveis e um ranking de protocolo do Papel ao Diamante
+• 42 medalhas, desafios diários e comemorações
+• Cards para compartilhar sua sequência, ranking e medalhas
+• Novos widgets para a Tela de Início e a Tela Bloqueada, incluindo um com sua próxima medalha
+• Melhorias de desempenho e estabilidade

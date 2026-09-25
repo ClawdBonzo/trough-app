@@ -1,274 +1,326 @@
 import SwiftUI
 
-struct GamificationHomeView: View {
+// MARK: - Screen (tab root)
+
+/// Achievements as a full screen: scrolls, TRBackground, share in the toolbar.
+/// Use this as a tab root / navigation destination. `GamificationHomeView` alone is the
+/// non-scrolling content (for embedding inside an existing ScrollView).
+struct AchievementsScreen: View {
     @ObservedObject var viewModel: GamificationViewModel
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var showQuestSheet = false
-    @State private var showBadgesSheet = false
+    @State private var shareKind: ShareCardKind?
 
     var body: some View {
-        VStack(spacing: 20) {
-            // MARK: Level Hero
-            HStack(spacing: 20) {
-                VStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .fill(AppColors.card)
-                            .frame(width: 100, height: 100)
-
-                        Circle()
-                            .trim(from: 0, to: viewModel.levelProgressPercent)
-                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                            .frame(width: 100, height: 100)
-                            .rotationEffect(.degrees(-90))
-                            .animation(
-                                reduceMotion ? nil : .easeInOut(duration: 0.5),
-                                value: viewModel.levelProgressPercent
-                            )
-
-                        VStack(spacing: 2) {
-                            Text(String(viewModel.currentLevel))
-                                .font(.system(size: 28, weight: .bold))
-                                .foregroundColor(.white)
-                            Text("\(Int(viewModel.levelProgressPercent * 100))%")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .accessibilityLabel("Level \(viewModel.currentLevel), \(Int(viewModel.levelProgressPercent * 100)) percent progress")
-
-                    Text("Level")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        ScrollView {
+            GamificationHomeView(viewModel: viewModel)
+                .frame(maxWidth: 760)
+                .frame(maxWidth: .infinity)
+        }
+        .scrollIndicators(.hidden)
+        .background(TRBackground(glow: TR.RankCover.forLevel(viewModel.currentLevel).colors.first ?? TR.Palette.coral, glowOpacity: 0.16))
+        .navigationTitle(Text(verbatim: NSLocalizedString("tab.achievements", comment: "")))
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button { shareKind = .rank } label: {
+                    Label(gLoc("ach.share", "Share"), systemImage: "square.and.arrow.up")
                 }
-
-                VStack(alignment: .leading, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(viewModel.levelName)
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Text("\(viewModel.currentXP) XP Total")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(viewModel.xpUntilNextLevel) XP until level \(viewModel.currentLevel + 1)")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-
-                        ProgressView(value: viewModel.levelProgressPercent)
-                            .tint(AppColors.accent)
-                            .frame(height: 6)
-                            .accessibilityLabel("\(Int(viewModel.levelProgressPercent * 100)) percent to next level")
-                    }
-                }
-
-                Spacer()
+                .accessibilityIdentifier("achievements-share")
             }
-            .padding(16)
-            .background(AppColors.card)
-            .cornerRadius(12)
+        }
+        .sheet(item: $shareKind) { kind in
+            ShareCardSheet(kind: kind, data: .from(viewModel))
+        }
+        .refreshable { viewModel.refresh() }
+    }
+}
 
-            // MARK: Streaks
-            if !viewModel.streakStates.isEmpty {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Your Streaks")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .accessibilityAddTraits(.isHeader)
+// MARK: - Content
 
-                    VStack(spacing: 8) {
-                        ForEach(Array(viewModel.streakStates.values), id: \.streakType) { streak in
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(streakTypeLabel(streak.streakType))
-                                        .font(.subheadline)
-                                        .foregroundColor(.white)
-                                    Text("Best: \(streak.bestCount) days")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
+/// Achievements content: passport, persona, streaks, daily challenge, quests, badge wall.
+/// Not scrollable on purpose — wrap in a ScrollView (see `AchievementsScreen`).
+struct GamificationHomeView: View {
+    @ObservedObject var viewModel: GamificationViewModel
+    @State private var shareKind: ShareCardKind?
 
-                                Spacer()
+    var body: some View {
+        VStack(alignment: .leading, spacing: TR.Metrics.sectionSpacing) {
+            PassportCard(viewModel: viewModel) { shareKind = .rank }
+                .trRevealOnAppear()
+            PersonaCard(persona: viewModel.persona, checkins: viewModel.facts.checkins)
+                .trRevealOnAppear(delay: 0.05)
+            streaks
+                .trRevealOnAppear(delay: 0.1)
+            if let challenge = viewModel.dailyChallenge {
+                DailyChallengeCard(quest: challenge)
+                    .trRevealOnAppear(delay: 0.15)
+            }
+            QuestSection(viewModel: viewModel)
+                .trRevealOnAppear(delay: 0.18)
+            BadgeWallGrid(viewModel: viewModel)
+        }
+        .padding(TR.Metrics.gutter)
+        .padding(.bottom, 24)
+        .sheet(item: $shareKind) { kind in
+            ShareCardSheet(kind: kind, data: .from(viewModel))
+        }
+    }
 
-                                HStack(spacing: 4) {
-                                    Text("\(streak.currentCount)")
-                                        .font(.title3.bold())
-                                        .foregroundColor(AppColors.accent)
-                                    Text(flameMark(streak.flameLevel))
-                                        .font(.title2)
-                                        .accessibilityHidden(true)
-                                }
-                            }
-                            .padding(12)
-                            .background(AppColors.card)
-                            .cornerRadius(8)
-                            .accessibilityElement(children: .combine)
-                            .accessibilityLabel("\(streakTypeLabel(streak.streakType)): \(streak.currentCount) days, best \(streak.bestCount)")
-                        }
-                    }
+    // MARK: Streaks
+
+    private var streaks: some View {
+        let checkin = viewModel.streakStates["checkin"]
+        let injection = viewModel.streakStates["injection"]
+        let days = viewModel.checkinStreakDays
+        let weeks = viewModel.injectionStreakWeeks
+        return VStack(alignment: .leading, spacing: 12) {
+            TRSectionHeader(Text(verbatim: gLoc("ach.streaks.title", "Streaks")))
+            HStack(alignment: .top, spacing: 12) {
+                StreakCard(
+                    title: gLoc("ach.streaks.checkin", "Check-in streak"),
+                    count: days,
+                    unit: days == 1 ? gLoc("ach.unit.day", "day") : gLoc("ach.unit.days", "days"),
+                    best: max(checkin?.bestCount ?? 0, viewModel.facts.longestCheckinStreak, days),
+                    flame: GamificationViewModel.flameLevel(forDays: days),
+                    symbol: "flame.fill",
+                    onShare: days > 0 ? { shareKind = .streak } : nil
+                )
+                StreakCard(
+                    title: gLoc("ach.streaks.injection", "On-time injections"),
+                    count: weeks,
+                    unit: weeks == 1 ? gLoc("ach.unit.week", "week") : gLoc("ach.unit.weeks", "weeks"),
+                    best: max(injection?.bestCount ?? 0, viewModel.facts.longestOnScheduleWeeks, weeks),
+                    flame: GamificationViewModel.flameLevel(forWeeks: weeks),
+                    symbol: "calendar.badge.checkmark",
+                    onShare: nil
+                )
+            }
+        }
+    }
+}
+
+// MARK: - Passport card
+
+struct PassportCard: View {
+    @ObservedObject var viewModel: GamificationViewModel
+    var onShare: () -> Void
+
+    var body: some View {
+        let level = viewModel.currentLevel
+        let cover = TR.RankCover.forLevel(level)
+        let ink = cover.ink
+        let isMax = level >= 11
+        let badges = viewModel.badgeProgress.filter(\.isUnlocked).count
+        let shape = RoundedRectangle(cornerRadius: 24, style: .continuous)
+
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(verbatim: "\(gLoc("ach.passport.kicker", "Protocol passport")) · \(cover.displayName)".uppercased())
+                        .font(.caption.weight(.heavy))
+                        .tracking(1.8)
+                        .foregroundStyle(ink.opacity(0.72))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Text(verbatim: viewModel.levelName)
+                        .font(TR.Font.display(.largeTitle, weight: .black))
+                        .foregroundStyle(ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    Text(verbatim: String(format: gLoc("ach.levelN", "Level %d"), level))
+                        .font(TR.Font.display(.subheadline, weight: .bold))
+                        .foregroundStyle(ink.opacity(0.8))
                 }
+                Spacer(minLength: 0)
+                Button(action: onShare) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(ink)
+                        .frame(width: TR.Metrics.minTap, height: TR.Metrics.minTap)
+                        .background(ink.opacity(0.12), in: Circle())
+                        .overlay(Circle().strokeBorder(ink.opacity(0.18), lineWidth: 1))
+                }
+                .buttonStyle(.trPressable)
+                .accessibilityLabel(Text(verbatim: gLoc("ach.share.title.rank", "Share your rank")))
+                .accessibilityIdentifier("passport-share")
             }
 
-            // MARK: Quests Preview
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
+                GeometryReader { proxy in
+                    ZStack(alignment: .leading) {
+                        Capsule().fill(ink.opacity(0.15))
+                        Capsule()
+                            .fill(ink.opacity(0.85))
+                            .frame(width: max(8, proxy.size.width * (isMax ? 1 : viewModel.levelProgressPercent)))
+                    }
+                }
+                .frame(height: 8)
                 HStack {
-                    Text("Daily Quests")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .accessibilityAddTraits(.isHeader)
-
+                    Text(verbatim: String(format: gLoc("ach.xpTotal", "%@ XP"), viewModel.currentXP.formatted()))
+                        .font(.subheadline.weight(.bold).monospacedDigit())
                     Spacer()
-
-                    let completed = viewModel.activeQuests.filter(\.isCompleted).count
-                    Text("\(completed)/\(viewModel.activeQuests.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .accessibilityLabel("\(completed) of \(viewModel.activeQuests.count) quests completed")
+                    Text(verbatim: isMax
+                         ? gLoc("ach.passport.topRank", "Top rank")
+                         : String(format: gLoc("ach.passport.toNext", "%d XP to %@"), viewModel.xpUntilNextLevel, GamificationCatalog.levelName(level + 1)))
+                        .font(.subheadline.weight(.semibold).monospacedDigit())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
-
-                if viewModel.activeQuests.isEmpty {
-                    Text("No quests available")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(12)
-                } else {
-                    VStack(spacing: 8) {
-                        ForEach(viewModel.activeQuests.prefix(3)) { quest in
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(quest.title)
-                                        .font(.subheadline)
-                                        .foregroundColor(.white)
-                                    Text(quest.description)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .lineLimit(1)
-                                }
-
-                                Spacer()
-
-                                HStack(spacing: 8) {
-                                    Text("+\(quest.xpReward) XP")
-                                        .font(.caption.bold())
-                                        .foregroundColor(AppColors.accent)
-
-                                    if quest.isCompleted {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.green)
-                                            .accessibilityLabel("Completed")
-                                    }
-                                }
-                            }
-                            .padding(10)
-                            .background(AppColors.card)
-                            .cornerRadius(8)
-                            .accessibilityElement(children: .combine)
-                            .accessibilityLabel("\(quest.title). \(quest.xpReward) XP. \(quest.isCompleted ? "Completed." : "Incomplete.")")
-                        }
-                    }
-
-                    if viewModel.activeQuests.count > 3 {
-                        Button(action: { showQuestSheet = true }) {
-                            Text("View all quests →")
-                                .font(.caption.bold())
-                                .foregroundColor(AppColors.accent)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(10)
-                        }
-                        .accessibilityLabel("View all \(viewModel.activeQuests.count) quests")
-                    }
-                }
+                .foregroundStyle(ink)
             }
 
-            // MARK: Badges Preview
-            if !viewModel.allBadges.isEmpty {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Badges")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .accessibilityAddTraits(.isHeader)
-
-                        Spacer()
-
-                        Text("\(viewModel.unlockedBadges.count)/\(viewModel.allBadges.count)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .accessibilityLabel("\(viewModel.unlockedBadges.count) of \(viewModel.allBadges.count) badges unlocked")
-                    }
-
-                    HStack(spacing: 8) {
-                        ForEach(viewModel.unlockedBadges.prefix(3), id: \.id) { badge in
-                            Text(badge.emoji)
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                                .padding(12)
-                                .background(AppColors.card)
-                                .cornerRadius(8)
-                                .accessibilityLabel(badge.name)
-                        }
-
-                        if viewModel.allBadges.count > viewModel.unlockedBadges.count {
-                            Button(action: { showBadgesSheet = true }) {
-                                HStack(spacing: 4) {
-                                    Text("+\(viewModel.allBadges.count - viewModel.unlockedBadges.count)")
-                                        .font(.caption.bold())
-                                    Text("more")
-                                        .font(.caption)
-                                }
-                                .foregroundColor(.secondary)
-                                .frame(maxWidth: .infinity)
-                                .padding(12)
-                                .background(AppColors.card)
-                                .cornerRadius(8)
-                            }
-                            .accessibilityLabel("\(viewModel.allBadges.count - viewModel.unlockedBadges.count) more badges to unlock")
-                        }
-                    }
-
-                    if viewModel.allBadges.count > 3 {
-                        Button(action: { showBadgesSheet = true }) {
-                            Text("View all badges →")
-                                .font(.caption.bold())
-                                .foregroundColor(AppColors.accent)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(10)
-                        }
-                        .accessibilityLabel("View all \(viewModel.allBadges.count) badges")
-                    }
-                }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) { chips(ink: ink, badges: badges) }
+                VStack(alignment: .leading, spacing: 8) { chips(ink: ink, badges: badges) }
             }
+        }
+        .padding(20)
+        .background {
+            ZStack {
+                shape.fill(cover.gradient)
+                // Faint trough wave watermark.
+                TroughWaveShape()
+                    .stroke(ink.opacity(0.1), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .frame(width: 220, height: 110)
+                    .offset(x: 110, y: 10)
+                shape.fill(LinearGradient(colors: [.white.opacity(0.28), .clear, .white.opacity(0.08)], startPoint: .topLeading, endPoint: .bottomTrailing))
+            }
+            .clipShape(shape)
+        }
+        .overlay(shape.strokeBorder(.white.opacity(0.3), lineWidth: 1))
+        .holoSheen(cornerRadius: 24)
+        .shadow(color: (cover.colors.last ?? .clear).opacity(0.4), radius: 18, y: 8)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("passport-card")
+    }
 
-            Spacer()
+    @ViewBuilder
+    private func chips(ink: Color, badges: Int) -> some View {
+        if viewModel.checkinStreakDays > 0 {
+            chip(String(format: gLoc("ach.chip.streak", "%d-day streak"), viewModel.checkinStreakDays), "flame.fill", ink: ink)
         }
-        .padding(16)
-        .sheet(isPresented: $showQuestSheet) {
-            QuestListView(viewModel: viewModel)
-        }
-        .sheet(isPresented: $showBadgesSheet) {
-            BadgeCollectionView(viewModel: viewModel)
+        chip(String(format: gLoc("ach.chip.badges", "%d/%d badges"), badges, GamificationCatalog.badges.count), "rosette", ink: ink)
+        if viewModel.injectionStreakWeeks > 0 {
+            chip(String(format: gLoc("ach.chip.weeks", "%d wks on time"), viewModel.injectionStreakWeeks), "syringe.fill", ink: ink)
         }
     }
 
-    // MARK: Helpers
-
-    private func streakTypeLabel(_ type: String) -> String {
-        switch type {
-        case "checkin":              return "Check-in Streak"
-        case "injection":            return "Injection Streak"
-        case "supplement_compliance": return "Supplement Streak"
-        default:                     return type.capitalized
+    private func chip(_ text: String, _ symbol: String, ink: Color) -> some View {
+        HStack(spacing: 5) {
+            Image(systemName: symbol).imageScale(.small)
+            Text(verbatim: text).lineLimit(1).fixedSize()
         }
-    }
-
-    private func flameMark(_ level: Int) -> String {
-        String(repeating: "🔥", count: max(0, min(level, 5)))
+        .font(.caption.weight(.bold))
+        .foregroundStyle(ink)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(ink.opacity(0.14), in: Capsule())
     }
 }
 
+// MARK: - Persona
+
+struct PersonaCard: View {
+    let persona: Persona?
+    let checkins: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            TRKicker(Text(verbatim: gLoc("ach.persona.kicker", "Your protocol persona")))
+            if let persona {
+                Label {
+                    Text(verbatim: persona.title)
+                        .font(TR.Font.display(.title2, weight: .heavy))
+                } icon: {
+                    Image(systemName: persona.symbol)
+                        .foregroundStyle(TR.Palette.teal)
+                }
+                .foregroundStyle(TR.Palette.textPrimary)
+                Text(verbatim: persona.tagline)
+                    .font(.body)
+                    .foregroundStyle(TR.Palette.textSecondary)
+            } else {
+                Label {
+                    Text(verbatim: gLoc("ach.persona.lockedTitle", "Still taking notes"))
+                        .font(TR.Font.display(.title3, weight: .heavy))
+                } icon: {
+                    Image(systemName: "sparkle.magnifyingglass")
+                        .foregroundStyle(TR.Palette.textTertiary)
+                }
+                .foregroundStyle(TR.Palette.textPrimary)
+                Text(verbatim: String(format: gLoc("ach.persona.locked", "Your logging style is revealed after %d check-ins (%d so far)."),
+                                      Persona.minimumCheckins, min(checkins, Persona.minimumCheckins)))
+                    .font(.subheadline)
+                    .foregroundStyle(TR.Palette.textSecondary)
+                TRProgressBar(value: Double(checkins) / Double(Persona.minimumCheckins), height: 6,
+                              colors: [TR.Palette.teal, TR.Palette.sky])
+                    .padding(.top, 2)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: persona == nil ? TR.Palette.deepBlue : TR.Palette.teal)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+// MARK: - Streak card
+
+struct StreakCard: View {
+    let title: String
+    let count: Int
+    let unit: String
+    let best: Int
+    let flame: Int
+    let symbol: String
+    var onShare: (() -> Void)?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top) {
+                StreakFlameEmblem(level: flame, size: 52, symbol: symbol)
+                Spacer(minLength: 0)
+                if let onShare {
+                    Button(action: onShare) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .frame(width: TR.Metrics.minTap, height: TR.Metrics.minTap)
+                    }
+                    .accessibilityLabel(Text(verbatim: gLoc("ach.share.title.streak", "Share your streak")))
+                    .accessibilityIdentifier("streak-share")
+                }
+            }
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                CountUp(count)
+                    .font(TR.Font.number(36))
+                    .foregroundStyle(count > 0 ? AnyShapeStyle(TR.Gradients.xp) : AnyShapeStyle(TR.Palette.textTertiary))
+                Text(verbatim: unit)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(TR.Palette.textSecondary)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: title)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(TR.Palette.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                Text(verbatim: "\(FlameTier.name(flame)) · \(String(format: gLoc("ach.streaks.best", "best %d"), best))")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textTertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: flame > 0 ? FlameTier.colors(flame).last : nil, padding: 14)
+        .accessibilityElement(children: .contain)
+    }
+}
+
+#if DEBUG
 #Preview {
-    Text("Preview unavailable in this context")
+    NavigationStack {
+        AchievementsScreen(viewModel: GamificationViewModel())
+    }
+    .preferredColorScheme(.dark)
 }
+#endif

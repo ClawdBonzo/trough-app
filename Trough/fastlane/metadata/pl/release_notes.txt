@@ -1,3 +1,8 @@
-• Naprawiono błąd importu CSV, który mógł pomylić kolumny badań
-• Przypomnienia o suplementach co dwa tygodnie przychodzą teraz we właściwych tygodniach
-• Poprawki stabilności
+Trough 1.4 to nasza największa aktualizacja.
+
+• Zupełnie nowy wygląd całej aplikacji i nowa ikona
+• Serie check-inów, 11 poziomów i ranga protokołu od Papieru do Diamentu
+• 42 odznaki, codzienne wyzwania i świętowanie sukcesów
+• Karty do udostępniania serii, rangi i odznak
+• Nowe widżety na ekran początkowy i ekran blokady, w tym widżet z następną odznaką
+• Poprawki wydajności i stabilności

@@ -1,36 +1,58 @@
-Conheça seu Protocol Score em 7 dias.
+Registre cada aplicação da TRT, veja seus níveis estimados de testosterona entre as doses e mantenha seus exames de sangue organizados, tudo em um app privado.
 
-O Trough é o aplicativo privado e offline-first de acompanhamento de TRT e hormônios, feito para homens em terapia de reposição de testosterona.
+O Trough é um controle de testosterona e injeções feito para homens em TRT ou reposição hormonal. Registre a aplicação em segundos, receba uma sugestão de local para a próxima e faça seu check-in diário em 30 segundos. Sem conta e sem anúncios.
 
-ACOMPANHE SEU PROTOCOLO
-• Registre injeções com dose, rodízio de locais de aplicação e composto
-• Suporte completo para Cipionato, Enantato, Propionato e Undecilato de Testosterona, além de combinações de múltiplos ésteres
-• Acompanhe GLP-1 (Semaglutida, Tirzepatida), peptídeos e adjuvantes (Anastrozol, hCG e mais)
+NOVIDADES DA 1.4
+• Visual totalmente novo, do painel ao registro de injeções
+• Sequências de registros, 11 níveis e um ranking de protocolo do Papel ao Diamante
+• 42 medalhas para conquistar com constância
+• Desafios diários e comemorações a cada conquista
+• Cards para compartilhar sua sequência, ranking e medalhas
+• Widgets para a Tela de Início e a Tela Bloqueada, incluindo um com sua próxima medalha
 
-CHECK-IN DIÁRIO DE BEM-ESTAR
-• Avalie energia, humor, libido, qualidade do sono e clareza mental em 30 segundos
-• Gera seu Protocol Score pessoal — um único número que mostra como o seu protocolo está funcionando
-• Acompanhe tendências ao longo do tempo enquanto ajusta sua rotina
+CONTROLE DE INJEÇÕES
+• Registre dose, composto e local de aplicação em segundos
+• Calendário com todas as aplicações
+• Sugestões de rodízio dos locais de aplicação
+• Lembretes no dia da injeção e Atividade ao Vivo com contagem regressiva para a próxima dose
+• Cipionato, enantato, propionato e undecanoato de testosterona, e protocolos com múltiplos ésteres
 
-CURVAS DE PK (Pro)
-• Modelagem farmacocinética real usando a equação de Bateman com atraso de absorção
-• Estimativas de pico, vale e níveis atuais com bandas de confiança
+NÍVEIS ESTIMADOS (CURVAS PK, PRO)
+• Curva estimada dos seus níveis no sangue entre as doses, calculada a partir do seu próprio registro
+• Pico, vale e nível atual estimados. São estimativas de um modelo, não resultados de exame.
 
-ACOMPANHAMENTO DE EXAMES (Pro)
-• Registre resultados de exames com faixas de referência personalizadas
-• Tendências visuais com bandas coloridas
+CHECK-IN DIÁRIO + PROTOCOL SCORE
+• Avalie energia, humor, libido, sono e clareza mental em cerca de 30 segundos
+• Suas respostas formam um Protocol Score de 0 a 100 para acompanhar a evolução
 
-PEPTÍDEOS E ADJUVANTES (Pro)
-• Acompanhe peptídeos, agonistas de GLP-1 e compostos adjuvantes
-• Correlacione-os com suas métricas de bem-estar e exames
+EXAMES DE SANGUE (PRO)
+• 19 marcadores, incluindo testosterona total e livre, estradiol (E2), hematócrito e PSA
+• Valores de referência e gráficos de evolução de cada marcador entre as coletas
+• Anexe fotos dos laudos e anotações do seu médico
 
-PRIVADO POR NATUREZA
-• 100% no aparelho. Sem conta, sem nuvem, sem rastreamento.
-• Seus dados nunca saem do seu iPhone
+PEPTÍDEOS, GLP-1 E ADJUVANTES (PRO)
+• 34 modelos prontos de peptídeos, GLP-1 e adjuvantes como hCG e anastrozol
+• Agendas e lembretes junto ao seu protocolo de testosterona
 
-Comece seu teste gratuito de 3 dias para desbloquear todos os recursos Pro. Cancele quando quiser.
+APPLE SAÚDE, EXPORTAÇÃO E CONSULTAS
+• Lê VFC, frequência cardíaca em repouso, sono, passos e peso do app Saúde; grava o peso
+• Importação e exportação em CSV
+• Relatório em PDF para levar à próxima consulta (Pro)
 
-O Trough Pro é uma assinatura com renovação automática. O pagamento é cobrado na sua conta do Apple ID e renovado automaticamente, a menos que seja cancelado com pelo menos 24 horas de antecedência do fim do período. Gerencie ou cancele nos Ajustes.
+PRIVADO POR PADRÃO
+• Sem conta, sem cadastro e sem anúncios
+• Seu registro de saúde fica no seu iPhone, não nos nossos servidores
+• Disponível em 11 idiomas. Requer iPhone com iOS 17 ou posterior.
+
+TROUGH PRO
+O Trough é gratuito. O Trough Pro libera as curvas PK estimadas, o controle de exames, peptídeos e GLP-1 e o relatório PDF para o médico. Planos mensal e anual, com teste grátis para novos assinantes elegíveis.
+
+• O pagamento é cobrado na sua conta Apple na confirmação da compra
+• A assinatura é renovada automaticamente, a menos que seja cancelada pelo menos 24 horas antes do fim do período atual
+• A renovação é cobrada nas 24 horas anteriores ao fim do período atual
+• Gerencie ou cancele quando quiser nos ajustes da sua conta Apple
+
+O Trough é uma ferramenta de registro, não um dispositivo médico, e não oferece aconselhamento médico. Converse sempre com seu médico antes de mudar seu protocolo.
 
 Termos de Uso: https://gwlabs.app/terms
 Política de Privacidade: https://gwlabs.app/privacy

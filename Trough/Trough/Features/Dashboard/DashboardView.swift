@@ -18,128 +18,35 @@ struct DashboardView: View {
     @AppStorage("userIDString") private var userIDString = UUID().uuidString
     @AppStorage("hasShownTrialEndedScreen") private var hasShownTrialEndedScreen = false
     @AppStorage("hasShownSupplementBanner") private var hasShownSupplementBanner = false
-    @State private var showSupplementBanner = false
-    @State private var navigateToInjections = false
-    @State private var navigateToSupplements = false
     @State private var showAchievements = false
     @AppStorage("dismissedInsightsReEngage") private var dismissedInsightsReEngage = false
+
+    /// XP granted for a new daily check-in (GamificationViewModel.didSaveCheckin).
+    private let checkinXP = 20
+    private let isScreenshotMode = DashboardScreenshotMode.isOn
 
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
 
                 if vm.isLoading {
                     DashboardSkeletonView()
+                        .padding(.horizontal, TR.Metrics.gutter)
                         .transition(.opacity)
                 } else {
-                ScrollView {
-                    VStack(spacing: 16) {
-                        // Greeting + cycle day
-                        greetingHeader
-
-                        if showSampleDataBanner { sampleDataBanner }
-                        if subscriptionManager.showTrialExpiryWarning {
-                            trialExpiryBanner
-                        }
-                        if subscriptionManager.showGracePeriodWarning {
-                            gracePeriodBanner
-                        }
-
-                        // Personal best banner
-                        if vm.isPersonalBest {
-                            personalBestBanner
-                        }
-
-                        // Smart insight card
-                        if let insight = vm.smartInsight {
-                            smartInsightCard(insight)
-                                .onAppear {
-                                    // Daily quest: the user actually saw an insight.
-                                    gamificationVM.completeQuest(QuestService.viewInsightsQuestID())
-                                }
-                        }
-
-                        // Re-engagement: enough data logged but not yet subscribed
-                        if !subscriptionManager.isSubscribed
-                            && vm.totalCheckins >= 6
-                            && !dismissedInsightsReEngage {
-                            insightsReEngageBanner
-                        }
-
-                        protocolScoreHero
-                        if !vm.activeCompounds.isEmpty || vm.activeProtocol != nil {
-                            activeProtocolCard
-                        }
-
-                        // Check-in CTA with pulse if not done today
-                        checkinCTACard
-
-                        // Injection + supplement compliance side by side
-                        if vm.activeProtocol != nil {
-                            complianceRow
-                        }
-
-                        // NEW: One-time supplement setup banner (post-subscription)
-                        if subscriptionManager.isSubscribed && vm.supplementCount == 0 && !hasShownSupplementBanner {
-                            supplementSetupBanner
-                        }
-
-                        // Weight trend sparkline
-                        if vm.latestWeightLbs != nil {
-                            weightTrendCard
-                        }
-
-                        streakCard
-
-                        // Compact level / XP progress card (taps through to full Achievements)
-                        levelProgressCard
-
-                        // PK Curve / Body Composition
-                        if subscriptionManager.isSubscribed {
-                            if userType == "trt" {
-                                pkCurveCard
-                                if vm.hcgProtocol != nil {
-                                    fertilityCard
-                                }
-                            } else {
-                                bodyCompositionCard
-                            }
-                        } else {
-                            if userType == "trt" {
-                                pkCurvePreviewCard
-                            } else {
-                                LockedCard(
-                                    icon: "scalemass",
-                                    title: NSLocalizedString("dashboard.bodyComposition", comment: ""),
-                                    subtitle: NSLocalizedString("dashboard.bodyComposition.subtitle", comment: ""),
-                                    onInfo: { showProFeatures = true }
-                                ) { showPaywall = true }
-                            }
-                        }
-
-                        // GLP-1 weight correlation (paid only); free users see a teaser
-                        if subscriptionManager.isSubscribed && vm.hasGLP1Data {
-                            glp1CorrelationCard
-                        } else if !subscriptionManager.isSubscribed {
-                            peptideTeaserCard
-                        }
-
-                        // 7-Day Trends bar chart
-                        trendChartCard
-                        quickStatsCard
-
-                        // Tomorrow's forecast
-                        if let forecast = vm.forecastText {
-                            forecastCard(forecast)
-                        }
+                    ScrollView {
+                        content
+                            .padding(.horizontal, TR.Metrics.gutter)
+                            .padding(.top, 8)
+                            .padding(.bottom, 32)
                     }
-                    .padding()
+                    .scrollIndicators(.hidden)
                 }
-                } // end else isLoading
             }
             .navigationTitle(NSLocalizedString("dashboard.title", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .navigationBar)
             .onAppear {
                 vm.setModelContext(modelContext)
                 vm.load()
@@ -160,7 +67,7 @@ struct DashboardView: View {
             .sheet(isPresented: $showAchievements) {
                 NavigationStack {
                     ZStack {
-                        AppColors.background.ignoresSafeArea()
+                        TRBackground()
                         ScrollView { GamificationHomeView(viewModel: gamificationVM) }
                     }
                     .navigationTitle(NSLocalizedString("tab.achievements", comment: ""))
@@ -188,7 +95,7 @@ struct DashboardView: View {
             }
             .onReceive(subscriptionManager.$isInTrial) { inTrial in
                 // Show soft downgrade once when trial expires
-                if !inTrial && !hasShownTrialEndedScreen && !subscriptionManager.isSubscribed {
+                if !inTrial && !hasShownTrialEndedScreen && !subscriptionManager.isSubscribed && !isScreenshotMode {
                     let trialStarted = UserDefaults.standard.bool(forKey: "trialWasStarted")
                     if trialStarted {
                         hasShownTrialEndedScreen = true
@@ -196,520 +103,374 @@ struct DashboardView: View {
                     }
                 }
             }
-            .onChange(of: showCheckin) { _, dismissed in
-                if !dismissed { vm.checkReviewPrompt() }
+        }
+    }
+
+    // MARK: - Layout (ordered by importance)
+
+    @ViewBuilder
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            greetingHeader
+                .trRevealOnAppear(delay: 0)
+
+            protocolCard
+                .trRevealOnAppear(delay: 0.04)
+
+            if !isScreenshotMode {
+                if showSampleDataBanner { sampleDataBanner }
+                if subscriptionManager.showTrialExpiryWarning { trialExpiryBanner }
+                if subscriptionManager.showGracePeriodWarning { gracePeriodBanner }
+            }
+
+            // Today
+            sectionLabel(dashL("dash.section.today", "Today"))
+                .trRevealOnAppear(delay: 0.08)
+            DashboardCheckinCTA(isCheckedIn: vm.todayCheckin != nil, xpEarned: checkinXP) { showCheckin = true }
+                .trRevealOnAppear(delay: 0.1)
+            if let proto = vm.activeProtocol, let days = vm.daysUntilNextInjection {
+                HStack(spacing: 12) {
+                    NavigationLink(destination: InjectionsView()) {
+                        DashboardNextInjectionTile(compound: proto.compoundName, daysUntil: days,
+                                                   overdueDays: vm.injectionOverdueDays)
+                    }
+                    .buttonStyle(.trPressable)
+                    if let day = vm.cycleDay {
+                        cycleDayTile(day: day, of: proto.frequencyDays)
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .trRevealOnAppear(delay: 0.12)
+            }
+            if let challenge = gamificationVM.dailyChallenge {
+                dailyChallenge(challenge)
+                    .trRevealOnAppear(delay: 0.14)
+            }
+
+            // Score
+            DashboardScoreCard(
+                score: vm.protocolScore,
+                interpretation: vm.interpretation,
+                trend: vm.trend,
+                hasPriorWeek: vm.hasPriorWeek,
+                sevenDayAvg: vm.sevenDayAvg,
+                week: vm.weekScores,
+                hasData: !vm.recentCheckins.isEmpty,
+                onLogToday: { showCheckin = true }
+            )
+            .trRevealOnAppear(delay: 0.16)
+
+            if vm.isPersonalBest { personalBestBanner }
+
+            if let insight = vm.smartInsight {
+                smartInsightCard(insight)
+                    .onAppear {
+                        // Daily quest: the user actually saw an insight.
+                        gamificationVM.completeQuest(QuestService.viewInsightsQuestID())
+                    }
+            }
+
+            // PK curve / body composition
+            if subscriptionManager.isSubscribed {
+                if userType == "trt" {
+                    pkCurveCard
+                    if vm.hcgProtocol != nil { fertilityCard }
+                } else {
+                    bodyCompositionCard
+                }
+            } else {
+                if userType == "trt" {
+                    pkCurvePreviewCard
+                } else {
+                    LockedCard(
+                        icon: "scalemass",
+                        title: NSLocalizedString("dashboard.bodyComposition", comment: ""),
+                        subtitle: NSLocalizedString("dashboard.bodyComposition.subtitle", comment: ""),
+                        onInfo: { showProFeatures = true }
+                    ) { showPaywall = true }
+                }
+            }
+
+            // Progress
+            sectionLabel(dashL("dash.section.progress", "Progress"))
+            if let next = nextBadge {
+                Button { showAchievements = true } label: { DashboardNextBadgeCard(badge: next) }
+                    .buttonStyle(.trPressable)
+                    .accessibilityHint(Text(dashL("dash.hero.a11yHint", "Opens achievements")))
+            }
+            if let persona = gamificationVM.persona {
+                DashboardPersonaCard(persona: persona)
+            }
+            if vm.activeProtocol != nil { complianceRow }
+            if vm.hasWeeklyReport { weeklyReportRow }
+
+            // Trends
+            sectionLabel(dashL("dash.section.trends", "Trends"))
+            trendChartCard
+            quickStatsCard
+
+            if subscriptionManager.isSubscribed && vm.hasGLP1Data {
+                glp1CorrelationCard
+            }
+            if vm.latestWeightLbs != nil && userType != "natural" {
+                weightTrendCard
+            }
+            if let forecast = vm.forecastText {
+                forecastCard(forecast)
+            }
+            if !vm.activeCompounds.isEmpty {
+                activeStackCard
+            }
+
+            // Tips / upsells — never in screenshots
+            if !isScreenshotMode {
+                if subscriptionManager.isSubscribed && vm.supplementCount == 0 && !hasShownSupplementBanner {
+                    supplementSetupBanner
+                }
+                if !subscriptionManager.isSubscribed && vm.totalCheckins >= 6 && !dismissedInsightsReEngage {
+                    insightsReEngageBanner
+                }
+                if !subscriptionManager.isSubscribed {
+                    peptideTeaserCard
+                }
             }
         }
     }
 
-    // MARK: - Sample Data Banner
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(TR.Font.display(.title3, weight: .heavy))
+            .foregroundStyle(TR.Palette.textPrimary)
+            .padding(.top, 10)
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    // MARK: - Greeting
+
+    var greetingHeader: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            TRKicker(Text(Date.now, format: .dateTime.weekday(.wide).month(.wide).day()), color: TR.Palette.coral)
+            Text(vm.greetingText)
+                .font(TR.Font.display(30, weight: .heavy))
+                .foregroundStyle(TR.Palette.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 4)
+    }
+
+    // MARK: - Protocol Card (hero)
+
+    private var protocolCard: some View {
+        let badges = gamificationVM.badgeProgress
+        return Button { showAchievements = true } label: {
+            DashboardProtocolCard(
+                level: gamificationVM.currentLevel,
+                levelName: gamificationVM.levelName,
+                progress: gamificationVM.levelProgressPercent,
+                xpToNext: gamificationVM.xpUntilNextLevel,
+                totalXP: gamificationVM.currentXP,
+                checkinStreakDays: gamificationVM.checkinStreakDays,
+                injectionStreakWeeks: gamificationVM.injectionStreakWeeks,
+                showsInjectionStreak: userType == "trt" && vm.activeProtocol != nil,
+                badgesUnlocked: badges.filter(\.isUnlocked).count,
+                badgesTotal: badges.count
+            )
+        }
+        .buttonStyle(.trPressable)
+    }
+
+    // MARK: - Today
+
+    private func cycleDayTile(day: Int, of total: Int) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            DashCardHeader(icon: "waveform.path.ecg", title: dashL("dash.today.cycle", "Cycle"), tint: TR.Palette.teal)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(dashL("dash.today.dayWord", "Day"))
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(TR.Palette.textSecondary)
+                Text("\(day)")
+                    .font(TR.Font.number(34))
+                    .foregroundStyle(TR.Palette.textPrimary)
+                Text("/\(total)")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(TR.Palette.textTertiary)
+            }
+            // Segmented cycle track.
+            HStack(spacing: 3) {
+                ForEach(1...max(1, min(total, 14)), id: \.self) { i in
+                    Capsule()
+                        .fill(i <= day ? AnyShapeStyle(LinearGradient(colors: [TR.Palette.teal, TR.Palette.sky], startPoint: .leading, endPoint: .trailing))
+                                       : AnyShapeStyle(Color.white.opacity(0.08)))
+                        .frame(height: 5)
+                }
+            }
+            .padding(.top, 4)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: TR.Palette.teal)
+        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private func dailyChallenge(_ challenge: QuestDisplayModel) -> some View {
+        if !challenge.isCompleted, challenge.challenge == .checkin || challenge.challenge == .healthSync {
+            Button { showCheckin = true } label: { DashboardDailyChallengeCard(challenge: challenge) }
+                .buttonStyle(.trPressable)
+        } else if !challenge.isCompleted, challenge.challenge == .injection {
+            NavigationLink(destination: InjectionsView()) { DashboardDailyChallengeCard(challenge: challenge) }
+                .buttonStyle(.trPressable)
+        } else {
+            DashboardDailyChallengeCard(challenge: challenge)
+        }
+    }
+
+    /// Locked, non-secret badge closest to completion.
+    private var nextBadge: BadgeProgressModel? {
+        gamificationVM.badgeProgress
+            .filter { !$0.isUnlocked && !$0.isHiddenSecret }
+            .min { a, b in
+                if a.fraction != b.fraction { return a.fraction > b.fraction }
+                return a.def.prestige < b.def.prestige
+            }
+    }
+
+    // MARK: - Banners
 
     private var sampleDataBanner: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
+            DashCardHeader(icon: "sparkles", title: dashL("dash.sample.kicker", "Getting started"), tint: TR.Palette.gold)
             Text(NSLocalizedString("dashboard.noDataTitle", comment: ""))
-                .font(.headline)
-                .foregroundColor(.white)
+                .font(TR.Font.display(.headline))
+                .foregroundStyle(TR.Palette.textPrimary)
             Text(NSLocalizedString("dashboard.noDataSubtitle", comment: ""))
                 .font(.subheadline)
-                .foregroundColor(AppColors.textSecondary)
-            HStack(spacing: 12) {
+                .foregroundStyle(TR.Palette.textSecondary)
+            HStack(spacing: 10) {
                 Button(NSLocalizedString("dashboard.loadSampleData", comment: "")) {
                     let userID = UUID(uuidString: userIDString) ?? UUID()
                     SampleDataService.insertSampleData(context: modelContext, userID: userID)
                     showSampleDataBanner = false
                     vm.load()
+                    gamificationVM.refresh()
                 }
-                .font(.subheadline.bold())
-                .foregroundColor(AppColors.accent)
+                .buttonStyle(TRSecondaryButtonStyle(tint: TR.Palette.gold))
                 .accessibilityLabel("Load sample check-in and injection data")
 
                 Button(NSLocalizedString("dashboard.startCheckin", comment: "")) { showCheckin = true }
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
+                    .buttonStyle(TRSecondaryButtonStyle())
                     .accessibilityLabel("Open daily check-in")
             }
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.3), lineWidth: 1))
+        .trCard(tint: TR.Palette.gold)
     }
-
-    // MARK: - Insights Re-engagement Banner (free users with enough data)
 
     private var insightsReEngageBanner: some View {
         Button { showPaywall = true } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "sparkles")
-                    .font(.title3)
-                    .foregroundColor(AppColors.accent)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(String(format: NSLocalizedString("dashboard.reEngage.title", comment: ""), vm.totalCheckins))
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                    Text(NSLocalizedString("dashboard.reEngage.subtitle", comment: ""))
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                        .multilineTextAlignment(.leading)
-                }
-                Spacer(minLength: 4)
+            DashboardBanner(
+                icon: "sparkles", tint: TR.Palette.coral,
+                title: String(format: NSLocalizedString("dashboard.reEngage.title", comment: ""), vm.totalCheckins),
+                subtitle: NSLocalizedString("dashboard.reEngage.subtitle", comment: "")
+            ) {
                 Image(systemName: "xmark")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(TR.Palette.textTertiary)
                     .padding(8)
                     .contentShape(Rectangle())
                     .onTapGesture { dismissedInsightsReEngage = true }
                     .accessibilityLabel("Dismiss")
             }
-            .padding()
-            .background(AppColors.card)
-            .cornerRadius(16)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.35), lineWidth: 1))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.trPressable)
         .accessibilityHint("Opens Pro free trial")
     }
-
-    // MARK: - Peptide / GLP-1 Teaser (free users)
 
     private var peptideTeaserCard: some View {
         Button { showPaywall = true } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "pills.fill")
-                    .font(.title3)
-                    .foregroundColor(AppColors.softCTA)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(NSLocalizedString("dashboard.peptideTeaser.title", comment: ""))
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                    Text(NSLocalizedString("dashboard.peptideTeaser.subtitle", comment: ""))
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                        .multilineTextAlignment(.leading)
-                }
-                Spacer(minLength: 4)
-                Image(systemName: "lock.fill")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            DashboardBanner(
+                icon: "pills.fill", tint: TR.Palette.lilac,
+                title: NSLocalizedString("dashboard.peptideTeaser.title", comment: ""),
+                subtitle: NSLocalizedString("dashboard.peptideTeaser.subtitle", comment: "")
+            ) {
+                Image(systemName: "lock.fill").font(.caption).foregroundStyle(TR.Palette.textTertiary)
             }
-            .padding()
-            .background(AppColors.card)
-            .cornerRadius(16)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.trPressable)
         .accessibilityHint("Opens Pro free trial")
     }
 
-    // MARK: - Trial Expiry Banner
-
     private var trialExpiryBanner: some View {
         let days = subscriptionManager.trialDaysRemaining ?? 0
-        return HStack(spacing: 12) {
-            Image(systemName: "clock.badge.exclamationmark")
-                .font(.title3)
-                .foregroundColor(.orange)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(days <= 0
-                     ? NSLocalizedString("dashboard.trial.ended", comment: "")
-                     : String(format: NSLocalizedString("dashboard.trial.endsIn", comment: ""), days))
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
-                Text(NSLocalizedString("dashboard.trial.subscribe", comment: ""))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
+        return DashboardBanner(
+            icon: "clock.badge.exclamationmark", tint: TR.Palette.tangerine,
+            title: days <= 0
+                ? NSLocalizedString("dashboard.trial.ended", comment: "")
+                : String(format: NSLocalizedString("dashboard.trial.endsIn", comment: ""), days),
+            subtitle: NSLocalizedString("dashboard.trial.subscribe", comment: "")
+        ) {
             Button(NSLocalizedString("dashboard.trial.subscribeButton", comment: "")) { showPaywall = true }
-                .font(.caption.bold())
-                .foregroundColor(.white)
+                .font(.caption.weight(.heavy))
+                .foregroundStyle(.white)
                 .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(AppColors.accent)
-                .clipShape(Capsule())
+                .padding(.vertical, 7)
+                .background(TR.Gradients.cta, in: Capsule())
         }
-        .padding(14)
-        .background(Color.orange.opacity(0.1))
-        .cornerRadius(14)
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.orange.opacity(0.3), lineWidth: 1))
     }
-
-    // MARK: - Grace Period Banner
 
     private var gracePeriodBanner: some View {
         let days = subscriptionManager.graceDaysRemaining ?? 0
-        return HStack(spacing: 12) {
-            Image(systemName: "creditcard.trianglebadge.exclamationmark")
-                .font(.title3)
-                .foregroundColor(.yellow)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(NSLocalizedString("dashboard.grace.title", comment: ""))
-                    .font(.subheadline.bold())
-                    .foregroundColor(.white)
-                Text(String(format: NSLocalizedString("dashboard.grace.subtitle", comment: ""), days))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-        }
-        .padding(14)
-        .background(Color.yellow.opacity(0.08))
-        .cornerRadius(14)
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.yellow.opacity(0.2), lineWidth: 1))
+        return DashboardBanner(
+            icon: "creditcard.trianglebadge.exclamationmark", tint: TR.Palette.gold,
+            title: NSLocalizedString("dashboard.grace.title", comment: ""),
+            subtitle: String(format: NSLocalizedString("dashboard.grace.subtitle", comment: ""), days)
+        ) { EmptyView() }
     }
 
-    // MARK: - Active Protocol Card (FREE)
-
-    private var activeProtocolCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "list.bullet.clipboard")
-                    .foregroundColor(AppColors.accent)
-                Text(NSLocalizedString("dashboard.activeProtocol", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
-            }
-
-            // Primary TRT protocol
-            if let proto = vm.activeProtocol {
-                HStack(spacing: 8) {
-                    Circle().fill(Color(hex: proto.colorHex)).frame(width: 8, height: 8)
-                    Text(proto.name)
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                    Spacer()
-                    if vm.injectionOverdueDays > 0 {
-                        Text(NSLocalizedString("dashboard.overdue", comment: ""))
-                            .font(.caption2.bold())
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(AppColors.accent)
-                            .cornerRadius(4)
-                    } else {
-                        Text(String(format: NSLocalizedString("dashboard.nextIn", comment: ""), max(0, (vm.activeProtocol?.frequencyDays ?? 7) - vm.daysSinceLastInjection)))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-
-            // Adjuncts / Peptides / GLP-1
-            if !vm.activeCompounds.isEmpty {
-                Divider().background(Color.white.opacity(0.1))
-                ForEach(vm.activeCompounds, id: \.id) { compound in
-                    HStack(spacing: 8) {
-                        let category = compoundCategory(compound.supplementName)
-                        Image(systemName: categoryIcon(category))
-                            .font(.caption)
-                            .foregroundColor(categoryColor(category))
-                            .frame(width: 16)
-                        Text(compound.supplementName)
-                            .font(.caption)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text("\(formatCompoundDose(compound.doseAmount, unit: compound.doseUnit)) · E\(compound.frequencyDays)D")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-        }
-        .padding(16)
-        .background(AppColors.card)
-        .cornerRadius(14)
-    }
-
-    private func compoundCategory(_ name: String) -> String {
-        let glp1 = ["Semaglutide", "Tirzepatide", "Liraglutide"]
-        let ai = ["Anastrozole", "Aromasin", "Letrozole", "Cabergoline"]
-        if glp1.contains(name) { return "glp1" }
-        if ai.contains(name) { return "ai" }
-        if name == "hCG" { return "fertility" }
-        return "peptide"
-    }
-
-    private func categoryIcon(_ cat: String) -> String {
-        switch cat {
-        case "glp1":      return "scalemass"
-        case "ai":        return "shield.lefthalf.filled"
-        case "fertility": return "heart.fill"
-        default:          return "pills.fill"
-        }
-    }
-
-    private func categoryColor(_ cat: String) -> Color {
-        switch cat {
-        case "glp1":      return .green
-        case "ai":        return .orange
-        case "fertility": return .pink
-        default:          return .cyan
-        }
-    }
-
-    private func formatCompoundDose(_ dose: Double, unit: String) -> String {
-        if dose == dose.rounded() { return "\(Int(dose))\(unit)" }
-        return String(format: "%.2g%@", dose, unit)
-    }
-
-    // MARK: - Protocol Score Hero
-
-    private var protocolScoreHero: some View {
-        VStack(spacing: 16) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(NSLocalizedString("dashboard.protocolScore", comment: ""))
-                        .font(.headline)
-                        .foregroundColor(.secondary)
-                    Text(vm.interpretation)
-                        .font(.title3.bold())
-                        .foregroundColor(vm.scoreColor)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                }
-                Spacer()
-                trendBadge
-            }
-
-            HStack(spacing: 24) {
-                CircularRingView(score: vm.protocolScore, color: vm.scoreColor)
-                    .frame(width: 120, height: 120)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    StatRow(label: NSLocalizedString("dashboard.7dayAvg", comment: ""), value: String(format: "%.0f", vm.sevenDayAvg))
-                    StatRow(label: NSLocalizedString("dashboard.prior7day", comment: ""), value: String(format: "%.0f", vm.priorSevenDayAvg))
-                    if vm.recentCheckins.isEmpty {
-                        Button {
-                            showCheckin = true
-                        } label: {
-                            Label(NSLocalizedString("dashboard.logToday", comment: ""), systemImage: "plus.circle.fill")
-                                .font(.subheadline.bold())
-                                .foregroundColor(AppColors.accent)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-
-            DisclaimerBanner(type: .protocolScore)
-        }
-        .padding(16)
-        .background(
-            LinearGradient(
-                colors: [AppColors.card, AppColors.card.opacity(0.85)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(20)
-        .shadow(color: vm.scoreColor.opacity(0.2), radius: 12)
-    }
-
-    private var trendBadge: some View {
-        HStack(spacing: 4) {
-            Image(systemName: vm.trend >= 0 ? "arrow.up.right" : "arrow.down.right")
-            Text(String(format: "%+.0f", vm.trend))
-        }
-        .font(.caption.bold())
-        .foregroundColor(vm.trend >= 0 ? .green : AppColors.accent)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background((vm.trend >= 0 ? Color.green : AppColors.accent).opacity(0.15))
-        .clipShape(Capsule())
-    }
-
-    // MARK: - Check-in CTA
-
-    private var checkinCTACard: some View {
-        Group {
-            if vm.todayCheckin != nil {
-                recentBadgesCard
-            } else {
-                Button { showCheckin = true } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("dashboard.dailyCheckin", comment: ""))
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text(NSLocalizedString("dashboard.tapToLog", comment: ""))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(AppColors.accent)
-                    }
-                    .padding()
-                    .background(AppColors.card)
-                    .cornerRadius(16)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(AppColors.accent.opacity(0.4), lineWidth: 1)
-                    )
+    var supplementSetupBanner: some View {
+        NavigationLink(destination: SettingsView()) {
+            DashboardBanner(
+                icon: "pills.fill", tint: TR.Palette.teal,
+                title: NSLocalizedString("dashboard.supplementSetup.track", comment: ""),
+                subtitle: NSLocalizedString("dashboard.supplementSetup.correlations", comment: "")
+            ) {
+                Button { hasShownSupplementBanner = true } label: {
+                    Image(systemName: "xmark").font(.caption.weight(.bold)).foregroundStyle(TR.Palette.textTertiary)
+                        .padding(8)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Dismiss")
             }
         }
+        .buttonStyle(.trPressable)
+        .accessibilityLabel("Set up supplement tracking")
+        .accessibilityHint("Tap to add supplements and see correlations with your Protocol Score")
     }
 
-    private var recentBadgesCard: some View {
+    var personalBestBanner: some View {
+        DashboardBanner(
+            icon: "trophy.fill", tint: TR.Palette.gold,
+            title: String(format: NSLocalizedString("dashboard.personalBest.new", comment: ""), Int(vm.personalBestScore)),
+            subtitle: dashL("dash.personalBest.sub", "Your highest self-rated score this month.")
+        ) { EmptyView() }
+    }
+
+    // MARK: - Insight
+
+    private func smartInsightCard(_ message: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text(NSLocalizedString("dashboard.todaysCheckin", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(.green)
-            }
-            HStack(spacing: 12) {
-                ForEach(vm.recentCheckins.prefix(5), id: \.id) { checkin in
-                    MiniBadge(checkin: checkin)
-                }
-            }
+            DashCardHeader(icon: "brain.head.profile", title: dashL("dash.insight.kicker", "Insight"), tint: TR.Palette.lilac)
+            Text(message)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(TR.Palette.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+            DisclaimerBanner(type: .insight)
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: TR.Palette.lilac)
     }
 
-    // MARK: - Streak Card
-
-    private var streakCard: some View {
-        Group {
-            if vm.hasWeeklyReport {
-                Button {
-                    if subscriptionManager.isSubscribed {
-                        showWeeklyReport = true
-                    } else {
-                        showPaywall = true
-                    }
-                } label: {
-                    streakCardContent
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(
-                                    subscriptionManager.isSubscribed
-                                        ? AppColors.accent.opacity(0.4)
-                                        : Color.secondary.opacity(0.3),
-                                    lineWidth: 1
-                                )
-                        )
-                }
-                .buttonStyle(.plain)
-            } else {
-                streakCardContent
-            }
-        }
-    }
-
-    private var streakCardContent: some View {
-        HStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(NSLocalizedString("dashboard.checkinStreak", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("\(vm.streak)")
-                        .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(vm.streak > 0 ? AppColors.accent : .secondary)
-                    Text(NSLocalizedString("dashboard.streak.days", comment: ""))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                if let milestone = vm.milestoneText {
-                    Text(milestone)
-                        .font(.caption.bold())
-                        .foregroundColor(AppColors.accent)
-                }
-            }
-            Spacer()
-            if vm.hasWeeklyReport {
-                VStack(spacing: 4) {
-                    Image(systemName: subscriptionManager.isSubscribed
-                          ? "chart.bar.doc.horizontal.fill"
-                          : "lock.fill")
-                        .font(.title2)
-                        .foregroundColor(subscriptionManager.isSubscribed ? AppColors.accent : .secondary)
-                    Text(NSLocalizedString("dashboard.weeklyReport", comment: ""))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
-    }
-
-    // MARK: - Level Progress Card (compact; taps to full Achievements)
-
-    private var nextBadgeToUnlock: BadgeDisplayModel? {
-        gamificationVM.allBadges.first { !$0.isUnlocked }
-    }
-
-    private var levelProgressCard: some View {
-        Button { showAchievements = true } label: {
-            HStack(spacing: 16) {
-                // Level ring
-                ZStack {
-                    Circle()
-                        .stroke(AppColors.secondary.opacity(0.4), lineWidth: 5)
-                        .frame(width: 56, height: 56)
-                    Circle()
-                        .trim(from: 0, to: gamificationVM.levelProgressPercent)
-                        .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                        .frame(width: 56, height: 56)
-                        .rotationEffect(.degrees(-90))
-                    Text("\(gamificationVM.currentLevel)")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(String(format: NSLocalizedString("gamification.levelLine", comment: ""), gamificationVM.currentLevel, gamificationVM.levelName))
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                    ProgressView(value: gamificationVM.levelProgressPercent)
-                        .tint(AppColors.accent)
-                        .frame(height: 5)
-                    Text(String(format: NSLocalizedString("gamification.xpToLevel", comment: ""), gamificationVM.xpUntilNextLevel, gamificationVM.currentLevel + 1))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-
-                Spacer()
-
-                // Next badge to unlock (dimmed) or chevron
-                if let next = nextBadgeToUnlock {
-                    VStack(spacing: 3) {
-                        Text(next.emoji)
-                            .font(.title2)
-                            .opacity(0.4)
-                            .grayscale(1.0)
-                        Text(NSLocalizedString("common.next", comment: ""))
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                    .accessibilityLabel("Next badge to unlock: \(next.name)")
-                } else {
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding()
-            .background(AppColors.card)
-            .cornerRadius(16)
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Level \(gamificationVM.currentLevel), \(gamificationVM.levelName). \(gamificationVM.xpUntilNextLevel) XP to next level. Tap for achievements.")
-    }
-
-    // MARK: - PK Curve Preview (free users — blurred with CTA)
+    // MARK: - PK Curve
 
     private var pkCurvePreviewCard: some View {
         ZStack {
@@ -718,37 +479,18 @@ struct DashboardView: View {
                 injections: Self.samplePKInjections,
                 overdueDays: 0
             )
-            .blur(radius: 6)
+            .blur(radius: 7)
             .allowsHitTesting(false)
+            .accessibilityHidden(true)
 
-            VStack(spacing: 10) {
-                Image(systemName: "waveform.path.ecg")
-                    .font(.system(size: 28))
-                    .foregroundColor(.white)
-                Text(NSLocalizedString("dashboard.seeBloodLevels", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Text(NSLocalizedString("dashboard.pkCurveDesc", comment: ""))
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.7))
-                    .multilineTextAlignment(.center)
-                Button { showPaywall = true } label: {
-                    Text(NSLocalizedString("dashboard.startFreeTrial", comment: ""))
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 10)
-                        .background(AppColors.softCTA)
-                        .clipShape(Capsule())
-                }
-                .buttonStyle(.plain)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(AppColors.card.opacity(0.5))
+            DashboardProLockOverlay(
+                icon: "waveform.path.ecg",
+                title: NSLocalizedString("dashboard.seeBloodLevels", comment: ""),
+                message: NSLocalizedString("dashboard.pkCurveDesc", comment: "")
+            ) { showPaywall = true }
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
+        .trCard(tint: TR.Palette.coral)
     }
 
     private static let samplePKProtocols: [PKProtocolInput] = [
@@ -775,185 +517,110 @@ struct DashboardView: View {
         ]
     }()
 
-    // MARK: - PK Curve Card
-
-    @AppStorage("pkAbsorptionDelay") private var pkAbsorptionDelay = true
-
     private var pkCurveCard: some View {
-        VStack(spacing: 0) {
-            PKCurveView(
-                protocols: vm.pkProtocols,
-                injections: vm.pkInjections,
-                overdueDays: vm.injectionOverdueDays
-            )
-        }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
+        PKCurveView(
+            protocols: vm.pkProtocols,
+            injections: vm.pkInjections,
+            overdueDays: vm.injectionOverdueDays
+        )
+        .trCard(tint: TR.Palette.coral)
     }
 
-    // MARK: - Fertility Card (hCG users)
+    // MARK: - Fertility (hCG)
 
     private var fertilityCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
-                Image(systemName: "figure.2.circle")
-                    .font(.title2)
-                    .foregroundColor(.green)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(NSLocalizedString("dashboard.fertilityActive", comment: ""))
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    if let estimate = vm.fertilityEstimate {
-                        Text(estimate)
-                            .font(.caption)
-                            .foregroundColor(.green)
-                    }
-                }
-                Spacer()
+            DashCardHeader(icon: "figure.2.circle", title: NSLocalizedString("dashboard.fertilityActive", comment: ""), tint: TR.Palette.mint)
+            if let estimate = vm.fertilityEstimate {
+                Text(estimate)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textPrimary)
             }
-
             if let startDate = vm.hcgStartDate {
                 let weeks = max(0, Int(Date.now.timeIntervalSince(startDate) / (7 * 86400)))
-                HStack(spacing: 16) {
+                HStack(spacing: 24) {
                     StatRow(label: NSLocalizedString("dashboard.fertility.hcgStarted", comment: ""),
                             value: String(format: NSLocalizedString("dashboard.weeksAgo", comment: ""), weeks))
                     StatRow(label: NSLocalizedString("dashboard.protocol", comment: ""), value: vm.hcgProtocol?.name ?? "hCG")
                 }
             }
-
             DisclaimerBanner(type: .fertility)
         }
-        .padding(16)
-        .background(AppColors.card)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.green.opacity(0.3), lineWidth: 1)
-        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: TR.Palette.mint)
     }
 
-    // MARK: - GLP-1 Weight Correlation Card
+    // MARK: - GLP-1
 
     private var glp1CorrelationCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
-                Image(systemName: "chart.line.downtrend.xyaxis")
-                    .font(.title2)
-                    .foregroundColor(.green)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(NSLocalizedString("dashboard.glp1Weight", comment: ""))
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    if let change = vm.glp1WeeklyWeightChange {
-                        Text(String(format: NSLocalizedString("dashboard.glp1.lbsPerWeek", comment: ""), change))
-                            .font(.caption.bold())
-                            .foregroundColor(change <= 0 ? .green : Color(hex: "#F39C12"))
-                    }
-                }
-                Spacer()
+            DashCardHeader(icon: "chart.line.downtrend.xyaxis", title: NSLocalizedString("dashboard.glp1Weight", comment: ""), tint: TR.Palette.teal) {
                 if vm.glp1EnergyStable {
-                    HStack(spacing: 4) {
-                        Image(systemName: "bolt.fill")
-                            .font(.caption2)
-                        Text(NSLocalizedString("dashboard.energyStable", comment: ""))
-                            .font(.caption2)
-                    }
-                    .foregroundColor(.green)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.green.opacity(0.15))
-                    .clipShape(Capsule())
+                    TRPill(Text(NSLocalizedString("dashboard.energyStable", comment: "")), systemImage: "bolt.fill", tint: TR.Palette.teal)
                 }
             }
-
+            if let change = vm.glp1WeeklyWeightChange {
+                Text(String(format: NSLocalizedString("dashboard.glp1.lbsPerWeek", comment: ""), change))
+                    .font(TR.Font.display(.title3, weight: .heavy))
+                    .foregroundStyle(TR.Palette.textPrimary)
+            }
             if let change = vm.glp1WeeklyWeightChange, change < 0, vm.glp1EnergyStable {
                 Text(NSLocalizedString("dashboard.glp1Working", comment: ""))
                     .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(10)
-                    .background(AppColors.background.opacity(0.6))
-                    .cornerRadius(8)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
-
             DisclaimerBanner(type: .standard)
         }
-        .padding(16)
-        .background(AppColors.card)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.green.opacity(0.2), lineWidth: 1)
-        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trCard(tint: TR.Palette.teal)
     }
 
-    // MARK: - Body Composition Card (natural users)
+    // MARK: - Body Composition (natural users)
 
     private var bodyCompositionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(NSLocalizedString("dashboard.bodyComp", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
+            DashCardHeader(icon: "scalemass.fill", title: NSLocalizedString("dashboard.bodyComp", comment: ""), tint: TR.Palette.sky) {
                 if let delta = vm.weightDelta30d {
-                    let isDown = delta <= 0
-                    Text(String(format: "%+.0f %@", delta / 0.453592, NSLocalizedString("unit.lbs", comment: "")))
-                        .font(.caption.bold())
-                        .foregroundColor(isDown ? .green : AppColors.accent)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background((isDown ? Color.green : AppColors.accent).opacity(0.15))
-                        .clipShape(Capsule())
+                    TRPill(verbatim: String(format: "%+.0f %@", delta / 0.453592, NSLocalizedString("unit.lbs", comment: "")),
+                           tint: TR.Palette.sky)
                 }
             }
 
             if vm.weightSeries30d.isEmpty {
                 Text(NSLocalizedString("dashboard.logWeightHint", comment: ""))
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
                     .frame(maxWidth: .infinity, minHeight: 80)
                     .multilineTextAlignment(.center)
             } else {
-                // Weight trend + 7-day moving average
                 Chart {
+                    ForEach(vm.weightMovingAvg) { pt in
+                        AreaMark(x: .value("Date", pt.date), y: .value("lbs", pt.weightKg / 0.453592))
+                            .foregroundStyle(LinearGradient.dashArea(TR.Palette.sky, top: 0.3))
+                            .interpolationMethod(.catmullRom)
+                    }
                     ForEach(vm.weightSeries30d) { pt in
-                        LineMark(
-                            x: .value("Date", pt.date),
-                            y: .value("lbs", pt.weightKg / 0.453592)
-                        )
-                        .foregroundStyle(AppColors.accent.opacity(0.35))
-                        .interpolationMethod(.catmullRom)
+                        PointMark(x: .value("Date", pt.date), y: .value("lbs", pt.weightKg / 0.453592))
+                            .foregroundStyle(TR.Palette.sky.opacity(0.45))
+                            .symbolSize(14)
                     }
                     ForEach(vm.weightMovingAvg) { pt in
-                        LineMark(
-                            x: .value("Date", pt.date),
-                            y: .value("lbs", pt.weightKg / 0.453592)
-                        )
-                        .foregroundStyle(AppColors.accent)
-                        .lineStyle(StrokeStyle(lineWidth: 2))
-                        .interpolationMethod(.catmullRom)
+                        LineMark(x: .value("Date", pt.date), y: .value("lbs", pt.weightKg / 0.453592))
+                            .foregroundStyle(LinearGradient(colors: [TR.Palette.sky, TR.Palette.teal], startPoint: .leading, endPoint: .trailing))
+                            .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                            .interpolationMethod(.catmullRom)
                     }
                 }
-                .frame(height: 100)
-                .chartBackground { _ in AppColors.card }
-                .chartYAxis {
-                    AxisMarks(position: .leading) { _ in
-                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                            .foregroundStyle(Color.white.opacity(0.08))
-                        AxisValueLabel().foregroundStyle(Color.secondary)
-                    }
-                }
+                .frame(height: 110)
+                .chartYScale(domain: .automatic(includesZero: false))
+                .chartYAxis { dashYAxis() }
                 .chartXAxis {
                     AxisMarks(values: .stride(by: .day, count: 7)) { _ in
-                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                            .foregroundStyle(Color.white.opacity(0.08))
-                        AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
-                            .foregroundStyle(Color.secondary)
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5)).foregroundStyle(Color.white.opacity(0.06))
+                        AxisValueLabel(format: .dateTime.month(.defaultDigits).day()).foregroundStyle(TR.Palette.textTertiary)
                     }
                 }
 
-                // Stats row
                 if let latest = vm.weightSeries30d.last {
                     HStack(spacing: 20) {
                         StatRow(label: NSLocalizedString("dashboard.weight.current", comment: ""),
@@ -968,53 +635,39 @@ struct DashboardView: View {
                     }
                 }
 
-                // Body fat overlay chart
                 if !vm.bodyFatSeries.isEmpty {
-                    Divider()
-                        .background(Color.white.opacity(0.08))
+                    TRKicker(Text(NSLocalizedString("dashboard.bodyComposition.bodyFatPct", comment: "")))
                         .padding(.top, 4)
-
-                    Text(NSLocalizedString("dashboard.bodyComposition.bodyFatPct", comment: ""))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-
                     Chart {
                         ForEach(vm.bodyFatSeries) { pt in
-                            AreaMark(
-                                x: .value("Date", pt.date),
-                                y: .value("%", pt.weightKg)
-                            )
-                            .foregroundStyle(Color.green.gradient.opacity(0.2))
-                            .interpolationMethod(.catmullRom)
-                            LineMark(
-                                x: .value("Date", pt.date),
-                                y: .value("%", pt.weightKg)
-                            )
-                            .foregroundStyle(Color.green)
-                            .lineStyle(StrokeStyle(lineWidth: 1.5))
-                            .interpolationMethod(.catmullRom)
+                            AreaMark(x: .value("Date", pt.date), y: .value("%", pt.weightKg))
+                                .foregroundStyle(LinearGradient.dashArea(TR.Palette.mint))
+                                .interpolationMethod(.catmullRom)
+                            LineMark(x: .value("Date", pt.date), y: .value("%", pt.weightKg))
+                                .foregroundStyle(TR.Palette.mint)
+                                .lineStyle(StrokeStyle(lineWidth: 2))
+                                .interpolationMethod(.catmullRom)
                         }
                     }
-                    .frame(height: 56)
-                    .chartBackground { _ in AppColors.card }
-                    .chartYAxis {
-                        AxisMarks(position: .leading) { _ in
-                            AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                                .foregroundStyle(Color.white.opacity(0.08))
-                            AxisValueLabel().foregroundStyle(Color.secondary)
-                        }
-                    }
+                    .frame(height: 60)
+                    .chartYScale(domain: .automatic(includesZero: false))
+                    .chartYAxis { dashYAxis() }
                 }
             }
 
             DisclaimerBanner(type: .standard)
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
+        .trCard(tint: TR.Palette.sky)
     }
 
-    // MARK: - Trend Chart Card
+    private func dashYAxis() -> some AxisContent {
+        AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) { _ in
+            AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3])).foregroundStyle(Color.white.opacity(0.07))
+            AxisValueLabel().foregroundStyle(TR.Palette.textTertiary)
+        }
+    }
+
+    // MARK: - Trend Chart
 
     /// Metric series filtered to 3 days for free users, full for Pro.
     private var visibleMetricSeries: [MetricSeries] {
@@ -1030,481 +683,352 @@ struct DashboardView: View {
     }
 
     private var trendChartCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(subscriptionManager.isSubscribed
-                     ? NSLocalizedString("dashboard.trendChart", comment: "")
-                     : NSLocalizedString("dashboard.trendChart.recent", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
+        let shown = visibleMetricSeries.filter(\.isVisible)
+        return VStack(alignment: .leading, spacing: 14) {
+            DashCardHeader(icon: "chart.xyaxis.line",
+                           title: subscriptionManager.isSubscribed
+                               ? NSLocalizedString("dashboard.trendChart", comment: "")
+                               : NSLocalizedString("dashboard.trendChart.recent", comment: ""),
+                           tint: TR.Palette.sky) {
                 if !subscriptionManager.isSubscribed {
-                    Text(NSLocalizedString("dashboard.trendChart.3days", comment: ""))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(AppColors.background.opacity(0.6))
-                        .clipShape(Capsule())
+                    TRPill(Text(NSLocalizedString("dashboard.trendChart.3days", comment: "")))
                 }
             }
 
             if visibleMetricSeries.isEmpty || visibleMetricSeries.allSatisfy({ $0.dataPoints.isEmpty }) {
                 Text(NSLocalizedString("dashboard.trendChart.empty", comment: ""))
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
                     .frame(maxWidth: .infinity, minHeight: 80)
                     .multilineTextAlignment(.center)
             } else {
                 Chart {
-                    ForEach(visibleMetricSeries.filter(\.isVisible)) { series in
+                    ForEach(shown) { series in
                         ForEach(series.dataPoints) { pt in
+                            // Only fill under a lone series — overlapping fills turn to mud.
+                            if shown.count <= 2 {
+                                AreaMark(
+                                    x: .value("Date", pt.date),
+                                    yStart: .value("Base", 1),
+                                    yEnd: .value("Score", pt.value),
+                                    series: .value("Metric", series.label)
+                                )
+                                .foregroundStyle(LinearGradient.dashArea(series.color, top: 0.28))
+                                .interpolationMethod(.catmullRom)
+                            }
                             LineMark(
                                 x: .value("Date", pt.date),
                                 y: .value("Score", pt.value),
                                 series: .value("Metric", series.label)
                             )
                             .foregroundStyle(series.color)
+                            .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
                             .interpolationMethod(.catmullRom)
 
-                            // Show dots so single data points are visible
-                            PointMark(
-                                x: .value("Date", pt.date),
-                                y: .value("Score", pt.value)
-                            )
-                            .foregroundStyle(series.color)
-                            .symbolSize(series.dataPoints.count == 1 ? 60 : 20)
+                            if series.dataPoints.count == 1 {
+                                PointMark(x: .value("Date", pt.date), y: .value("Score", pt.value))
+                                    .foregroundStyle(series.color)
+                                    .symbolSize(60)
+                            }
                         }
                     }
                 }
                 .chartYScale(domain: 1...5)
+                .chartLegend(.hidden)
                 .chartXAxis {
-                    AxisMarks(values: .stride(by: .day, count: subscriptionManager.isSubscribed ? 2 : 1)) { value in
-                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                            .foregroundStyle(Color.white.opacity(0.08))
+                    AxisMarks(values: .stride(by: .day, count: subscriptionManager.isSubscribed ? 3 : 1)) { _ in
                         AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
-                            .foregroundStyle(Color.secondary)
+                            .foregroundStyle(TR.Palette.textTertiary)
                     }
                 }
                 .chartYAxis {
-                    AxisMarks(values: [1, 2, 3, 4, 5]) { value in
-                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                            .foregroundStyle(Color.white.opacity(0.08))
-                        AxisValueLabel()
-                            .foregroundStyle(Color.secondary)
+                    AxisMarks(position: .leading, values: [1, 3, 5]) { _ in
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 3])).foregroundStyle(Color.white.opacity(0.07))
+                        AxisValueLabel().foregroundStyle(TR.Palette.textTertiary)
                     }
                 }
-                .frame(height: 160)
-                .chartBackground { _ in AppColors.card }
+                .frame(height: 170)
 
                 metricLegend
 
-                // Upsell for free users
                 if !subscriptionManager.isSubscribed {
                     Button { showPaywall = true } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.caption.bold())
-                            Text(NSLocalizedString("dashboard.trendChart.unlock", comment: ""))
-                                .font(.caption.bold())
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(AppColors.softCTA)
-                        .clipShape(Capsule())
+                        Label(NSLocalizedString("dashboard.trendChart.unlock", comment: ""), systemImage: "chart.line.uptrend.xyaxis")
+                            .font(.subheadline.weight(.heavy))
                     }
-                    .buttonStyle(.plain)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 6)
+                    .buttonStyle(TRPrimaryButtonStyle())
                 }
             }
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
+        .trCard(tint: TR.Palette.sky)
     }
 
     private var metricLegend: some View {
         FlowLayout(spacing: 8) {
             ForEach(vm.metricSeries) { series in
                 Button {
-                    vm.toggleMetric(id: series.id)
+                    withAnimation(TR.Motion.snappy) { vm.toggleMetric(id: series.id) }
                 } label: {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 6) {
                         Circle()
-                            .fill(series.isVisible ? series.color : Color.secondary.opacity(0.3))
+                            .fill(series.isVisible ? series.color : Color.white.opacity(0.15))
                             .frame(width: 8, height: 8)
-                        Text("\(series.emoji) \(series.label)")
-                            .font(.caption2)
-                            .foregroundColor(series.isVisible ? .primary : .secondary)
+                        Text(series.label)
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(series.isVisible ? TR.Palette.textPrimary : TR.Palette.textTertiary)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(AppColors.background.opacity(0.6))
-                    .clipShape(Capsule())
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule().fill(series.isVisible ? series.color.opacity(0.14) : Color.white.opacity(0.04))
+                    )
+                    .overlay(Capsule().strokeBorder(series.isVisible ? series.color.opacity(0.35) : TR.Palette.hairline, lineWidth: 1))
                 }
                 .buttonStyle(.plain)
+                .accessibilityAddTraits(series.isVisible ? .isSelected : [])
             }
         }
     }
 
-    // MARK: - Quick Stats Card
+    // MARK: - Quick Stats (7-day summary + week-over-week)
+
+    private var avgMood7d: Double {
+        let last7 = vm.recentCheckins.prefix(7)
+        guard !last7.isEmpty else { return 0 }
+        return last7.map(\.moodScore).reduce(0, +) / Double(last7.count)
+    }
+
+    private var avgSleep7d: Double {
+        let last7 = vm.recentCheckins.prefix(7)
+        guard !last7.isEmpty else { return 0 }
+        return last7.map(\.sleepQualityScore).reduce(0, +) / Double(last7.count)
+    }
 
     private var quickStatsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("dashboard.7daySummary", comment: ""))
-                .font(.headline)
-                .foregroundColor(.white)
+            DashCardHeader(icon: "square.grid.2x2.fill", title: NSLocalizedString("dashboard.7daySummary", comment: ""), tint: TR.Palette.gold)
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                QuickStatTile(
-                    emoji: "⚡️",
-                    label: NSLocalizedString("dashboard.quickStats.avgEnergy", comment: ""),
-                    value: String(format: "%.1f", vm.avgEnergy7d),
-                    subtitle: "/ 5",
-                    delta: vm.energyDelta
-                )
-                QuickStatTile(
-                    emoji: "🔥",
-                    label: NSLocalizedString("dashboard.quickStats.avgLibido", comment: ""),
-                    value: String(format: "%.1f", vm.avgLibido7d),
-                    subtitle: "/ 5",
-                    delta: vm.libidoDelta
-                )
-                QuickStatTile(
-                    emoji: "🌅",
-                    label: NSLocalizedString("dashboard.quickStats.morningWood", comment: ""),
-                    value: String(format: "%.0f%%", vm.morningWoodPct30d),
-                    subtitle: NSLocalizedString("dashboard.quickStats.30d", comment: "")
-                )
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                QuickStatTile(icon: "bolt.fill", tint: TR.Palette.gold,
+                              label: NSLocalizedString("dashboard.quickStats.avgEnergy", comment: ""),
+                              value: String(format: "%.1f", vm.avgEnergy7d), subtitle: "/ 5",
+                              delta: vm.hasPriorWeek ? vm.energyDelta : nil)
+                QuickStatTile(icon: "flame.fill", tint: TR.Palette.coral,
+                              label: NSLocalizedString("dashboard.quickStats.avgLibido", comment: ""),
+                              value: String(format: "%.1f", vm.avgLibido7d), subtitle: "/ 5",
+                              delta: vm.hasPriorWeek ? vm.libidoDelta : nil)
+                QuickStatTile(icon: "face.smiling.inverse", tint: TR.Palette.teal,
+                              label: dashL("dash.stats.avgMood", "Avg mood"),
+                              value: String(format: "%.1f", avgMood7d), subtitle: "/ 5",
+                              delta: vm.hasPriorWeek ? vm.moodDelta : nil)
+                QuickStatTile(icon: "moon.stars.fill", tint: TR.Palette.lilac,
+                              label: dashL("dash.stats.avgSleep", "Avg sleep"),
+                              value: String(format: "%.1f", avgSleep7d), subtitle: "/ 5",
+                              delta: vm.hasPriorWeek ? vm.sleepDelta : nil)
                 if userType == "natural" {
-                    QuickStatTile(
-                        emoji: "💊",
-                        label: NSLocalizedString("dashboard.compliance.supplements", comment: ""),
-                        value: String(format: "%.0f%%", vm.supplementCompliancePct),
-                        subtitle: NSLocalizedString("dashboard.quickStats.adherence", comment: "")
-                    )
-                } else {
-                    QuickStatTile(
-                        emoji: "💉",
-                        label: NSLocalizedString("dashboard.quickStats.nextInjection", comment: ""),
-                        value: vm.injectionOverdueDays > 0
-                            ? NSLocalizedString("dashboard.quickStats.overdue", comment: "")
-                            : NSLocalizedString("dashboard.quickStats.onTrack", comment: ""),
-                        subtitle: vm.injectionOverdueDays > 0
-                            ? String(format: NSLocalizedString("dashboard.daysLate", comment: ""), vm.injectionOverdueDays)
-                            : ""
-                    )
+                    QuickStatTile(icon: "pills.fill", tint: TR.Palette.mint,
+                                  label: NSLocalizedString("dashboard.compliance.supplements", comment: ""),
+                                  value: String(format: "%.0f%%", vm.supplementCompliancePct),
+                                  subtitle: NSLocalizedString("dashboard.quickStats.adherence", comment: ""))
                 }
+                QuickStatTile(icon: "sunrise.fill", tint: TR.Palette.tangerine,
+                              label: NSLocalizedString("dashboard.quickStats.morningWood", comment: ""),
+                              value: String(format: "%.0f%%", vm.morningWoodPct30d),
+                              subtitle: NSLocalizedString("dashboard.quickStats.30d", comment: ""))
             }
         }
-        .padding()
-        .background(AppColors.card)
-        .cornerRadius(16)
-    }
-}
-
-// MARK: - Circular Ring View
-
-struct CircularRingView: View {
-    let score: Double
-    let color: Color
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(color.opacity(0.15), lineWidth: 10)
-            Circle()
-                .trim(from: 0, to: score / 100)
-                .stroke(color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-                .animation(.easeInOut(duration: 1.0), value: score)
-            VStack(spacing: 2) {
-                Text(String(format: "%.0f", score))
-                    .font(.system(size: 28, weight: .black, design: .rounded))
-                    .foregroundColor(.white)
-                Text(NSLocalizedString("onboarding.outOf100", comment: ""))
-                    .font(.system(size: 10))
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-}
-
-// MARK: - Mini Badge
-
-struct MiniBadge: View {
-    let checkin: SDCheckin
-
-    var body: some View {
-        VStack(spacing: 2) {
-            Text(dayAbbrev(checkin.date))
-                .font(.system(size: 9))
-                .foregroundColor(.secondary)
-            ZStack {
-                Circle()
-                    .fill(scoreColor(checkin.protocolScore).opacity(0.2))
-                    .frame(width: 32, height: 32)
-                Text(String(format: "%.0f", checkin.protocolScore))
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(scoreColor(checkin.protocolScore))
-            }
-        }
+        .trCard(tint: TR.Palette.gold)
     }
 
-    private func scoreColor(_ s: Double) -> Color {
-        s >= 70 ? .green : s >= 40 ? Color(hex: "#F39C12") : AppColors.accent
-    }
-
-    private func dayAbbrev(_ date: Date) -> String {
-        String(SharedFormatters.weekdayShort.string(from: date).prefix(2))
-    }
-
-}
-
-// MARK: - New Dashboard Cards
-
-extension DashboardView {
-
-    var greetingHeader: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(vm.greetingText)
-                .font(.title2.bold())
-                .foregroundColor(.white)
-            if let day = vm.cycleDay, let proto = vm.activeProtocol {
-                Text(String(format: NSLocalizedString("dashboard.cycleDay", comment: ""), day, proto.frequencyDays, proto.compoundName))
-                    .font(.subheadline)
-                    .foregroundColor(AppColors.textSecondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    // MARK: - Smart Insight Card
-
-    private func smartInsightCard(_ message: String) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: "brain.head.profile")
-                .font(.title3)
-                .foregroundColor(AppColors.accent)
-            Text(message)
-                .font(.subheadline)
-                .foregroundColor(.white)
-                .lineLimit(3)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [AppColors.card, AppColors.card.opacity(0.7)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(16)
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppColors.accent.opacity(0.2), lineWidth: 1))
-    }
-
-    // MARK: - Personal Best Banner
-
-    var personalBestBanner: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "trophy.fill")
-                .font(.title3)
-                .foregroundColor(Color(hex: "#FFD700"))
-            Text(String(format: NSLocalizedString("dashboard.personalBest.new", comment: ""), Int(vm.personalBestScore)))
-                .font(.subheadline.bold())
-                .foregroundColor(Color(hex: "#FFD700"))
-            Spacer()
-        }
-        .padding()
-        .background(Color(hex: "#FFD700").opacity(0.1))
-        .cornerRadius(12)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(hex: "#FFD700").opacity(0.3), lineWidth: 1))
-    }
-
-    // MARK: - Compliance Row (injection + supplement side by side)
+    // MARK: - Compliance
 
     var complianceRow: some View {
         HStack(spacing: 12) {
-            // NEW: Injection compliance — tappable, navigates to Injections
             NavigationLink(destination: InjectionsView()) {
-                VStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.white.opacity(0.1), lineWidth: 6)
-                        Circle()
-                            .trim(from: 0, to: vm.injectionsExpectedThisMonth > 0
-                                  ? min(1.0, Double(vm.injectionsMadeThisMonth) / Double(vm.injectionsExpectedThisMonth))
-                                  : 0)
-                            .stroke(AppColors.accent, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
-                        Text("\(vm.injectionsMadeThisMonth)/\(vm.injectionsExpectedThisMonth)")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                    }
-                    .frame(width: 56, height: 56)
-                    Text(NSLocalizedString("dashboard.compliance.injections", comment: ""))
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                    Text(NSLocalizedString("dashboard.compliance.thisMonth", comment: ""))
-                        .font(.caption2)
-                        .foregroundColor(AppColors.textSecondary.opacity(0.7))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-                .cornerRadius(16)
+                DashboardRingTile(
+                    progress: vm.injectionsExpectedThisMonth > 0
+                        ? min(1.0, Double(vm.injectionsMadeThisMonth) / Double(vm.injectionsExpectedThisMonth)) : 0,
+                    valueText: "\(vm.injectionsMadeThisMonth)/\(vm.injectionsExpectedThisMonth)",
+                    title: NSLocalizedString("dashboard.compliance.injections", comment: ""),
+                    subtitle: NSLocalizedString("dashboard.compliance.thisMonth", comment: ""),
+                    colors: [TR.Palette.coral, TR.Palette.tangerine]
+                )
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.trPressable)
             .accessibilityLabel("Injections this month")
             .accessibilityHint("Tap to view and log injections")
 
-            // NEW: Supplement compliance — tappable, navigates to Settings > Supplements
             NavigationLink(destination: SettingsView()) {
-                VStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.white.opacity(0.1), lineWidth: 6)
-                        Circle()
-                            .trim(from: 0, to: vm.supplementCompliancePct / 100)
-                            .stroke(.green, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
-                        if vm.supplementCompliancePct == 0 && vm.supplementCount == 0 {
-                            // NEW: Show + icon when no supplements configured
-                            Image(systemName: "plus")
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(AppColors.textSecondary)
-                        } else {
-                            Text("\(Int(vm.supplementCompliancePct))%")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                    }
-                    .frame(width: 56, height: 56)
-                    Text(NSLocalizedString("dashboard.compliance.supplements", comment: ""))
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                    Text(vm.supplementCount == 0
-                         ? NSLocalizedString("dashboard.compliance.tapToAdd", comment: "")
-                         : NSLocalizedString("dashboard.compliance.thisWeek", comment: ""))
-                        .font(.caption2)
-                        .foregroundColor(AppColors.textSecondary.opacity(0.7))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-                .cornerRadius(16)
+                DashboardRingTile(
+                    progress: vm.supplementCompliancePct / 100,
+                    valueText: "\(Int(vm.supplementCompliancePct))%",
+                    title: NSLocalizedString("dashboard.compliance.supplements", comment: ""),
+                    subtitle: vm.supplementCount == 0
+                        ? NSLocalizedString("dashboard.compliance.tapToAdd", comment: "")
+                        : NSLocalizedString("dashboard.compliance.thisWeek", comment: ""),
+                    colors: [TR.Palette.teal, TR.Palette.mint],
+                    showsPlus: vm.supplementCompliancePct == 0 && vm.supplementCount == 0
+                )
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.trPressable)
             .accessibilityLabel("Supplements this week")
             .accessibilityHint(vm.supplementCount == 0 ? "Tap to add supplements" : "Tap to manage supplements")
         }
     }
 
-    // MARK: - Supplement Setup Banner (one-time, post-subscription)
+    // MARK: - Weekly report
 
-    var supplementSetupBanner: some View {
-        NavigationLink(destination: SettingsView()) {
+    private var weeklyReportRow: some View {
+        Button {
+            if subscriptionManager.isSubscribed { showWeeklyReport = true } else { showPaywall = true }
+        } label: {
             HStack(spacing: 12) {
-                Image(systemName: "pills.fill")
+                Image(systemName: "doc.text.image.fill")
                     .font(.title3)
-                    .foregroundColor(AppColors.accent)
+                    .foregroundStyle(TR.Palette.sky)
+                    .frame(width: 40, height: 40)
+                    .background(TR.Palette.sky.opacity(0.15), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(NSLocalizedString("dashboard.supplementSetup.track", comment: ""))
-                        .font(.subheadline.bold())
-                        .foregroundColor(.white)
-                    Text(NSLocalizedString("dashboard.supplementSetup.correlations", comment: ""))
+                    Text(NSLocalizedString("dashboard.weeklyReport", comment: "").replacingOccurrences(of: "\n", with: " "))
+                        .font(TR.Font.display(.headline))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                    Text(vm.milestoneText ?? dashL("dash.weekly.sub", "Your last 7 days at a glance"))
                         .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                 }
                 Spacer()
-                Button {
-                    hasShownSupplementBanner = true
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                }
-                .buttonStyle(.plain)
+                Image(systemName: subscriptionManager.isSubscribed ? "chevron.right" : "lock.fill")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(TR.Palette.textTertiary)
             }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14)
-                            .stroke(AppColors.accent.opacity(0.3), lineWidth: 1)
-                    )
-            )
+            .trCard(tint: TR.Palette.sky)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Set up supplement tracking")
-        .accessibilityHint("Tap to add supplements and see correlations with your Protocol Score")
+        .buttonStyle(.trPressable)
     }
 
-    // MARK: - Weight Trend Card
+    // MARK: - Weight trend
 
     var weightTrendCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(NSLocalizedString("dashboard.weightTrend", comment: ""))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
+            DashCardHeader(icon: "scalemass.fill", title: NSLocalizedString("dashboard.weightTrend", comment: ""), tint: TR.Palette.sky) {
                 if let delta = vm.weightTrendDelta {
-                    HStack(spacing: 4) {
-                        Image(systemName: delta >= 0 ? "arrow.up.right" : "arrow.down.right")
-                            .font(.caption.bold())
-                        Text(String(format: "%+.1f %@", delta, NSLocalizedString("unit.lbs", comment: "")))
-                            .font(.subheadline.bold())
-                    }
-                    .foregroundColor(delta <= 0 ? .green : Color(hex: "#F39C12"))
+                    TRPill(verbatim: String(format: "%+.1f %@", delta, NSLocalizedString("unit.lbs", comment: "")),
+                           systemImage: delta >= 0 ? "arrow.up.right" : "arrow.down.right", tint: TR.Palette.sky)
                 }
             }
             if let weight = vm.latestWeightLbs {
-                Text(String(format: "%.1f %@", weight, NSLocalizedString("unit.lbs", comment: "")))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(String(format: "%.1f", weight))
+                        .font(TR.Font.number(30))
+                        .foregroundStyle(TR.Palette.textPrimary)
+                    Text(NSLocalizedString("unit.lbs", comment: ""))
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(TR.Palette.textSecondary)
+                }
                 Text(NSLocalizedString("dashboard.weightTrend.30day", comment: ""))
                     .font(.caption)
-                    .foregroundColor(AppColors.textSecondary)
+                    .foregroundStyle(TR.Palette.textTertiary)
             }
         }
-        .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.8)], startPoint: .top, endPoint: .bottom))
-        .cornerRadius(16)
+        .trCard(tint: TR.Palette.sky)
     }
 
-    // MARK: - Forecast Card
+    // MARK: - Forecast
 
     func forecastCard(_ text: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: "sparkles")
                 .font(.title3)
-                .foregroundColor(Color(hex: "#F1C40F"))
-            VStack(alignment: .leading, spacing: 2) {
-                Text(NSLocalizedString("dashboard.forecast", comment: ""))
-                    .font(.caption.bold())
-                    .foregroundColor(AppColors.textSecondary)
+                .foregroundStyle(TR.Palette.gold)
+                .frame(width: 40, height: 40)
+                .background(TR.Palette.gold.opacity(0.15), in: Circle())
+            VStack(alignment: .leading, spacing: 3) {
+                TRKicker(Text(NSLocalizedString("dashboard.forecast", comment: "")), color: TR.Palette.gold)
                 Text(text)
-                    .font(.subheadline)
-                    .foregroundColor(.white)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(TR.Palette.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .trCard(tint: TR.Palette.gold)
+    }
+
+    // MARK: - Active stack (adjuncts / peptides / GLP-1)
+
+    private var activeStackCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            DashCardHeader(icon: "list.bullet.clipboard", title: NSLocalizedString("dashboard.activeProtocol", comment: ""), tint: TR.Palette.coral)
+            if let proto = vm.activeProtocol {
+                compoundRow(icon: "syringe.fill", color: Color(hex: proto.colorHex), name: proto.name,
+                            detail: "E\(proto.frequencyDays)D")
+            }
+            ForEach(vm.activeCompounds, id: \.id) { compound in
+                let category = compoundCategory(compound.supplementName)
+                compoundRow(icon: categoryIcon(category), color: categoryColor(category), name: compound.supplementName,
+                            detail: "\(formatCompoundDose(compound.doseAmount, unit: compound.doseUnit)) · E\(compound.frequencyDays)D")
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(LinearGradient(colors: [AppColors.card, AppColors.card.opacity(0.7)], startPoint: .topLeading, endPoint: .bottomTrailing))
-        .cornerRadius(16)
+        .trCard()
+    }
+
+    private func compoundRow(icon: String, color: Color, name: String, detail: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(color)
+                .frame(width: 28, height: 28)
+                .background(color.opacity(0.15), in: Circle())
+            Text(name)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(TR.Palette.textPrimary)
+            Spacer()
+            Text(detail)
+                .font(.caption.weight(.bold))
+                .monospacedDigit()
+                .foregroundStyle(TR.Palette.textSecondary)
+        }
+    }
+
+    private func compoundCategory(_ name: String) -> String {
+        let glp1 = ["Semaglutide", "Tirzepatide", "Liraglutide"]
+        let ai = ["Anastrozole", "Aromasin", "Letrozole", "Cabergoline"]
+        if glp1.contains(name) { return "glp1" }
+        if ai.contains(name) { return "ai" }
+        if name == "hCG" { return "fertility" }
+        return "peptide"
+    }
+
+    private func categoryIcon(_ cat: String) -> String {
+        switch cat {
+        case "glp1":      return "scalemass"
+        case "ai":        return "shield.lefthalf.filled"
+        case "fertility": return "heart.fill"
+        default:          return "pills.fill"
+        }
+    }
+
+    private func categoryColor(_ cat: String) -> Color {
+        switch cat {
+        case "glp1":      return TR.Palette.mint
+        case "ai":        return TR.Palette.tangerine
+        case "fertility": return Color(trHex: 0xFF7AC6)
+        default:          return TR.Palette.sky
+        }
+    }
+
+    private func formatCompoundDose(_ dose: Double, unit: String) -> String {
+        if dose == dose.rounded() { return "\(Int(dose))\(unit)" }
+        return String(format: "%.2g%@", dose, unit)
     }
 }
 
 // MARK: - Quick Stat Tile
 
 struct QuickStatTile: View {
-    let emoji: String
+    let icon: String
+    var tint: Color = TR.Palette.coral
     let label: String
     let value: String
     let subtitle: String
@@ -1513,36 +1037,42 @@ struct QuickStatTile: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(emoji)
-                    .font(.title3)
+                Image(systemName: icon)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(tint)
+                    .frame(width: 24, height: 24)
+                    .background(tint.opacity(0.15), in: Circle())
                 Spacer()
                 if let d = delta, abs(d) >= 0.1 {
                     HStack(spacing: 2) {
                         Image(systemName: d >= 0 ? "arrow.up.right" : "arrow.down.right")
-                            .font(.caption2.bold())
-                        Text(String(format: "%+.1f", d))
-                            .font(.caption2.bold())
+                        Text(String(format: "%+.1f", d)).monospacedDigit()
                     }
-                    .foregroundColor(d >= 0 ? .green : AppColors.accent)
+                    .font(.caption2.weight(.heavy))
+                    .foregroundStyle(d >= 0 ? TR.Palette.teal : TR.Palette.coral)
                 }
             }
-            Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-            HStack(spacing: 4) {
-                Text(label)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text(value)
+                    .font(TR.Font.number(24, weight: .heavy))
+                    .foregroundStyle(TR.Palette.textPrimary)
                 if !subtitle.isEmpty {
                     Text(subtitle)
-                        .font(.caption2)
-                        .foregroundColor(.secondary.opacity(0.6))
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(TR.Palette.textTertiary)
                 }
             }
+            Text(label)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(TR.Palette.textSecondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
         .padding(12)
-        .background(AppColors.background.opacity(0.6))
-        .cornerRadius(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(TR.Palette.surfaceRaised.opacity(0.55), in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous).strokeBorder(TR.Palette.hairline, lineWidth: 1))
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -1555,11 +1085,11 @@ struct StatRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(value)
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .font(TR.Font.number(18, weight: .heavy))
+                .foregroundStyle(TR.Palette.textPrimary)
             Text(label)
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(TR.Palette.textSecondary)
         }
     }
 }
@@ -1617,7 +1147,7 @@ struct TrialEndedView: View {
 
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            TRBackground()
 
             VStack(spacing: 28) {
                 Spacer()

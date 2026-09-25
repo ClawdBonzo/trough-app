@@ -15,91 +15,67 @@ struct HealthKitPermissionView: View {
         ("heart.fill",                       NSLocalizedString("hk.restingHR", comment: ""),     NSLocalizedString("hk.restingHRDesc", comment: "")),
     ]
 
+    private let tints: [[Color]] = [OnboardingTint.coral, OnboardingTint.lilac, OnboardingTint.teal, [Color(trHex: 0xFF6B81), Color(trHex: 0xE0245E)]]
+
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            TRBackground()
 
             VStack(spacing: 0) {
-                Spacer()
+                ScrollView {
+                    VStack(spacing: 28) {
+                        // Icon + headline
+                        VStack(spacing: 16) {
+                            OnboardingIconTile(systemImage: "heart.text.square.fill",
+                                               colors: [Color(trHex: 0xFF6B81), TR.Palette.coral, Color(trHex: 0xC2304F)],
+                                               size: 76)
+                                .trPopOnAppear()
 
-                // Icon + headline
-                VStack(spacing: 16) {
-                    ZStack {
-                        Circle()
-                            .fill(AppColors.accent.opacity(0.12))
-                            .frame(width: 88, height: 88)
-                        Image(systemName: "heart.text.square.fill")
-                            .font(.system(size: 40))
-                            .foregroundColor(AppColors.accent)
-                    }
-
-                    VStack(spacing: 8) {
-                        Text(NSLocalizedString("hk.title", comment: ""))
-                            .font(.system(size: 28, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(NSLocalizedString("hk.subtitle", comment: ""))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
-                    }
-                }
-
-                Spacer().frame(height: 36)
-
-                // Data list
-                VStack(spacing: 0) {
-                    ForEach(dataPoints, id: \.title) { point in
-                        HStack(spacing: 14) {
-                            Image(systemName: point.icon)
-                                .font(.title3)
-                                .foregroundColor(AppColors.accent)
-                                .frame(width: 32)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(point.title)
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(.white)
-                                Text(point.detail)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            VStack(spacing: 8) {
+                                Text(NSLocalizedString("hk.title", comment: ""))
+                                    .font(TR.Font.display(.title, weight: .black))
+                                    .foregroundStyle(TR.Palette.textPrimary)
+                                    .multilineTextAlignment(.center)
+                                    .accessibilityAddTraits(.isHeader)
+                                Text(NSLocalizedString("hk.subtitle", comment: ""))
+                                    .font(.subheadline)
+                                    .foregroundStyle(TR.Palette.textSecondary)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 8)
                             }
-                            Spacer()
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 14)
+                        .trRevealOnAppear()
 
-                        if point.title != dataPoints.last?.title {
-                            Divider()
-                                .background(Color.white.opacity(0.06))
-                                .padding(.leading, 66)
+                        // Data list
+                        VStack(spacing: 16) {
+                            ForEach(Array(dataPoints.enumerated()), id: \.element.title) { index, point in
+                                OnboardingFeatureRow(icon: point.icon, title: point.title, detail: point.detail,
+                                                     tint: tints[index % tints.count])
+                            }
+                        }
+                        .trCard(padding: 16)
+                        .trRevealOnAppear(delay: 0.1)
+
+                        // Privacy note
+                        Label(NSLocalizedString("hk.privacy", comment: ""), systemImage: "lock.shield.fill")
+                            .font(.caption2)
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .multilineTextAlignment(.center)
+
+                        if let err = errorMessage {
+                            Text(err)
+                                .font(.caption)
+                                .foregroundStyle(TR.Palette.coralLight)
+                                .multilineTextAlignment(.center)
                         }
                     }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 40)
+                    .padding(.bottom, 16)
                 }
-                .background(AppColors.card)
-                .cornerRadius(16)
-                .padding(.horizontal, 20)
-
-                Spacer().frame(height: 16)
-
-                // Privacy note
-                Label(NSLocalizedString("hk.privacy", comment: ""), systemImage: "lock.shield.fill")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 12)
-
-                if let err = errorMessage {
-                    Text(err)
-                        .font(.caption)
-                        .foregroundColor(AppColors.accent)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 8)
-                }
-
-                Spacer()
 
                 // CTA buttons
-                VStack(spacing: 12) {
+                VStack(spacing: 8) {
                     Button {
                         isRequesting = true
                         Task {
@@ -112,32 +88,33 @@ struct HealthKitPermissionView: View {
                             hkPermissionRequested = true
                         }
                     } label: {
-                        HStack {
+                        Group {
                             if isRequesting {
                                 ProgressView().tint(.white)
                             } else {
                                 Text(NSLocalizedString("hk.allow", comment: ""))
-                                    .font(.headline)
                             }
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.accent)
-                        .foregroundColor(.white)
-                        .cornerRadius(14)
                     }
+                    .buttonStyle(.trPrimary)
                     .disabled(isRequesting)
 
-                    Button(NSLocalizedString("hk.notNow", comment: "")) {
+                    Button {
                         hkPermissionRequested = true
+                    } label: {
+                        Text(NSLocalizedString("hk.notNow", comment: ""))
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(TR.Palette.textSecondary)
+                            .frame(minHeight: TR.Metrics.minTap)
+                            .contentShape(Rectangle())
                     }
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 24)
-                .padding(.bottom, 40)
+                .padding(.bottom, 24)
             }
         }
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -168,11 +145,10 @@ struct HealthKitDeniedBanner: View {
                     .foregroundColor(.secondary)
             }
             .padding(12)
-            .background(AppColors.card)
-            .cornerRadius(10)
+            .background(TR.Palette.surface, in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(AppColors.accent.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous)
+                    .strokeBorder(TR.Palette.coral.opacity(0.35), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

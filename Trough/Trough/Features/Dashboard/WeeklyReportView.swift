@@ -16,7 +16,7 @@ struct WeeklyReportView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                AppColors.background.ignoresSafeArea()
+                TRBackground()
 
                 if let report {
                     ScrollView {
@@ -35,14 +35,8 @@ struct WeeklyReportView: View {
                                     }
                                     Text("Share Report")
                                 }
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(AppColors.accent)
-                                .cornerRadius(14)
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(TRPrimaryButtonStyle())
                             .padding(.horizontal)
                             .disabled(isRendering)
 
@@ -55,13 +49,13 @@ struct WeeklyReportView: View {
                     VStack(spacing: 12) {
                         Image(systemName: "chart.bar.doc.horizontal")
                             .font(.system(size: 48))
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                         Text("Not enough data yet")
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundStyle(TR.Palette.textPrimary)
                         Text("Check in for 7 consecutive days to unlock your weekly report.")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 32)
                     }
@@ -73,7 +67,7 @@ struct WeeklyReportView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
-                        .foregroundColor(AppColors.accent)
+                        .foregroundStyle(TR.Palette.coral)
                 }
             }
             .onAppear { loadReport() }
@@ -98,7 +92,10 @@ struct WeeklyReportView: View {
         isRendering = true
         let card = WeeklyReportCard(report: report, userType: userType)
             .frame(width: 390)
+            .padding(16)
+            .background(TR.Palette.background)
             .environment(\.colorScheme, .dark)
+            .environment(\.trStaticRender, true)
         let renderer = ImageRenderer(content: card)
         renderer.scale = 3.0
         shareImage = renderer.uiImage
@@ -131,9 +128,7 @@ struct WeeklyReportCard: View {
             }
             reportFooter
         }
-        .padding(20)
-        .background(AppColors.card)
-        .cornerRadius(20)
+        .trCard(tint: TR.Palette.coral, padding: 20)
     }
 
     // MARK: Header
@@ -141,25 +136,13 @@ struct WeeklyReportCard: View {
     private var reportHeader: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
+                TRKicker(Text(weekRangeText), color: TR.Palette.coral)
                 Text("Weekly Report")
-                    .font(.title3.bold())
-                    .foregroundColor(.white)
-                Text(weekRangeText)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                    .font(TR.Font.display(.title2, weight: .heavy))
+                    .foregroundStyle(TR.Palette.textPrimary)
             }
             Spacer()
-            HStack(spacing: 4) {
-                Image(systemName: "flame.fill")
-                    .foregroundColor(AppColors.accent)
-                Text("\(report.streakLength)d")
-                    .font(.headline.bold())
-                    .foregroundColor(.white)
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(AppColors.accent.opacity(0.15))
-            .clipShape(Capsule())
+            TRPill(verbatim: "\(report.streakLength)d", systemImage: "flame.fill", tint: TR.Palette.gold)
         }
     }
 
@@ -167,40 +150,34 @@ struct WeeklyReportCard: View {
 
     private var scoreSection: some View {
         HStack(spacing: 20) {
-            ZStack {
-                Circle()
-                    .stroke(scoreColor.opacity(0.15), lineWidth: 8)
-                    .frame(width: 80, height: 80)
-                Circle()
-                    .trim(from: 0, to: report.protocolScore / 100)
-                    .stroke(scoreColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                    .frame(width: 80, height: 80)
-                VStack(spacing: 1) {
+            TRRing(progress: report.protocolScore / 100, lineWidth: 9,
+                   colors: [TR.Palette.coralDeep, TR.Palette.coral, TR.Palette.tangerine, TR.Palette.gold]) {
+                VStack(spacing: 0) {
                     Text(String(format: "%.0f", report.protocolScore))
-                        .font(.system(size: 22, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(TR.Font.number(24))
+                        .foregroundStyle(TR.Palette.textPrimary)
                     Text("avg")
-                        .font(.system(size: 9))
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(TR.Palette.textTertiary)
                 }
             }
+            .frame(width: 96, height: 96)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("Protocol Score")
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(TR.Font.display(.headline))
+                    .foregroundStyle(TR.Palette.textPrimary)
                 if report.priorProtocolScore > 0 {
                     HStack(spacing: 6) {
                         changeBadge(report.scoreChange)
                         Text("vs prior week")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                 }
                 Text(DashboardViewModel.interpret(report.protocolScore))
-                    .font(.caption)
-                    .foregroundColor(scoreColor)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
             Spacer()
         }
@@ -210,9 +187,7 @@ struct WeeklyReportCard: View {
 
     private var metricBarsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("This Week vs Prior Week")
-                .font(.caption.bold())
-                .foregroundColor(.secondary)
+            TRKicker("This Week vs Prior Week")
 
             let metrics: [(String, String, Double, Double)] = [
                 ("⚡️", "Energy",        report.avgEnergy,  report.priorAvgEnergy),
@@ -227,8 +202,7 @@ struct WeeklyReportCard: View {
             }
         }
         .padding(14)
-        .background(AppColors.background.opacity(0.5))
-        .cornerRadius(12)
+        .background(TR.Palette.surfaceRaised.opacity(0.5), in: RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous))
     }
 
     // MARK: HealthKit summary row
@@ -239,28 +213,28 @@ struct WeeklyReportCard: View {
             if let hrv = report.avgHRV {
                 HStack(spacing: 8) {
                     Image(systemName: "waveform.path.ecg")
-                        .foregroundColor(AppColors.accent)
+                        .foregroundStyle(TR.Palette.coral)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(String(format: "%.0f ms", hrv))
                             .font(.subheadline.bold())
-                            .foregroundColor(.white)
+                            .foregroundStyle(TR.Palette.textPrimary)
                         Text("Avg HRV")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                 }
             }
             if let sleep = report.avgSleepHours {
                 HStack(spacing: 8) {
                     Image(systemName: "moon.zzz.fill")
-                        .foregroundColor(.indigo)
+                        .foregroundStyle(TR.Palette.lilac)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(String(format: "%.1f hrs", sleep))
                             .font(.subheadline.bold())
-                            .foregroundColor(.white)
+                            .foregroundStyle(TR.Palette.textPrimary)
                         Text("Avg Sleep")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(TR.Palette.textSecondary)
                     }
                 }
             }
@@ -279,7 +253,7 @@ struct WeeklyReportCard: View {
                 .font(.subheadline)
             Text(insight.message)
                 .font(.subheadline)
-                .foregroundColor(.white)
+                .foregroundStyle(TR.Palette.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(12)
@@ -302,20 +276,20 @@ struct WeeklyReportCard: View {
                         systemImage: "syringe"
                     )
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
                 }
                 Spacer()
                 Label("\(Int(report.morningWoodPct))% MW", systemImage: "checkmark.circle")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
                 Label("\(Int(report.workoutCompletionPct))% workouts", systemImage: "figure.strengthtraining.traditional")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
             if let aiSummary = report.aiDosesSummary {
                 Label(aiSummary, systemImage: "shield.checkered")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
             if let fertility = report.fertilitySnapshot {
                 Label(fertility, systemImage: "figure.2.circle")
@@ -326,10 +300,10 @@ struct WeeklyReportCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("Notes for Doctor", systemImage: "stethoscope")
                         .font(.caption.bold())
-                        .foregroundColor(.white)
+                        .foregroundStyle(TR.Palette.textPrimary)
                     Text(doctorNotes)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(TR.Palette.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.top, 4)
@@ -337,14 +311,13 @@ struct WeeklyReportCard: View {
             if let summary = report.peptideSummary {
                 Label(summary, systemImage: "pills.fill")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
             }
         }
     }
 
     // MARK: Helpers
 
-    private var scoreColor: Color { DashboardViewModel.color(for: report.protocolScore) }
 
     private func changeBadge(_ change: Double) -> some View {
         HStack(spacing: 3) {
@@ -352,10 +325,10 @@ struct WeeklyReportCard: View {
             Text(String(format: "%+.0f", change))
         }
         .font(.caption.bold())
-        .foregroundColor(change >= 0 ? .green : AppColors.accent)
+        .foregroundStyle(change >= 0 ? TR.Palette.teal : TR.Palette.coral)
         .padding(.horizontal, 8)
         .padding(.vertical, 3)
-        .background((change >= 0 ? Color.green : AppColors.accent).opacity(0.15))
+        .background((change >= 0 ? TR.Palette.teal : TR.Palette.coral).opacity(0.15))
         .clipShape(Capsule())
     }
 
@@ -389,25 +362,26 @@ struct MetricComparisonRow: View {
             HStack {
                 Text("\(emoji) \(label)")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(TR.Palette.textSecondary)
                 Spacer()
                 Text(String(format: "%.1f", current))
                     .font(.caption.bold())
-                    .foregroundColor(.white)
+                    .foregroundStyle(TR.Palette.textPrimary)
             }
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     // Prior week (faded)
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(Color.secondary.opacity(0.2))
-                        .frame(width: geo.size.width * (prior / 5.0), height: 6)
+                    Capsule()
+                        .fill(Color.white.opacity(0.1))
+                        .frame(width: geo.size.width * (prior / 5.0), height: 7)
                     // Current week
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(current >= prior ? Color(hex: "#27AE60") : AppColors.accent)
-                        .frame(width: geo.size.width * (current / 5.0), height: 6)
+                    Capsule()
+                        .fill(LinearGradient(colors: current >= prior ? [TR.Palette.teal, TR.Palette.mint] : [TR.Palette.coralDeep, TR.Palette.coral],
+                                             startPoint: .leading, endPoint: .trailing))
+                        .frame(width: geo.size.width * (current / 5.0), height: 7)
                 }
             }
-            .frame(height: 6)
+            .frame(height: 7)
         }
     }
 }

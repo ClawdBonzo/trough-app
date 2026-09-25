@@ -52,6 +52,9 @@ final class DailyCheckinViewModel: ObservableObject {
     @Published var availableSupplements: [SDSupplementConfig] = []
     @Published var savedCheckin: SDCheckin? = nil
     @Published var insightResult: InsightResult? = nil
+    /// True when the last `save()` created today's check-in (XP was earned),
+    /// false when it updated an existing one. Drives the completion reward UI.
+    @Published private(set) var lastSaveWasNew = false
 
     // MARK: Computed
     var currentScore: Double {
@@ -193,6 +196,7 @@ final class DailyCheckinViewModel: ObservableObject {
             existingCheckin = fetchCheckin(on: saveDate)
         }
         let isNewCheckin = existingCheckin == nil
+        lastSaveWasNew = isNewCheckin
         // FIXED: convert lbs input to kg for storage if US locale
         let rawWeight = Double(bodyWeightInput)
         let bwKg = rawWeight.map { usesMetricWeight ? $0 : $0 / 2.20462 }
@@ -291,6 +295,28 @@ final class DailyCheckinViewModel: ObservableObject {
 
         navigationPath = [.binaryTaps, .completion]
     }
+
+    #if DEBUG
+    /// Screenshot hook (`-TRShowCompletion`): shows the completion screen for the
+    /// most recent real check-in without saving anything.
+    func presentLatestCompletionForScreenshots() {
+        guard let ctx = modelContext else { return }
+        var desc = FetchDescriptor<SDCheckin>(
+            predicate: #Predicate { !$0.isSampleData },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        desc.fetchLimit = 1
+        guard let latest = try? ctx.fetch(desc).first else { return }
+        savedCheckin = latest
+        lastSaveWasNew = true
+        insightResult = InsightEngine.shared.generateInsight(
+            for: latest,
+            userType: UserDefaults.standard.string(forKey: "userType") ?? "trt",
+            context: buildInsightContext(around: latest)
+        )
+        navigationPath = [.binaryTaps, .completion]
+    }
+    #endif
 
     // MARK: - Supplement adherence quest
 
