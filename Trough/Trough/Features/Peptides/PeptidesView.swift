@@ -429,7 +429,7 @@ private struct PeptideTimelineRow: View {
                         .font(.caption)
                         .foregroundStyle(TR.Palette.textSecondary)
                     if let site = log.injectionSite, !site.isEmpty {
-                        Text("· \(site)")
+                        Text(verbatim: "· " + InjectionSite.localizedName(site))
                             .font(.caption)
                             .foregroundStyle(TR.Palette.textSecondary)
                             .lineLimit(1)

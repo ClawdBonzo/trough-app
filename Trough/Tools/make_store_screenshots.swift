@@ -831,7 +831,8 @@ do {
     float(asset("marker-card.png"), cx: o + W - 350 * s, cy: screen.maxY - 560 * s, width: 700 * s, degrees: 5, shadow: 1.3, in: context)
 }
 
-// 7 · Private by design: privacy chips, a share card, the app icon to sign off.
+// 7 · Private by design: privacy chips over the quiet end of the More screen, the app icon to sign off.
+//     (No share card here — the slide is about keeping your log to yourself.)
 do {
     let o = 6 * W
     drawCopy(7, origin: o, in: context)
@@ -841,11 +842,9 @@ do {
     let symbols = ["person.crop.circle.badge.xmark", "lock.iphone", "nosign"]
     let tints = [coral, teal, lilac]
     for (index, text) in chips.prefix(3).enumerated() {
-        chip(text, symbolName: symbols[index], left: o + 40 * s + CGFloat(index % 2) * 34 * s, cy: screen.minY + 640 * s + CGFloat(index) * 150 * s,
+        chip(text, symbolName: symbols[index], left: o + 40 * s + CGFloat(index % 2) * 34 * s, cy: screen.minY + 1300 * s + CGFloat(index) * 160 * s,
              degrees: index % 2 == 0 ? -3 : 2, tint: tints[index], in: context)
     }
-    let cardWidth: CGFloat = 430 * s
-    float(firstAsset("card-streak-story.png", "card-rank-story.png"), cx: o + W - 290 * s, cy: screen.maxY - 470 * s, width: cardWidth, degrees: 7, corner: cardWidth * 0.06, shadow: 1.3, in: context)
     appIcon(icon, cx: o + W - 165 * s, cy: screen.minY + 170 * s, size: 210 * s, degrees: 8, in: context)
 }
 

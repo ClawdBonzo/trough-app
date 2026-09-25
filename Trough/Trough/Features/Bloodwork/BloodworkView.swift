@@ -39,7 +39,7 @@ struct BloodworkView: View {
                     }
                 }
             }
-            .navigationTitle("Bloodwork")
+            .navigationTitle(NSLocalizedString("bloodwork.title", comment: ""))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showingExportSheet = true } label: {

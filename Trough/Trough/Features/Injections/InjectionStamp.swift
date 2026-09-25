@@ -74,7 +74,7 @@ enum InjectionStampText {
                 : NSLocalizedString("inj14.side.right", value: "R", comment: "Right side, stamp abbreviation")
             parts.removeLast()
         }
-        let region = parts.joined(separator: " ").uppercased()
+        let region = InjectionSite.localizedRegion(parts.joined(separator: " ")).uppercased()
         return side.map { "\($0) · \(region)" } ?? region
     }
 }

@@ -165,7 +165,7 @@ private struct StoreRankCard: View {
             HStack(spacing: 14) {
                 RankEmblem(level: data.level, width: 78, shadow: false)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(verbatim: "\(cover.displayName.uppercased()) RANK · LEVEL \(data.level)")
+                    Text(verbatim: String(format: gLoc("store.rankLine", "%1$@ RANK · LEVEL %2$d"), cover.displayName.uppercased(), data.level))
                         .font(.system(size: 11, weight: .heavy, design: .rounded)).tracking(1.1)
                         .foregroundStyle(cover.ink.opacity(0.7))
                     Text(verbatim: data.levelName)
@@ -227,7 +227,7 @@ private struct StoreStreakCard: View {
                 .font(.system(size: 50, weight: .black, design: .rounded).monospacedDigit())
                 .foregroundStyle(LinearGradient(colors: [TR.Palette.gold, TR.Palette.tangerine], startPoint: .top, endPoint: .bottom))
                 .padding(.top, 2)
-            StoreKicker(text: "day streak", color: TR.Palette.textPrimary.opacity(0.8))
+            StoreKicker(text: gLoc("ach.share.stat.dayStreak", "day streak"), color: TR.Palette.textPrimary.opacity(0.8))
         }
         .padding(.horizontal, 12)
         .padding(.bottom, 4)
@@ -268,8 +268,8 @@ private struct StoreScoreCard: View {
             }
             .frame(width: 112, height: 112)
             VStack(alignment: .leading, spacing: 8) {
-                StoreKicker(text: "Protocol Score", color: TR.Palette.coralLight)
-                Text(verbatim: "Today").font(.system(size: 22, weight: .heavy, design: .rounded)).foregroundStyle(TR.Palette.textPrimary)
+                StoreKicker(text: NSLocalizedString("dashboard.protocolScore", comment: ""), color: TR.Palette.coralLight)
+                Text(verbatim: NSLocalizedString("common.today", comment: "")).font(.system(size: 22, weight: .heavy, design: .rounded)).foregroundStyle(TR.Palette.textPrimary)
                 HStack(alignment: .bottom, spacing: 5) {
                     ForEach(Array(week.enumerated()), id: \.offset) { index, value in
                         Capsule()
@@ -278,7 +278,7 @@ private struct StoreScoreCard: View {
                     }
                 }
                 .frame(height: 44, alignment: .bottom)
-                Text(verbatim: "Self-rated · last 7 days").font(.system(size: 11, weight: .semibold)).foregroundStyle(TR.Palette.textTertiary)
+                Text(verbatim: gLoc("store.selfRated7d", "Self-rated · last 7 days")).font(.system(size: 11, weight: .semibold)).foregroundStyle(TR.Palette.textTertiary)
             }
         }
         .frame(width: 320, alignment: .leading)
@@ -300,11 +300,14 @@ private struct StoreNextInjectionCard: View {
             .frame(width: 62, height: 62)
             .shadow(color: TR.Palette.coral.opacity(0.6), radius: 12)
             VStack(alignment: .leading, spacing: 3) {
-                StoreKicker(text: "Next injection", color: TR.Palette.coralLight)
-                Text(verbatim: days == 0 ? "Today" : days == 1 ? "Tomorrow" : "In \(days) days")
+                StoreKicker(text: gLoc("dash.today.nextShot", "Next injection"), color: TR.Palette.coralLight)
+                Text(verbatim: days == 0 ? NSLocalizedString("common.today", comment: "")
+                     : days == 1 ? gLoc("store.tomorrow", "Tomorrow")
+                     : String(format: gLoc("store.inDays", "In %d days"), days))
                     .font(.system(size: 26, weight: .black, design: .rounded))
                     .foregroundStyle(TR.Palette.textPrimary)
-                Text(verbatim: "\(next.formatted(.dateTime.weekday(.wide))) · \(site) suggested")
+                Text(verbatim: String(format: gLoc("store.siteSuggested", "%1$@ · %2$@ suggested"),
+                                     next.formatted(.dateTime.weekday(.wide)), InjectionSite.localizedName(site)))
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(TR.Palette.textSecondary)
             }
@@ -324,9 +327,9 @@ private struct StoreMarkerCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                StoreKicker(text: "Bloodwork", color: TR.Palette.sky)
+                StoreKicker(text: NSLocalizedString("bloodwork.title", comment: ""), color: TR.Palette.sky)
                 Spacer()
-                Text(verbatim: "\(panels.count) panels").font(.system(size: 12, weight: .heavy, design: .rounded)).foregroundStyle(TR.Palette.textSecondary)
+                Text(verbatim: String(format: gLoc("store.panels", "%d panels"), panels.count)).font(.system(size: 12, weight: .heavy, design: .rounded)).foregroundStyle(TR.Palette.textSecondary)
             }
             ForEach(markers, id: \.0) { name, short, color in
                 let series = panels.compactMap { $0.markers.first { $0.markerName == name } }
@@ -344,7 +347,7 @@ private struct StoreMarkerCard: View {
                     .background(TR.Palette.surfaceRaised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                 }
             }
-            Text(verbatim: "Latest: \((panels.last?.drawnAt ?? .now).formatted(.dateTime.month(.abbreviated).day()))")
+            Text(verbatim: String(format: gLoc("store.latest", "Latest: %@"), (panels.last?.drawnAt ?? .now).formatted(.dateTime.month(.abbreviated).day())))
                 .font(.system(size: 11, weight: .semibold)).foregroundStyle(TR.Palette.textTertiary)
         }
         .frame(width: 330)

@@ -1218,3 +1218,32 @@
 "quest.supplement_adherence.desc" = "Hit ≥80% supplement compliance this week";
 "notif.day7.title" = "You're on a roll";
 "notif.day7.body" = "You've logged %d check-ins — see your protocol score.";
+
+/* Daily insights (InsightEngine) — observations of the user's own logs, never outcome claims */
+"insight.default" = "Keep logging. Patterns show up after 2+ injection cycles.";
+"insight.energyDip" = "Your logged energy tends to dip around day %1$d — in %2$d of your last %3$d cycles.";
+"insight.sleepMW" = "After nights under 6.5 h of sleep, you logged no morning wood %d%% of the time.";
+"insight.hrvDrop" = "Today's HRV is %d%% below your 14-day average.";
+"insight.supplements" = "Supplements logged on %d of the last 7 days.";
+"insight.weightTrend" = "Your logged weight is trending down while energy holds steady.";
+"insight.strongDay" = "Strong check-in. Your %d-day streak is building a solid log.";
+"insight.aiE2" = "Your scores dipped after recent aromatase inhibitor doses. Worth reviewing with your doctor alongside your labs.";
+"insight.glp1Weight" = "Consistent GLP-1 logs, with weight trending down and energy holding steady.";
+"insight.glp1Energy" = "Energy scores are lower while logging GLP-1. Worth reviewing with your doctor.";
+
+/* Injection sites (display only — stored values stay English) and store assets */
+"site.region.glute" = "Glute";
+"site.region.quad" = "Quad";
+"site.region.delt" = "Delt";
+"site.region.ventroGlute" = "Ventro-Glute";
+"site.region.subqAbdomen" = "SubQ Abdomen";
+"site.side.left" = "Left";
+"site.side.right" = "Right";
+"site.format" = "%1$@ %2$@";
+"store.rankLine" = "%1$@ RANK · LEVEL %2$d";
+"store.selfRated7d" = "Self-rated · last 7 days";
+"store.tomorrow" = "Tomorrow";
+"store.inDays" = "In %d days";
+"store.siteSuggested" = "%1$@ · %2$@ suggested";
+"store.panels" = "%d panels";
+"store.latest" = "Latest: %@";

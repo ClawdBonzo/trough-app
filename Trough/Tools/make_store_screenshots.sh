@@ -93,7 +93,8 @@ ui_language() {
 if (( BUILD )); then
   echo "building…"
   timeout_kill 1800 xcodebuild build -project Trough.xcodeproj -scheme Trough -configuration Debug \
-    -destination "platform=iOS Simulator,id=$UDID" -derivedDataPath $DERIVED -quiet 2>&1 | grep -E "error:" && { echo "build failed" >&2; exit 1; }
+    -destination "platform=iOS Simulator,id=$UDID" -derivedDataPath $DERIVED -quiet 2>&1 | grep -E "error:" | grep -v "failed with exit code 0" && { echo "build failed" >&2; exit 1; }
+  # (Xcode 27 -quiet prints spurious "failed with exit code 0" lines on success.)
 fi
 
 BASE_ARGS=(-TRSeedDemo -TRSkipOnboarding -TRScreenshotMode)

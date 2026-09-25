@@ -7,7 +7,31 @@ struct InjectionSite: Hashable, Identifiable {
     let side: String
 
     var id: String { displayName }
+    /// Stored identifier ("Delt Left") — persisted on SDInjection/SDPeptideLog; never localized.
     var displayName: String { "\(region) \(side)" }
+    /// What the user reads, in their language ("Deltamuskel links", "左三角筋").
+    var localizedName: String { Self.localizedName(displayName) }
+
+    private static let regionKeys = ["Glute": "glute", "Quad": "quad", "Delt": "delt",
+                                     "Ventro-Glute": "ventroGlute", "SubQ Abdomen": "subqAbdomen"]
+
+    /// Localized region ("Delt" → "Deltamuskel"); unknown regions pass through.
+    static func localizedRegion(_ region: String) -> String {
+        guard let key = regionKeys[region] else { return region }
+        return NSLocalizedString("site.region.\(key)", value: region, comment: "Injection site region")
+    }
+
+    /// Localizes a stored site string. Free-text or legacy values pass through unchanged.
+    static func localizedName(_ stored: String) -> String {
+        var parts = stored.split(separator: " ").map(String.init)
+        guard let last = parts.last, last == "Left" || last == "Right" else { return localizedRegion(stored) }
+        parts.removeLast()
+        let side = last == "Left"
+            ? NSLocalizedString("site.side.left", value: "Left", comment: "Injection site side")
+            : NSLocalizedString("site.side.right", value: "Right", comment: "Injection site side")
+        return String(format: NSLocalizedString("site.format", value: "%1$@ %2$@", comment: "Injection site: %1$@ region, %2$@ side"),
+                      localizedRegion(parts.joined(separator: " ")), side)
+    }
 
     static let all: [InjectionSite] = [
         InjectionSite(region: "Glute",         side: "Left"),

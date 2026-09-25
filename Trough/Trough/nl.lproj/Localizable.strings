@@ -412,7 +412,7 @@
 /* ═══════════════════════════════════════════════════════════════
    Peptides / Adjuncts
    ═══════════════════════════════════════════════════════════════ */
-"peptides.title" = "Aanvullingen & peptiden";
+"peptides.title" = "Bijmiddelen & peptiden";
 "peptides.trackYourStack" = "Volg je stack";
 "peptides.trackSubtitle" = "Log bijmiddelen en peptidedoses om\nje stack te volgen en patronen te herkennen.";
 "peptides.logFirstDose" = "Eerste dosis loggen";
@@ -426,7 +426,7 @@
 "peptides.dosesTotal" = "%d dosis(sen) in totaal";
 "peptides.logDose" = "Dosis loggen";
 "peptides.editLog" = "Logitem bewerken";
-"peptides.adjunctPeptide" = "Aanvulling / peptide";
+"peptides.adjunctPeptide" = "Bijmiddel / peptide";
 "peptides.amount" = "Hoeveelheid";
 "peptides.unit" = "Eenheid";
 "peptides.route" = "Toedieningsweg";
@@ -508,7 +508,7 @@
 "pro.bloodworkDesc" = "Log labwaarden, volg trends in de tijd, stel aangepaste referentiewaarden in";
 "pro.reports" = "Wekelijkse rapporten & export";
 "pro.reportsDesc" = "Export naar PDF en CSV met dokternotities — perfect voor je consult";
-"pro.peptides" = "Aanvullingen & peptiden";
+"pro.peptides" = "Bijmiddelen & peptiden";
 "pro.peptidesDesc" = "Volg AI-middelen, peptiden en GLP-1-agonisten met E2-correlatie";
 "pro.siteRotation" = "Rotatie van injectieplekken";
 "pro.siteRotationDesc" = "Visuele rotatiekaart om littekenvorming te voorkomen";
@@ -911,7 +911,7 @@
 "ach.badge.unlockedOn" = "Ontgrendeld op %@";
 "ach.badges.count" = "%d van %d";
 "ach.badges.title" = "Badgemuur";
-"ach.cat.adjuncts" = "Aanvullingen";
+"ach.cat.adjuncts" = "Bijmiddelen";
 "ach.cat.bloodwork" = "Bloedwaarden";
 "ach.cat.checkins" = "Check-ins";
 "ach.cat.health" = "Apple Gezondheid";
@@ -1213,3 +1213,89 @@
 "quest.supplement_adherence.desc" = "Haal deze week ≥80% supplementtrouw";
 "notif.day7.title" = "Je bent lekker bezig";
 "notif.day7.body" = "Je hebt %d check-ins gelogd — bekijk je protocolscore.";
+
+/* UI literals used directly as LocalizedStringKey (Text("…"), navigationTitle("…")) */
+"Adjuncts & Peptides" = "Bijmiddelen & peptiden";
+"All Results" = "Alle uitslagen";
+"Ambiguous date format" = "Dubbelzinnige datumnotatie";
+"Avg HRV" = "Gem. HRV";
+"Avg Sleep" = "Gem. slaap";
+"Both day-first and month-first formats matched. Confirm which is correct:" = "Zowel dag-eerst als maand-eerst past. Bevestig welke klopt:";
+"Cancel" = "Annuleren";
+"Check in for 7 consecutive days to unlock your weekly report." = "Check 7 dagen op rij in om je weekrapport te ontgrendelen.";
+"Choose from Library" = "Kies uit bibliotheek";
+"Dismiss" = "Sluiten";
+"Done" = "Klaar";
+"E2 correlation" = "E2-verband";
+"Edit" = "Bewerken";
+"Edit reference range" = "Referentiebereik bewerken";
+"Export data" = "Gegevens exporteren";
+"Full Policy & Terms" = "Volledig beleid & voorwaarden";
+"Green = auto-detected  ·  Yellow = not mapped" = "Groen = automatisch herkend  ·  Geel = niet gekoppeld";
+"High" = "Hoog";
+"Import" = "Importeren";
+"Injections this month" = "Injecties deze maand";
+"Lab Name (optional)" = "Labnaam (optioneel)";
+"Load sample check-in and injection data" = "Voorbeelddata voor check-ins en injecties laden";
+"Log" = "Loggen";
+"Log new dose" = "Nieuwe dosis loggen";
+"Low" = "Laag";
+"Map the Date column to proceed." = "Koppel de datumkolom om verder te gaan.";
+"Next" = "Volgende";
+"Not enough data yet" = "Nog niet genoeg gegevens";
+"Notes" = "Notities";
+"Notes for your doctor about this panel..." = "Notities voor je arts over dit panel...";
+"Open daily check-in" = "Dagelijkse check-in openen";
+"Opens Pro free trial" = "Opent de gratis Pro-proefperiode";
+"Optional notes about this panel..." = "Optionele notities over dit panel...";
+"Panel Info" = "Panelinfo";
+"Photo" = "Foto";
+"Photo unavailable" = "Foto niet beschikbaar";
+"Privacy & Data" = "Privacy & gegevens";
+"Protocol Score" = "Protocol Score";
+"Reference Range" = "Referentiebereik";
+"Remove" = "Verwijderen";
+"Reset to Default" = "Standaard herstellen";
+"Save" = "Opslaan";
+"Set up supplement tracking" = "Supplementen bijhouden instellen";
+"Share Report" = "Rapport delen";
+"Supplements this week" = "Supplementen deze week";
+"Take Photo" = "Foto maken";
+"Tap to add supplements and see correlations with your Protocol Score" = "Tik om supplementen toe te voegen en verbanden met je Protocol Score te zien";
+"Tap to view and log injections" = "Tik om injecties te bekijken en te loggen";
+"Weekly Report" = "Weekrapport";
+"What does your spreadsheet contain?" = "Wat staat er in je spreadsheet?";
+"Your Lab's Reference Range" = "Referentiebereik van je lab";
+"avg" = "gem.";
+"required" = "verplicht";
+"vs prior week" = "t.o.v. vorige week";
+"— Not mapped —" = "— Niet gekoppeld —";
+
+/* Daily insights (InsightEngine) — observations of the user's own logs, never outcome claims */
+"insight.default" = "Blijf loggen. Patronen verschijnen na 2+ injectiecycli.";
+"insight.energyDip" = "Je gelogde energie zakt meestal rond dag %1$d — in %2$d van je laatste %3$d cycli.";
+"insight.sleepMW" = "Na nachten met minder dan 6,5 uur slaap logde je %d%% van de tijd geen ochtenderectie.";
+"insight.hrvDrop" = "Je HRV is vandaag %d%% lager dan je 14-daags gemiddelde.";
+"insight.supplements" = "Supplementen gelogd op %d van de laatste 7 dagen.";
+"insight.weightTrend" = "Je gelogde gewicht daalt terwijl je energie stabiel blijft.";
+"insight.strongDay" = "Sterke check-in. Je reeks van %d dagen bouwt een solide logboek op.";
+"insight.aiE2" = "Je scores daalden na recente doses aromataseremmer. Bespreek dit met je arts, samen met je labuitslagen.";
+"insight.glp1Weight" = "Consequente GLP-1-logs, dalend gewicht en stabiele energie.";
+"insight.glp1Energy" = "Je energiescores zijn lager sinds je GLP-1 logt. Bespreek dit met je arts.";
+
+/* Injection sites (display only — stored values stay English) and store assets */
+"site.region.glute" = "Bil";
+"site.region.quad" = "Bovenbeen";
+"site.region.delt" = "Schouder";
+"site.region.ventroGlute" = "Ventrogluteaal";
+"site.region.subqAbdomen" = "Buik (SC)";
+"site.side.left" = "links";
+"site.side.right" = "rechts";
+"site.format" = "%1$@ %2$@";
+"store.rankLine" = "RANG %1$@ · LEVEL %2$d";
+"store.selfRated7d" = "Zelf beoordeeld · laatste 7 dagen";
+"store.tomorrow" = "Morgen";
+"store.inDays" = "Over %d dagen";
+"store.siteSuggested" = "%1$@ · %2$@ voorgesteld";
+"store.panels" = "%d panels";
+"store.latest" = "Laatst: %@";

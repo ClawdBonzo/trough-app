@@ -99,7 +99,7 @@ private struct SiteChip: View {
                     if isRecommended {
                         TRKicker(Text(NSLocalizedString("inj14.site.suggested", value: "Suggested next", comment: "Recommended rotation site")), color: TR.Palette.gold)
                     }
-                    Text(site.displayName)
+                    Text(site.localizedName)
                         .font(isRecommended ? TR.Font.display(.headline, weight: .heavy) : .subheadline.weight(.bold))
                         .foregroundStyle(TR.Palette.textPrimary)
                         .lineLimit(2)

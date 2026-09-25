@@ -60,7 +60,7 @@ final class InsightEngine {
             if let result = rule(self) { return result }
         }
         return InsightResult(
-            message: "Keep tracking. Insights emerge after 2+ injection cycles.",
+            message: gLoc("insight.default", "Keep logging. Patterns show up after 2+ injection cycles."),
             type: .neutral,
             ruleID: "default"
         )
@@ -120,8 +120,8 @@ final class InsightEngine {
 
         let dayX = Int(daysSinceInj.rounded())
         return InsightResult(
-            message: "Your energy tends to dip around day \(dayX). " +
-                     "This has happened in \(dipCycles) of your last \(totalCycles) cycles.",
+            message: String(format: gLoc("insight.energyDip", "Your logged energy tends to dip around day %1$d — in %2$d of your last %3$d cycles."),
+                            dayX, dipCycles, totalCycles),
             type: .warning,
             ruleID: "energy_dip"
         )
@@ -146,7 +146,7 @@ final class InsightEngine {
         guard pct > 60 else { return nil }
 
         return InsightResult(
-            message: "Sleep under 6.5 hrs is linked to lower morning wood in your data (\(pct)% of the time).",
+            message: String(format: gLoc("insight.sleepMW", "After nights under 6.5 h of sleep, you logged no morning wood %d%% of the time."), pct),
             type: .warning,
             ruleID: "sleep_mw_correlation"
         )
@@ -168,7 +168,7 @@ final class InsightEngine {
 
         let dropPct = Int(((baseline - todayHRV) / baseline) * 100)
         return InsightResult(
-            message: "Your HRV is \(dropPct)% below your baseline. Recovery may be impacted.",
+            message: String(format: gLoc("insight.hrvDrop", "Today's HRV is %d%% below your 14-day average."), dropPct),
             type: .warning,
             ruleID: "hrv_drop"
         )
@@ -193,9 +193,8 @@ final class InsightEngine {
 
         guard Double(taken) / Double(last7.count) < 0.5 else { return nil }
 
-        let missed = last7.count - taken
         return InsightResult(
-            message: "You've missed supplements \(missed) of 7 days. Consistency matters.",
+            message: String(format: gLoc("insight.supplements", "Supplements logged on %d of the last 7 days."), taken),
             type: .warning,
             ruleID: "supplement_adherence"
         )
@@ -228,7 +227,7 @@ final class InsightEngine {
         guard recentEnergy >= earlyEnergy - 0.2 else { return nil }
 
         return InsightResult(
-            message: "Weight is dropping while energy stays high. Your protocol is working.",
+            message: gLoc("insight.weightTrend", "Your logged weight is trending down while energy holds steady."),
             type: .positive,
             ruleID: "weight_trend"
         )
@@ -248,7 +247,7 @@ final class InsightEngine {
               ctx.streak >= 3 else { return nil }
 
         return InsightResult(
-            message: "Strong day. Your \(ctx.streak)-day streak is building solid data.",
+            message: String(format: gLoc("insight.strongDay", "Strong check-in. Your %d-day streak is building a solid log."), ctx.streak),
             type: .positive,
             ruleID: "positive_reinforcement"
         )
@@ -284,7 +283,7 @@ final class InsightEngine {
         guard energyDrop || moodDrop || libidoDrop || jointPainNoted else { return nil }
 
         return InsightResult(
-            message: "Recent AI use may be crashing your E2 — check bloodwork.",
+            message: gLoc("insight.aiE2", "Your scores dipped after recent aromatase inhibitor doses. Worth reviewing with your doctor alongside your labs."),
             type: .warning,
             ruleID: "ai_e2_correlation"
         )
@@ -317,7 +316,7 @@ final class InsightEngine {
 
         if weightTrendingDown && energyStable {
             return InsightResult(
-                message: "Consistent GLP-1 use + weight trending down + stable energy = protocol working well.",
+                message: gLoc("insight.glp1Weight", "Consistent GLP-1 logs, with weight trending down and energy holding steady."),
                 type: .positive,
                 ruleID: "glp1_weight_correlation"
             )
@@ -326,25 +325,13 @@ final class InsightEngine {
         // If on GLP-1 but energy is tanking, flag it
         if !energyStable && recentGLP1.count >= 3 {
             return InsightResult(
-                message: "Energy dropping while on GLP-1 — check calorie intake and recovery.",
+                message: gLoc("insight.glp1Energy", "Energy scores are lower while logging GLP-1. Worth reviewing with your doctor."),
                 type: .warning,
                 ruleID: "glp1_energy_warning"
             )
         }
 
         return nil
-    }
-
-    // MARK: - Legacy compatibility (DailyCheckinViewModel calls this before context is built)
-
-    func insight(for checkin: SDCheckin) -> String {
-        let score = checkin.protocolScore
-        switch score {
-        case 80...: return "Strong day — all metrics tracking well."
-        case 65..<80: return "Good response. Stay consistent with your schedule."
-        case 45..<65: return "Average day. Check your sleep and recovery."
-        default: return "Rough day. Note any stressors and monitor trends."
-        }
     }
 
     // MARK: - Helpers

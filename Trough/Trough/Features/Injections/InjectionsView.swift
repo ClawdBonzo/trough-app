@@ -51,7 +51,8 @@ struct InjectionsView: View {
             .navigationTitle(NSLocalizedString("injections.title", comment: ""))
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(TR.Palette.abyss.opacity(0.94), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(.automatic, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $vm.showingLogSheet, onDismiss: { vm.load() }) {
                 LogInjectionSheet(vm: vm)
             }
@@ -164,7 +165,7 @@ struct InjectionsView: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 TRKicker(Text(NSLocalizedString("inj14.nextSite", value: "Next site in rotation", comment: "")))
-                Text(vm.suggestedSite)
+                Text(InjectionSite.localizedName(vm.suggestedSite))
                     .font(TR.Font.display(.headline, weight: .heavy))
                     .foregroundStyle(TR.Palette.textPrimary)
             }
@@ -475,7 +476,8 @@ struct LogInjectionSheet: View {
                              : NSLocalizedString("injections.logInjection", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(TR.Palette.abyss.opacity(0.94), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(.automatic, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(NSLocalizedString("common.cancel", comment: "")) { dismiss() }
