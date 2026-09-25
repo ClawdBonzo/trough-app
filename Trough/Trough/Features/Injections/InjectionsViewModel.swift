@@ -113,7 +113,7 @@ final class InjectionsViewModel: ObservableObject {
     func saveForm() {
         guard let modelContext else { return }
         guard let dose = Double(formDoseMg), dose > 0 else {
-            errorMessage = "Please enter a valid dose."
+            errorMessage = gLoc("error.invalidDose", "Please enter a valid dose.")
             return
         }
         let matchingProtocol = activeProtocols.first {

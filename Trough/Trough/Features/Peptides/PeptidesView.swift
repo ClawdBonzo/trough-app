@@ -85,17 +85,17 @@ struct PeptidesView: View {
         VStack(alignment: .leading, spacing: 20) {
             if !glp1Compounds.isEmpty {
                 compoundScrollSection(
-                    title: "GLP-1 / Weight Management",
+                    title: NSLocalizedString("peptides.glp1Weight", value: "GLP-1 / Weight Management", comment: ""),
                     compounds: glp1Compounds,
                     showE2Badge: false,
-                    badgeText: "Weight tracking",
+                    badgeText: NSLocalizedString("peptides.weightTracking", value: "Weight tracking", comment: ""),
                     badgeColor: PeptideCategory.glp1.tint
                 )
             }
 
             if !aiCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "AI / Ancillary",
+                    title: NSLocalizedString("peptides.aiAncillary", value: "AI / Ancillary", comment: ""),
                     compounds: aiCompounds,
                     showE2Badge: true
                 )
@@ -103,7 +103,7 @@ struct PeptidesView: View {
 
             if !peptideCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "Peptides",
+                    title: NSLocalizedString("peptides.peptides", value: "Peptides", comment: ""),
                     compounds: peptideCompounds,
                     showE2Badge: false
                 )
@@ -111,7 +111,7 @@ struct PeptidesView: View {
 
             if glp1Compounds.isEmpty && aiCompounds.isEmpty && peptideCompounds.isEmpty {
                 compoundScrollSection(
-                    title: "Active Compounds",
+                    title: NSLocalizedString("peptides.activeCompounds", value: "Active Compounds", comment: ""),
                     compounds: vm.activeCompounds,
                     showE2Badge: false
                 )
@@ -226,8 +226,8 @@ struct PeptidesView: View {
 
     private func dateHeader(_ date: Date) -> String {
         let cal = Calendar.current
-        if cal.isDateInToday(date) { return "Today" }
-        if cal.isDateInYesterday(date) { return "Yesterday" }
+        if cal.isDateInToday(date) { return NSLocalizedString("common.today", value: "Today", comment: "") }
+        if cal.isDateInYesterday(date) { return NSLocalizedString("common.yesterday", value: "Yesterday", comment: "") }
         return SharedFormatters.monthDay.string(from: date)
     }
 }
@@ -395,7 +395,7 @@ private struct PeptideTimelineRow: View {
     var isLast: Bool = false
 
     private var doseDisplay: String {
-        let unit = log.doseUnit ?? "mcg"
+        let unit = PeptidesViewModel.unitLabel(log.doseUnit ?? "mcg")
         return log.doseMcg.truncatingRemainder(dividingBy: 1) == 0
             ? String(format: "%.0f %@", log.doseMcg, unit)
             : String(format: "%.2f %@", log.doseMcg, unit)
@@ -429,7 +429,7 @@ private struct PeptideTimelineRow: View {
                     Text(doseDisplay)
                         .font(.caption.weight(.bold))
                         .foregroundStyle(cat.tint)
-                    Text(log.routeOfAdministration)
+                    Text(PeptidesViewModel.routeLabel(log.routeOfAdministration))
                         .font(.caption)
                         .foregroundStyle(TR.Palette.textSecondary)
                     if let site = log.injectionSite, !site.isEmpty {

@@ -21,8 +21,8 @@ final class ExportService {
 
         var errorDescription: String? {
             switch self {
-            case .nothingToExport: return "There is no data to export yet."
-            case .cannotWriteFile: return "Could not write the export file."
+            case .nothingToExport: return gLoc("export.error.nothing", "There is no data to export yet.")
+            case .cannotWriteFile: return gLoc("export.error.write", "Could not write the export file.")
             }
         }
     }
@@ -287,7 +287,7 @@ private final class DoctorReportComposer {
     func render(to url: URL) throws {
         let format = UIGraphicsPDFRendererFormat()
         format.documentInfo = [
-            kCGPDFContextTitle as String: "Trough — Bloodwork & Protocol Summary",
+            kCGPDFContextTitle as String: gLoc("pdf.title", "Trough — Bloodwork & Protocol Summary"),
             kCGPDFContextCreator as String: "Trough"
         ]
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
@@ -340,7 +340,7 @@ private final class DoctorReportComposer {
             .font: UIFont.systemFont(ofSize: 8),
             .foregroundColor: inkFaint
         ]
-        let pageText = NSAttributedString(string: "Page \(pageNumber)", attributes: pageAttrs)
+        let pageText = NSAttributedString(string: String(format: gLoc("pdf.page", "Page %d"), pageNumber), attributes: pageAttrs)
         let size = pageText.size()
         pageText.draw(at: CGPoint(x: pageRect.width - margin - size.width,
                                   y: pageRect.height - margin + 2))
@@ -384,17 +384,17 @@ private final class DoctorReportComposer {
     private func fmt(_ v: Double) -> String {
         v.truncatingRemainder(dividingBy: 1) == 0
             ? String(Int(v))
-            : String(format: "%.1f", v)
+            : String(format: "%.1f", locale: Locale.current, v)
     }
 
     // MARK: Header
 
     private func drawHeader() {
-        drawText("Trough — Bloodwork & Protocol Summary",
+        drawText(gLoc("pdf.title", "Trough — Bloodwork & Protocol Summary"),
                  font: .systemFont(ofSize: 20, weight: .bold), color: ink, spacingAfter: 4)
         let version = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "—"
         let generated = Date.now.formatted(date: .long, time: .shortened)
-        drawText("Generated \(generated)  ·  Trough v\(version)  ·  Data entered by the user on-device",
+        drawText(String(format: gLoc("pdf.generated", "Generated %1$@  ·  Trough v%2$@  ·  Data entered by the user on-device"), generated, version),
                  font: .systemFont(ofSize: 9), color: inkSecondary, spacingAfter: 10)
         drawRule(spacing: 12)
     }
@@ -402,23 +402,23 @@ private final class DoctorReportComposer {
     // MARK: Protocol section
 
     private func drawProtocolSection() {
-        drawText("Active Protocol", font: .systemFont(ofSize: 13, weight: .semibold),
+        drawText(gLoc("pdf.activeProtocol", "Active Protocol"), font: .systemFont(ofSize: 13, weight: .semibold),
                  color: ink, spacingAfter: 6)
         if activeProtocols.isEmpty {
-            drawText("No active protocol recorded.", font: .systemFont(ofSize: 10),
+            drawText(gLoc("pdf.noProtocol", "No active protocol recorded."), font: .systemFont(ofSize: 10),
                      color: inkSecondary, spacingAfter: 10)
         } else {
             for p in activeProtocols {
                 let frequency = p.frequencyDays == 1
-                    ? "daily"
-                    : "every \(p.frequencyDays) days"
-                var line = "\(p.compoundName) — \(fmt(p.doseAmountMg)) mg \(frequency)"
+                    ? gLoc("pdf.freq.daily", "daily")
+                    : String(format: gLoc("pdf.freq.everyDays", "every %d days"), p.frequencyDays)
+                var line = String(format: gLoc("pdf.protocolLine", "%1$@ — %2$@ mg %3$@"), p.compoundName, fmt(p.doseAmountMg), frequency)
                 if p.concentrationMgPerMl > 0 {
                     line += "  (\(fmt(p.concentrationMgPerMl)) mg/mL)"
                 }
-                if !p.isPrimary { line += "  [secondary]" }
+                if !p.isPrimary { line += "  [" + gLoc("pdf.secondary", "secondary") + "]" }
                 drawText("•  \(line)", font: .systemFont(ofSize: 10), color: ink, spacingAfter: 3)
-                drawText("    Started \(p.startDate.formatted(date: .abbreviated, time: .omitted))",
+                drawText("    " + String(format: gLoc("pdf.started", "Started %@"), p.startDate.formatted(date: .abbreviated, time: .omitted)),
                          font: .systemFont(ofSize: 8.5), color: inkSecondary, spacingAfter: 6)
             }
         }
@@ -436,11 +436,11 @@ private final class DoctorReportComposer {
 
     private var columns: [Column] {
         [
-            Column(title: "Marker",    x: 0,   width: 190, alignment: .left),
-            Column(title: "Value",     x: 195, width: 65,  alignment: .right),
-            Column(title: "Unit",      x: 268, width: 62,  alignment: .left),
-            Column(title: "Ref. Range", x: 335, width: 110, alignment: .left),
-            Column(title: "Flag",      x: 455, width: 49,  alignment: .center),
+            Column(title: gLoc("pdf.col.marker", "Marker"),    x: 0,   width: 190, alignment: .left),
+            Column(title: gLoc("pdf.col.value", "Value"),      x: 195, width: 65,  alignment: .right),
+            Column(title: gLoc("pdf.col.unit", "Unit"),        x: 268, width: 62,  alignment: .left),
+            Column(title: gLoc("pdf.col.range", "Ref. Range"), x: 335, width: 110, alignment: .left),
+            Column(title: gLoc("pdf.col.flag", "Flag"),        x: 455, width: 49,  alignment: .center),
         ]
     }
 
@@ -481,7 +481,7 @@ private final class DoctorReportComposer {
     }
 
     private func drawSessions() {
-        drawText("Bloodwork Results (newest first)",
+        drawText(gLoc("pdf.results", "Bloodwork Results (newest first)"),
                  font: .systemFont(ofSize: 13, weight: .semibold), color: ink, spacingAfter: 8)
 
         for session in sessions {
@@ -502,8 +502,8 @@ private final class DoctorReportComposer {
                 let low = marker.referenceRangeLow
                 let high = marker.referenceRangeHigh
                 var flag = ""
-                if let low, marker.value < low { flag = "LOW" }
-                if let high, marker.value > high { flag = "HIGH" }
+                if let low, marker.value < low { flag = gLoc("pdf.flag.low", "LOW") }
+                if let high, marker.value > high { flag = gLoc("pdf.flag.high", "HIGH") }
                 let rangeText: String
                 switch (low, high) {
                 case let (l?, h?): rangeText = "\(fmt(l)) – \(fmt(h))"
@@ -512,7 +512,7 @@ private final class DoctorReportComposer {
                 default: rangeText = "—"
                 }
                 let valueColor = flag.isEmpty ? ink : outOfRange
-                let cells = [marker.markerName, fmt(marker.value), marker.unit, rangeText, flag]
+                let cells = [MarkerFormat.displayName(marker.markerName), fmt(marker.value), marker.unit, rangeText, flag]
                 for (i, col) in columns.enumerated() {
                     let isValue = i == 1 || i == 4
                     drawTableCell(cells[i], column: col, y: cursorY,
@@ -524,7 +524,7 @@ private final class DoctorReportComposer {
             cursorY += 4
 
             if let doctorNotes = session.doctorNotes, !doctorNotes.isEmpty {
-                drawText("Notes for doctor:", font: .systemFont(ofSize: 9, weight: .semibold),
+                drawText(gLoc("pdf.doctorNotes", "Notes for doctor:"), font: .systemFont(ofSize: 9, weight: .semibold),
                          color: inkSecondary, spacingAfter: 2)
                 drawText(doctorNotes, font: .systemFont(ofSize: 9.5), color: ink, spacingAfter: 6)
             }
@@ -551,9 +551,9 @@ private final class DoctorReportComposer {
             + trendable.keys.filter { !markerOrder.contains($0) }.sorted()
 
         ensureSpace(40)
-        drawText("Trends", font: .systemFont(ofSize: 13, weight: .semibold),
+        drawText(gLoc("pdf.trends", "Trends"), font: .systemFont(ofSize: 13, weight: .semibold),
                  color: ink, spacingAfter: 2)
-        drawText("Values over time as entered. No interpretation is provided.",
+        drawText(gLoc("pdf.trends.subtitle", "Values over time as entered. No interpretation is provided."),
                  font: .systemFont(ofSize: 8.5), color: inkSecondary, spacingAfter: 8)
 
         for name in names {
@@ -572,7 +572,8 @@ private final class DoctorReportComposer {
         ensureSpace(total)
 
         // Title
-        let titleText = unit.isEmpty ? name : "\(name) (\(unit))"
+        let displayName = MarkerFormat.displayName(name)
+        let titleText = unit.isEmpty ? displayName : "\(displayName) (\(unit))"
         let title = NSAttributedString(string: titleText, attributes: [
             .font: UIFont.systemFont(ofSize: 9.5, weight: .semibold), .foregroundColor: ink
         ])

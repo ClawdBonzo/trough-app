@@ -151,7 +151,9 @@ struct SupplementAddSheet: View {
     private var presetSection: some View {
         Section(NSLocalizedString("supplements.title", comment: "")) {
             Picker(NSLocalizedString("supplements.preset", comment: ""), selection: $vm.formPresetName) {
-                ForEach(SettingsViewModel.presetNames, id: \.self) { Text($0) }
+                ForEach(SettingsViewModel.presetNames, id: \.self) { name in
+                    Text(name == "Custom" ? NSLocalizedString("common.custom", value: "Custom", comment: "") : name)
+                }
             }
             .pickerStyle(.menu)
             .onChange(of: vm.formPresetName) { _, name in

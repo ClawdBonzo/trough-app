@@ -355,7 +355,7 @@ struct BloodworkDetailView: View {
 
                     // Marker sections
                     ForEach(groupedMarkers, id: \.title) { group in
-                        GlassSection(group.title) {
+                        GlassSection(MarkerFormat.sectionTitle(group.title)) {
                             ForEach(Array(group.markers.enumerated()), id: \.element.id) { idx, marker in
                                 if idx > 0 { GlassDivider(leadingInset: 14) }
                                 BloodworkMarkerRow(marker: marker)
@@ -367,7 +367,7 @@ struct BloodworkDetailView: View {
 
                     // Notes
                     if let notes = bloodwork.notes, !notes.isEmpty {
-                        GlassSection("Notes") {
+                        GlassSection(NSLocalizedString("common.notes", comment: "")) {
                             Text(notes)
                                 .font(.subheadline)
                                 .foregroundStyle(TR.Palette.textSecondary)
@@ -423,7 +423,7 @@ struct BloodworkMarkerRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(marker.markerName)
+                Text(MarkerFormat.displayName(marker.markerName))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(TR.Palette.textPrimary)
                 if let low = marker.referenceRangeLow, let high = marker.referenceRangeHigh {

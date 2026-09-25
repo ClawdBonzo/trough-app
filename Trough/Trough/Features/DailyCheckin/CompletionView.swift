@@ -315,7 +315,7 @@ struct CompletionView: View {
                     gamificationVM.refresh()
                     hkValues = HKSnapshot(
                         hrv:   checkin.hrv.map    { String(format: "%.0f ms", $0) } ?? "–",
-                        sleep: checkin.sleepHours.map { String(format: "%.1f hrs", $0) } ?? "–",
+                        sleep: checkin.sleepHours.map { String(format: gLoc("unit.hoursShort", "%.1f hrs"), locale: Locale.current, $0) } ?? "–",
                         steps: checkin.stepCount.map  { "\($0)" } ?? "–",
                         hr:    checkin.restingHR.map  { String(format: "%.0f bpm", $0) } ?? "–"
                     )

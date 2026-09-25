@@ -345,7 +345,7 @@ enum CSVImportService {
         // Warn once per unmapped score column — those rows get the neutral 3.0 default
         for key in ["energy", "mood", "libido", "sleep", "clarity"] where mapping[key] == nil {
             warnings.append(ImportRowIssue(row: 1,
-                message: "No \(key) column mapped — all rows defaulted to 3"))
+                message: String(format: gLoc("csv.issue.noColumn", "No %@ column mapped — all rows defaulted to 3"), csvMetricName(key))))
         }
 
         // Does the body weight column name contain "lb"?
@@ -359,16 +359,16 @@ enum CSVImportService {
 
             // ── Date (required) ──────────────────────────────────────────────
             guard let dateIdx = mapping["date"], dateIdx < row.count else {
-                errors.append(ImportRowIssue(row: rowNum, message: "No date column mapped"))
+                errors.append(ImportRowIssue(row: rowNum, message: gLoc("csv.issue.noDateColumn", "No date column mapped")))
                 skipped += 1; continue
             }
             let rawDate = row[dateIdx].trimmingCharacters(in: .whitespaces)
             guard !rawDate.isEmpty, let date = fmt.date(from: rawDate)?.startOfDay else {
-                errors.append(ImportRowIssue(row: rowNum, message: "Date '\(rawDate)' not parseable"))
+                errors.append(ImportRowIssue(row: rowNum, message: String(format: gLoc("csv.issue.badDate", "Date '%@' not parseable"), rawDate)))
                 skipped += 1; continue
             }
             guard !existingDates.contains(date) else {
-                warnings.append(ImportRowIssue(row: rowNum, message: "Duplicate date \(rawDate) — skipped"))
+                warnings.append(ImportRowIssue(row: rowNum, message: String(format: gLoc("csv.issue.duplicateDate", "Duplicate date %@ — skipped"), rawDate)))
                 skipped += 1; continue
             }
 
@@ -377,16 +377,16 @@ enum CSVImportService {
             func parseScore(_ key: String) -> Double {
                 guard let idx = mapping[key] else { return 3.0 } // unmapped: warned once above
                 guard idx < row.count, !row[idx].isEmpty else {
-                    rowWarnings.append("\(key) value missing — defaulted to 3")
+                    rowWarnings.append(String(format: gLoc("csv.issue.valueMissing", "%@ value missing — defaulted to 3"), csvMetricName(key)))
                     return 3.0
                 }
                 let raw = normalizeDecimalSeparators(row[idx].trimmingCharacters(in: .whitespaces))
                 guard let v = Double(raw) else {
-                    rowWarnings.append("\(key) value '\(row[idx])' not parseable — defaulted to 3")
+                    rowWarnings.append(String(format: gLoc("csv.issue.valueUnparseable", "%1$@ value '%2$@' not parseable — defaulted to 3"), csvMetricName(key), row[idx]))
                     return 3.0
                 }
                 if v < 1 || v > 5 {
-                    rowWarnings.append("\(key) value \(row[idx]) out of range — clamped to 1–5")
+                    rowWarnings.append(String(format: gLoc("csv.issue.outOfRange", "%1$@ value %2$@ out of range — clamped to 1–5"), csvMetricName(key), row[idx]))
                     return max(1, min(5, v))
                 }
                 return v
@@ -490,16 +490,16 @@ enum CSVImportService {
             let rowNum = rowIdx + 2
 
             guard let dateIdx = mapping["date"], dateIdx < row.count else {
-                errors.append(ImportRowIssue(row: rowNum, message: "No date column mapped"))
+                errors.append(ImportRowIssue(row: rowNum, message: gLoc("csv.issue.noDateColumn", "No date column mapped")))
                 skipped += 1; continue
             }
             let rawDate = row[dateIdx].trimmingCharacters(in: .whitespaces)
             guard !rawDate.isEmpty, let date = fmt.date(from: rawDate) else {
-                errors.append(ImportRowIssue(row: rowNum, message: "Date '\(rawDate)' not parseable"))
+                errors.append(ImportRowIssue(row: rowNum, message: String(format: gLoc("csv.issue.badDate", "Date '%@' not parseable"), rawDate)))
                 skipped += 1; continue
             }
             guard !existingDates.contains(date.startOfDay) else {
-                warnings.append(ImportRowIssue(row: rowNum, message: "Duplicate date \(rawDate) — skipped"))
+                warnings.append(ImportRowIssue(row: rowNum, message: String(format: gLoc("csv.issue.duplicateDate", "Duplicate date %@ — skipped"), rawDate)))
                 skipped += 1; continue
             }
 
@@ -514,7 +514,7 @@ enum CSVImportService {
 
             guard !markerEntries.isEmpty else {
                 warnings.append(ImportRowIssue(row: rowNum,
-                    message: "No recognized marker values found — skipped"))
+                    message: gLoc("csv.issue.noMarkers", "No recognized marker values found — skipped")))
                 skipped += 1; continue
             }
 
@@ -630,6 +630,18 @@ enum CSVImportService {
     }
 }
 
+/// Localized name of a check-in score column key, for import messages.
+func csvMetricName(_ key: String) -> String {
+    switch key {
+    case "energy":  return gLoc("checkin.energy", "Energy")
+    case "mood":    return gLoc("checkin.mood", "Mood")
+    case "libido":  return gLoc("checkin.libido", "Libido")
+    case "sleep":   return gLoc("checkin.sleepQuality", "Sleep Quality")
+    case "clarity": return gLoc("checkin.mentalClarity", "Mental Clarity")
+    default:        return key
+    }
+}
+
 // MARK: - Error
 
 enum CSVImportError: LocalizedError {
@@ -638,8 +650,8 @@ enum CSVImportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .emptyFile:      return "The CSV file appears to be empty."
-        case .cannotReadFile: return "Could not read the file. Check that it is a valid CSV."
+        case .emptyFile:      return gLoc("csv.error.empty", "The CSV file appears to be empty.")
+        case .cannotReadFile: return gLoc("csv.error.unreadable", "Could not read the file. Check that it is a valid CSV.")
         }
     }
 }

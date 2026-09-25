@@ -50,7 +50,9 @@ struct PeptideLogView: View {
     private var compoundSection: some View {
         Section(NSLocalizedString("peptides.adjunctPeptide", comment: "")) {
             Picker(NSLocalizedString("common.compound", comment: ""), selection: $vm.formCompoundSelection) {
-                ForEach(PeptidesViewModel.presetCompounds, id: \.self) { Text($0) }
+                ForEach(PeptidesViewModel.presetCompounds, id: \.self) { name in
+                    Text(name == "Custom" ? NSLocalizedString("common.custom", value: "Custom", comment: "") : name)
+                }
             }
             .pickerStyle(.menu)
             .onChange(of: vm.formCompoundSelection) { _, _ in vm.onCompoundChanged() }
@@ -77,13 +79,13 @@ struct PeptideLogView: View {
                     .keyboardType(.decimalPad)
                 Spacer()
                 Picker(NSLocalizedString("peptides.unit", comment: ""), selection: $vm.formDoseUnit) {
-                    ForEach(PeptidesViewModel.doseUnits, id: \.self) { Text($0) }
+                    ForEach(PeptidesViewModel.doseUnits, id: \.self) { Text(PeptidesViewModel.unitLabel($0)) }
                 }
                 .pickerStyle(.segmented)
                 .frame(width: 160)
             }
             Picker(NSLocalizedString("peptides.route", comment: ""), selection: $vm.formRoute) {
-                ForEach(PeptidesViewModel.routes, id: \.self) { Text($0) }
+                ForEach(PeptidesViewModel.routes, id: \.self) { Text(PeptidesViewModel.routeLabel($0)) }
             }
             .pickerStyle(.menu)
             DatePicker(NSLocalizedString("peptides.dateTime", comment: ""), selection: $vm.formDate)

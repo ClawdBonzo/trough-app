@@ -187,7 +187,7 @@ struct WeeklyReportCard: View {
 
     private var metricBarsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            TRKicker("This Week vs Prior Week")
+            TRKicker(Text(verbatim: gLoc("weekly.compareKicker", "This Week vs Prior Week")))
 
             let metrics: [(String, String, Double, Double)] = [
                 ("⚡️", gLoc("checkin.energy", "Energy"),               report.avgEnergy,  report.priorAvgEnergy),
@@ -229,7 +229,7 @@ struct WeeklyReportCard: View {
                     Image(systemName: "moon.zzz.fill")
                         .foregroundStyle(TR.Palette.lilac)
                     VStack(alignment: .leading, spacing: 1) {
-                        Text(String(format: "%.1f hrs", sleep))
+                        Text(verbatim: String(format: gLoc("unit.hoursShort", "%.1f hrs"), locale: Locale.current, sleep))
                             .font(.subheadline.bold())
                             .foregroundStyle(TR.Palette.textPrimary)
                         Text("Avg Sleep")

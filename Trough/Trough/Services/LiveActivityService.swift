@@ -21,7 +21,7 @@ enum LiveActivityService {
         guard daysUntil <= 1 else { end(); return }
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
 
-        let status = daysUntil <= 0 ? "Due today" : "Due tomorrow"
+        let status = daysUntil <= 0 ? gLoc("live.dueToday", "Due today") : gLoc("live.dueTomorrow", "Due tomorrow")
         let state = InjectionActivityAttributes.ContentState(
             nextInjectionDate: max(nextDate, Date()),
             statusLine: status

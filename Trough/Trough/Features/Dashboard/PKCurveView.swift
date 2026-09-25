@@ -274,7 +274,7 @@ struct PKCurveView: View {
     private func dayLabel(_ t: Double) -> String {
         if abs(t) < 0.5 { return NSLocalizedString("pk.now", comment: "") }
         let sign = t > 0 ? "+" : ""
-        return "D\(sign)\(Int(t))"
+        return String(format: gLoc("chart.dayOffset", "D%@"), "\(sign)\(Int(t))")
     }
 }
 

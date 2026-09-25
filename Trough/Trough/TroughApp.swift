@@ -124,7 +124,7 @@ private struct StorageFallbackAlert: ViewModifier {
         content
             .onAppear { isPresented = tier != .primary }
             .alert(title, isPresented: $isPresented) {
-                Button("OK", role: .cancel) {}
+                Button(NSLocalizedString("common.ok", comment: ""), role: .cancel) {}
             } message: {
                 Text(message)
             }
@@ -133,8 +133,8 @@ private struct StorageFallbackAlert: ViewModifier {
     private var title: String {
         switch tier {
         case .primary:     return ""
-        case .noMigration: return "Storage Warning"
-        case .inMemory:    return "Data Cannot Be Saved"
+        case .noMigration: return gLoc("storage.warning.title", "Storage Warning")
+        case .inMemory:    return gLoc("storage.inMemory.title", "Data Cannot Be Saved")
         }
     }
 
@@ -143,9 +143,9 @@ private struct StorageFallbackAlert: ViewModifier {
         case .primary:
             return ""
         case .noMigration:
-            return "Your data was opened in recovery mode. Everything should look normal, but if anything seems missing, please contact support before making changes."
+            return gLoc("storage.warning.message", "Your data was opened in recovery mode. Everything should look normal, but if anything seems missing, please contact support before making changes.")
         case .inMemory:
-            return "Trough couldn't access its storage, so nothing you enter this session will be saved. Try freeing up storage space and restarting the app. If this keeps happening, please contact support."
+            return gLoc("storage.inMemory.message", "Trough couldn't access its storage, so nothing you enter this session will be saved. Try freeing up storage space and restarting the app. If this keeps happening, please contact support.")
         }
     }
 }

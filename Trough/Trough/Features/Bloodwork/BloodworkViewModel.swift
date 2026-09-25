@@ -41,6 +41,18 @@ final class BloodworkViewModel: ObservableObject {
         case lipids     = "Lipids"
         case fertility  = "Fertility"
         var id: String { rawValue }
+
+        /// Localized segment label (rawValue stays the stable id).
+        var label: String {
+            switch self {
+            case .primary:    return gLoc("bloodwork.panel.primary", "T / Free T")
+            case .e2:         return "E2"
+            case .hematocrit: return MarkerFormat.displayName("Hematocrit")
+            case .shbg:       return "SHBG"
+            case .lipids:     return MarkerFormat.sectionTitle("Lipids")
+            case .fertility:  return gLoc("bloodwork.panel.fertility", "Fertility")
+            }
+        }
     }
     @Published var selectedPanel: TrendPanel = .primary
     @Published var showFertilityTimeline = false
@@ -233,7 +245,7 @@ final class BloodworkViewModel: ObservableObject {
 
     func saveForm() {
         let filled = formMarkers.filter { $0.valueDouble != nil }
-        guard !filled.isEmpty else { errorMessage = "Enter at least one value."; return }
+        guard !filled.isEmpty else { errorMessage = gLoc("bloodwork.error.noValues", "Enter at least one value."); return }
 
         let isNewResult = editingResult == nil
         let bw: SDBloodwork

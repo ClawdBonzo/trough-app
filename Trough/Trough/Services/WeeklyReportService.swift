@@ -170,7 +170,7 @@ enum WeeklyReportService {
             var hcgDesc = FetchDescriptor<SDProtocol>(predicate: hcgPred)
             hcgDesc.fetchLimit = 1
             if let hcg = try? context.fetch(hcgDesc).first {
-                var parts = ["hCG active"]
+                var parts = [gLoc("weekly.hcgActive", "hCG active")]
                 // Latest FSH value — fetch newest bloodwork first so we stop early.
                 var bwDesc = FetchDescriptor<SDBloodwork>(sortBy: [SortDescriptor(\.drawnAt, order: .reverse)])
                 bwDesc.fetchLimit = 25
@@ -185,10 +185,7 @@ enum WeeklyReportService {
                     hcgStartDate: hcg.startDate,
                     trtStartDate: activeProto.startDate
                 ) {
-                    // Extract just the week range
-                    let short = result.estimate
-                        .replacingOccurrences(of: "Expected FSH/LH recovery window: ", with: "Recovery: ")
-                    parts.append(short)
+                    parts.append(String(format: gLoc("weekly.recovery", "Recovery: %@"), result.range))
                 }
                 fertilitySnapshot = parts.joined(separator: " · ")
             } else {

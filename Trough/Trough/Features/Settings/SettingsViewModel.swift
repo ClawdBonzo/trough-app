@@ -84,7 +84,7 @@ final class SettingsViewModel: ObservableObject {
               let freq = Int(formFrequencyDays), freq > 0,
               let conc = Double(formConcentration), conc > 0
         else {
-            errorMessage = "Please fill in all protocol fields."
+            errorMessage = gLoc("error.protocolFields", "Please fill in all protocol fields.")
             return
         }
 
@@ -139,7 +139,7 @@ final class SettingsViewModel: ObservableObject {
               let dose = Double(formSupplDose), dose > 0,
               let freq = Int(formSupplFreq), freq > 0
         else {
-            errorMessage = "Please fill in all supplement fields."
+            errorMessage = gLoc("error.supplementFields", "Please fill in all supplement fields.")
             return
         }
 

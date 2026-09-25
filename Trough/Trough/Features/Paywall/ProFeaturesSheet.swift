@@ -73,12 +73,6 @@ struct ProFeaturesSheet: View {
                                 detail: NSLocalizedString("pro.siteRotationDesc", comment: ""),
                                 tint: OnboardingTint.teal
                             )
-                            OnboardingFeatureRow(
-                                icon: "bell.badge.fill",
-                                title: NSLocalizedString("pro.reminders", comment: ""),
-                                detail: NSLocalizedString("pro.remindersDesc", comment: ""),
-                                tint: [TR.Palette.tangerine, TR.Palette.coral]
-                            )
                         }
                         .trCard(tint: TR.Palette.coral, padding: 16)
                         .trRevealOnAppear(delay: 0.1)

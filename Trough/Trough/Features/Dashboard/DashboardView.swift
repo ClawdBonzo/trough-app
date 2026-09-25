@@ -902,7 +902,9 @@ struct DashboardView: View {
             }
             .buttonStyle(.trPressable)
             .accessibilityLabel("Supplements this week")
-            .accessibilityHint(vm.supplementCount == 0 ? "Tap to add supplements" : "Tap to manage supplements")
+            .accessibilityHint(vm.supplementCount == 0
+                                ? gLoc("dash.supplements.hintAdd", "Tap to add supplements")
+                                : gLoc("dash.supplements.hintManage", "Tap to manage supplements"))
         }
     }
 

@@ -73,6 +73,16 @@ final class PeptidesViewModel: ObservableObject {
     static let routes = ["subcutaneous", "intramuscular", "intranasal", "oral"]
     static let doseUnits = ["mcg", "mg", "units"]
 
+    /// Display-only localization of a stored route / dose unit (stored values stay English).
+    static func routeLabel(_ route: String) -> String {
+        guard routes.contains(route) else { return route }
+        return gLoc("route.\(route)", route)
+    }
+
+    static func unitLabel(_ unit: String) -> String {
+        unit == "units" ? gLoc("unit.units", "units") : unit
+    }
+
     private static let defaultUnits: [String: String] = [
         // GLP-1 / incretin / weight management
         "Semaglutide": "mg", "Tirzepatide": "mg", "Retatrutide": "mg",
@@ -172,12 +182,12 @@ final class PeptidesViewModel: ObservableObject {
 
     func saveForm() {
         guard let dose = Double(formDoseAmount), dose > 0 else {
-            errorMessage = "Please enter a valid dose."
+            errorMessage = gLoc("error.invalidDose", "Please enter a valid dose.")
             return
         }
         let name = effectiveCompoundName.trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else {
-            errorMessage = "Please enter a compound name."
+            errorMessage = gLoc("error.compoundName", "Please enter a compound name.")
             return
         }
 

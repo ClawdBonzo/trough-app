@@ -171,7 +171,9 @@ struct ExportDataView: View {
         }
         .buttonStyle(.trPressable)
         .disabled(generatingOption != nil)
-        .accessibilityHint(locked ? "Opens Pro free trial" : "Generates the file, then opens the share sheet")
+        .accessibilityHint(locked
+                           ? NSLocalizedString("Opens Pro free trial", comment: "")
+                           : gLoc("export.hint.generate", "Generates the file, then opens the share sheet"))
     }
 
     // MARK: Generate

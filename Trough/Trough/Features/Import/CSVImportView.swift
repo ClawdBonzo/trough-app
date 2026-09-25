@@ -21,6 +21,15 @@ enum CSVImportType: String, CaseIterable, Identifiable {
     case both      = "Both"
     var id: String { rawValue }
 
+    /// Localized display name (rawValue stays the stable id).
+    var label: String {
+        switch self {
+        case .checkins:  return NSLocalizedString("import.dailyCheckins", value: "Daily Check-ins", comment: "")
+        case .bloodwork: return NSLocalizedString("import.bloodwork", value: "Bloodwork", comment: "")
+        case .both:      return NSLocalizedString("import.both", value: "Both", comment: "")
+        }
+    }
+
     var icon: String {
         switch self {
         case .checkins:  return "checkmark.circle"
@@ -34,10 +43,37 @@ enum CSVImportType: String, CaseIterable, Identifiable {
 
 struct FieldDef: Identifiable {
     let id: String            // matches ColumnMapping key
-    let label: String
+    let englishLabel: String
     let isRequired: Bool
     let appliesToCheckins: Bool
     let appliesToBloodwork: Bool
+
+    init(id: String, label: String, isRequired: Bool, appliesToCheckins: Bool, appliesToBloodwork: Bool) {
+        self.id = id
+        self.englishLabel = label
+        self.isRequired = isRequired
+        self.appliesToCheckins = appliesToCheckins
+        self.appliesToBloodwork = appliesToBloodwork
+    }
+
+    /// Localized label for the mapping UI.
+    var label: String {
+        let scale = gLoc("csv.field.scale", "%@ (1–5)")
+        switch id {
+        case "date":        return NSLocalizedString("import.date", value: "Date", comment: "")
+        case "energy":      return String(format: scale, gLoc("checkin.energy", "Energy"))
+        case "mood":        return String(format: scale, gLoc("checkin.mood", "Mood"))
+        case "libido":      return String(format: scale, gLoc("checkin.libido", "Libido"))
+        case "sleep":       return String(format: scale, gLoc("checkin.sleepQuality", "Sleep Quality"))
+        case "clarity":     return String(format: scale, gLoc("checkin.mentalClarity", "Mental Clarity"))
+        case "morningwood": return gLoc("dashboard.quickStats.morningWood", "Morning Wood")
+        case "workout":     return gLoc("csv.field.workout", "Worked Out")
+        case "bodyweight":  return gLoc("onboarding.hkWeight", "Body Weight")
+        case "bodyfat":     return gLoc("dashboard.bodyComposition.bodyFatPct", "Body Fat %")
+        case "labname":     return NSLocalizedString("import.labName", value: "Lab Name", comment: "")
+        default:            return MarkerFormat.displayName(englishLabel)
+        }
+    }
 }
 
 private let allFieldDefs: [FieldDef] = [
@@ -295,12 +331,12 @@ private struct CSVImportFlowView: View {
 
     private var navTitle: String {
         switch vm.step {
-        case .filePicker:    return "Import CSV"
-        case .typePicker:    return "What to Import"
-        case .preview:       return "Preview"
-        case .columnMapping: return "Map Columns"
-        case .importing:     return "Importing…"
-        case .report:        return "Import Complete"
+        case .filePicker:    return gLoc("csv.title.import", "Import CSV")
+        case .typePicker:    return gLoc("csv.title.whatToImport", "What to Import")
+        case .preview:       return gLoc("csv.title.preview", "Preview")
+        case .columnMapping: return gLoc("csv.title.mapColumns", "Map Columns")
+        case .importing:     return gLoc("csv.title.importing", "Importing…")
+        case .report:        return gLoc("csv.title.complete", "Import Complete")
         }
     }
 
@@ -429,7 +465,7 @@ private struct TypeOptionRow: View {
                               size: 40, filled: isSelected)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(type.rawValue)
+                    Text(type.label)
                         .font(TR.Font.display(.headline, weight: .bold))
                         .foregroundStyle(isSelected ? TR.Palette.textPrimary : TR.Palette.textSecondary)
                     Text(typeDescription(type))
@@ -455,9 +491,9 @@ private struct TypeOptionRow: View {
 
     private func typeDescription(_ t: CSVImportType) -> String {
         switch t {
-        case .checkins:  return "Energy, mood, libido, sleep, clarity, body weight"
-        case .bloodwork: return "Testosterone, E2, hematocrit, lipids, and more"
-        case .both:      return "Map check-in and bloodwork columns from one file"
+        case .checkins:  return gLoc("csv.typeDesc.checkins", "Energy, mood, libido, sleep, clarity, body weight")
+        case .bloodwork: return gLoc("csv.typeDesc.bloodwork", "Testosterone, E2, hematocrit, lipids, and more")
+        case .both:      return gLoc("csv.typeDesc.both", "Map check-in and bloodwork columns from one file")
         }
     }
 }
@@ -749,7 +785,7 @@ private struct ImportingStep: View {
                 }
                 .frame(width: 140, height: 140)
 
-                Text(progress >= 1.0 ? "Finishing up…" : "Importing records…")
+                Text(progress >= 1.0 ? gLoc("csv.finishing", "Finishing up…") : gLoc("csv.importingRecords", "Importing records…"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(TR.Palette.textSecondary)
             }
@@ -786,7 +822,7 @@ struct ImportReportView: View {
                                   size: 64, filled: true)
                         .trGlow(allErrors.isEmpty ? TR.Palette.mint : TR.Palette.gold, radius: 14, opacity: 0.4)
 
-                    Text(allErrors.isEmpty ? "Import Complete" : "Imported with Issues")
+                    Text(allErrors.isEmpty ? gLoc("csv.title.complete", "Import Complete") : gLoc("csv.title.withIssues", "Imported with Issues"))
                         .font(TR.Font.display(.title2))
                         .foregroundStyle(TR.Palette.textPrimary)
 
@@ -810,7 +846,7 @@ struct ImportReportView: View {
                 if let cr = vm.checkinsResult {
                     ResultBreakdownRow(
                         icon: "checkmark.circle",
-                        label: "Check-ins",
+                        label: gLoc("ach.cat.checkins", "Check-ins"),
                         imported: cr.importedCount,
                         skipped: cr.skippedCount
                     )
@@ -818,7 +854,7 @@ struct ImportReportView: View {
                 if let br = vm.bloodworkResult {
                     ResultBreakdownRow(
                         icon: "drop.fill",
-                        label: "Bloodwork",
+                        label: NSLocalizedString("import.bloodwork", value: "Bloodwork", comment: ""),
                         imported: br.importedCount,
                         skipped: br.skippedCount
                     )
@@ -827,7 +863,9 @@ struct ImportReportView: View {
                 // ── Warnings (collapsible) ───────────────────────────────────
                 if !allWarnings.isEmpty {
                     IssueSection(
-                        title: "\(allWarnings.count) Warning\(allWarnings.count == 1 ? "" : "s")",
+                        title: allWarnings.count == 1
+                            ? gLoc("csv.warnings.one", "1 Warning")
+                            : String(format: gLoc("csv.warnings.other", "%d Warnings"), allWarnings.count),
                         icon: "exclamationmark.triangle",
                         color: TR.Palette.gold,
                         issues: allWarnings,
@@ -838,7 +876,9 @@ struct ImportReportView: View {
                 // ── Errors (collapsible) ─────────────────────────────────────
                 if !allErrors.isEmpty {
                     IssueSection(
-                        title: "\(allErrors.count) Row\(allErrors.count == 1 ? "" : "s") Skipped",
+                        title: allErrors.count == 1
+                            ? gLoc("csv.rowsSkipped.one", "1 Row Skipped")
+                            : String(format: gLoc("csv.rowsSkipped.other", "%d Rows Skipped"), allErrors.count),
                         icon: "xmark.circle",
                         color: TR.Palette.lilac,
                         issues: allErrors,

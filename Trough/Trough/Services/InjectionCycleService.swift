@@ -173,7 +173,7 @@ enum InjectionCycleService {
     static func fertilityRecoveryEstimate(
         hcgStartDate: Date?,
         trtStartDate: Date?
-    ) -> (estimate: String, weeksOnTRT: Int)? {
+    ) -> (estimate: String, range: String, weeksOnTRT: Int)? {
         guard hcgStartDate != nil else { return nil }
 
         let trtWeeks: Int
@@ -184,17 +184,18 @@ enum InjectionCycleService {
         }
 
         // Literature-based recovery windows (Kohn et al., Fertility & Sterility 2017)
-        let estimate: String
+        let bounds: (low: Int, high: Int)
         switch trtWeeks {
         case 0..<52:     // < 1 year on TRT
-            estimate = "8–12 weeks"
+            bounds = (8, 12)
         case 52..<156:   // 1–3 years
-            estimate = "12–20 weeks"
+            bounds = (12, 20)
         default:         // 3+ years
-            estimate = "16–26 weeks"
+            bounds = (16, 26)
         }
-
-        return (estimate: "Expected FSH/LH recovery window: \(estimate)", weeksOnTRT: trtWeeks)
+        let range = String(format: gLoc("fertility.weeksRange", "%1$d–%2$d weeks"), bounds.low, bounds.high)
+        let estimate = String(format: gLoc("fertility.recoveryWindow", "Expected FSH/LH recovery window: %@"), range)
+        return (estimate: estimate, range: range, weeksOnTRT: trtWeeks)
     }
 
     // MARK: - Private

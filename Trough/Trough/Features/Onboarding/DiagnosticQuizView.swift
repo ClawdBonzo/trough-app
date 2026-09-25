@@ -16,11 +16,11 @@ struct DiagnosticQuizView: View {
     @State private var currentSlider = 0
 
     private let sliders: [(emoji: String, label: String)] = [
-        ("⚡️", "Energy"),
-        ("😊", "Mood"),
-        ("🔥", "Libido"),
-        ("😴", "Sleep Quality"),
-        ("🧠", "Mental Clarity"),
+        ("⚡️", NSLocalizedString("quiz.energy", value: "Energy", comment: "")),
+        ("😊", NSLocalizedString("quiz.mood", value: "Mood", comment: "")),
+        ("🔥", NSLocalizedString("quiz.libido", value: "Libido", comment: "")),
+        ("😴", NSLocalizedString("quiz.sleepQuality", value: "Sleep Quality", comment: "")),
+        ("🧠", NSLocalizedString("quiz.mentalClarity", value: "Mental Clarity", comment: "")),
     ]
 
     var body: some View {

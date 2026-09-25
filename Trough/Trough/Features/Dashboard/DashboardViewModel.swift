@@ -353,11 +353,11 @@ final class DashboardViewModel: ObservableObject {
         let checkins = Array(recentCheckins.prefix(14)).reversed()  // oldest first for chart
 
         let specs: [(id: String, label: String, emoji: String, color: Color, kp: KeyPath<SDCheckin, Double>)] = [
-            ("energy",  "Energy",        "⚡️", .yellow,        \.energyScore),
-            ("mood",    "Mood",          "😌", .cyan,           \.moodScore),
-            ("libido",  "Libido",        "🔥", AppColors.accent, \.libidoScore),
-            ("sleep",   "Sleep",         "🌙", .indigo,         \.sleepQualityScore),
-            ("clarity", "Mental Clarity","🧠", .mint,           \.mentalClarityScore),
+            ("energy",  gLoc("checkin.energy", "Energy"),                "⚡️", .yellow,        \.energyScore),
+            ("mood",    gLoc("checkin.mood", "Mood"),                    "😌", .cyan,           \.moodScore),
+            ("libido",  gLoc("checkin.libido", "Libido"),                "🔥", AppColors.accent, \.libidoScore),
+            ("sleep",   gLoc("checkin.sleep", "Sleep"),                  "🌙", .indigo,         \.sleepQualityScore),
+            ("clarity", gLoc("checkin.mentalClarity", "Mental Clarity"), "🧠", .mint,           \.mentalClarityScore),
         ]
 
         metricSeries = specs.map { spec in

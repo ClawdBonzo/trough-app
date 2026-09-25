@@ -42,7 +42,9 @@ struct BloodworkEntryView: View {
                     RangeEditSheet(entry: $vm.formMarkers[idx])
                 }
             }
-            .navigationTitle(vm.editingResult == nil ? "Add Bloodwork" : "Edit Bloodwork")
+            .navigationTitle(vm.editingResult == nil
+                             ? NSLocalizedString("bloodwork.addBloodwork", comment: "")
+                             : NSLocalizedString("bloodwork.editBloodwork", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -59,11 +61,11 @@ struct BloodworkEntryView: View {
                     .foregroundStyle(TR.Palette.coral)
                 }
             }
-            .alert("Error", isPresented: Binding(
+            .alert(NSLocalizedString("common.error", comment: ""), isPresented: Binding(
                 get: { vm.errorMessage != nil },
                 set: { if !$0 { vm.errorMessage = nil } }
             )) {
-                Button("OK") { vm.errorMessage = nil }
+                Button(NSLocalizedString("common.ok", comment: "")) { vm.errorMessage = nil }
             } message: {
                 Text(vm.errorMessage ?? "")
             }
@@ -113,7 +115,7 @@ struct BloodworkEntryView: View {
     // MARK: Marker section
 
     private func markerSection(title: String, entries: [BloodworkViewModel.MarkerEntry]) -> some View {
-        GlassSection(title) {
+        GlassSection(MarkerFormat.sectionTitle(title)) {
             ForEach(Array(entries.enumerated()), id: \.element.id) { i, entry in
                 if i > 0 { GlassDivider(leadingInset: 14) }
                 markerRow(for: entry)
@@ -135,7 +137,7 @@ struct BloodworkEntryView: View {
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(entry.name)
+                    Text(MarkerFormat.displayName(entry.name))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(TR.Palette.textPrimary)
                     HStack(spacing: 4) {
@@ -175,7 +177,7 @@ struct BloodworkEntryView: View {
                     .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous)
                         .strokeBorder(entry.valueDouble == nil ? TR.Palette.hairline : rangeColor(for: entry).opacity(0.4), lineWidth: 1))
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(entry.name), \(entry.unit)")
+                    .accessibilityLabel(Text(verbatim: "\(MarkerFormat.displayName(entry.name)), \(entry.unit)"))
                 }
             }
 
@@ -207,7 +209,7 @@ struct BloodworkEntryView: View {
     // MARK: Photo section
 
     private var photoSection: some View {
-        GlassSection("Photo") {
+        GlassSection(NSLocalizedString("Photo", comment: "Bloodwork photo section")) {
             VStack(alignment: .leading, spacing: 12) {
                 if let img = photoImage {
                     HStack(spacing: 12) {
@@ -259,7 +261,7 @@ struct BloodworkEntryView: View {
     // MARK: Notes section
 
     private var notesSection: some View {
-        GlassSection("Notes") {
+        GlassSection(NSLocalizedString("common.notes", comment: "")) {
             TextField("Optional notes about this panel...", text: $vm.formNotes, axis: .vertical)
                 .lineLimit(3...6)
                 .foregroundStyle(TR.Palette.textPrimary)
@@ -297,7 +299,7 @@ struct RangeEditSheet: View {
                 TRBackground()
                 Form {
                     Section {
-                        Text(entry.name)
+                        Text(MarkerFormat.displayName(entry.name))
                             .font(.headline)
                             .foregroundStyle(TR.Palette.textPrimary)
                         Text(verbatim: String(format: gLoc("bloodwork.defaultRange", "Default: %.1f–%.1f %@"), locale: Locale.current,

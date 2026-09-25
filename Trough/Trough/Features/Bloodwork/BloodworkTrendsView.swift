@@ -13,7 +13,7 @@ struct BloodworkTrendsView: View {
                 GlassPillPicker(
                     items: vm.availablePanels,
                     selection: $vm.selectedPanel,
-                    title: { $0.rawValue }
+                    title: { $0.label }
                 )
 
                 // Chart content
@@ -41,30 +41,30 @@ struct BloodworkTrendsView: View {
         switch vm.selectedPanel {
         case .primary:
             VStack(spacing: 14) {
-                markerChart(name: "Total Testosterone", color: TR.Palette.coral, title: "Total Testosterone")
-                markerChart(name: "Free Testosterone", color: TR.Palette.teal, title: "Free Testosterone")
+                markerChart(name: "Total Testosterone", color: TR.Palette.coral, title: MarkerFormat.displayName("Total Testosterone"))
+                markerChart(name: "Free Testosterone", color: TR.Palette.teal, title: MarkerFormat.displayName("Free Testosterone"))
             }
         case .e2:
-            markerChart(name: "Estradiol (E2)", color: TR.Palette.gold, title: "Estradiol (E2)")
+            markerChart(name: "Estradiol (E2)", color: TR.Palette.gold, title: MarkerFormat.displayName("Estradiol (E2)"))
         case .hematocrit:
             VStack(spacing: 14) {
-                markerChart(name: "Hematocrit", color: TR.Palette.coralLight, title: "Hematocrit")
-                markerChart(name: "Hemoglobin", color: TR.Palette.tangerine, title: "Hemoglobin")
+                markerChart(name: "Hematocrit", color: TR.Palette.coralLight, title: MarkerFormat.displayName("Hematocrit"))
+                markerChart(name: "Hemoglobin", color: TR.Palette.tangerine, title: MarkerFormat.displayName("Hemoglobin"))
             }
         case .shbg:
-            markerChart(name: "SHBG", color: TR.Palette.lilac, title: "SHBG")
+            markerChart(name: "SHBG", color: TR.Palette.lilac, title: MarkerFormat.displayName("SHBG"))
         case .lipids:
             VStack(spacing: 14) {
-                markerChart(name: "Total Cholesterol", color: TR.Palette.sky, title: "Total Cholesterol")
-                markerChart(name: "LDL",               color: TR.Palette.tangerine, title: "LDL")
-                markerChart(name: "HDL",               color: TR.Palette.mint, title: "HDL")
-                markerChart(name: "Triglycerides",     color: TR.Palette.gold, title: "Triglycerides")
+                markerChart(name: "Total Cholesterol", color: TR.Palette.sky, title: MarkerFormat.displayName("Total Cholesterol"))
+                markerChart(name: "LDL",               color: TR.Palette.tangerine, title: MarkerFormat.displayName("LDL"))
+                markerChart(name: "HDL",               color: TR.Palette.mint, title: MarkerFormat.displayName("HDL"))
+                markerChart(name: "Triglycerides",     color: TR.Palette.gold, title: MarkerFormat.displayName("Triglycerides"))
             }
         case .fertility:
             VStack(spacing: 14) {
-                fertilityChart(name: "FSH", color: TR.Palette.mint, title: "FSH — Fertility Recovery Zone",
+                fertilityChart(name: "FSH", color: TR.Palette.mint, title: gLoc("bloodwork.trends.fshTitle", "FSH — Fertility Recovery Zone"),
                                recoveryLow: 1.5, recoveryHigh: 9.0)
-                markerChart(name: "LH", color: TR.Palette.teal, title: "LH")
+                markerChart(name: "LH", color: TR.Palette.teal, title: MarkerFormat.displayName("LH"))
                 DisclaimerBanner(type: .fertility)
             }
         }
@@ -154,14 +154,14 @@ struct BloodworkTrendsView: View {
             color: color,
             points: points,
             unit: unit,
-            emptyText: "No data — add bloodwork results to see trends",
+            emptyText: gLoc("bloodwork.trends.empty", "No data — add bloodwork results to see trends"),
             chart: {
                 gradientAreaChart(points: points, color: color, bandLow: rangeLow, bandHigh: rangeHigh,
                                   bandTint: TR.Palette.teal)
             },
             legend: {
                 if let low = rangeLow, let high = rangeHigh {
-                    bandLegend(String(format: "Ref: %.1f–%.1f %@", low, high, unit), tint: TR.Palette.teal)
+                    bandLegend(String(format: gLoc("bloodwork.refRangeUnit", "Ref: %.1f–%.1f %@"), locale: Locale.current, low, high, unit), tint: TR.Palette.teal)
                 }
             }
         )
@@ -280,13 +280,13 @@ struct BloodworkTrendsView: View {
             color: color,
             points: points,
             unit: unit,
-            emptyText: "No data — add bloodwork with FSH to see fertility trends",
+            emptyText: gLoc("bloodwork.trends.emptyFSH", "No data — add bloodwork with FSH to see fertility trends"),
             chart: {
                 gradientAreaChart(points: points, color: color, bandLow: recoveryLow, bandHigh: recoveryHigh,
                                   bandTint: TR.Palette.mint)
             },
             legend: {
-                bandLegend(String(format: "Fertility Recovery Zone: %.1f–%.1f %@", recoveryLow, recoveryHigh, unit),
+                bandLegend(String(format: gLoc("bloodwork.trends.recoveryZone", "Fertility Recovery Zone: %.1f–%.1f %@"), locale: Locale.current, recoveryLow, recoveryHigh, unit),
                            tint: TR.Palette.mint)
             }
         )

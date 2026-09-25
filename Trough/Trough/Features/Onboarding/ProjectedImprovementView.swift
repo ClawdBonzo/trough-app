@@ -72,7 +72,7 @@ struct ProjectedImprovementView: View {
                 // Day labels
                 HStack {
                     ForEach(0..<7, id: \.self) { day in
-                        Text(day == 0 ? NSLocalizedString("projected.now", comment: "") : "D\(day + 1)")
+                        Text(day == 0 ? NSLocalizedString("projected.now", comment: "") : String(format: gLoc("chart.dayN", "D%d"), day + 1))
                             .font(.caption2)
                             .foregroundColor(AppColors.textSecondary)
                         if day < 6 { Spacer() }

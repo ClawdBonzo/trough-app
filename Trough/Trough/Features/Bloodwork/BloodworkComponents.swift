@@ -335,15 +335,48 @@ enum MarkerFormat {
         String(format: NSLocalizedString("bloodwork.refShort", value: "Ref %@", comment: "Reference range, short form"), range)
     }
 
-    /// Short display name for chips.
+    /// Short display name for chips (localized at display time).
     static func short(_ name: String) -> String {
         switch name {
-        case "Total Testosterone": return "Total T"
-        case "Free Testosterone":  return "Free T"
+        case "Total Testosterone": return gLoc("marker.short.totalT", "Total T")
+        case "Free Testosterone":  return gLoc("marker.short.freeT", "Free T")
         case "Estradiol (E2)":     return "E2"
-        case "Total Cholesterol":  return "Total Chol."
-        default: return name
+        case "Total Cholesterol":  return gLoc("marker.short.totalChol", "Total Chol.")
+        default: return displayName(name)
         }
+    }
+
+    /// Stored marker names are English and stay that way (they key the data);
+    /// this localizes them for display only. Unknown/custom names pass through.
+    private static let markerKeys: [String: String] = [
+        "Total Testosterone": "marker.totalT",
+        "Free Testosterone":  "marker.freeT",
+        "Estradiol (E2)":     "marker.e2",
+        "Hematocrit":         "marker.hematocrit",
+        "Hemoglobin":         "marker.hemoglobin",
+        "Prolactin":          "marker.prolactin",
+        "Cortisol (AM)":      "marker.cortisolAM",
+        "Total Cholesterol":  "marker.totalChol",
+        "Triglycerides":      "marker.triglycerides",
+    ]
+
+    static func displayName(_ name: String) -> String {
+        guard let key = markerKeys[name] else { return name }
+        return gLoc(key, name)
+    }
+
+    private static let sectionKeys: [String: String] = [
+        "Core": "bloodwork.section.core",
+        "Hormones": "bloodwork.section.hormones",
+        "Lipids": "bloodwork.section.lipids",
+        "Liver": "bloodwork.section.liver",
+        "Other": "bloodwork.section.other",
+    ]
+
+    /// Localized marker-section title ("Core", "Lipids", ...).
+    static func sectionTitle(_ title: String) -> String {
+        guard let key = sectionKeys[title] else { return title }
+        return gLoc(key, title)
     }
 }
 
@@ -393,7 +426,7 @@ struct BloodworkMarkerChip: View {
         .overlay(RoundedRectangle(cornerRadius: TR.Metrics.controlRadius, style: .continuous)
             .strokeBorder(status.tint.opacity(status == .unknown ? 0.08 : 0.22), lineWidth: 1))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(name), \(MarkerFormat.value(value)) \(unit), \(status.label)")
+        .accessibilityLabel(Text(verbatim: "\(MarkerFormat.displayName(name)), \(MarkerFormat.value(value)) \(unit), \(status.label)"))
     }
 }
 
