@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "연속 기록";
 "ach.celebrate.moreBadges" = "+배지 %d개 더";
 "ach.celebrate.quest.line" = "잘했어요. 기록이 또 하나 늘었어요.";
-"ach.celebrate.rank.line" = "레벨 %d · %@ 등급. 공유하는 모든 카드에 표시돼요.";
+"ach.celebrate.rank.line" = "레벨 %d · %@ 등급. 꾸준함으로 얻은 결과예요.";
 "ach.celebrate.streak.line.hundred" = "세 자릿수 돌파. 꾸준함이 기록으로 증명됐어요.";
 "ach.celebrate.streak.line.month" = "한 달 동안 하루도 안 빠졌어요. 이제 루틴이에요.";
 "ach.celebrate.streak.line.week" = "일주일 내내 체크인. 습관이 자리 잡고 있어요.";

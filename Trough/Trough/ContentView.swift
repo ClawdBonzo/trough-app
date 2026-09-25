@@ -120,6 +120,7 @@ struct MainTabView: View {
         .fullScreenCover(isPresented: $gamificationVM.showCelebration) {
             if let c = gamificationVM.currentCelebration {
                 CelebrationView(celebration: c) { gamificationVM.dismissCurrentCelebration() }
+                    .id(c.id) // fresh view state when the next celebration swaps in
                     .environmentObject(gamificationVM)
             }
         }

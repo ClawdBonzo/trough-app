@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "REEKS";
 "ach.celebrate.moreBadges" = "+%d badges extra";
 "ach.celebrate.quest.line" = "Netjes gedaan. Weer eentje voor het logboek.";
-"ach.celebrate.rank.line" = "Level %d · cover %@. Die staat op elke kaart die je deelt.";
+"ach.celebrate.rank.line" = "Level %d · cover %@. Verdiend door vol te houden.";
 "ach.celebrate.streak.line.hundred" = "Drie cijfers. Consequent, zwart op wit.";
 "ach.celebrate.streak.line.month" = "Een maand lang geen dag gemist. Dat is een routine.";
 "ach.celebrate.streak.line.week" = "Een hele week check-ins. De gewoonte ontstaat.";

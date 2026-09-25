@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "連続記録";
 "ach.celebrate.moreBadges" = "ほか%d個のバッジ";
 "ach.celebrate.quest.line" = "お見事。またひとつ記録に加わりました。";
-"ach.celebrate.rank.line" = "レベル%d · %@ランク。シェアするカードすべてに反映されます。";
+"ach.celebrate.rank.line" = "レベル%d · %@ランク。続けてきた証です。";
 "ach.celebrate.streak.line.hundred" = "ついに3ケタ。継続の証が記録に残りました。";
 "ach.celebrate.streak.line.month" = "1か月、1日も欠かさず。もう立派なルーティンです。";
 "ach.celebrate.streak.line.week" = "まる1週間のチェックイン。習慣が形になってきました。";

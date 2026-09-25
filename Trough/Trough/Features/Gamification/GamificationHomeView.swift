@@ -40,11 +40,10 @@ struct AchievementsScreen: View {
 /// Not scrollable on purpose — wrap in a ScrollView (see `AchievementsScreen`).
 struct GamificationHomeView: View {
     @ObservedObject var viewModel: GamificationViewModel
-    @State private var shareKind: ShareCardKind?
 
     var body: some View {
         VStack(alignment: .leading, spacing: TR.Metrics.sectionSpacing) {
-            PassportCard(viewModel: viewModel) { shareKind = .rank }
+            PassportCard(viewModel: viewModel)
                 .trRevealOnAppear()
             PersonaCard(persona: viewModel.persona, checkins: viewModel.facts.checkins)
                 .trRevealOnAppear(delay: 0.05)
@@ -60,9 +59,6 @@ struct GamificationHomeView: View {
         }
         .padding(TR.Metrics.gutter)
         .padding(.bottom, 24)
-        .sheet(item: $shareKind) { kind in
-            ShareCardSheet(kind: kind, data: .from(viewModel))
-        }
     }
 
     // MARK: Streaks
@@ -82,7 +78,7 @@ struct GamificationHomeView: View {
                     best: max(checkin?.bestCount ?? 0, viewModel.facts.longestCheckinStreak, days),
                     flame: GamificationViewModel.flameLevel(forDays: days),
                     symbol: "flame.fill",
-                    onShare: days > 0 ? { shareKind = .streak } : nil
+                    onShare: nil
                 )
                 StreakCard(
                     title: gLoc("ach.streaks.injection", "On-time injections"),
@@ -102,7 +98,7 @@ struct GamificationHomeView: View {
 
 struct PassportCard: View {
     @ObservedObject var viewModel: GamificationViewModel
-    var onShare: () -> Void
+    var onShare: (() -> Void)? = nil
 
     var body: some View {
         let level = viewModel.currentLevel
@@ -131,17 +127,20 @@ struct PassportCard: View {
                         .foregroundStyle(ink.opacity(0.8))
                 }
                 Spacer(minLength: 0)
-                Button(action: onShare) {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.headline.weight(.bold))
-                        .foregroundStyle(ink)
-                        .frame(width: TR.Metrics.minTap, height: TR.Metrics.minTap)
-                        .background(ink.opacity(0.12), in: Circle())
-                        .overlay(Circle().strokeBorder(ink.opacity(0.18), lineWidth: 1))
+                // Sharing is opt-in from the toolbar only — no share nudges on cards.
+                if let onShare {
+                    Button(action: onShare) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(ink)
+                            .frame(width: TR.Metrics.minTap, height: TR.Metrics.minTap)
+                            .background(ink.opacity(0.12), in: Circle())
+                            .overlay(Circle().strokeBorder(ink.opacity(0.18), lineWidth: 1))
+                    }
+                    .buttonStyle(.trPressable)
+                    .accessibilityLabel(Text(verbatim: gLoc("ach.share.title.rank", "Share your rank")))
+                    .accessibilityIdentifier("passport-share")
                 }
-                .buttonStyle(.trPressable)
-                .accessibilityLabel(Text(verbatim: gLoc("ach.share.title.rank", "Share your rank")))
-                .accessibilityIdentifier("passport-share")
             }
 
             VStack(alignment: .leading, spacing: 6) {

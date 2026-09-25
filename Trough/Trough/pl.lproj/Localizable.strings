@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "SERIA";
 "ach.celebrate.moreBadges" = "Kolejne odznaki: +%d";
 "ach.celebrate.quest.line" = "Dobra robota. Kolejna pozycja w dzienniku.";
-"ach.celebrate.rank.line" = "Poziom %d · ranga %@. Widać ją na każdej udostępnianej karcie.";
+"ach.celebrate.rank.line" = "Poziom %d · ranga %@. Zasłużona regularnością.";
 "ach.celebrate.streak.line.hundred" = "Trzy cyfry. Regularność czarno na białym.";
 "ach.celebrate.streak.line.month" = "Miesiąc bez jednego opuszczonego dnia. To już rutyna.";
 "ach.celebrate.streak.line.week" = "Pełny tydzień check-inów. Nawyk się buduje.";

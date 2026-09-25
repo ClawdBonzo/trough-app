@@ -936,7 +936,7 @@
 "ach.celebrate.kicker.streak" = "STREAK";
 "ach.celebrate.moreBadges" = "+%d more badges";
 "ach.celebrate.quest.line" = "Nicely done. Another one for the log.";
-"ach.celebrate.rank.line" = "Level %d · %@ cover. It's on every card you share.";
+"ach.celebrate.rank.line" = "Level %d · %@ cover. Earned by showing up.";
 "ach.celebrate.streak.line.hundred" = "Triple digits. Consistency, on the record.";
 "ach.celebrate.streak.line.month" = "A month without missing a day. That's a routine.";
 "ach.celebrate.streak.line.week" = "A full week of check-ins. The habit is forming.";

@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "SVIT";
 "ach.celebrate.moreBadges" = "+%d märken till";
 "ach.celebrate.quest.line" = "Snyggt jobbat. En till i loggen.";
-"ach.celebrate.rank.line" = "Nivå %d · %@-omslag. Det syns på varje kort du delar.";
+"ach.celebrate.rank.line" = "Nivå %d · %@-omslag. Förtjänat genom att hålla i.";
 "ach.celebrate.streak.line.hundred" = "Tresiffrigt. Konsekvens, svart på vitt.";
 "ach.celebrate.streak.line.month" = "En månad utan en enda missad dag. Det kallas rutin.";
 "ach.celebrate.streak.line.week" = "En hel vecka av incheckningar. Vanan tar form.";

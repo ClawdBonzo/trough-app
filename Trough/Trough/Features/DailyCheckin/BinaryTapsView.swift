@@ -109,7 +109,8 @@ struct BinaryTapsView: View {
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(false)
         .toolbarBackground(TR.Palette.abyss.opacity(0.94), for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(.automatic, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 
     // MARK: Question card

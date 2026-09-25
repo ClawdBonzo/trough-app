@@ -928,7 +928,7 @@
 "ach.celebrate.kicker.streak" = "SEQUÊNCIA";
 "ach.celebrate.moreBadges" = "+%d medalha(s)";
 "ach.celebrate.quest.line" = "Mandou bem. Mais uma pro registro.";
-"ach.celebrate.rank.line" = "Nível %d · capa %@. Ela aparece em todo card que você compartilhar.";
+"ach.celebrate.rank.line" = "Nível %d · capa %@. Conquistada com constância.";
 "ach.celebrate.streak.line.hundred" = "Três dígitos. Constância registrada.";
 "ach.celebrate.streak.line.month" = "Um mês sem falhar um dia. Isso é rotina.";
 "ach.celebrate.streak.line.week" = "Uma semana inteira de check-ins. O hábito está pegando.";

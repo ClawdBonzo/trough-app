@@ -3,7 +3,7 @@ import SwiftUI
 /// Full-screen celebration for a badge unlock, a new rank, a streak milestone (or, via the
 /// legacy wrapper, a quest). Layered: screen background + tinted glow, rotating halo ring,
 /// sunburst rays, the art, kicker, title, witty line, a gold "+XP" chip that pops a beat later,
-/// "+N more badges", confetti, Share + "Carry on". Tap anywhere to dismiss.
+/// "+N more badges", confetti, "Carry on". Tap anywhere to dismiss.
 ///
 /// Reduce Motion: fades only — no spin, no rays rotation, no confetti, no pop.
 struct CelebrationView: View {
@@ -15,7 +15,6 @@ struct CelebrationView: View {
     @State private var chipShown = false
     @State private var spin = false
     @State private var burst = 0
-    @State private var shareKind: ShareCardKind?
     @State private var didFinish = false
 
     var body: some View {
@@ -70,24 +69,13 @@ struct CelebrationView: View {
 
                 Spacer(minLength: 12)
 
-                VStack(spacing: 10) {
-                    if let kind = shareCardKind {
-                        Button {
-                            shareKind = kind
-                        } label: {
-                            Label(gLoc("ach.share", "Share"), systemImage: "square.and.arrow.up")
-                        }
-                        .buttonStyle(.trPrimary)
-                        .accessibilityIdentifier("celebration-share")
-                    }
-                    Button { finish() } label: {
-                        Text(gLoc("ach.celebrate.carryOn", "Carry on"))
-                            .frame(maxWidth: .infinity, minHeight: TR.Metrics.minTap)
-                    }
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(TR.Palette.textSecondary)
-                    .accessibilityIdentifier("celebration-done")
+                // No share prompt here: Trough is a private health log. Sharing
+                // stays opt-in from the Achievements screen.
+                Button { finish() } label: {
+                    Text(gLoc("ach.celebrate.carryOn", "Carry on"))
                 }
+                .buttonStyle(.trPrimary)
+                .accessibilityIdentifier("celebration-done")
                 .frame(maxWidth: 380)
                 .opacity(appeared ? 1 : 0)
             }
@@ -102,9 +90,6 @@ struct CelebrationView: View {
         .environment(\.colorScheme, .dark)
         .sensoryFeedback(.success, trigger: burst)
         .onAppear(perform: start)
-        .sheet(item: $shareKind) { kind in
-            ShareCardSheet(kind: kind, data: .current)
-        }
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.isModal)
         .accessibilityAction(.escape) { finish() }
@@ -158,7 +143,7 @@ struct CelebrationView: View {
             return def.unlockedLine
         case .levelUp(let level, _, _):
             let cover = TR.RankCover.forLevel(level)
-            return String(format: gLoc("ach.celebrate.rank.line", "Level %d · %@ cover. It's on every card you share."), level, cover.displayName)
+            return String(format: gLoc("ach.celebrate.rank.line", "Level %d · %@ cover. Earned by showing up."), level, cover.displayName)
         case .streak(let days, _):
             switch days {
             case ..<14: return gLoc("ach.celebrate.streak.line.week", "A full week of check-ins. The habit is forming.")

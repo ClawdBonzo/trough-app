@@ -249,6 +249,16 @@ final class GamificationViewModel: ObservableObject {
     /// prompt's moment (ReviewPromptService applies its own gates).
     func dismissCurrentCelebration() {
         guard let finished = currentCelebration else { return }
+        if finished.isFullScreen, let next = celebrationQueue.first, next.isFullScreen {
+            // Swap the next celebration into the cover that is already on screen.
+            // Dismissing and re-presenting a fullScreenCover back to back races
+            // SwiftUI's dismissal animation and can leave a cover that no longer
+            // responds to `showCelebration = false` ("Carry on" does nothing).
+            celebrationQueue.removeFirst()
+            setPresentation(next, show: true)
+            playHaptic(for: next)
+            return
+        }
         setPresentation(nil, show: false)
         if celebrationQueue.isEmpty {
             if finished.isFullScreen {
@@ -290,6 +300,10 @@ final class GamificationViewModel: ObservableObject {
         guard currentCelebration == nil, !celebrationQueue.isEmpty else { return }
         let next = celebrationQueue.removeFirst()
         setPresentation(next, show: true)
+        playHaptic(for: next)
+    }
+
+    private func playHaptic(for next: Celebration) {
         switch next {
         case .badge:   hapticManager?.badgeUnlock()
         case .levelUp: hapticManager?.levelUp()

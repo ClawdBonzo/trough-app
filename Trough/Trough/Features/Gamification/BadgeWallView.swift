@@ -270,9 +270,9 @@ struct BadgeDetailSheet: View {
                         Button {
                             shareKind = .badge(badge.def)
                         } label: {
-                            Label(gLoc("ach.badge.share", "Show it off"), systemImage: "square.and.arrow.up")
+                            Label(gLoc("ach.share", "Share"), systemImage: "square.and.arrow.up")
                         }
-                        .buttonStyle(.trPrimary)
+                        .buttonStyle(.trSecondary)
                         .padding(.top, 8)
                         .accessibilityIdentifier("badge-share")
                     }

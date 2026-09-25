@@ -57,7 +57,10 @@ struct DashboardView: View {
                 vm.load()
                 showSampleDataBanner = !SampleDataService.hasRealData(context: modelContext)
             }
-            .sheet(isPresented: $showCheckin, onDismiss: { vm.load() }) {
+            .sheet(isPresented: $showCheckin, onDismiss: {
+                vm.load()
+                showSampleDataBanner = !SampleDataService.hasRealData(context: modelContext)
+            }) {
                 DailyCheckinView()
             }
             .sheet(isPresented: $showWeeklyReport) {
