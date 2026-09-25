@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 Trois mois d’affilée ! Régularité légendaire";
 
 /* Forecast */
-"forecast.injectionToday" = "Jour d'injection aujourd'hui — l'énergie devrait culminer dans 24 à 48 heures.";
-"forecast.injectionTomorrow" = "Injection prévue demain. Vous êtes au creux — un peu de fatigue est normal.";
-"forecast.dip" = "Jour %d demain — l'énergie baisse généralement. Anticipez-la.";
-"forecast.strong" = "Jour %d demain — les taux devraient être élevés après l'injection.";
-"forecast.tapering" = "Prochaine injection dans %d jours. Les taux baissent progressivement.";
+"forecast.injectionToday" = "Jour d’injection aujourd’hui. Notez votre dose pour garder votre courbe à jour.";
+"forecast.injectionTomorrow" = "Injection prévue demain — vous êtes près du point bas de votre courbe estimée.";
+"forecast.dip" = "Demain, jour %d — la fin de votre cycle sur votre courbe estimée.";
+"forecast.strong" = "Demain, jour %d — près du pic de votre courbe estimée.";
+"forecast.tapering" = "Prochaine injection dans %d jours. Votre taux estimé diminue progressivement.";
 
 /* PK Curve */
 "pk.overdue" = "En retard de %dj";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "Cette semaine vs semaine précédente";
 "unit.hoursShort" = "%.1f h";
 "fertility.weeksRange" = "%1$d à %2$d semaines";
-"fertility.recoveryWindow" = "Délai de récupération FSH/LH attendu : %@";
+"fertility.recoveryWindow" = "Fenêtre de récupération FSH/LH habituelle : %@";
 "weekly.hcgActive" = "hCG active";
 "weekly.recovery" = "Récupération : %@";
 "error.invalidDose" = "Veuillez saisir une dose valide.";

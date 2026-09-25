@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 세 달 연속! 전설적인 꾸준함";
 
 /* Forecast */
-"forecast.injectionToday" = "오늘은 주사일입니다 — 활력은 24~48시간 후 정점에 이릅니다.";
-"forecast.injectionTomorrow" = "내일 주사 예정입니다. 현재 트로프 구간이라 다소 피로감이 정상입니다.";
-"forecast.dip" = "내일 %d일째 — 활력이 보통 떨어집니다. 미리 대비하세요.";
-"forecast.strong" = "내일 %d일째 — 주사 후 수치가 강할 것입니다.";
-"forecast.tapering" = "다음 주사까지 %d일. 수치가 서서히 감소하고 있습니다.";
+"forecast.injectionToday" = "오늘은 주사하는 날이에요. 용량을 기록해 곡선을 최신으로 유지하세요.";
+"forecast.injectionTomorrow" = "내일 주사 예정이에요. 추정 곡선의 최저점 근처예요.";
+"forecast.dip" = "내일은 %d일째 — 추정 곡선상 주기의 후반부예요.";
+"forecast.strong" = "내일은 %d일째 — 추정 곡선의 정점 근처예요.";
+"forecast.tapering" = "다음 주사까지 %d일. 추정 수치가 서서히 내려가고 있어요.";
 
 /* PK Curve */
 "pk.overdue" = "%d일 초과";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "이번 주 vs 지난주";
 "unit.hoursShort" = "%.1f시간";
 "fertility.weeksRange" = "%1$d–%2$d주";
-"fertility.recoveryWindow" = "예상 FSH/LH 회복 기간: %@";
+"fertility.recoveryWindow" = "일반적인 FSH/LH 회복 기간: %@";
 "weekly.hcgActive" = "hCG 사용 중";
 "weekly.recovery" = "회복: %@";
 "error.invalidDose" = "올바른 용량을 입력하세요.";

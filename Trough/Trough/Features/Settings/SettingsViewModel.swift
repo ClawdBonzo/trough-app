@@ -61,9 +61,10 @@ final class SettingsViewModel: ObservableObject {
 
     func load() {
         let protoPred = #Predicate<SDProtocol> { $0.isActive && !$0.isSampleData }
-        var protoDesc = FetchDescriptor<SDProtocol>(predicate: protoPred)
-        protoDesc.fetchLimit = 1
-        currentProtocol = try? modelContext.fetch(protoDesc).first
+        // Several protocols can be active (e.g. TRT + hCG): show the primary one,
+        // the same protocol the dashboard and cycle day use.
+        let active = (try? modelContext.fetch(FetchDescriptor<SDProtocol>(predicate: protoPred))) ?? []
+        currentProtocol = active.first(where: \.isPrimary) ?? active.min { $0.startDate < $1.startDate }
 
         let activeSupplPred = #Predicate<SDSupplementConfig> { $0.isActive && !$0.isSampleData }
         supplements = (try? modelContext.fetch(FetchDescriptor<SDSupplementConfig>(predicate: activeSupplPred))) ?? []

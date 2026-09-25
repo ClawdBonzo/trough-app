@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 3か月連続！伝説級の継続力";
 
 /* Forecast */
-"forecast.injectionToday" = "今日は注射日 — エネルギーは24〜48時間でピークに達するはずです。";
-"forecast.injectionTomorrow" = "明日が注射予定日。トラフ期にあり — 多少の疲労は正常です。";
-"forecast.dip" = "明日は%d日目 — エネルギーは通常低下します。先回りして対処を。";
-"forecast.strong" = "明日は%d日目 — 注射後で値は高いはずです。";
-"forecast.tapering" = "次回の注射まで%d日。値は徐々に低下しています。";
+"forecast.injectionToday" = "今日は注射日です。投与を記録してカーブを最新に保ちましょう。";
+"forecast.injectionTomorrow" = "明日は注射予定日。推定カーブの最低点付近です。";
+"forecast.dip" = "明日は%d日目。推定カーブではサイクルの後半です。";
+"forecast.strong" = "明日は%d日目。推定カーブのピーク付近です。";
+"forecast.tapering" = "次の注射まであと%d日。推定レベルはゆるやかに下降中です。";
 
 /* PK Curve */
 "pk.overdue" = "%d日超過";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "今週と先週の比較";
 "unit.hoursShort" = "%.1f時間";
 "fertility.weeksRange" = "%1$d～%2$d週間";
-"fertility.recoveryWindow" = "FSH/LHの回復期間の目安：%@";
+"fertility.recoveryWindow" = "FSH/LHの一般的な回復期間：%@";
 "weekly.hcgActive" = "hCG使用中";
 "weekly.recovery" = "回復：%@";
 "error.invalidDose" = "有効な用量を入力してください。";

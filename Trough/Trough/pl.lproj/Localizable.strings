@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 Trzy miesiące z rzędu! Legendarna regularność";
 
 /* Forecast */
-"forecast.injectionToday" = "Dziś dzień zastrzyku — szczyt energii powinien przyjść za 24–48 godzin.";
-"forecast.injectionTomorrow" = "Jutro pora na zastrzyk. Jesteś w dołku — lekkie zmęczenie to norma.";
-"forecast.dip" = "Jutro dzień %d — energia zwykle spada. Bądź o krok przed nią.";
-"forecast.strong" = "Jutro dzień %d — poziomy po zastrzyku powinny być mocne.";
-"forecast.tapering" = "Następny zastrzyk za %d dn. Poziomy stopniowo opadają.";
+"forecast.injectionToday" = "Dziś dzień iniekcji. Zapisz dawkę, aby krzywa była aktualna.";
+"forecast.injectionTomorrow" = "Iniekcja jutro — jesteś blisko najniższego punktu szacowanej krzywej.";
+"forecast.dip" = "Jutro dzień %d — późniejsza część cyklu na szacowanej krzywej.";
+"forecast.strong" = "Jutro dzień %d — blisko szczytu szacowanej krzywej.";
+"forecast.tapering" = "Następna iniekcja za %d dni. Szacowany poziom stopniowo spada.";
 
 /* PK Curve */
 "pk.overdue" = "Zaległy o %d dn.";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "Ten tydzień vs poprzedni";
 "unit.hoursShort" = "%.1f godz.";
 "fertility.weeksRange" = "%1$d–%2$d tyg.";
-"fertility.recoveryWindow" = "Przewidywany czas powrotu FSH/LH: %@";
+"fertility.recoveryWindow" = "Typowy okres regeneracji FSH/LH: %@";
 "weekly.hcgActive" = "hCG aktywne";
 "weekly.recovery" = "Powrót: %@";
 "error.invalidDose" = "Wpisz prawidłową dawkę.";

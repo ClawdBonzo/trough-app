@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 Tre månader i rad! Legendarisk kontinuitet";
 
 /* Forecast */
-"forecast.injectionToday" = "Injektionsdag idag — energin bör nå sin topp om 24–48 timmar.";
-"forecast.injectionTomorrow" = "Injektion ska tas imorgon. Du är i dalen — viss trötthet är normalt.";
-"forecast.dip" = "Dag %d imorgon — energin sjunker ofta. Ligg steget före.";
-"forecast.strong" = "Dag %d imorgon — nivåerna bör vara starka efter injektionen.";
-"forecast.tapering" = "Nästa injektion om %d dagar. Nivåerna avtar gradvis.";
+"forecast.injectionToday" = "Injektionsdag i dag. Logga din dos så att kurvan hålls uppdaterad.";
+"forecast.injectionTomorrow" = "Injektion i morgon – du är nära lägsta punkten på din uppskattade kurva.";
+"forecast.dip" = "Dag %d i morgon – den senare delen av cykeln på din uppskattade kurva.";
+"forecast.strong" = "Dag %d i morgon – nära toppen av din uppskattade kurva.";
+"forecast.tapering" = "Nästa injektion om %d dagar. Din uppskattade nivå sjunker gradvis.";
 
 /* PK Curve */
 "pk.overdue" = "Försenad med %dd";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "Den här veckan mot förra";
 "unit.hoursShort" = "%.1f tim";
 "fertility.weeksRange" = "%1$d–%2$d veckor";
-"fertility.recoveryWindow" = "Förväntad återhämtningstid för FSH/LH: %@";
+"fertility.recoveryWindow" = "Typiskt återhämtningsfönster för FSH/LH: %@";
 "weekly.hcgActive" = "hCG aktivt";
 "weekly.recovery" = "Återhämtning: %@";
 "error.invalidDose" = "Ange en giltig dos.";

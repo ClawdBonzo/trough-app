@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 Drie maanden op rij! Legendarisch consequent";
 
 /* Forecast */
-"forecast.injectionToday" = "Vandaag is je injectiedag — je energie zou over 24–48 uur moeten pieken.";
-"forecast.injectionTomorrow" = "Morgen is er een injectie gepland. Je zit op het dieptepunt — wat vermoeidheid is normaal.";
-"forecast.dip" = "Dag %d morgen — je energie zakt doorgaans wat. Blijf erop voor.";
-"forecast.strong" = "Dag %d morgen — je waarden zouden sterk moeten zijn na de injectie.";
-"forecast.tapering" = "Volgende injectie over %d dagen. Je waarden lopen geleidelijk terug.";
+"forecast.injectionToday" = "Vandaag is injectiedag. Log je dosis zodat je curve actueel blijft.";
+"forecast.injectionTomorrow" = "Injectie morgen — je zit bij het laagste punt van je geschatte curve.";
+"forecast.dip" = "Morgen dag %d — het latere deel van je cyclus op je geschatte curve.";
+"forecast.strong" = "Morgen dag %d — bij de piek van je geschatte curve.";
+"forecast.tapering" = "Volgende injectie over %d dagen. Je geschatte niveau daalt geleidelijk.";
 
 /* PK Curve */
 "pk.overdue" = "%dd te laat";
@@ -1376,7 +1376,7 @@
 "weekly.compareKicker" = "Deze week vs vorige week";
 "unit.hoursShort" = "%.1f u";
 "fertility.weeksRange" = "%1$d–%2$d weken";
-"fertility.recoveryWindow" = "Verwachte hersteltermijn FSH/LH: %@";
+"fertility.recoveryWindow" = "Gebruikelijk FSH/LH-herstelvenster: %@";
 "weekly.hcgActive" = "hCG actief";
 "weekly.recovery" = "Herstel: %@";
 "error.invalidDose" = "Vul een geldige dosis in.";

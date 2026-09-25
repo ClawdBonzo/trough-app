@@ -311,11 +311,11 @@
 "milestone.90" = "🔥🔥🔥🔥🔥 Three months straight — legendary consistency";
 
 /* Forecast */
-"forecast.injectionToday" = "Injection day today — energy should peak in 24–48 hours.";
-"forecast.injectionTomorrow" = "Injection due tomorrow. You're at the trough — some fatigue is normal.";
-"forecast.dip" = "Day %d tomorrow — energy typically dips. Stay ahead of it.";
-"forecast.strong" = "Day %d tomorrow — levels should be strong post-injection.";
-"forecast.tapering" = "Next injection in %d days. Levels are tapering gradually.";
+"forecast.injectionToday" = "Injection day today. Log your dose to keep your curve up to date.";
+"forecast.injectionTomorrow" = "Injection due tomorrow — you're near the low point of your estimated curve.";
+"forecast.dip" = "Day %d tomorrow — the later part of your cycle on your estimated curve.";
+"forecast.strong" = "Day %d tomorrow — near the peak of your estimated curve.";
+"forecast.tapering" = "Next injection in %d days. Your estimated level is tapering.";
 
 /* PK Curve */
 "pk.overdue" = "Overdue by %dd";
@@ -1324,7 +1324,7 @@
 "weekly.compareKicker" = "This Week vs Prior Week";
 "unit.hoursShort" = "%.1f hrs";
 "fertility.weeksRange" = "%1$d–%2$d weeks";
-"fertility.recoveryWindow" = "Expected FSH/LH recovery window: %@";
+"fertility.recoveryWindow" = "Typical FSH/LH recovery window: %@";
 "weekly.hcgActive" = "hCG active";
 "weekly.recovery" = "Recovery: %@";
 "error.invalidDose" = "Please enter a valid dose.";
