@@ -1299,3 +1299,23 @@
 "store.siteSuggested" = "%1$@ · sugerowane: %2$@";
 "store.panels" = "Badania: %d";
 "store.latest" = "Ostatnie: %@";
+
+/* 1.4.1: interpolated UI strings */
+"csv.rowIssue" = "Wiersz %d:";
+"csv.importedCount" = "Zaimportowano: %d";
+"csv.skippedCount" = "Pominięto: %d";
+"csv.importedRecords.one" = "Zaimportowano 1 rekord";
+"csv.importedRecords.other" = "Zaimportowane rekordy: %d";
+"csv.parseSummary" = "Wiersze: %d · kolumny: %d · separator: %@";
+"csv.delimiter.comma" = "przecinek";
+"csv.delimiter.tab" = "tabulator";
+"csv.delimiter.semicolon" = "średnik";
+"weekly.injections.one" = "1 zastrzyk";
+"weekly.injections.other" = "Zastrzyki: %d";
+"weekly.morningWoodPct" = "Poranna erekcja: %d%%";
+"weekly.workoutPct" = "Treningi: %d%%";
+"peptides.doseTotal.one" = "Łącznie 1 dawka";
+"peptides.doseTotal.other" = "Dawki łącznie: %d";
+"bloodwork.refRangeShort" = "Ref.: %.1f–%.1f";
+"bloodwork.refRangeUnit" = "Ref.: %.1f–%.1f %@";
+"bloodwork.defaultRange" = "Domyślnie: %.1f–%.1f %@";

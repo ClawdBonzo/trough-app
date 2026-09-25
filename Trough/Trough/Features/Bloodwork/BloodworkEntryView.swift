@@ -139,7 +139,8 @@ struct BloodworkEntryView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(TR.Palette.textPrimary)
                     HStack(spacing: 4) {
-                        Text("Ref: \(entry.rangeLow, specifier: "%.1f")–\(entry.rangeHigh, specifier: "%.1f")")
+                        Text(verbatim: String(format: gLoc("bloodwork.refRangeShort", "Ref: %.1f–%.1f"), locale: Locale.current,
+                                             entry.rangeLow, entry.rangeHigh))
                             .font(.caption2)
                             .foregroundStyle(entry.hasCustomRange ? TR.Palette.teal : TR.Palette.textTertiary)
                         if entry.hasCustomRange {
@@ -299,7 +300,8 @@ struct RangeEditSheet: View {
                         Text(entry.name)
                             .font(.headline)
                             .foregroundStyle(TR.Palette.textPrimary)
-                        Text("Default: \(entry.defaultRangeLow, specifier: "%.1f")–\(entry.defaultRangeHigh, specifier: "%.1f") \(entry.unit)")
+                        Text(verbatim: String(format: gLoc("bloodwork.defaultRange", "Default: %.1f–%.1f %@"), locale: Locale.current,
+                                             entry.defaultRangeLow, entry.defaultRangeHigh, entry.unit))
                             .font(.caption)
                             .foregroundStyle(TR.Palette.textSecondary)
                     }

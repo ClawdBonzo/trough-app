@@ -1299,3 +1299,23 @@
 "store.siteSuggested" = "%1$@ · förslag: %2$@";
 "store.panels" = "%d provtagningar";
 "store.latest" = "Senast: %@";
+
+/* 1.4.1: interpolated UI strings */
+"csv.rowIssue" = "Rad %d:";
+"csv.importedCount" = "%d importerade";
+"csv.skippedCount" = "%d överhoppade";
+"csv.importedRecords.one" = "1 post importerad";
+"csv.importedRecords.other" = "%d poster importerade";
+"csv.parseSummary" = "%d rader · %d kolumner · avgränsare: %@";
+"csv.delimiter.comma" = "komma";
+"csv.delimiter.tab" = "tabb";
+"csv.delimiter.semicolon" = "semikolon";
+"weekly.injections.one" = "1 injektion";
+"weekly.injections.other" = "%d injektioner";
+"weekly.morningWoodPct" = "%d %% morgonstånd";
+"weekly.workoutPct" = "%d %% träningspass";
+"peptides.doseTotal.one" = "1 dos totalt";
+"peptides.doseTotal.other" = "%d doser totalt";
+"bloodwork.refRangeShort" = "Ref.: %.1f–%.1f";
+"bloodwork.refRangeUnit" = "Ref.: %.1f–%.1f %@";
+"bloodwork.defaultRange" = "Standard: %.1f–%.1f %@";

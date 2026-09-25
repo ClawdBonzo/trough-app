@@ -427,7 +427,8 @@ struct BloodworkMarkerRow: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(TR.Palette.textPrimary)
                 if let low = marker.referenceRangeLow, let high = marker.referenceRangeHigh {
-                    Text("Ref: \(low, specifier: "%.1f")–\(high, specifier: "%.1f") \(marker.unit)")
+                    Text(verbatim: String(format: gLoc("bloodwork.refRangeUnit", "Ref: %.1f–%.1f %@"), locale: Locale.current,
+                                         low, high, marker.unit))
                         .font(.caption2)
                         .foregroundStyle(TR.Palette.textTertiary)
                 }

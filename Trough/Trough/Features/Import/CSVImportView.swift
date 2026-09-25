@@ -515,7 +515,8 @@ private struct PreviewStep: View {
                 Image(systemName: "info.circle")
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textTertiary)
-                Text("\(parse.rows.count) rows · \(parse.headers.count) columns · delimiter: \(delimiterLabel(parse.delimiter))")
+                Text(verbatim: String(format: gLoc("csv.parseSummary", "%d rows · %d columns · delimiter: %@"),
+                                     parse.rows.count, parse.headers.count, delimiterLabel(parse.delimiter)))
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
             }
@@ -526,9 +527,9 @@ private struct PreviewStep: View {
 
     private func delimiterLabel(_ d: Character) -> String {
         switch d {
-        case ",":  return "comma"
-        case "\t": return "tab"
-        case ";":  return "semicolon"
+        case ",":  return gLoc("csv.delimiter.comma", "comma")
+        case "\t": return gLoc("csv.delimiter.tab", "tab")
+        case ";":  return gLoc("csv.delimiter.semicolon", "semicolon")
         default:   return String(d)
         }
     }
@@ -789,7 +790,9 @@ struct ImportReportView: View {
                         .font(TR.Font.display(.title2))
                         .foregroundStyle(TR.Palette.textPrimary)
 
-                    Text("Imported \(vm.totalImported) record\(vm.totalImported == 1 ? "" : "s")")
+                    Text(verbatim: vm.totalImported == 1
+                         ? gLoc("csv.importedRecords.one", "Imported 1 record")
+                         : String(format: gLoc("csv.importedRecords.other", "Imported %d records"), vm.totalImported))
                         .font(TR.Font.display(.headline, weight: .bold))
                         .foregroundStyle(TR.Palette.coralLight)
 
@@ -869,12 +872,12 @@ private struct ResultBreakdownRow: View {
 
             Spacer()
 
-            Text("\(imported) imported")
+            Text(verbatim: String(format: gLoc("csv.importedCount", "%d imported"), imported))
                 .font(.caption.weight(.bold))
                 .foregroundStyle(TR.Palette.mint)
 
             if skipped > 0 {
-                Text("\(skipped) skipped")
+                Text(verbatim: String(format: gLoc("csv.skippedCount", "%d skipped"), skipped))
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
             }
@@ -920,7 +923,7 @@ private struct IssueSection: View {
                 VStack(spacing: 0) {
                     ForEach(issues) { issue in
                         HStack(alignment: .top, spacing: 8) {
-                            Text("Row \(issue.row):")
+                            Text(verbatim: String(format: gLoc("csv.rowIssue", "Row %d:"), issue.row))
                                 .font(.caption2.bold())
                                 .foregroundStyle(TR.Palette.textTertiary)
                                 .frame(width: 52, alignment: .leading)

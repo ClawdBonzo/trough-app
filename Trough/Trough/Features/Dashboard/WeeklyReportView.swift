@@ -190,11 +190,11 @@ struct WeeklyReportCard: View {
             TRKicker("This Week vs Prior Week")
 
             let metrics: [(String, String, Double, Double)] = [
-                ("⚡️", "Energy",        report.avgEnergy,  report.priorAvgEnergy),
-                ("😌", "Mood",           report.avgMood,    report.priorAvgMood),
-                ("🔥", "Libido",         report.avgLibido,  report.priorAvgLibido),
-                ("🌙", "Sleep Quality",  report.avgSleep,   report.priorAvgSleep),
-                ("🧠", "Mental Clarity", report.avgClarity, report.priorAvgClarity),
+                ("⚡️", gLoc("checkin.energy", "Energy"),               report.avgEnergy,  report.priorAvgEnergy),
+                ("😌", gLoc("checkin.mood", "Mood"),                   report.avgMood,    report.priorAvgMood),
+                ("🔥", gLoc("checkin.libido", "Libido"),               report.avgLibido,  report.priorAvgLibido),
+                ("🌙", gLoc("checkin.sleepQuality", "Sleep Quality"),  report.avgSleep,   report.priorAvgSleep),
+                ("🧠", gLoc("checkin.mentalClarity", "Mental Clarity"), report.avgClarity, report.priorAvgClarity),
             ]
 
             ForEach(metrics, id: \.1) { emoji, label, current, prior in
@@ -272,17 +272,19 @@ struct WeeklyReportCard: View {
             HStack(spacing: 12) {
                 if userType == "trt" {
                     Label(
-                        "\(report.totalInjections) injection\(report.totalInjections == 1 ? "" : "s")",
+                        report.totalInjections == 1
+                            ? gLoc("weekly.injections.one", "1 injection")
+                            : String(format: gLoc("weekly.injections.other", "%d injections"), report.totalInjections),
                         systemImage: "syringe"
                     )
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
                 }
                 Spacer()
-                Label("\(Int(report.morningWoodPct))% MW", systemImage: "checkmark.circle")
+                Label(String(format: gLoc("weekly.morningWoodPct", "%d%% MW"), Int(report.morningWoodPct)), systemImage: "checkmark.circle")
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
-                Label("\(Int(report.workoutCompletionPct))% workouts", systemImage: "figure.strengthtraining.traditional")
+                Label(String(format: gLoc("weekly.workoutPct", "%d%% workouts"), Int(report.workoutCompletionPct)), systemImage: "figure.strengthtraining.traditional")
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
             }
@@ -360,7 +362,7 @@ struct MetricComparisonRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text("\(emoji) \(label)")
+                Text(verbatim: "\(emoji) \(label)")
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
                 Spacer()

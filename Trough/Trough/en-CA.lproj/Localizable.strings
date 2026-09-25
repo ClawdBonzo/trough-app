@@ -1249,3 +1249,23 @@
 "store.siteSuggested" = "%1$@ · %2$@ suggested";
 "store.panels" = "%d panels";
 "store.latest" = "Latest: %@";
+
+/* 1.4.1: interpolated UI strings */
+"csv.rowIssue" = "Row %d:";
+"csv.importedCount" = "%d imported";
+"csv.skippedCount" = "%d skipped";
+"csv.importedRecords.one" = "Imported 1 record";
+"csv.importedRecords.other" = "Imported %d records";
+"csv.parseSummary" = "%d rows · %d columns · delimiter: %@";
+"csv.delimiter.comma" = "comma";
+"csv.delimiter.tab" = "tab";
+"csv.delimiter.semicolon" = "semicolon";
+"weekly.injections.one" = "1 injection";
+"weekly.injections.other" = "%d injections";
+"weekly.morningWoodPct" = "%d%% MW";
+"weekly.workoutPct" = "%d%% workouts";
+"peptides.doseTotal.one" = "1 dose total";
+"peptides.doseTotal.other" = "%d doses total";
+"bloodwork.refRangeShort" = "Ref: %.1f–%.1f";
+"bloodwork.refRangeUnit" = "Ref: %.1f–%.1f %@";
+"bloodwork.defaultRange" = "Default: %.1f–%.1f %@";

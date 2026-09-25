@@ -358,12 +358,16 @@ private struct CompoundCard: View {
             HStack(spacing: 6) {
                 HStack(spacing: 4) {
                     Circle().fill(recencyColor).frame(width: 6, height: 6)
-                    Text(daysSince == 0 ? "Today" : "\(daysSince)d ago")
+                    Text(verbatim: daysSince == 0
+                         ? gLoc("common.today", "Today")
+                         : String(format: gLoc("unit.daysAgo", "%dd ago"), daysSince))
                 }
                 .font(.caption.weight(.bold))
                 .foregroundStyle(recencyColor)
                 Text("·").foregroundStyle(TR.Palette.textTertiary)
-                Text("\(compound.doseCount) dose\(compound.doseCount == 1 ? "" : "s") total")
+                Text(verbatim: compound.doseCount == 1
+                     ? gLoc("peptides.doseTotal.one", "1 dose total")
+                     : String(format: gLoc("peptides.doseTotal.other", "%d doses total"), compound.doseCount))
                     .font(.caption)
                     .foregroundStyle(TR.Palette.textSecondary)
                     .lineLimit(1)

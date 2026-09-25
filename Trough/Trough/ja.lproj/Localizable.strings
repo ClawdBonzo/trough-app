@@ -1299,3 +1299,23 @@
 "store.siteSuggested" = "%1$@ · おすすめ：%2$@";
 "store.panels" = "%d件のパネル";
 "store.latest" = "最新：%@";
+
+/* 1.4.1: interpolated UI strings */
+"csv.rowIssue" = "%d行目：";
+"csv.importedCount" = "%d件インポート";
+"csv.skippedCount" = "%d件スキップ";
+"csv.importedRecords.one" = "1件のデータをインポートしました";
+"csv.importedRecords.other" = "%d件のデータをインポートしました";
+"csv.parseSummary" = "%d行 · %d列 · 区切り文字：%@";
+"csv.delimiter.comma" = "カンマ";
+"csv.delimiter.tab" = "タブ";
+"csv.delimiter.semicolon" = "セミコロン";
+"weekly.injections.one" = "注射 1回";
+"weekly.injections.other" = "注射 %d回";
+"weekly.morningWoodPct" = "朝立ち %d%%";
+"weekly.workoutPct" = "トレーニング %d%%";
+"peptides.doseTotal.one" = "合計1回の投与";
+"peptides.doseTotal.other" = "合計%d回の投与";
+"bloodwork.refRangeShort" = "基準：%.1f–%.1f";
+"bloodwork.refRangeUnit" = "基準：%.1f–%.1f %@";
+"bloodwork.defaultRange" = "デフォルト：%.1f–%.1f %@";

@@ -1299,3 +1299,23 @@
 "store.siteSuggested" = "%1$@ · 추천: %2$@";
 "store.panels" = "패널 %d개";
 "store.latest" = "최근: %@";
+
+/* 1.4.1: interpolated UI strings */
+"csv.rowIssue" = "%d행:";
+"csv.importedCount" = "%d개 가져옴";
+"csv.skippedCount" = "%d개 건너뜀";
+"csv.importedRecords.one" = "기록 1개를 가져왔습니다";
+"csv.importedRecords.other" = "기록 %d개를 가져왔습니다";
+"csv.parseSummary" = "%d행 · %d열 · 구분자: %@";
+"csv.delimiter.comma" = "쉼표";
+"csv.delimiter.tab" = "탭";
+"csv.delimiter.semicolon" = "세미콜론";
+"weekly.injections.one" = "주사 1회";
+"weekly.injections.other" = "주사 %d회";
+"weekly.morningWoodPct" = "아침 발기 %d%%";
+"weekly.workoutPct" = "운동 %d%%";
+"peptides.doseTotal.one" = "총 1회 투여";
+"peptides.doseTotal.other" = "총 %d회 투여";
+"bloodwork.refRangeShort" = "참고: %.1f–%.1f";
+"bloodwork.refRangeUnit" = "참고: %.1f–%.1f %@";
+"bloodwork.defaultRange" = "기본값: %.1f–%.1f %@";
