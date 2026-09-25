@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		W2B0001BLD00 /* DashboardCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0001REF00 /* DashboardCards.swift */; };
+		W2B0002BLD00 /* InjectionStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0002REF00 /* InjectionStamp.swift */; };
+		W2B0003BLD00 /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0003REF00 /* CelebrationView.swift */; };
+		W2B0004BLD00 /* BadgeWallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0004REF00 /* BadgeWallView.swift */; };
+		W2B0005BLD00 /* ShareCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0005REF00 /* ShareCards.swift */; };
+		W2B0006BLD00 /* ShareRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0006REF00 /* ShareRenderer.swift */; };
+		W2B0007BLD00 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0007REF00 /* QRCode.swift */; };
+		W2B0008BLD00 /* BloodworkComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0008REF00 /* BloodworkComponents.swift */; };
+		W2B0009BLD00 /* OnboardingComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0009REF00 /* OnboardingComponents.swift */; };
+		W2B0010BLD00 /* DemoMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0010REF00 /* DemoMode.swift */; };
+		W2B0011BLD00 /* StoreAssetExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = W2B0011REF00 /* StoreAssetExporter.swift */; };
 		DSGN0001BLD /* TroughTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0001REF /* TroughTheme.swift */; };
 		DSGN0002BLD /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0002REF /* Surfaces.swift */; };
 		DSGN0003BLD /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0003REF /* Controls.swift */; };
@@ -124,6 +135,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		W2B0001REF00 /* DashboardCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCards.swift; sourceTree = "<group>"; };
+		W2B0002REF00 /* InjectionStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionStamp.swift; sourceTree = "<group>"; };
+		W2B0003REF00 /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationView.swift; sourceTree = "<group>"; };
+		W2B0004REF00 /* BadgeWallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeWallView.swift; sourceTree = "<group>"; };
+		W2B0005REF00 /* ShareCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCards.swift; sourceTree = "<group>"; };
+		W2B0006REF00 /* ShareRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRenderer.swift; sourceTree = "<group>"; };
+		W2B0007REF00 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		W2B0008REF00 /* BloodworkComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodworkComponents.swift; sourceTree = "<group>"; };
+		W2B0009REF00 /* OnboardingComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingComponents.swift; sourceTree = "<group>"; };
+		W2B0010REF00 /* DemoMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoMode.swift; sourceTree = "<group>"; };
+		W2B0011REF00 /* StoreAssetExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAssetExporter.swift; sourceTree = "<group>"; };
 		DSGN0001REF /* TroughTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughTheme.swift; sourceTree = "<group>"; };
 		DSGN0002REF /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfaces.swift; sourceTree = "<group>"; };
 		DSGN0003REF /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
@@ -269,6 +291,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		W2BSHAREGRP0 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				W2B0005REF00 /* ShareCards.swift */,
+				W2B0006REF00 /* ShareRenderer.swift */,
+				W2B0007REF00 /* QRCode.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		DSGNGROUP000 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +326,8 @@
 		169FEFB61B33444FAEBADF4D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0011REF00 /* StoreAssetExporter.swift */,
+				W2B0010REF00 /* DemoMode.swift */,
 				5CA577C7AD82411C89DA0ED3 /* InsightEngine.swift */,
 				A9E4A90406B74F339A2F9849 /* InjectionCycleService.swift */,
 				E49BFE36059E4003B02441B5 /* HealthKitService.swift */,
@@ -355,6 +389,7 @@
 		3ED1FCAFC99C40BAAFD67E88 /* Injections */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0002REF00 /* InjectionStamp.swift */,
 				6700DE90AB24455083083527 /* InjectionsView.swift */,
 				F4DBDF7A47914F68ABCA540B /* InjectionsViewModel.swift */,
 				DD110011EE220011DD11EE22 /* InjectionSitePicker.swift */,
@@ -394,6 +429,7 @@
 		6DFCB169D7F04A06A55631AA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				W2BSHAREGRP0 /* Share */,
 				C726F7F192B444558859C027 /* Dashboard */,
 				93FE31CF1CBD4AB99E673224 /* DailyCheckin */,
 				3ED1FCAFC99C40BAAFD67E88 /* Injections */,
@@ -451,6 +487,7 @@
 		91EC5DBE145A4558A97D7A40 /* Bloodwork */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0008REF00 /* BloodworkComponents.swift */,
 				CD798D2CEE264DDF9D5ABA65 /* BloodworkView.swift */,
 				6D1526AC5CC74FBBAAF95E39 /* BloodworkViewModel.swift */,
 				BW001122334455667788AA02 /* BloodworkEntryView.swift */,
@@ -507,6 +544,7 @@
 		C726F7F192B444558859C027 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0001REF00 /* DashboardCards.swift */,
 				8663BF9EA184443DA308FD0E /* DashboardView.swift */,
 				13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */,
 				BB11CC22DD440022BB11CC22 /* PKCurveView.swift */,
@@ -518,6 +556,7 @@
 		CC990011FF220099CC99FF11 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0009REF00 /* OnboardingComponents.swift */,
 				DD110022EE220022DD11EE22 /* OnboardingView.swift */,
 				FF220033AA440033FF22AA33 /* HealthKitPermissionView.swift */,
 			);
@@ -543,6 +582,8 @@
 		GAMF0001 /* Gamification */ = {
 			isa = PBXGroup;
 			children = (
+				W2B0004REF00 /* BadgeWallView.swift */,
+				W2B0003REF00 /* CelebrationView.swift */,
 				GMVM0001 /* GamificationViewModel.swift */,
 				DSGN0008REF /* GamificationCatalog.swift */,
 				DSGN0009REF /* GamificationEngine.swift */,
@@ -771,6 +812,17 @@
 				BCLV0002 /* BadgeCollectionView.swift in Sources */,
 				QSVC0002 /* QuestService.swift in Sources */,
 				BSVC0002 /* BadgeService.swift in Sources */,
+				W2B0001BLD00 /* DashboardCards.swift in Sources */,
+				W2B0002BLD00 /* InjectionStamp.swift in Sources */,
+				W2B0003BLD00 /* CelebrationView.swift in Sources */,
+				W2B0004BLD00 /* BadgeWallView.swift in Sources */,
+				W2B0005BLD00 /* ShareCards.swift in Sources */,
+				W2B0006BLD00 /* ShareRenderer.swift in Sources */,
+				W2B0007BLD00 /* QRCode.swift in Sources */,
+				W2B0008BLD00 /* BloodworkComponents.swift in Sources */,
+				W2B0009BLD00 /* OnboardingComponents.swift in Sources */,
+				W2B0010BLD00 /* DemoMode.swift in Sources */,
+				W2B0011BLD00 /* StoreAssetExporter.swift in Sources */,
 				DSGN0001BLD /* TroughTheme.swift in Sources */,
 				DSGN0002BLD /* Surfaces.swift in Sources */,
 				DSGN0003BLD /* Controls.swift in Sources */,
