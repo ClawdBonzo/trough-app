@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "até a próxima";
 "widget.injection" = "Injeção";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Sequência";
+"widget.kicker.checkInStreak" = "Sequência de check-ins";
+"widget.checkedInToday" = "Check-in feito hoje";
+"widget.levelShort" = "N%d";
+"widget.nextBadge.displayName" = "Próxima Medalha";
+"widget.nextBadge.description" = "A medalha mais perto de você e quanto falta.";
+"widget.kicker.nextBadge" = "Próxima medalha";
+"widget.badge.toGo" = "Restantes: %d";
+"widget.badge.progress" = "%1$d de %2$d";
+"widget.badge.allEarned" = "Todas as medalhas conquistadas";
+"widget.badge.allEarnedSub" = "A coleção completa. Mantenha a sequência viva.";
+"widget.badge.openApp" = "Abra o Trough para começar a colecionar.";
+"widget.lock.displayName" = "Sequência";
+"widget.lock.description" = "Sua sequência de check-ins e a próxima injeção, na Tela Bloqueada.";
+"widget.lock.streak" = "Sequência: %d d";
+"widget.lock.inlineCheckIn" = "%d d seguidos · faça check-in";
+"widget.injLock.displayName" = "Próxima Injeção";
+"widget.injLock.description" = "Dias até sua próxima injeção agendada.";
+"widget.injLock.today" = "Hoje";
+"widget.injLock.daysShort" = "%dd";
+"widget.injLock.none" = "Nenhuma injeção agendada";

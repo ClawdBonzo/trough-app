@@ -70,7 +70,7 @@
 "quiz.cta" = "スコアを見る";
 
 "scoreReveal.protocolScore" = "プロトコルスコア";
-"scoreReveal.cta" = "予測される改善を見る";
+"scoreReveal.cta" = "続ける";
 "scoreReveal.dialedIn" = "最適化済み";
 "scoreReveal.steady" = "安定";
 "scoreReveal.trendingDown" = "低下傾向";
@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "設定でいつでも変更できます。";
 "onboarding.getStarted" = "始める";
 
-"onboarding.startTrial" = "3日間の無料トライアルを開始";
+"onboarding.startTrial" = "7日間の無料トライアルを開始";
 "onboarding.trialSubtitle" = "すべてのインサイトを解放し、85以上への進捗を追跡します。";
-"onboarding.noCharge" = "3日間は無料です。設定 → サブスクリプションでいつでも解約できます。";
+"onboarding.noCharge" = "7日間は無料です。設定 → サブスクリプションでいつでも解約できます。";
 "onboarding.maybeLater" = "後で";
 
 /* Frequency labels */
@@ -304,11 +304,11 @@
 "greeting.evening" = "こんばんは";
 
 /* Milestones */
-"milestone.7" = "🔥 1週間達成！TRTトラッカー上位30%";
-"milestone.14" = "🔥🔥 2週間達成！TRTトラッカー上位15%";
-"milestone.30" = "🔥🔥🔥 1ヶ月達成！TRTトラッカー上位5%";
-"milestone.60" = "🔥🔥🔥🔥 2ヶ月達成！上位2% — エリートです";
-"milestone.90" = "🔥🔥🔥🔥🔥 3ヶ月達成！上位1% — レジェンド";
+"milestone.7" = "🔥 1週間連続！いいペースです";
+"milestone.14" = "🔥🔥 2週間連続！習慣になってきました";
+"milestone.30" = "🔥🔥🔥 1か月チェックイン継続！";
+"milestone.60" = "🔥🔥🔥🔥 2か月連続！本物の継続力";
+"milestone.90" = "🔥🔥🔥🔥🔥 3か月連続！伝説級の継続力";
 
 /* Forecast */
 "forecast.injectionToday" = "今日は注射日 — エネルギーは24〜48時間でピークに達するはずです。";
@@ -486,20 +486,20 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "プロトコルスコアを42 → 85へ。";
-"paywall.subtitle" = "すべての機能。3日間無料。";
+"paywall.heroSubtitle" = "プロトコルのすべてを、ひとつのプライベートな場所に。";
+"paywall.subtitle" = "すべての機能。7日間無料。";
 "paywall.monthly" = "月額";
 "paywall.annual" = "年額";
 "paywall.save40" = "58%お得";
 "paywall.startTrial" = "無料トライアルを開始";
-"paywall.startTrialFull" = "無料トライアルを開始 — 3日間無料、その後%@";
+"paywall.startTrialFull" = "無料トライアルを開始 — 7日間無料、その後%@";
 "paywall.restorePurchases" = "復元";
 "paywall.privacyPolicy" = "プライバシー";
 "paywall.termsOfUse" = "規約";
 
 /* Pro features */
 "pro.title" = "Proで使える機能";
-"pro.trialIncluded" = "3日間の無料トライアル付き";
+"pro.trialIncluded" = "7日間の無料トライアル付き";
 "pro.pkCurves" = "PK曲線";
 "pro.pkCurvesDesc" = "信頼区間と複数エステルの重ね合わせで推定血中濃度を表示";
 "pro.trendHistory" = "完全なトレンド履歴";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "%d%%お得";
 "paywall.ctaSub.trial" = "その後%@ · 自動更新 · いつでもキャンセル可";
 "paywall.ctaSub.noTrial" = "%@ · 自動更新 · いつでもキャンセル可";
-"paywall.trialBadge" = "3日間無料トライアル";
+"paywall.trialBadge" = "7日間無料トライアル";
 "paywall.bestValue" = "ベストバリュー";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "あなたのプロトコルスコア";
 "onboarding.trialUnlock" = "無料トライアルを開始してすべてのインサイトをアンロック。";
 "onboarding.proUnlock" = "Trough Proですべてのインサイトをアンロック。";
-"onboarding.trialLegal" = "3日間無料トライアル、その後自動更新。いつでもキャンセルできます。";
+"onboarding.trialLegal" = "7日間無料トライアル、その後自動更新。いつでもキャンセルできます。";
 "onboarding.subscribeLegal" = "自動更新。いつでもキャンセルできます。";
 
 /* Export */
@@ -715,3 +715,499 @@
 "common.time" = "時刻";
 "onboarding.enterPrescribedDose" = "処方された用量を入力";
 "onboarding.doseValidation" = "続行するには、医師に処方された用量を入力してください。";
+
+/* ===== Trough 1.4 (redesign & gamification) ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "ブロンズ";
+"badge.tier.silver" = "シルバー";
+"badge.tier.gold" = "ゴールド";
+"badge.tier.platinum" = "プラチナ";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "シークレットバッジ";
+"badge.secret.how" = "記録を続けると見つかります。";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "最初の一歩";
+"badge.checkins_1.how" = "初めてのチェックインを記録する";
+"badge.checkins_1.line" = "1日目、記録完了。";
+"badge.checkins_7.title" = "1週間分の記録";
+"badge.checkins_7.how" = "チェックインを7回記録する";
+"badge.checkins_7.line" = "7回の記録。パターンが見えてきました。";
+"badge.checkins_30.title" = "1か月分のデータ";
+"badge.checkins_30.how" = "チェックインを30回記録する";
+"badge.checkins_30.line" = "30回の記録。ログに輪郭が出てきました。";
+"badge.checkins_100.title" = "センチュリオン";
+"badge.checkins_100.how" = "チェックインを100回記録する";
+"badge.checkins_100.line" = "ついに3ケタ。ノートもずいぶん厚くなりました。";
+"badge.checkins_365.title" = "365の記録";
+"badge.checkins_365.how" = "チェックインを365回記録する";
+"badge.checkins_365.line" = "丸1年分の記録。見事な継続力です。";
+"badge.checkin_streak_3.title" = "ウォームアップ";
+"badge.checkin_streak_3.how" = "3日連続でチェックインする";
+"badge.checkin_streak_3.line" = "3日連続。勢いがついてきました。";
+"badge.streak_flame_7.title" = "炎の番人";
+"badge.streak_flame_7.how" = "7日連続でチェックインする";
+"badge.streak_flame_7.line" = "まる1週間、一度も欠かさず。";
+"badge.checkin_streak_14.title" = "2週間の集中";
+"badge.checkin_streak_14.how" = "14日連続でチェックインする";
+"badge.checkin_streak_14.line" = "2週間連続。もう習慣の域です。";
+"badge.consistency_king.title" = "継続の王";
+"badge.consistency_king.how" = "30日連続でチェックインする";
+"badge.consistency_king.line" = "30日連続。王冠はあなたのものです。";
+"badge.checkin_streak_60.title" = "途切れぬ記録";
+"badge.checkin_streak_60.how" = "60日連続でチェックインする";
+"badge.checkin_streak_60.line" = "60日。連続記録に重みが出てきました。";
+"badge.checkin_streak_100.title" = "百日の道";
+"badge.checkin_streak_100.how" = "100日連続でチェックインする";
+"badge.checkin_streak_100.line" = "100日連続。まさにレジェンド。";
+"badge.injections_1.title" = "初回の注射を記録";
+"badge.injections_1.how" = "初めての注射を記録する";
+"badge.injections_1.line" = "日付入りで記録完了。すべてはここから。";
+"badge.injections_10.title" = "記録10回";
+"badge.injections_10.how" = "注射を10回記録する";
+"badge.injections_10.line" = "10回の記録。スケジュールに歴史が生まれました。";
+"badge.injections_25.title" = "25回の節目";
+"badge.injections_25.how" = "注射を25回記録する";
+"badge.injections_25.line" = "25回記録。カレンダーも喜んでいます。";
+"badge.injections_52.title" = "52回の記録";
+"badge.injections_52.how" = "注射を52回記録する";
+"badge.injections_52.line" = "52回記録。1年分の記録がそろいました。";
+"badge.injections_100.title" = "記録の番人";
+"badge.injections_100.how" = "注射を100回記録する";
+"badge.injections_100.line" = "注射の記録100回。几帳面そのもの。";
+"badge.on_schedule_weeks_4.title" = "時間どおり";
+"badge.on_schedule_weeks_4.how" = "4週連続で予定どおりに注射を記録する";
+"badge.on_schedule_weeks_4.line" = "4週連続で予定どおり。まるで時計仕掛け。";
+"badge.on_schedule_weeks_12.title" = "メトロノーム";
+"badge.on_schedule_weeks_12.how" = "12週連続で予定どおりに注射を記録する";
+"badge.on_schedule_weeks_12.line" = "12週、ぴったり予定どおり。";
+"badge.on_schedule_weeks_26.title" = "半年のリズム";
+"badge.on_schedule_weeks_26.how" = "26週連続で予定どおりに注射を記録する";
+"badge.on_schedule_weeks_26.line" = "半年間、予定どおり。ぶれない手元です。";
+"badge.on_schedule_weeks_52.title" = "年間皆勤";
+"badge.on_schedule_weeks_52.how" = "52週連続で予定どおりに注射を記録する";
+"badge.on_schedule_weeks_52.line" = "予定どおりの週を、丸1年。";
+"badge.bloodwork_1.title" = "最初のパネル";
+"badge.bloodwork_1.how" = "初めての血液検査パネルを記録する";
+"badge.bloodwork_1.line" = "最初のパネルを保存。記録に残りました。";
+"badge.bloodwork_3.title" = "記録の足跡";
+"badge.bloodwork_3.how" = "血液検査パネルを3件記録する";
+"badge.bloodwork_3.line" = "3件のパネルを記録。次の受診で役立ちます。";
+"badge.bloodwork_5.title" = "ラボの常連";
+"badge.bloodwork_5.how" = "血液検査パネルを5件記録する";
+"badge.bloodwork_5.line" = "5件のパネルを保存。アーカイブが充実してきました。";
+"badge.bloodwork_master.title" = "血液検査マスター";
+"badge.bloodwork_master.how" = "血液検査パネルを10件記録する";
+"badge.bloodwork_master.line" = "10件のパネルを保存。非の打ちどころのない記録です。";
+"badge.health_synced_7.title" = "連携スタート";
+"badge.health_synced_7.how" = "Appleヘルスケアのデータ付きでチェックインを7回記録する";
+"badge.health_synced_7.line" = "ログとAppleヘルスケアがつながりました。";
+"badge.health_synced_30.title" = "データストリーム";
+"badge.health_synced_30.how" = "Appleヘルスケアのデータ付きでチェックインを30回記録する";
+"badge.health_synced_30.line" = "連携チェックイン30回。記録がぐっと楽に。";
+"badge.health_synced_100.title" = "完全連携";
+"badge.health_synced_100.how" = "Appleヘルスケアのデータ付きでチェックインを100回記録する";
+"badge.health_synced_100.line" = "連携チェックイン100回。自動化の極みです。";
+"badge.adjunct_logs_1.title" = "スタック始動";
+"badge.adjunct_logs_1.how" = "ペプチドまたは補助薬の用量を初めて記録する";
+"badge.adjunct_logs_1.line" = "補助薬の初記録が完了しました。";
+"badge.adjunct_logs_10.title" = "スタック記録係";
+"badge.adjunct_logs_10.how" = "ペプチドまたは補助薬の用量を10回記録する";
+"badge.adjunct_logs_10.line" = "補助薬の記録10回。すべて漏れなく。";
+"badge.adjunct_logs_50.title" = "スタック記録官";
+"badge.adjunct_logs_50.how" = "ペプチドまたは補助薬の用量を50回記録する";
+"badge.adjunct_logs_50.line" = "補助薬の記録50回。抜かりなし。";
+"badge.level_5.title" = "期待の新星";
+"badge.level_5.how" = "レベル5に到達する";
+"badge.level_5.line" = "レベル5。本当の上り坂はここから。";
+"badge.level_10.title" = "マスター級";
+"badge.level_10.how" = "レベル10に到達する";
+"badge.level_10.line" = "レベル10。ここまで来る人はひと握りです。";
+"badge.level_11.title" = "頂点";
+"badge.level_11.how" = "レベル11に到達する";
+"badge.level_11.line" = "最高レベル到達。あとは続けるだけ。";
+"badge.notes_10.title" = "フィールドノート";
+"badge.notes_10.how" = "10件の記録にメモを追加する";
+"badge.notes_10.line" = "メモ10件。背景こそが大事です。";
+"badge.notes_50.title" = "記録の語り部";
+"badge.notes_50.how" = "50件の記録にメモを追加する";
+"badge.notes_50.line" = "メモ50件。未来の自分がきっと感謝します。";
+"badge.testosterone_peak.title" = "好調な1日";
+"badge.testosterone_peak.how" = "自己評価のプロトコルスコアが80以上のチェックインを記録する";
+"badge.testosterone_peak.line" = "いい1日を、しっかり記録に残しました。";
+"badge.perfect_week.title" = "パーフェクトウィーク";
+"badge.perfect_week.how" = "月曜から日曜までの1週間、毎日チェックインする";
+"badge.perfect_week.line" = "月曜から日曜まで、7日すべて達成。";
+"badge.supplement_adherence.title" = "サプリの優等生";
+"badge.supplement_adherence.how" = "直近30日のうち27日、サプリメントを記録する";
+"badge.supplement_adherence.line" = "30日中27日。勤勉そのものです。";
+"badge.injection_precision.title" = "正確無比";
+"badge.injection_precision.how" = "30日間、予定された注射をすべて時間どおりに記録する";
+"badge.injection_precision.line" = "30日間、記録漏れゼロ。";
+"badge.secret_night_owl.title" = "夜ふかし";
+"badge.secret_night_owl.how" = "深夜0時〜午前4時にチェックインする";
+"badge.secret_night_owl.line" = "ログは眠りません。（あなたは寝てくださいね）";
+"badge.secret_new_year.title" = "新たな始まり";
+"badge.secret_new_year.how" = "1月1日にチェックインする";
+"badge.secret_new_year.line" = "新しい年も、変わらぬ記録習慣を。";
+"badge.secret_full_year.title" = "ひと巡り";
+"badge.secret_full_year.how" = "最初のチェックインから1年を迎える";
+"badge.secret_full_year.line" = "Troughと一緒に、太陽のまわりを一周。";
+
+/* Level names (11 levels) */
+"level.name.1" = "見習い";
+"level.name.2" = "駆け出し";
+"level.name.3" = "本気";
+"level.name.4" = "ひたむき";
+"level.name.5" = "猛進";
+"level.name.6" = "集中";
+"level.name.7" = "鍛錬";
+"level.name.8" = "上級者";
+"level.name.9" = "達人";
+"level.name.10" = "マスター";
+"level.name.11" = "究極のアルファ";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "朝型タイプ";
+"persona.earlyRiser.tagline" = "チェックインの多くが午前9時前です。";
+"persona.metronome.title" = "メトロノーム";
+"persona.metronome.tagline" = "注射のタイミングがいつも正確です。";
+"persona.dataNerd.title" = "データマニア";
+"persona.dataNerd.tagline" = "血液検査の記録をきちんと保存しています。";
+"persona.stackBuilder.title" = "スタック職人";
+"persona.stackBuilder.tagline" = "複数の補助薬を記録しています。";
+"persona.synced.title" = "連携派";
+"persona.synced.tagline" = "Appleヘルスケアが細かなデータを自動で補ってくれます。";
+"persona.steady.title" = "着実派";
+"persona.steady.tagline" = "静かに、着実に。いちばん頼れるタイプです。";
+
+/* Daily challenges */
+"challenge.checkin.title" = "デイリーチャレンジ：チェックイン";
+"challenge.checkin.desc" = "今日のチェックインを記録しましょう。";
+"challenge.injection.title" = "デイリーチャレンジ：予定どおり";
+"challenge.injection.desc" = "注射の予定日です。今日のうちに記録しましょう。";
+"challenge.note.title" = "デイリーチャレンジ：メモを追加";
+"challenge.note.desc" = "今日、いずれかの記録にメモを追加しましょう。";
+"challenge.healthSync.title" = "デイリーチャレンジ：ヘルスケア連携";
+"challenge.healthSync.desc" = "チェックインすると、Appleヘルスケアが今日のデータを補完します。";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "今週のチェックイン：1回";
+"notif.recap.checkins.other" = "今週のチェックイン：%d回";
+"notif.recap.injections.one" = "注射の記録：1回";
+"notif.recap.injections.other" = "注射の記録：%d回";
+"notif.streakRisk.title" = "%d日の連続記録が待っています";
+"notif.streakRisk.body" = "さっとチェックインして記録をつなげましょう。";
+"notif.recap.title" = "Troughで振り返る今週";
+
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@、未解除、%d/%d";
+"ach.badge.a11y.unlocked" = "%@、%@、解除済み";
+"ach.badge.howEarned" = "獲得条件";
+"ach.badge.secretHint" = "シークレットバッジです。その時はふいに訪れます — 記録を続けましょう。";
+"ach.badge.share" = "自慢する";
+"ach.badge.unlockedOn" = "%@に獲得";
+"ach.badges.count" = "%d/%d";
+"ach.badges.title" = "バッジコレクション";
+"ach.cat.adjuncts" = "補助薬";
+"ach.cat.bloodwork" = "血液検査の記録";
+"ach.cat.checkins" = "チェックイン";
+"ach.cat.health" = "Appleヘルスケア";
+"ach.cat.injections" = "注射の記録";
+"ach.cat.levels" = "レベル";
+"ach.cat.notes" = "メモ";
+"ach.cat.secrets" = "シークレット";
+"ach.cat.specials" = "スペシャル";
+"ach.cat.streaks" = "連続記録";
+"ach.celebrate.carryOn" = "続ける";
+"ach.celebrate.kicker.badge" = "バッジ獲得";
+"ach.celebrate.kicker.quest" = "クエスト達成";
+"ach.celebrate.kicker.rank" = "ランクアップ";
+"ach.celebrate.kicker.streak" = "連続記録";
+"ach.celebrate.moreBadges" = "ほか%d個のバッジ";
+"ach.celebrate.quest.line" = "お見事。またひとつ記録に加わりました。";
+"ach.celebrate.rank.line" = "レベル%d · %@ランク。シェアするカードすべてに反映されます。";
+"ach.celebrate.streak.line.hundred" = "ついに3ケタ。継続の証が記録に残りました。";
+"ach.celebrate.streak.line.month" = "1か月、1日も欠かさず。もう立派なルーティンです。";
+"ach.celebrate.streak.line.week" = "まる1週間のチェックイン。習慣が形になってきました。";
+"ach.celebrate.streak.line.year" = "1年間、毎日チェックイン。まさにレジェンド。";
+"ach.celebrate.streak.title" = "%d日連続";
+"ach.celebrate.totalXP" = "合計%d XP";
+"ach.challenge.done" = "今日は達成済み。お見事。";
+"ach.challenge.kicker" = "今日のチャレンジ";
+"ach.chip.badges" = "バッジ%d/%d";
+"ach.chip.streak" = "%d日連続";
+"ach.chip.weeks" = "%d週 予定どおり";
+"ach.flame.0" = "未点火";
+"ach.flame.1" = "火種";
+"ach.flame.2" = "点火";
+"ach.flame.3" = "燃焼";
+"ach.flame.4" = "猛火";
+"ach.flame.5" = "白熱";
+"ach.levelN" = "レベル%d";
+"ach.more.app" = "アプリ";
+"ach.more.tracking" = "記録";
+"ach.passport.kicker" = "プロトコルパスポート";
+"ach.passport.toNext" = "%2$@まであと%1$d XP";
+"ach.passport.topRank" = "最高ランク";
+"ach.persona.kicker" = "あなたのプロトコルペルソナ";
+"ach.persona.locked" = "チェックインを%d回記録すると、あなたの記録スタイルがわかります（現在%d回）。";
+"ach.persona.lockedTitle" = "まだ観察中";
+"ach.quest.done" = "達成";
+"ach.quest.open" = "未達成";
+"ach.quests.empty" = "新しいクエストは明日届きます。";
+"ach.quests.title" = "クエスト";
+"ach.rank.level" = "レベル";
+"ach.share" = "シェア";
+"ach.share.badge.kicker" = "バッジ獲得";
+"ach.share.cta" = "あなたはどれだけ続けられる？";
+"ach.share.footer" = "プライベートなプロトコル記録 · App Store";
+"ach.share.format" = "フォーマット";
+"ach.share.format.square" = "スクエア";
+"ach.share.format.story" = "ストーリー";
+"ach.share.message" = "あなたはどれだけ続けられる？ 僕はTrough — TRT Trackerでプロトコルの記録をプライベートに管理しています。";
+"ach.share.privacy" = "カードに表示されるのはランク・連続記録・バッジのみ。用量や検査値は表示されません。";
+"ach.share.rank.kicker" = "私のプロトコルランク";
+"ach.share.stat.badges" = "バッジ";
+"ach.share.stat.best" = "最長連続記録";
+"ach.share.stat.dayStreak" = "日連続";
+"ach.share.stat.level" = "レベル";
+"ach.share.stat.weeks" = "予定どおりの週";
+"ach.share.streak.kicker" = "私のチェックイン連続記録";
+"ach.share.streak.line" = "チェックイン%d日連続";
+"ach.share.title.badge" = "このバッジをシェア";
+"ach.share.title.rank" = "ランクをシェア";
+"ach.share.title.streak" = "連続記録をシェア";
+"ach.streaks.best" = "最高%d";
+"ach.streaks.checkin" = "チェックイン連続記録";
+"ach.streaks.injection" = "予定どおりの注射";
+"ach.streaks.title" = "連続記録";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "日";
+"ach.unit.days" = "日";
+"ach.unit.week" = "週";
+"ach.unit.weeks" = "週";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "次のバッジ";
+"dash.badge.moreCheckins" = "チェックインあと%d回";
+"dash.badge.moreDays" = "あと%d日";
+"dash.badge.moreInjections" = "注射の記録あと%d回";
+"dash.badge.morePanels" = "血液検査パネルあと%d件";
+"dash.badge.moreWeeks" = "予定どおりの週あと%d週";
+"dash.badge.reachLevel" = "レベル%dに到達";
+"dash.badge.toGo" = "あと%d";
+"dash.challenge.done" = "達成 — また明日";
+"dash.challenge.kicker" = "デイリーチャレンジ";
+"dash.hero.a11y" = "レベル%1$d、%2$@。次のレベルまであと%3$d XP。チェックイン%4$d日連続。バッジ%5$d/%6$d個。";
+"dash.hero.a11yHint" = "実績を開きます";
+"dash.hero.lv" = "Lv";
+"dash.hero.maxRank" = "最高ランク到達";
+"dash.hero.onScheduleWeeks" = "%d週 予定どおり";
+"dash.hero.rankKicker" = "ランク · %@";
+"dash.hero.streakDays" = "%d日連続";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "%2$@まであと%1$d XP";
+"dash.insight.kicker" = "インサイト";
+"dash.persona.kicker" = "あなたの記録スタイル";
+"dash.personalBest.sub" = "今月の自己評価スコアの最高値です。";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "はじめに";
+"dash.score.avg7" = "7日平均 %.0f";
+"dash.score.noData" = "まだチェックインがありません";
+"dash.score.vsLastWeek" = "先週比";
+"dash.section.progress" = "進捗";
+"dash.section.today" = "今日";
+"dash.section.trends" = "トレンド";
+"dash.stats.avgMood" = "平均気分";
+"dash.stats.avgSleep" = "平均睡眠";
+"dash.today.checkedIn" = "チェックイン済み ✓";
+"dash.today.checkedInSub" = "タップして今日の記録を確認";
+"dash.today.cycle" = "サイクル";
+"dash.today.day" = "日後";
+"dash.today.dayWord" = "経過";
+"dash.today.days" = "日後";
+"dash.today.daysLate" = "日遅れ";
+"dash.today.dueToday" = "今日";
+"dash.today.nextShot" = "次回の注射";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "直近7日間をひと目で";
+"pk.legend.combined" = "合計";
+"pk.legend.estimated" = "推定値";
+"pk.legend.peak" = "ピーク期";
+"pk.legend.trough" = "トラフに接近";
+"pk.legend.variation" = "±20%の変動幅";
+"pk.toggle.absorption" = "吸収の遅れ";
+"pk.toggle.bands" = "範囲を表示";
+
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "ステップ%1$d/%2$d";
+"onb14.close" = "閉じる";
+"onb14.reminders.streakNudge" = "毎日の通知が、チェックインの連続記録を続けるいちばん簡単な方法です。";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "プロトコルパスポート";
+"onb14.passport.levelCover" = "レベル%1$d · %2$@";
+"onb14.passport.badges" = "バッジ";
+"onb14.passport.a11y" = "レベル%1$d、%2$@。バッジ%3$d/%4$d個。";
+"onb14.passport.ready" = "準備完了";
+"onb14.passport.title" = "あなたのプロトコルパスポート";
+"onb14.passport.subtitle" = "チェックイン、注射の記録、連続記録のたびにXPを獲得し、パスポートにバッジのスタンプが押されます。";
+"onb14.passport.nextUp" = "次の目標";
+"onb14.passport.firstBadge" = "あと1回のチェックインで最初のバッジ";
+"onb14.passport.pillLevels" = "11段階のレベル";
+"onb14.passport.pillBadges" = "%d個のバッジ";
+"onb14.passport.pillStreaks" = "連続記録";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "%d日間の無料トライアル";
+"onb14.trialLegal" = "%d日間の無料トライアル後、自動更新。いつでもキャンセルできます。";
+"onb14.paywall.autoRenew" = "お支払いは購入確定時にApple IDに請求されます。現在の期間終了の24時間前までにキャンセルしない限り、サブスクリプションは自動更新されます。管理やキャンセルは「設定」からいつでも行えます。";
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "検査機関";
+"bloodwork.addPanel" = "パネルを追加";
+"bloodwork.deleteConfirm" = "このパネルを削除しますか？";
+"bloodwork.delete" = "パネルを削除";
+"bloodwork.summary.onePanel" = "1件のパネルを記録済み";
+"bloodwork.summary.panels" = "%d件のパネルを記録済み";
+"bloodwork.summary.lastDrawn" = "前回の採血：%@";
+"bloodwork.summary.kicker" = "検査ログ";
+"bloodwork.stat.panels" = "パネル";
+"bloodwork.stat.markers" = "記録中の項目";
+"bloodwork.stat.photos" = "検査の写真";
+"bloodwork.markerCount" = "%d項目";
+"bloodwork.doctorNotes" = "医師のメモ";
+"bloodwork.notes" = "メモ";
+"bloodwork.moreMarkers" = "ほか%d項目";
+"bloodwork.viewPanel" = "パネルを表示";
+"bloodwork.labPhoto" = "検査結果の写真あり";
+"bloodwork.labPhotoTitle" = "検査結果の写真";
+"bloodwork.range.within" = "基準範囲内";
+"bloodwork.range.below" = "基準値未満";
+"bloodwork.range.above" = "基準値超過";
+"bloodwork.range.none" = "基準範囲なし";
+"bloodwork.refShort" = "基準 %@";
+"peptides.categories" = "カテゴリ";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / 補助薬";
+"peptides.cat.gh" = "GH分泌促進";
+"peptides.cat.healing" = "回復";
+"peptides.cat.longevity" = "ロンジェビティ";
+"peptides.cat.specialty" = "スペシャルティ";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "すべての機能を解放";
+"settings.pro.subtitle" = "医師向けレポートとすべてのPro機能 — すべて端末内で完結。";
+"settings.spreadWord" = "Troughを広める";
+"settings.rateApp.subtitle" = "小さなプライベートアプリにとって、大きな励みになります";
+"settings.onDeviceFooter" = "記録したデータはすべてこの端末内に保存されます。アカウントもクラウドもありません。";
+"privacy.hero.title" = "設計からプライベート";
+"privacy.hero.subtitle" = "アカウントなし。クラウドなし。データはこの端末から出ません。";
+"export.hero.title" = "あなたのデータを、あなたのファイルに";
+"export.hero.subtitle" = "この端末上で作成され、あなたが選んだ相手とだけ共有されます。";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "ステップ1/2";
+"checkin14.streakDays" = "%d日連続";
+"checkin14.scoreKicker" = "スコア";
+"checkin14.scoreHint" = "評価に合わせてリアルタイムで更新されます。";
+"checkin14.earnXP" = "+20 XPを獲得";
+"checkin14.updatingToday" = "今日の記録を更新中";
+"checkin14.step2" = "ステップ2/2";
+"checkin14.close" = "閉じる";
+"checkin14.savedTitle" = "チェックイン完了！";
+"checkin14.savedSubtitle" = "また1日、記録が増えました。いい継続ぶりです。";
+"checkin14.updatedSubtitle" = "今日のチェックインは最新の状態です。";
+"checkin14.xpEarnedA11y" = "20 XP獲得";
+"checkin14.updatedPill" = "チェックインを更新しました";
+"checkin14.streakKicker" = "チェックイン連続記録";
+"checkin14.day" = "日";
+"checkin14.days" = "日";
+"checkin14.bestStreak" = "最長：%d日";
+"checkin14.todaysQuests" = "今日のクエスト";
+"checkin14.dailyChallenge" = "デイリーチャレンジ";
+"checkin14.questDone" = "達成";
+"checkin14.questOpen" = "未達成";
+"checkin14.appleHealth" = "Appleヘルスケアから";
+"checkin14.insightKicker" = "今日のインサイト";
+"checkin14.rating.1" = "とても低い";
+"checkin14.rating.2" = "低い";
+"checkin14.rating.3" = "ふつう";
+"checkin14.rating.4" = "良い";
+"checkin14.rating.5" = "とても良い";
+"inj14.streakKicker" = "予定どおりの連続記録";
+"inj14.week" = "週";
+"inj14.weeks" = "週";
+"inj14.stampsCollected" = "スタンプ%d個を獲得";
+"inj14.nextSite" = "次のローテーション部位";
+"inj14.fab" = "記録";
+"inj14.logTitle" = "スタンプ帳";
+"inj14.tip" = "タップで編集 · 長押しでその他の操作";
+"inj14.stampHint" = "注射を開いて編集します";
+"inj14.thisWeek" = "今週";
+"inj14.weekN" = "第%d週";
+"inj14.onSchedule" = "予定どおり";
+"inj14.prevMonth" = "前の月";
+"inj14.nextMonth" = "次の月";
+"inj14.stampIt" = "スタンプを押す";
+"inj14.site.never" = "未使用";
+"inj14.site.today" = "今日使用";
+"inj14.site.daysAgo" = "%d日前";
+"inj14.site.suggested" = "次のおすすめ";
+"inj14.side.left" = "左";
+"inj14.side.right" = "右";
+"inj14.stampA11y" = "注射スタンプ：%@";
+"inj14.stamped" = "スタンプ完了！";
+"inj14.streakWeeksPill" = "%d週連続";
+
+// code-only
+"rank.cover.paper" = "ペーパー";
+"rank.cover.bronze" = "ブロンズ";
+"rank.cover.silver" = "シルバー";
+"rank.cover.gold" = "ゴールド";
+"rank.cover.platinum" = "プラチナ";
+"rank.cover.diamond" = "ダイヤモンド";
+
+// String(localized:) literal keys (bloodwork/peptides/CSV import screens)
+"Add Results" = "結果を追加";
+"Choose File" = "ファイルを選択";
+"Draw Date" = "採血日";
+"Included in your exported report for doctor visits." = "受診用に書き出すレポートに含まれます。";
+"Log First Dose" = "最初の用量を記録";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "補助薬とペプチドの用量を記録して\nスタックを追跡しパターンを見つけましょう。";
+"Log your first panel to start tracking trends." = "最初のパネルを記録してトレンドの追跡を始めましょう。";
+"No bloodwork recorded" = "血液検査の記録がありません";
+"Notes for Doctor" = "医師へのメモ";
+"Results" = "結果";
+"Select a CSV File" = "CSVファイルを選択";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = ".csv、.tsv、.txt に対応（区切り文字はカンマ、タブ、セミコロン）。";
+"Track Your Stack" = "スタックを記録";
+"Trends" = "トレンド";
+
+
+
+/* Daily challenges: supplements & adjuncts */
+"challenge.supplements.title" = "デイリーチャレンジ：サプリを記録";
+"challenge.supplements.desc" = "今日のチェックインで、摂取したサプリにチェックを入れましょう。";
+"challenge.peptide.title" = "デイリーチャレンジ：補助薬を記録";
+"challenge.peptide.desc" = "今日のペプチドまたは補助薬の用量を記録しましょう。";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "今日のチェックインを記録";
+"quest.log_checkin.desc" = "毎日のウェルネスチェックインを完了しましょう";
+"quest.view_insights.title" = "今日のインサイトを見る";
+"quest.view_insights.desc" = "ダッシュボードでプロトコルのインサイトを確認";
+"quest.daily_login.title" = "今日Troughを開く";
+"quest.daily_login.desc" = "アプリを開いて習慣をキープ";
+"quest.inject_on_schedule.title" = "予定どおりに注射";
+"quest.inject_on_schedule.desc" = "予定日から24時間以内に注射を記録";
+"quest.complete_bloodwork.title" = "血液検査の結果を記録";
+"quest.complete_bloodwork.desc" = "今週の検査結果を記録しましょう";
+"quest.hit_streak.title" = "7日間チェックイン連続";
+"quest.hit_streak.desc" = "今週は毎日チェックイン";
+"quest.supplement_adherence.title" = "サプリの継続";
+"quest.supplement_adherence.desc" = "今週のサプリ服用率80%以上を達成";

@@ -125,20 +125,31 @@ final class DailyCheckinViewModel: ObservableObject {
         )
     }
 
+    /// Cycle day of the PRIMARY protocol (same choice as the dashboard's
+    /// `activeProtocol`: first `isPrimary`, else the first active protocol),
+    /// counted from the last injection of THAT compound — so an ancillary
+    /// (e.g. hCG Mon/Thu) never drives the "Day X of Y" pill. Derived at read time.
     private func loadCycleInfo() {
         guard let ctx = modelContext else { return }
         let protoPred = #Predicate<SDProtocol> { $0.isActive && !$0.isSampleData }
-        var protoDesc = FetchDescriptor<SDProtocol>(predicate: protoPred)
-        protoDesc.fetchLimit = 1
-        guard let proto = try? ctx.fetch(protoDesc).first else { return }
+        let protos = (try? ctx.fetch(FetchDescriptor<SDProtocol>(
+            predicate: protoPred, sortBy: [SortDescriptor(\.createdAt)]))) ?? []
+        guard let proto = protos.first(where: \.isPrimary) ?? protos.first else {
+            cycleInfo = nil
+            return
+        }
 
         let injPred = #Predicate<SDInjection> { !$0.isSampleData }
-        var injDesc = FetchDescriptor<SDInjection>(
-            predicate: injPred,
-            sortBy: [SortDescriptor(\.injectedAt, order: .reverse)]
-        )
-        injDesc.fetchLimit = 1
-        guard let lastInj = try? ctx.fetch(injDesc).first else { return }
+        let injections = (try? ctx.fetch(FetchDescriptor<SDInjection>(
+            predicate: injPred, sortBy: [SortDescriptor(\.injectedAt, order: .reverse)]))) ?? []
+        let compound = proto.compoundName.trimmingCharacters(in: .whitespaces).lowercased()
+        guard let lastInj = injections.first(where: {
+            $0.protocolID == proto.id
+                || $0.compoundName.trimmingCharacters(in: .whitespaces).lowercased() == compound
+        }) else {
+            cycleInfo = nil
+            return
+        }
         cycleInfo = InjectionCycleService.cycleDay(
             lastInjectionDate: lastInj.injectedAt,
             frequencyDays: proto.frequencyDays

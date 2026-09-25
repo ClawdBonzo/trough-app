@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "till nästa";
 "widget.injection" = "Injektion";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Svit";
+"widget.kicker.checkInStreak" = "Incheckningssvit";
+"widget.checkedInToday" = "Incheckad idag";
+"widget.levelShort" = "N%d";
+"widget.nextBadge.displayName" = "Nästa märke";
+"widget.nextBadge.description" = "Märket du är närmast, och hur mycket som är kvar.";
+"widget.kicker.nextBadge" = "Nästa märke";
+"widget.badge.toGo" = "%d kvar";
+"widget.badge.progress" = "%1$d av %2$d";
+"widget.badge.allEarned" = "Alla märken tagna";
+"widget.badge.allEarnedSub" = "Hela samlingen. Håll sviten vid liv.";
+"widget.badge.openApp" = "Öppna Trough och börja samla.";
+"widget.lock.displayName" = "Svit";
+"widget.lock.description" = "Din incheckningssvit och nästa injektion, på låsskärmen.";
+"widget.lock.streak" = "%d dagars svit";
+"widget.lock.inlineCheckIn" = "%d dagars svit · checka in";
+"widget.injLock.displayName" = "Nästa injektion";
+"widget.injLock.description" = "Dagar kvar till din nästa schemalagda injektion.";
+"widget.injLock.today" = "Idag";
+"widget.injLock.daysShort" = "%d d";
+"widget.injLock.none" = "Ingen injektion schemalagd";

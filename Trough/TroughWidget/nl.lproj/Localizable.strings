@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "tot de volgende";
 "widget.injection" = "Injectie";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Reeks";
+"widget.kicker.checkInStreak" = "Check-in-reeks";
+"widget.checkedInToday" = "Vandaag ingecheckt";
+"widget.levelShort" = "L%d";
+"widget.nextBadge.displayName" = "Volgende badge";
+"widget.nextBadge.description" = "De badge die het dichtst bij is, en hoeveel je nog nodig hebt.";
+"widget.kicker.nextBadge" = "Volgende badge";
+"widget.badge.toGo" = "Nog %d";
+"widget.badge.progress" = "%1$d van %2$d";
+"widget.badge.allEarned" = "Alle badges verdiend";
+"widget.badge.allEarnedSub" = "De complete collectie. Houd de reeks in leven.";
+"widget.badge.openApp" = "Open Trough en begin met verzamelen.";
+"widget.lock.displayName" = "Reeks";
+"widget.lock.description" = "Je check-in-reeks en volgende injectie op het toegangsscherm.";
+"widget.lock.streak" = "%d dagen op rij";
+"widget.lock.inlineCheckIn" = "%d dagen op rij · check in";
+"widget.injLock.displayName" = "Volgende injectie";
+"widget.injLock.description" = "Aantal dagen tot je volgende geplande injectie.";
+"widget.injLock.today" = "Vandaag";
+"widget.injLock.daysShort" = "%dd";
+"widget.injLock.none" = "Geen injectie gepland";

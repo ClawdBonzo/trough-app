@@ -70,7 +70,7 @@
 "quiz.cta" = "Visa min poäng";
 
 "scoreReveal.protocolScore" = "Protokollpoäng";
-"scoreReveal.cta" = "Visa din förväntade förbättring";
+"scoreReveal.cta" = "Fortsätt";
 "scoreReveal.dialedIn" = "Finjusterad";
 "scoreReveal.steady" = "Stabil";
 "scoreReveal.trendingDown" = "Trendar nedåt";
@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "Du kan alltid ändra detta i Inställningar.";
 "onboarding.getStarted" = "Kom igång";
 
-"onboarding.startTrial" = "Starta 3-dagars gratis provperiod";
+"onboarding.startTrial" = "Starta 7 dagars gratis provperiod";
 "onboarding.trialSubtitle" = "Lås upp fullständiga insikter och spåra dina framsteg mot 85+.";
-"onboarding.noCharge" = "Ingen kostnad i 3 dagar. Avsluta när som helst i Inställningar → Prenumerationer.";
+"onboarding.noCharge" = "Ingen kostnad i 7 dagar. Avsluta när som helst i Inställningar → Prenumerationer.";
 "onboarding.maybeLater" = "Kanske senare";
 
 /* Frequency labels */
@@ -304,11 +304,11 @@
 "greeting.evening" = "God kväll";
 
 /* Milestones */
-"milestone.7" = "🔥 En vecka! Topp 30 % av alla TRT-spårare";
-"milestone.14" = "🔥🔥 Två veckor! Topp 15 % av alla TRT-spårare";
-"milestone.30" = "🔥🔥🔥 En månad! Topp 5 % av alla TRT-spårare";
-"milestone.60" = "🔥🔥🔥🔥 Två månader! Topp 2 % — du är elit";
-"milestone.90" = "🔥🔥🔥🔥🔥 Tre månader! Topp 1 % — legend";
+"milestone.7" = "🔥 En vecka i rad! Snygg kontinuitet";
+"milestone.14" = "🔥🔥 Två veckor i rad! Vanan sätter sig";
+"milestone.30" = "🔥🔥🔥 En månad av incheckningar! Helt på banan";
+"milestone.60" = "🔥🔥🔥🔥 Två månader i rad! Riktigt konsekvent";
+"milestone.90" = "🔥🔥🔥🔥🔥 Tre månader i rad! Legendarisk kontinuitet";
 
 /* Forecast */
 "forecast.injectionToday" = "Injektionsdag idag — energin bör nå sin topp om 24–48 timmar.";
@@ -486,20 +486,20 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "Gå från 42 → 85 i protokollpoäng.";
-"paywall.subtitle" = "Allt. Gratis i 3 dagar.";
+"paywall.heroSubtitle" = "Hela ditt protokoll på ett privat ställe.";
+"paywall.subtitle" = "Allt. Gratis i 7 dagar.";
 "paywall.monthly" = "Månadsvis";
 "paywall.annual" = "Årsvis";
 "paywall.save40" = "Spara 58 %";
 "paywall.startTrial" = "Starta gratis provperiod";
-"paywall.startTrialFull" = "Starta gratis provperiod — 3 dagar gratis, sedan %@";
+"paywall.startTrialFull" = "Starta gratis provperiod — 7 dagar gratis, sedan %@";
 "paywall.restorePurchases" = "Återställ";
 "paywall.privacyPolicy" = "Integritet";
 "paywall.termsOfUse" = "Villkor";
 
 /* Pro features */
 "pro.title" = "Vad du får med Pro";
-"pro.trialIncluded" = "3 dagars gratis provperiod ingår";
+"pro.trialIncluded" = "7 dagars gratis provperiod ingår";
 "pro.pkCurves" = "PK-kurvor";
 "pro.pkCurvesDesc" = "Se dina uppskattade blodnivåer med konfidensband och flerester-stacking";
 "pro.trendHistory" = "Fullständig trendhistorik";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "Spara %d%%";
 "paywall.ctaSub.trial" = "därefter %@ · förnyas automatiskt · avsluta när som helst";
 "paywall.ctaSub.noTrial" = "%@ · förnyas automatiskt · avsluta när som helst";
-"paywall.trialBadge" = "3 dagars gratis provperiod";
+"paywall.trialBadge" = "7 dagars gratis provperiod";
 "paywall.bestValue" = "BÄSTA VÄRDE";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "Din protokollpoäng";
 "onboarding.trialUnlock" = "Starta din gratis provperiod för att låsa upp alla insikter.";
 "onboarding.proUnlock" = "Lås upp alla insikter med Trough Pro.";
-"onboarding.trialLegal" = "3 dagars gratis provperiod, därefter automatisk förnyelse. Avsluta när som helst.";
+"onboarding.trialLegal" = "7 dagars gratis provperiod, därefter automatisk förnyelse. Avsluta när som helst.";
 "onboarding.subscribeLegal" = "Förnyas automatiskt. Avsluta när som helst.";
 
 /* Export */
@@ -703,7 +703,7 @@
 "settings.dailyCheckinReminder" = "Daglig incheckningspåminnelse";
 "settings.injectionReminders" = "Påminnelser på injektionsdagen";
 "settings.injectionReminderTime" = "Tid för injektionspåminnelse";
-"settings.everyDaysConcentration" = "Var %d dag(ar) · %.0f mg/mL";
+"settings.everyDaysConcentration" = "Var %d:e dag · %.0f mg/mL";
 "settings.privacyLegal" = "Integritet och juridik";
 
 /* Notifications (additional) */
@@ -715,3 +715,499 @@
 "common.time" = "Tid";
 "onboarding.enterPrescribedDose" = "Ange din ordinerade dos";
 "onboarding.doseValidation" = "Ange dosen din läkare ordinerat för att fortsätta.";
+
+/* ===== Trough 1.4 (redesign & gamification) ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "Brons";
+"badge.tier.silver" = "Silver";
+"badge.tier.gold" = "Guld";
+"badge.tier.platinum" = "Platina";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "Hemligt märke";
+"badge.secret.how" = "Fortsätt logga för att hitta det.";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "Första anteckningen";
+"badge.checkins_1.how" = "Logga din första incheckning.";
+"badge.checkins_1.line" = "Dag ett är inskriven i boken.";
+"badge.checkins_7.title" = "En vecka i loggen";
+"badge.checkins_7.how" = "Logga 7 incheckningar.";
+"badge.checkins_7.line" = "Sju incheckningar. Ett mönster tar form.";
+"badge.checkins_30.title" = "En månad av data";
+"badge.checkins_30.how" = "Logga 30 incheckningar.";
+"badge.checkins_30.line" = "Trettio incheckningar. Nu har loggen fått form.";
+"badge.checkins_100.title" = "Centurion";
+"badge.checkins_100.how" = "Logga 100 incheckningar.";
+"badge.checkins_100.line" = "Tresiffrigt. Anteckningsboken börjar bli tjock.";
+"badge.checkins_365.title" = "Ett år i loggen";
+"badge.checkins_365.how" = "Logga 365 incheckningar.";
+"badge.checkins_365.line" = "Ett helt år av incheckningar. Snacka om uthållighet.";
+"badge.checkin_streak_3.title" = "Uppvärmd";
+"badge.checkin_streak_3.how" = "Checka in 3 dagar i rad.";
+"badge.checkin_streak_3.line" = "Tre dagar i rad. Nu är farten igång.";
+"badge.streak_flame_7.title" = "Lågans väktare";
+"badge.streak_flame_7.how" = "Checka in 7 dagar i rad.";
+"badge.streak_flame_7.line" = "En hel vecka utan att tappa takten.";
+"badge.checkin_streak_14.title" = "Två veckor i fokus";
+"badge.checkin_streak_14.how" = "Checka in 14 dagar i rad.";
+"badge.checkin_streak_14.line" = "Två veckor i rad. Nu snackar vi vana.";
+"badge.consistency_king.title" = "Svitens kung";
+"badge.consistency_king.how" = "Checka in 30 dagar i rad.";
+"badge.consistency_king.line" = "Trettio dagar i sträck. Kronan är din.";
+"badge.checkin_streak_60.title" = "Obruten";
+"badge.checkin_streak_60.how" = "Checka in 60 dagar i rad.";
+"badge.checkin_streak_60.line" = "Sextio dagar. Sviten har fått egen dragningskraft.";
+"badge.checkin_streak_100.title" = "Hundraklubben";
+"badge.checkin_streak_100.how" = "Checka in 100 dagar i rad.";
+"badge.checkin_streak_100.line" = "Hundra dagar i rad. Legendariskt.";
+"badge.injections_1.title" = "Första sprutan loggad";
+"badge.injections_1.how" = "Logga din första injektion.";
+"badge.injections_1.line" = "Loggad och daterad. Så börjar det.";
+"badge.injections_10.title" = "Tio i loggen";
+"badge.injections_10.how" = "Logga 10 injektioner.";
+"badge.injections_10.line" = "Tio loggade. Ditt schema har fått en historia.";
+"badge.injections_25.title" = "Kvartssekel";
+"badge.injections_25.how" = "Logga 25 injektioner.";
+"badge.injections_25.line" = "25 loggade. Kalendern tackar och bugar.";
+"badge.injections_52.title" = "Ett år av loggar";
+"badge.injections_52.how" = "Logga 52 injektioner.";
+"badge.injections_52.line" = "52 loggade. Ett helt års anteckningar.";
+"badge.injections_100.title" = "Arkivarien";
+"badge.injections_100.how" = "Logga 100 injektioner.";
+"badge.injections_100.line" = "100 injektioner loggade. Minutiöst.";
+"badge.on_schedule_weeks_4.title" = "På minuten";
+"badge.on_schedule_weeks_4.how" = "Logga din injektion enligt schema 4 veckor i rad.";
+"badge.on_schedule_weeks_4.line" = "Fyra veckor enligt schema. Som ett urverk.";
+"badge.on_schedule_weeks_12.title" = "Metronomen";
+"badge.on_schedule_weeks_12.how" = "Logga din injektion enligt schema 12 veckor i rad.";
+"badge.on_schedule_weeks_12.line" = "Tolv veckor, pricken i tid.";
+"badge.on_schedule_weeks_26.title" = "Halvårsrytm";
+"badge.on_schedule_weeks_26.how" = "Logga din injektion enligt schema 26 veckor i rad.";
+"badge.on_schedule_weeks_26.line" = "Sex månader enligt schema. Stadig hand.";
+"badge.on_schedule_weeks_52.title" = "Varvet runt";
+"badge.on_schedule_weeks_52.how" = "Logga din injektion enligt schema 52 veckor i rad.";
+"badge.on_schedule_weeks_52.line" = "Ett helt år av veckor enligt schema.";
+"badge.bloodwork_1.title" = "Första panelen";
+"badge.bloodwork_1.how" = "Logga din första blodprovspanel.";
+"badge.bloodwork_1.line" = "Första panelen arkiverad. Svart på vitt.";
+"badge.bloodwork_3.title" = "Pappersspår";
+"badge.bloodwork_3.how" = "Logga 3 blodprovspaneler.";
+"badge.bloodwork_3.line" = "Tre paneler loggade. Smidigt inför nästa läkarbesök.";
+"badge.bloodwork_5.title" = "Stamgäst på labbet";
+"badge.bloodwork_5.how" = "Logga 5 blodprovspaneler.";
+"badge.bloodwork_5.line" = "Fem paneler arkiverade. Arkivet växer.";
+"badge.bloodwork_master.title" = "Blodprovsmästare";
+"badge.bloodwork_master.how" = "Logga 10 blodprovspaneler.";
+"badge.bloodwork_master.line" = "Tio paneler i arkivet. Klanderfri ordning.";
+"badge.health_synced_7.title" = "I synk";
+"badge.health_synced_7.how" = "Logga 7 incheckningar med data från Apple Hälsa.";
+"badge.health_synced_7.line" = "Din logg och Apple Hälsa har börjat prata.";
+"badge.health_synced_30.title" = "Dataström";
+"badge.health_synced_30.how" = "Logga 30 incheckningar med data från Apple Hälsa.";
+"badge.health_synced_30.line" = "Trettio synkade incheckningar. Loggning utan ansträngning.";
+"badge.health_synced_100.title" = "Fullt integrerad";
+"badge.health_synced_100.how" = "Logga 100 incheckningar med data från Apple Hälsa.";
+"badge.health_synced_100.line" = "100 synkade incheckningar. Automatik när den är som bäst.";
+"badge.adjunct_logs_1.title" = "Stacken är igång";
+"badge.adjunct_logs_1.how" = "Logga din första dos av en peptid eller ett tilläggspreparat.";
+"badge.adjunct_logs_1.line" = "Första tilläggspreparatet är loggat.";
+"badge.adjunct_logs_10.title" = "Stackspårare";
+"badge.adjunct_logs_10.how" = "Logga 10 doser av peptider eller tilläggspreparat.";
+"badge.adjunct_logs_10.line" = "Tio loggade doser. Varenda en redovisad.";
+"badge.adjunct_logs_50.title" = "Stackens arkivarie";
+"badge.adjunct_logs_50.how" = "Logga 50 doser av peptider eller tilläggspreparat.";
+"badge.adjunct_logs_50.line" = "Femtio loggade doser. Inget slinker igenom.";
+"badge.level_5.title" = "Stigande stjärna";
+"badge.level_5.how" = "Nå nivå 5.";
+"badge.level_5.line" = "Nivå 5. Klättringen är igång.";
+"badge.level_10.title" = "Mästarklass";
+"badge.level_10.how" = "Nå nivå 10.";
+"badge.level_10.line" = "Nivå 10. Tunn luft här uppe.";
+"badge.level_11.title" = "Högst upp på stegen";
+"badge.level_11.how" = "Nå nivå 11.";
+"badge.level_11.line" = "Maxnivå. Nu återstår bara att hålla i.";
+"badge.notes_10.title" = "Fältanteckningar";
+"badge.notes_10.how" = "Lägg till anteckningar i 10 loggar.";
+"badge.notes_10.line" = "Tio anteckningar. Sammanhanget är kung.";
+"badge.notes_50.title" = "Krönikören";
+"badge.notes_50.how" = "Lägg till anteckningar i 50 loggar.";
+"badge.notes_50.line" = "Femtio anteckningar. Framtida du säger tack.";
+"badge.testosterone_peak.title" = "Bra dag loggad";
+"badge.testosterone_peak.how" = "Logga en incheckning där du själv skattar protokollpoängen till 80 eller mer.";
+"badge.testosterone_peak.line" = "En riktigt bra dag, antecknad för eftervärlden.";
+"badge.perfect_week.title" = "Perfekt vecka";
+"badge.perfect_week.how" = "Checka in varje dag under en kalendervecka, måndag till söndag.";
+"badge.perfect_week.line" = "Sju av sju, måndag till söndag.";
+"badge.supplement_adherence.title" = "Tillskottsproffs";
+"badge.supplement_adherence.how" = "Logga dina kosttillskott 27 av de senaste 30 dagarna.";
+"badge.supplement_adherence.line" = "Tjugosju av trettio. Plikttroget.";
+"badge.injection_precision.title" = "Prickskytten";
+"badge.injection_precision.how" = "Logga varje schemalagd injektion i tid under 30 dagar.";
+"badge.injection_precision.line" = "Trettio dagar, noll missade loggar.";
+"badge.secret_night_owl.title" = "Nattuggla";
+"badge.secret_night_owl.how" = "Checka in mellan midnatt och kl. 4.";
+"badge.secret_night_owl.line" = "Loggen sover aldrig. (Men det borde du.)";
+"badge.secret_new_year.title" = "Nystart";
+"badge.secret_new_year.how" = "Checka in den 1 januari.";
+"badge.secret_new_year.line" = "Nytt år, samma grymma loggvana.";
+"badge.secret_full_year.title" = "Ett helt varv";
+"badge.secret_full_year.how" = "Fyll ett år sedan din första incheckning.";
+"badge.secret_full_year.line" = "Ett varv runt solen med Trough.";
+
+/* Level names (11 levels) */
+"level.name.1" = "Nybörjare";
+"level.name.2" = "På gång";
+"level.name.3" = "Engagerad";
+"level.name.4" = "Hängiven";
+"level.name.5" = "Driven";
+"level.name.6" = "Fokuserad";
+"level.name.7" = "Disciplinerad";
+"level.name.8" = "Avancerad";
+"level.name.9" = "Expert";
+"level.name.10" = "Mästare";
+"level.name.11" = "Ultimat alfa";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "Morgonpigg";
+"persona.earlyRiser.tagline" = "De flesta av dina incheckningar kommer före kl. 9.";
+"persona.metronome.title" = "Metronomen";
+"persona.metronome.tagline" = "Dina injektioner håller perfekt takt.";
+"persona.dataNerd.title" = "Datanörden";
+"persona.dataNerd.tagline" = "Du har koll på dina blodprover.";
+"persona.stackBuilder.title" = "Stackbyggaren";
+"persona.stackBuilder.tagline" = "Du spårar mer än ett tilläggspreparat.";
+"persona.synced.title" = "Synkad";
+"persona.synced.tagline" = "Apple Hälsa fyller i detaljerna åt dig.";
+"persona.steady.title" = "Stadig";
+"persona.steady.tagline" = "Tyst och konsekvent. Den bästa sorten.";
+
+/* Daily challenges */
+"challenge.checkin.title" = "Dagens utmaning: Checka in";
+"challenge.checkin.desc" = "Logga dagens incheckning.";
+"challenge.injection.title" = "Dagens utmaning: Enligt schema";
+"challenge.injection.desc" = "Din injektion ska tas – logga den idag.";
+"challenge.note.title" = "Dagens utmaning: Skriv en anteckning";
+"challenge.note.desc" = "Lägg till en anteckning i valfri logg idag.";
+"challenge.healthSync.title" = "Dagens utmaning: Synka Apple Hälsa";
+"challenge.healthSync.desc" = "Checka in så att Apple Hälsa kan fylla i dagens data.";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "1 incheckning den här veckan";
+"notif.recap.checkins.other" = "%d incheckningar den här veckan";
+"notif.recap.injections.one" = "1 injektion loggad";
+"notif.recap.injections.other" = "%d injektioner loggade";
+"notif.streakRisk.title" = "Din svit på %d dagar väntar";
+"notif.streakRisk.body" = "En snabb incheckning håller den vid liv.";
+"notif.recap.title" = "Din vecka i Trough";
+
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@, låst, %d av %d";
+"ach.badge.a11y.unlocked" = "%@, %@, upplåst";
+"ach.badge.howEarned" = "Så tog du det";
+"ach.badge.secretHint" = "Ett hemligt märke. Det dyker upp när det dyker upp – fortsätt logga.";
+"ach.badge.share" = "Visa upp det";
+"ach.badge.unlockedOn" = "Upplåst %@";
+"ach.badges.count" = "%d av %d";
+"ach.badges.title" = "Märkesväggen";
+"ach.cat.adjuncts" = "Tilläggspreparat";
+"ach.cat.bloodwork" = "Blodprover";
+"ach.cat.checkins" = "Incheckningar";
+"ach.cat.health" = "Apple Hälsa";
+"ach.cat.injections" = "Injektionslogg";
+"ach.cat.levels" = "Nivåer";
+"ach.cat.notes" = "Anteckningar";
+"ach.cat.secrets" = "Hemligheter";
+"ach.cat.specials" = "Specialare";
+"ach.cat.streaks" = "Sviter";
+"ach.celebrate.carryOn" = "Kör vidare";
+"ach.celebrate.kicker.badge" = "NYTT MÄRKE";
+"ach.celebrate.kicker.quest" = "UPPDRAG KLART";
+"ach.celebrate.kicker.rank" = "NY RANG";
+"ach.celebrate.kicker.streak" = "SVIT";
+"ach.celebrate.moreBadges" = "+%d märken till";
+"ach.celebrate.quest.line" = "Snyggt jobbat. En till i loggen.";
+"ach.celebrate.rank.line" = "Nivå %d · %@-omslag. Det syns på varje kort du delar.";
+"ach.celebrate.streak.line.hundred" = "Tresiffrigt. Konsekvens, svart på vitt.";
+"ach.celebrate.streak.line.month" = "En månad utan en enda missad dag. Det kallas rutin.";
+"ach.celebrate.streak.line.week" = "En hel vecka av incheckningar. Vanan tar form.";
+"ach.celebrate.streak.line.year" = "Ett år av dagliga incheckningar. Legendariskt.";
+"ach.celebrate.streak.title" = "%d dagar i rad";
+"ach.celebrate.totalXP" = "%d XP totalt";
+"ach.challenge.done" = "Klart för idag. Snyggt.";
+"ach.challenge.kicker" = "Dagens utmaning";
+"ach.chip.badges" = "%d/%d märken";
+"ach.chip.streak" = "%d dagars svit";
+"ach.chip.weeks" = "%d v i tid";
+"ach.flame.0" = "Otänd";
+"ach.flame.1" = "Gnista";
+"ach.flame.2" = "Tänd";
+"ach.flame.3" = "Flammande";
+"ach.flame.4" = "Inferno";
+"ach.flame.5" = "Vitglödgad";
+"ach.levelN" = "Nivå %d";
+"ach.more.app" = "App";
+"ach.more.tracking" = "Spårning";
+"ach.passport.kicker" = "Protokollpass";
+"ach.passport.toNext" = "%d XP till %@";
+"ach.passport.topRank" = "Högsta rang";
+"ach.persona.kicker" = "Din protokollpersona";
+"ach.persona.locked" = "Din loggstil avslöjas efter %d incheckningar (%d hittills).";
+"ach.persona.lockedTitle" = "Antecknar fortfarande";
+"ach.quest.done" = "Klart";
+"ach.quest.open" = "Inte klart än";
+"ach.quests.empty" = "Nya uppdrag kommer i morgon.";
+"ach.quests.title" = "Uppdrag";
+"ach.rank.level" = "NIVÅ";
+"ach.share" = "Dela";
+"ach.share.badge.kicker" = "Nytt märke";
+"ach.share.cta" = "Hur konsekvent är du?";
+"ach.share.footer" = "Privat protokollogg · App Store";
+"ach.share.format" = "Format";
+"ach.share.format.square" = "Kvadrat";
+"ach.share.format.story" = "Story";
+"ach.share.message" = "Hur konsekvent är du? Jag håller min protokollogg privat med Trough — TRT Tracker.";
+"ach.share.privacy" = "Korten visar bara rang, sviter och märken – aldrig doser eller labbvärden.";
+"ach.share.rank.kicker" = "Min protokollrang";
+"ach.share.stat.badges" = "märken";
+"ach.share.stat.best" = "bästa svit";
+"ach.share.stat.dayStreak" = "dagars svit";
+"ach.share.stat.level" = "nivå";
+"ach.share.stat.weeks" = "veckor i tid";
+"ach.share.streak.kicker" = "Min incheckningssvit";
+"ach.share.streak.line" = "%d dagars incheckningssvit";
+"ach.share.title.badge" = "Dela märket";
+"ach.share.title.rank" = "Dela din rang";
+"ach.share.title.streak" = "Dela din svit";
+"ach.streaks.best" = "bästa %d";
+"ach.streaks.checkin" = "Incheckningssvit";
+"ach.streaks.injection" = "Injektioner i tid";
+"ach.streaks.title" = "Sviter";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "dag";
+"ach.unit.days" = "dagar";
+"ach.unit.week" = "vecka";
+"ach.unit.weeks" = "veckor";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "Nästa märke";
+"dash.badge.moreCheckins" = "%d incheckningar kvar";
+"dash.badge.moreDays" = "%d dagar kvar";
+"dash.badge.moreInjections" = "%d injektioner kvar";
+"dash.badge.morePanels" = "%d blodprovspaneler kvar";
+"dash.badge.moreWeeks" = "%d veckor enligt schema kvar";
+"dash.badge.reachLevel" = "Nå nivå %d";
+"dash.badge.toGo" = "%d kvar";
+"dash.challenge.done" = "Klart – vi ses i morgon";
+"dash.challenge.kicker" = "Dagens utmaning";
+"dash.hero.a11y" = "Nivå %1$d, %2$@. %3$d XP till nästa nivå. Incheckningssvit på %4$d dagar. %5$d av %6$d märken.";
+"dash.hero.a11yHint" = "Öppnar prestationer";
+"dash.hero.lv" = "NIV";
+"dash.hero.maxRank" = "Högsta rang nådd";
+"dash.hero.onScheduleWeeks" = "%d v i tid";
+"dash.hero.rankKicker" = "Rang · %@";
+"dash.hero.streakDays" = "%d dagars svit";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "%1$d XP till %2$@";
+"dash.insight.kicker" = "Insikt";
+"dash.persona.kicker" = "Din loggstil";
+"dash.personalBest.sub" = "Din högsta egna skattning den här månaden.";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "Kom igång";
+"dash.score.avg7" = "7-dagarssnitt %.0f";
+"dash.score.noData" = "Inga incheckningar än";
+"dash.score.vsLastWeek" = "mot förra v.";
+"dash.section.progress" = "Framsteg";
+"dash.section.today" = "Idag";
+"dash.section.trends" = "Trender";
+"dash.stats.avgMood" = "Snitthumör";
+"dash.stats.avgSleep" = "Snittsömn";
+"dash.today.checkedIn" = "Incheckad ✓";
+"dash.today.checkedInSub" = "Tryck för att se dagens logg";
+"dash.today.cycle" = "Cykel";
+"dash.today.day" = "dag";
+"dash.today.dayWord" = "Dag";
+"dash.today.days" = "dagar";
+"dash.today.daysLate" = "dagar sen";
+"dash.today.dueToday" = "Idag";
+"dash.today.nextShot" = "Nästa injektion";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "Dina senaste 7 dagar i korthet";
+"pk.legend.combined" = "Kombinerad";
+"pk.legend.estimated" = "Uppskattad nivå";
+"pk.legend.peak" = "Toppfönster";
+"pk.legend.trough" = "Närmar sig dalen";
+"pk.legend.variation" = "±20% variation";
+"pk.toggle.absorption" = "Absorptionsfördröjning";
+"pk.toggle.bands" = "Visa band";
+
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "Steg %1$d av %2$d";
+"onb14.close" = "Stäng";
+"onb14.reminders.streakNudge" = "En daglig knuff är det enklaste sättet att hålla din incheckningssvit vid liv.";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "Protokollpass";
+"onb14.passport.levelCover" = "Nivå %1$d · %2$@";
+"onb14.passport.badges" = "Märken";
+"onb14.passport.a11y" = "Nivå %1$d, %2$@. %3$d av %4$d märken.";
+"onb14.passport.ready" = "Nu är du redo";
+"onb14.passport.title" = "Ditt protokollpass";
+"onb14.passport.subtitle" = "Varje incheckning, loggad injektion och svit ger XP och stämplar ett märke i ditt pass.";
+"onb14.passport.nextUp" = "Näst på tur";
+"onb14.passport.firstBadge" = "Ditt första märke är bara en incheckning bort";
+"onb14.passport.pillLevels" = "11 nivåer";
+"onb14.passport.pillBadges" = "%d märken";
+"onb14.passport.pillStreaks" = "Sviter";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "%d dagars gratis provperiod";
+"onb14.trialLegal" = "%d dagars gratis provperiod, därefter automatisk förnyelse. Avsluta när som helst.";
+"onb14.paywall.autoRenew" = "Betalningen debiteras ditt Apple-ID när köpet bekräftas. Prenumerationen förnyas automatiskt om den inte avslutas minst 24 timmar innan den aktuella perioden tar slut. Hantera eller avsluta när som helst i Inställningar.";
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "Labb";
+"bloodwork.addPanel" = "Lägg till panel";
+"bloodwork.deleteConfirm" = "Radera den här panelen?";
+"bloodwork.delete" = "Radera panel";
+"bloodwork.summary.onePanel" = "1 panel loggad";
+"bloodwork.summary.panels" = "%d paneler loggade";
+"bloodwork.summary.lastDrawn" = "senast tagen %@";
+"bloodwork.summary.kicker" = "Labblogg";
+"bloodwork.stat.panels" = "Paneler";
+"bloodwork.stat.markers" = "Spårade markörer";
+"bloodwork.stat.photos" = "Labbfoton";
+"bloodwork.markerCount" = "%d markörer";
+"bloodwork.doctorNotes" = "Läkaranteckningar";
+"bloodwork.notes" = "Anteckningar";
+"bloodwork.moreMarkers" = "+%d till";
+"bloodwork.viewPanel" = "Visa panel";
+"bloodwork.labPhoto" = "Labbfoto bifogat";
+"bloodwork.labPhotoTitle" = "Labbfoto";
+"bloodwork.range.within" = "Inom ref.";
+"bloodwork.range.below" = "Under ref.";
+"bloodwork.range.above" = "Över ref.";
+"bloodwork.range.none" = "Inget ref.-intervall";
+"bloodwork.refShort" = "Ref. %@";
+"peptides.categories" = "Kategorier";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / stödpreparat";
+"peptides.cat.gh" = "GH-sekretagog";
+"peptides.cat.healing" = "Läkning";
+"peptides.cat.longevity" = "Livslängd";
+"peptides.cat.specialty" = "Special";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "Lås upp hela labbet";
+"settings.pro.subtitle" = "Läkarrapporter och alla Pro-funktioner – allt på enheten.";
+"settings.spreadWord" = "Tipsa andra";
+"settings.rateApp.subtitle" = "Det hjälper verkligen en liten, privat app";
+"settings.onDeviceFooter" = "Allt du loggar stannar på den här enheten. Inget konto, inget moln.";
+"privacy.hero.title" = "Privat från grunden";
+"privacy.hero.subtitle" = "Inget konto. Inget moln. Dina data stannar på den här enheten.";
+"export.hero.title" = "Dina data, dina filer";
+"export.hero.subtitle" = "Skapas på den här enheten och delas bara dit du väljer.";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "Steg 1 av 2";
+"checkin14.streakDays" = "%d dagars svit";
+"checkin14.scoreKicker" = "Poäng";
+"checkin14.scoreHint" = "Uppdateras direkt medan du betygsätter din dag.";
+"checkin14.earnXP" = "Tjäna +20 XP";
+"checkin14.updatingToday" = "Uppdaterar dagens";
+"checkin14.step2" = "Steg 2 av 2";
+"checkin14.close" = "Stäng";
+"checkin14.savedTitle" = "Incheckning loggad!";
+"checkin14.savedSubtitle" = "Ännu en dag i loggen. Snygg kontinuitet.";
+"checkin14.updatedSubtitle" = "Dagens incheckning är uppdaterad.";
+"checkin14.xpEarnedA11y" = "20 XP intjänade";
+"checkin14.updatedPill" = "Incheckning uppdaterad";
+"checkin14.streakKicker" = "Incheckningssvit";
+"checkin14.day" = "dag";
+"checkin14.days" = "dagar";
+"checkin14.bestStreak" = "Bästa: %d dagar";
+"checkin14.todaysQuests" = "Dagens uppdrag";
+"checkin14.dailyChallenge" = "Dagens utmaning";
+"checkin14.questDone" = "Klart";
+"checkin14.questOpen" = "Inte klart än";
+"checkin14.appleHealth" = "Från Apple Hälsa";
+"checkin14.insightKicker" = "Dagens insikt";
+"checkin14.rating.1" = "Mycket låg";
+"checkin14.rating.2" = "Låg";
+"checkin14.rating.3" = "Okej";
+"checkin14.rating.4" = "Bra";
+"checkin14.rating.5" = "Toppen";
+"inj14.streakKicker" = "Svit enligt schema";
+"inj14.week" = "vecka";
+"inj14.weeks" = "veckor";
+"inj14.stampsCollected" = "%d stämplar samlade";
+"inj14.nextSite" = "Nästa ställe i rotationen";
+"inj14.fab" = "Logga";
+"inj14.logTitle" = "Stämpellogg";
+"inj14.tip" = "Tryck på en stämpel för att redigera · håll in för mer";
+"inj14.stampHint" = "Öppnar injektionen för redigering";
+"inj14.thisWeek" = "Den här veckan";
+"inj14.weekN" = "Vecka %d";
+"inj14.onSchedule" = "enligt schema";
+"inj14.prevMonth" = "Föregående månad";
+"inj14.nextMonth" = "Nästa månad";
+"inj14.stampIt" = "Stämpla";
+"inj14.site.never" = "Aldrig använt";
+"inj14.site.today" = "Använt idag";
+"inj14.site.daysAgo" = "för %dd sedan";
+"inj14.site.suggested" = "Föreslås härnäst";
+"inj14.side.left" = "V";
+"inj14.side.right" = "H";
+"inj14.stampA11y" = "Injektionsstämpel: %@";
+"inj14.stamped" = "Stämplad!";
+"inj14.streakWeeksPill" = "%d veckors svit";
+
+// code-only
+"rank.cover.paper" = "Papper";
+"rank.cover.bronze" = "Brons";
+"rank.cover.silver" = "Silver";
+"rank.cover.gold" = "Guld";
+"rank.cover.platinum" = "Platina";
+"rank.cover.diamond" = "Diamant";
+
+// String(localized:) literal keys (bloodwork/peptides/CSV import screens)
+"Add Results" = "Lägg till resultat";
+"Choose File" = "Välj fil";
+"Draw Date" = "Provtagningsdatum";
+"Included in your exported report for doctor visits." = "Ingår i din exporterade rapport till läkarbesöket.";
+"Log First Dose" = "Logga första dosen";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "Logga tilläggspreparat och peptiddoser för att\nspåra din stack och upptäcka mönster.";
+"Log your first panel to start tracking trends." = "Logga din första panel för att börja spåra trender.";
+"No bloodwork recorded" = "Inga blodprover registrerade";
+"Notes for Doctor" = "Anteckningar till läkaren";
+"Results" = "Resultat";
+"Select a CSV File" = "Välj en CSV-fil";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = "Stöder .csv, .tsv och .txt med komma, tabb eller semikolon som avgränsare.";
+"Track Your Stack" = "Spåra din stack";
+"Trends" = "Trender";
+
+
+
+/* Daily challenges: supplements & adjuncts */
+"challenge.supplements.title" = "Dagens utmaning: Logga kosttillskott";
+"challenge.supplements.desc" = "Bocka av kosttillskotten du tagit i dagens incheckning.";
+"challenge.peptide.title" = "Dagens utmaning: Logga ett tilläggspreparat";
+"challenge.peptide.desc" = "Logga dagens dos av peptid eller tilläggspreparat.";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "Logga dagens incheckning";
+"quest.log_checkin.desc" = "Gör din dagliga välmående-incheckning";
+"quest.view_insights.title" = "Se dagens insikter";
+"quest.view_insights.desc" = "Kolla dina protokollinsikter på översikten";
+"quest.daily_login.title" = "Öppna Trough i dag";
+"quest.daily_login.desc" = "Öppna appen och håll kursen";
+"quest.inject_on_schedule.title" = "Injicera enligt schema";
+"quest.inject_on_schedule.desc" = "Logga injektionen inom 24 h från planerad dag";
+"quest.complete_bloodwork.title" = "Logga ett blodprov";
+"quest.complete_bloodwork.desc" = "Följ dina labbresultat den här veckan";
+"quest.hit_streak.title" = "7 dagars incheckningssvit";
+"quest.hit_streak.desc" = "Checka in varje dag den här veckan";
+"quest.supplement_adherence.title" = "Tillskottsföljsamhet";
+"quest.supplement_adherence.desc" = "Nå ≥80 % följsamhet för kosttillskott den här veckan";

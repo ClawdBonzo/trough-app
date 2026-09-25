@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "次回まで";
 "widget.injection" = "注射";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "連続記録";
+"widget.kicker.checkInStreak" = "チェックイン連続記録";
+"widget.checkedInToday" = "今日はチェックイン済み";
+"widget.levelShort" = "Lv.%d";
+"widget.nextBadge.displayName" = "次のバッジ";
+"widget.nextBadge.description" = "獲得間近のバッジと、達成までの残りを表示します。";
+"widget.kicker.nextBadge" = "次のバッジ";
+"widget.badge.toGo" = "あと%d";
+"widget.badge.progress" = "%1$d/%2$d";
+"widget.badge.allEarned" = "全バッジ獲得";
+"widget.badge.allEarnedSub" = "コンプリート達成。連続記録を続けましょう。";
+"widget.badge.openApp" = "Troughを開いてバッジ集めを始めましょう。";
+"widget.lock.displayName" = "連続記録";
+"widget.lock.description" = "チェックインの連続記録と次回の注射をロック画面に表示します。";
+"widget.lock.streak" = "%d日連続";
+"widget.lock.inlineCheckIn" = "%d日連続 · チェックイン";
+"widget.injLock.displayName" = "次回の注射";
+"widget.injLock.description" = "次に予定されている注射までの日数を表示します。";
+"widget.injLock.today" = "今日";
+"widget.injLock.daysShort" = "%d日";
+"widget.injLock.none" = "予定された注射はありません";

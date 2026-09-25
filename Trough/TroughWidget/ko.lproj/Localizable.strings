@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "다음 주사까지";
 "widget.injection" = "주사";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "연속 기록";
+"widget.kicker.checkInStreak" = "체크인 연속 기록";
+"widget.checkedInToday" = "오늘 체크인 완료";
+"widget.levelShort" = "Lv.%d";
+"widget.nextBadge.displayName" = "다음 배지";
+"widget.nextBadge.description" = "가장 가까운 배지와 남은 횟수를 보여줍니다.";
+"widget.kicker.nextBadge" = "다음 배지";
+"widget.badge.toGo" = "%d 남음";
+"widget.badge.progress" = "%1$d/%2$d";
+"widget.badge.allEarned" = "모든 배지 획득";
+"widget.badge.allEarnedSub" = "컬렉션 완성. 연속 기록은 계속 이어가세요.";
+"widget.badge.openApp" = "Trough를 열고 수집을 시작하세요.";
+"widget.lock.displayName" = "연속 기록";
+"widget.lock.description" = "체크인 연속 기록과 다음 주사를 잠금 화면에서 확인하세요.";
+"widget.lock.streak" = "%d일 연속";
+"widget.lock.inlineCheckIn" = "%d일 연속 · 체크인하기";
+"widget.injLock.displayName" = "다음 주사";
+"widget.injLock.description" = "다음 예정된 주사까지 남은 일수.";
+"widget.injLock.today" = "오늘";
+"widget.injLock.daysShort" = "%d일";
+"widget.injLock.none" = "예정된 주사 없음";

@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "bis zur nächsten";
 "widget.injection" = "Injektion";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Serie";
+"widget.kicker.checkInStreak" = "Check-in-Serie";
+"widget.checkedInToday" = "Heute eingecheckt";
+"widget.levelShort" = "L%d";
+"widget.nextBadge.displayName" = "Nächstes Abzeichen";
+"widget.nextBadge.description" = "Das Abzeichen, dem du am nächsten bist – und wie viel noch fehlt.";
+"widget.kicker.nextBadge" = "Nächstes Abzeichen";
+"widget.badge.toGo" = "Noch %d";
+"widget.badge.progress" = "%1$d von %2$d";
+"widget.badge.allEarned" = "Alle Abzeichen verdient";
+"widget.badge.allEarnedSub" = "Die komplette Sammlung. Halt die Serie am Leben.";
+"widget.badge.openApp" = "Öffne Trough und fang an zu sammeln.";
+"widget.lock.displayName" = "Serie";
+"widget.lock.description" = "Deine Check-in-Serie und nächste Injektion auf dem Sperrbildschirm.";
+"widget.lock.streak" = "%d-Tage-Serie";
+"widget.lock.inlineCheckIn" = "%d-Tage-Serie · einchecken";
+"widget.injLock.displayName" = "Nächste Injektion";
+"widget.injLock.description" = "Tage bis zu deiner nächsten geplanten Injektion.";
+"widget.injLock.today" = "Heute";
+"widget.injLock.daysShort" = "%d T";
+"widget.injLock.none" = "Keine Injektion geplant";

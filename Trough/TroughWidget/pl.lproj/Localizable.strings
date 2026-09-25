@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "do następnego";
 "widget.injection" = "Zastrzyk";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Seria";
+"widget.kicker.checkInStreak" = "Seria check-inów";
+"widget.checkedInToday" = "Check-in na dziś zrobiony";
+"widget.levelShort" = "Poz. %d";
+"widget.nextBadge.displayName" = "Następna odznaka";
+"widget.nextBadge.description" = "Odznaka, do której masz najbliżej, i ile jeszcze brakuje.";
+"widget.kicker.nextBadge" = "Następna odznaka";
+"widget.badge.toGo" = "Jeszcze %d";
+"widget.badge.progress" = "%1$d z %2$d";
+"widget.badge.allEarned" = "Wszystkie odznaki zdobyte";
+"widget.badge.allEarnedSub" = "Pełna kolekcja. Nie przerywaj serii.";
+"widget.badge.openApp" = "Otwórz Trough i zacznij kolekcję.";
+"widget.lock.displayName" = "Seria";
+"widget.lock.description" = "Twoja seria check-inów i następny zastrzyk na ekranie blokady.";
+"widget.lock.streak" = "Seria: %d dn.";
+"widget.lock.inlineCheckIn" = "Seria: %d dn. · zrób check-in";
+"widget.injLock.displayName" = "Następny zastrzyk";
+"widget.injLock.description" = "Dni do następnego zaplanowanego zastrzyku.";
+"widget.injLock.today" = "Dziś";
+"widget.injLock.daysShort" = "%d d";
+"widget.injLock.none" = "Brak zaplanowanego zastrzyku";

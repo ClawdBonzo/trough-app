@@ -70,7 +70,7 @@
 "quiz.cta" = "Ver mi puntaje";
 
 "scoreReveal.protocolScore" = "Protocol Score";
-"scoreReveal.cta" = "Ver tu mejora proyectada";
+"scoreReveal.cta" = "Continuar";
 "scoreReveal.dialedIn" = "En punto";
 "scoreReveal.steady" = "Estable";
 "scoreReveal.trendingDown" = "En descenso";
@@ -170,14 +170,14 @@
 "onboarding.changeInSettings" = "Siempre puedes cambiar esto en Ajustes.";
 "onboarding.getStarted" = "Empezar";
 
-"onboarding.startTrial" = "Iniciar prueba gratuita de 3 días";
+"onboarding.startTrial" = "Iniciar prueba gratuita de 7 días";
 "onboarding.trialSubtitle" = "Desbloquea todos los datos y rastrea tu progreso hasta 85+.";
-"onboarding.noCharge" = "Sin cargo por 3 días. Cancela en cualquier momento en Ajustes → Suscripciones.";
+"onboarding.noCharge" = "Sin cargo por 7 días. Cancela en cualquier momento en Ajustes → Suscripciones.";
 "onboarding.maybeLater" = "Quizás después";
 
 /* Frequency labels */
 "freq.daily" = "Diario";
-"freq.everyOtherDay" = "Cada tercer día";
+"freq.everyOtherDay" = "Cada dos días";
 "freq.every3Days" = "Cada 3 días";
 "freq.twiceWeekly" = "Dos veces por semana";
 "freq.weekly" = "Semanal";
@@ -245,11 +245,11 @@
 "greeting.evening" = "Buenas noches";
 
 /* Milestones */
-"milestone.7" = "🔥 ¡Una semana! Top 30% de usuarios de TRT";
-"milestone.14" = "🔥🔥 ¡Dos semanas! Top 15% de usuarios de TRT";
-"milestone.30" = "🔥🔥🔥 ¡Un mes! Top 5% de usuarios de TRT";
-"milestone.60" = "🔥🔥🔥🔥 ¡Dos meses! Top 2% — eres élite";
-"milestone.90" = "🔥🔥🔥🔥🔥 ¡Tres meses! Top 1% — leyenda";
+"milestone.7" = "🔥 ¡Una semana seguida! Gran constancia";
+"milestone.14" = "🔥🔥 ¡Dos semanas seguidas! El hábito se consolida";
+"milestone.30" = "🔥🔥🔥 ¡Un mes de registros! Sin fallar";
+"milestone.60" = "🔥🔥🔥🔥 ¡Dos meses seguidos! Constancia de verdad";
+"milestone.90" = "🔥🔥🔥🔥🔥 ¡Tres meses seguidos! Constancia legendaria";
 
 /* Forecast */
 "forecast.injectionToday" = "Día de inyección hoy — la energía debería alcanzar su pico en 24–48 horas.";
@@ -427,20 +427,20 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "Pasa de 42 → 85 en Protocol Score.";
-"paywall.subtitle" = "Todo incluido. Gratis por 3 días.";
+"paywall.heroSubtitle" = "Todo tu protocolo en un solo lugar privado.";
+"paywall.subtitle" = "Todo incluido. Gratis por 7 días.";
 "paywall.monthly" = "Mensual";
 "paywall.annual" = "Anual";
 "paywall.save40" = "Ahorra 58%";
 "paywall.startTrial" = "Iniciar prueba gratuita";
-"paywall.startTrialFull" = "Iniciar prueba gratuita — 3 días gratis, luego %@";
+"paywall.startTrialFull" = "Iniciar prueba gratuita — 7 días gratis, luego %@";
 "paywall.restorePurchases" = "Restaurar";
 "paywall.privacyPolicy" = "Privacidad";
 "paywall.termsOfUse" = "Términos";
 
 /* Pro features */
 "pro.title" = "Qué obtienes con Pro";
-"pro.trialIncluded" = "Prueba gratuita de 3 días incluida";
+"pro.trialIncluded" = "Prueba gratuita de 7 días incluida";
 "pro.pkCurves" = "Curvas PK";
 "pro.pkCurvesDesc" = "Ve tus niveles estimados en sangre con bandas de confianza y apilamiento multi-éster";
 "pro.trendHistory" = "Historial completo de tendencias";
@@ -552,7 +552,7 @@
 "dashboard.streak" = "Racha de registros";
 "dashboard.streak.days" = "días";
 "dashboard.personalBest" = "🏆 ¡Nuevo récord personal!";
-"dashboard.personalBest.subtitle" = "Tu Puntaje de Protocolo alcanzó un nuevo máximo.";
+"dashboard.personalBest.subtitle" = "Tu Protocol Score alcanzó un nuevo máximo.";
 "dashboard.weightTrend" = "Peso";
 "dashboard.weightTrend.30day" = "Tendencia de 30 días";
 "dashboard.pkCurve" = "Curva PK estimada";
@@ -597,7 +597,7 @@
 "dashboard.trial.subscribeButton" = "Suscribirse";
 "dashboard.trial.accomplished" = "Mira lo que lograste";
 "dashboard.trial.freeForever" = "Gratis para siempre";
-"dashboard.trial.freeFeatures" = "Puntaje de Protocolo, registros diarios, sincronización con HealthKit e insights básicos";
+"dashboard.trial.freeFeatures" = "Protocol Score, registros diarios, sincronización con HealthKit e insights básicos";
 "dashboard.trial.withPro" = "Con Pro";
 "dashboard.trial.proFeatures" = "Curvas PK, seguimiento de análisis, reportes semanales, seguimiento de péptidos y más";
 "dashboard.trial.subscribePro" = "Suscribirse a Trough Pro";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "Ahorra %d%%";
 "paywall.ctaSub.trial" = "luego %@ · se renueva automáticamente · cancela cuando quieras";
 "paywall.ctaSub.noTrial" = "%@ · se renueva automáticamente · cancela cuando quieras";
-"paywall.trialBadge" = "3 días de prueba gratis";
+"paywall.trialBadge" = "7 días de prueba gratis";
 "paywall.bestValue" = "MEJOR OPCIÓN";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "Tu Protocol Score";
 "onboarding.trialUnlock" = "Inicia tu prueba gratuita para desbloquear todos los insights.";
 "onboarding.proUnlock" = "Desbloquea todos los insights con Trough Pro.";
-"onboarding.trialLegal" = "3 días de prueba gratis, luego se renueva automáticamente. Cancela cuando quieras.";
+"onboarding.trialLegal" = "7 días de prueba gratis, luego se renueva automáticamente. Cancela cuando quieras.";
 "onboarding.subscribeLegal" = "Se renueva automáticamente. Cancela cuando quieras.";
 
 /* Export */
@@ -715,3 +715,499 @@
 "common.time" = "Hora";
 "onboarding.enterPrescribedDose" = "Ingresa tu dosis prescrita";
 "onboarding.doseValidation" = "Ingresa la dosis que te prescribió tu médico para continuar.";
+
+/* ===== Trough 1.4 (redesign & gamification) ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "Bronce";
+"badge.tier.silver" = "Plata";
+"badge.tier.gold" = "Oro";
+"badge.tier.platinum" = "Platino";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "Insignia secreta";
+"badge.secret.how" = "Sigue registrando para descubrirla.";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "Página uno";
+"badge.checkins_1.how" = "Registra tu primer check-in.";
+"badge.checkins_1.line" = "El día uno ya quedó por escrito.";
+"badge.checkins_7.title" = "Semana registrada";
+"badge.checkins_7.how" = "Registra 7 check-ins.";
+"badge.checkins_7.line" = "Siete registros. Ya se ve un patrón.";
+"badge.checkins_30.title" = "Un mes de datos";
+"badge.checkins_30.how" = "Registra 30 check-ins.";
+"badge.checkins_30.line" = "Treinta registros. Tu bitácora ya tiene forma.";
+"badge.checkins_100.title" = "Centurión";
+"badge.checkins_100.how" = "Registra 100 check-ins.";
+"badge.checkins_100.line" = "Tres cifras. La libreta ya pesa.";
+"badge.checkins_365.title" = "Un año en el registro";
+"badge.checkins_365.how" = "Registra 365 check-ins.";
+"badge.checkins_365.line" = "Un año entero de registros. Constancia de otro nivel.";
+"badge.checkin_streak_3.title" = "Calentando motores";
+"badge.checkin_streak_3.how" = "Haz check-in 3 días seguidos.";
+"badge.checkin_streak_3.line" = "Tres días seguidos. El impulso ya está en marcha.";
+"badge.streak_flame_7.title" = "Guardián de la llama";
+"badge.streak_flame_7.how" = "Haz check-in 7 días seguidos.";
+"badge.streak_flame_7.line" = "Una semana entera sin fallar ni un día.";
+"badge.checkin_streak_14.title" = "Quincena de hierro";
+"badge.checkin_streak_14.how" = "Haz check-in 14 días seguidos.";
+"badge.checkin_streak_14.line" = "Dos semanas seguidas. Esto ya es hábito.";
+"badge.consistency_king.title" = "Rey de la constancia";
+"badge.consistency_king.how" = "Haz check-in 30 días seguidos.";
+"badge.consistency_king.line" = "Treinta días sin parar. Te ganaste la corona.";
+"badge.checkin_streak_60.title" = "Inquebrantable";
+"badge.checkin_streak_60.how" = "Haz check-in 60 días seguidos.";
+"badge.checkin_streak_60.line" = "Sesenta días. La racha ya tiene su propia gravedad.";
+"badge.checkin_streak_100.title" = "Los Cien";
+"badge.checkin_streak_100.how" = "Haz check-in 100 días seguidos.";
+"badge.checkin_streak_100.line" = "Cien días seguidos. Legendario.";
+"badge.injections_1.title" = "Primera inyección";
+"badge.injections_1.how" = "Registra tu primera inyección.";
+"badge.injections_1.line" = "Anotada y con fecha. Así se empieza.";
+"badge.injections_10.title" = "Diez anotadas";
+"badge.injections_10.how" = "Registra 10 inyecciones.";
+"badge.injections_10.line" = "Diez registros. Tu calendario ya tiene historia.";
+"badge.injections_25.title" = "Bodas de plata";
+"badge.injections_25.how" = "Registra 25 inyecciones.";
+"badge.injections_25.line" = "25 registradas. Tu calendario te lo agradece.";
+"badge.injections_52.title" = "Un año de registros";
+"badge.injections_52.how" = "Registra 52 inyecciones.";
+"badge.injections_52.line" = "52 registradas. Un año entero de historial.";
+"badge.injections_100.title" = "Guardián del registro";
+"badge.injections_100.how" = "Registra 100 inyecciones.";
+"badge.injections_100.line" = "100 inyecciones registradas. Meticuloso.";
+"badge.on_schedule_weeks_4.title" = "Puntual";
+"badge.on_schedule_weeks_4.how" = "Registra tu inyección a tiempo durante 4 semanas seguidas.";
+"badge.on_schedule_weeks_4.line" = "Cuatro semanas a tiempo. Como un reloj.";
+"badge.on_schedule_weeks_12.title" = "Metrónomo";
+"badge.on_schedule_weeks_12.how" = "Registra tu inyección a tiempo durante 12 semanas seguidas.";
+"badge.on_schedule_weeks_12.line" = "Doce semanas, justo a tiempo.";
+"badge.on_schedule_weeks_26.title" = "Ritmo semestral";
+"badge.on_schedule_weeks_26.how" = "Registra tu inyección a tiempo durante 26 semanas seguidas.";
+"badge.on_schedule_weeks_26.line" = "Seis meses a tiempo. Pulso firme.";
+"badge.on_schedule_weeks_52.title" = "Vuelta completa";
+"badge.on_schedule_weeks_52.how" = "Registra tu inyección a tiempo durante 52 semanas seguidas.";
+"badge.on_schedule_weeks_52.line" = "Un año entero de semanas a tiempo.";
+"badge.bloodwork_1.title" = "Primer panel";
+"badge.bloodwork_1.how" = "Registra tu primer panel de análisis.";
+"badge.bloodwork_1.line" = "Primer panel archivado. Ya consta.";
+"badge.bloodwork_3.title" = "Expediente abierto";
+"badge.bloodwork_3.how" = "Registra 3 paneles de análisis.";
+"badge.bloodwork_3.line" = "Tres paneles registrados. Útiles para tu próxima consulta.";
+"badge.bloodwork_5.title" = "Cliente frecuente";
+"badge.bloodwork_5.how" = "Registra 5 paneles de análisis.";
+"badge.bloodwork_5.line" = "Cinco paneles archivados. El archivo crece.";
+"badge.bloodwork_master.title" = "Maestro de los análisis";
+"badge.bloodwork_master.how" = "Registra 10 paneles de análisis.";
+"badge.bloodwork_master.line" = "Diez paneles archivados. Registros impecables.";
+"badge.health_synced_7.title" = "En sintonía";
+"badge.health_synced_7.how" = "Registra 7 check-ins con datos de Apple Salud.";
+"badge.health_synced_7.line" = "Tu registro y Apple Salud ya se hablan.";
+"badge.health_synced_30.title" = "Flujo de datos";
+"badge.health_synced_30.how" = "Registra 30 check-ins con datos de Apple Salud.";
+"badge.health_synced_30.line" = "Treinta check-ins sincronizados. Registros sin esfuerzo.";
+"badge.health_synced_100.title" = "Integración total";
+"badge.health_synced_100.how" = "Registra 100 check-ins con datos de Apple Salud.";
+"badge.health_synced_100.line" = "100 check-ins sincronizados. Automatización en estado puro.";
+"badge.adjunct_logs_1.title" = "Stack en marcha";
+"badge.adjunct_logs_1.how" = "Registra tu primera dosis de péptido o complemento.";
+"badge.adjunct_logs_1.line" = "Primer complemento anotado.";
+"badge.adjunct_logs_10.title" = "Stack bajo control";
+"badge.adjunct_logs_10.how" = "Registra 10 dosis de péptidos o complementos.";
+"badge.adjunct_logs_10.line" = "Diez registros de complementos. Cada dosis, contada.";
+"badge.adjunct_logs_50.title" = "Archivista del stack";
+"badge.adjunct_logs_50.how" = "Registra 50 dosis de péptidos o complementos.";
+"badge.adjunct_logs_50.line" = "Cincuenta registros. No se escapa ni uno.";
+"badge.level_5.title" = "Estrella en ascenso";
+"badge.level_5.how" = "Alcanza el nivel 5.";
+"badge.level_5.line" = "Nivel 5. La escalada ya empezó.";
+"badge.level_10.title" = "Rango maestro";
+"badge.level_10.how" = "Alcanza el nivel 10.";
+"badge.level_10.line" = "Nivel 10. Aquí arriba el aire es otro.";
+"badge.level_11.title" = "En la cima";
+"badge.level_11.how" = "Alcanza el nivel 11.";
+"badge.level_11.line" = "Nivel máximo. Ya solo queda seguir siendo constante.";
+"badge.notes_10.title" = "Notas de campo";
+"badge.notes_10.how" = "Agrega notas a 10 registros.";
+"badge.notes_10.line" = "Diez notas. El contexto manda.";
+"badge.notes_50.title" = "Cronista";
+"badge.notes_50.how" = "Agrega notas a 50 registros.";
+"badge.notes_50.line" = "Cincuenta notas. Tu yo del futuro te lo agradece.";
+"badge.testosterone_peak.title" = "Buen día anotado";
+"badge.testosterone_peak.how" = "Haz un check-in con un Protocol Score autoevaluado de 80 o más.";
+"badge.testosterone_peak.line" = "Un gran día, anotado para la posteridad.";
+"badge.perfect_week.title" = "Semana perfecta";
+"badge.perfect_week.how" = "Haz check-in todos los días de una misma semana, de lunes a domingo.";
+"badge.perfect_week.line" = "Siete de siete, de lunes a domingo.";
+"badge.supplement_adherence.title" = "Suplementos al día";
+"badge.supplement_adherence.how" = "Registra tus suplementos 27 de los últimos 30 días.";
+"badge.supplement_adherence.line" = "Veintisiete de treinta. Muy aplicado.";
+"badge.injection_precision.title" = "Precisión quirúrgica";
+"badge.injection_precision.how" = "Registra a tiempo cada inyección programada durante 30 días.";
+"badge.injection_precision.line" = "Treinta días, cero registros perdidos.";
+"badge.secret_night_owl.title" = "Búho nocturno";
+"badge.secret_night_owl.how" = "Haz check-in entre la medianoche y las 4 a. m.";
+"badge.secret_night_owl.line" = "El registro nunca duerme. (Tú sí deberías.)";
+"badge.secret_new_year.title" = "Borrón y cuenta nueva";
+"badge.secret_new_year.how" = "Haz check-in el 1 de enero.";
+"badge.secret_new_year.line" = "Año nuevo, el mismo gran hábito.";
+"badge.secret_full_year.title" = "Órbita completa";
+"badge.secret_full_year.how" = "Cumple un año desde tu primer check-in.";
+"badge.secret_full_year.line" = "Una vuelta completa al sol con Trough.";
+
+/* Level names (11 levels) */
+"level.name.1" = "Principiante";
+"level.name.2" = "En ascenso";
+"level.name.3" = "Comprometido";
+"level.name.4" = "Dedicado";
+"level.name.5" = "Motivado";
+"level.name.6" = "Enfocado";
+"level.name.7" = "Disciplinado";
+"level.name.8" = "Avanzado";
+"level.name.9" = "Experto";
+"level.name.10" = "Maestro";
+"level.name.11" = "Alfa Supremo";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "Madrugador";
+"persona.earlyRiser.tagline" = "La mayoría de tus check-ins llegan antes de las 9 a. m.";
+"persona.metronome.title" = "Metrónomo";
+"persona.metronome.tagline" = "Tus inyecciones marcan el compás perfecto.";
+"persona.dataNerd.title" = "Nerd de los datos";
+"persona.dataNerd.tagline" = "Tienes tus análisis de sangre bien archivados.";
+"persona.stackBuilder.title" = "Arquitecto del stack";
+"persona.stackBuilder.tagline" = "Registras más de un complemento.";
+"persona.synced.title" = "Sincronizado";
+"persona.synced.tagline" = "Apple Salud completa los detalles por ti.";
+"persona.steady.title" = "Constante";
+"persona.steady.tagline" = "Constante sin hacer ruido. Lo mejor que hay.";
+
+/* Daily challenges */
+"challenge.checkin.title" = "Reto diario: haz check-in";
+"challenge.checkin.desc" = "Registra el check-in de hoy.";
+"challenge.injection.title" = "Reto diario: a tiempo";
+"challenge.injection.desc" = "Te toca la inyección: regístrala hoy.";
+"challenge.note.title" = "Reto diario: agrega una nota";
+"challenge.note.desc" = "Agrega una nota a cualquier registro de hoy.";
+"challenge.healthSync.title" = "Reto diario: sincroniza Apple Salud";
+"challenge.healthSync.desc" = "Haz check-in para que Apple Salud complete los datos de hoy.";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "1 check-in esta semana";
+"notif.recap.checkins.other" = "%d check-ins esta semana";
+"notif.recap.injections.one" = "1 inyección registrada";
+"notif.recap.injections.other" = "%d inyecciones registradas";
+"notif.streakRisk.title" = "Tu racha de %d días te espera";
+"notif.streakRisk.body" = "Un check-in rápido la mantiene viva.";
+"notif.recap.title" = "Tu semana en Trough";
+
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@, bloqueada, %d de %d";
+"ach.badge.a11y.unlocked" = "%@, %@, desbloqueada";
+"ach.badge.howEarned" = "Cómo la conseguiste";
+"ach.badge.secretHint" = "Una insignia secreta. Llega cuando llega: tú sigue registrando.";
+"ach.badge.share" = "Muéstrala";
+"ach.badge.unlockedOn" = "Desbloqueada el %@";
+"ach.badges.count" = "%d de %d";
+"ach.badges.title" = "Muro de insignias";
+"ach.cat.adjuncts" = "Complementos";
+"ach.cat.bloodwork" = "Análisis de sangre";
+"ach.cat.checkins" = "Check-ins";
+"ach.cat.health" = "Apple Salud";
+"ach.cat.injections" = "Inyecciones";
+"ach.cat.levels" = "Niveles";
+"ach.cat.notes" = "Notas";
+"ach.cat.secrets" = "Secretas";
+"ach.cat.specials" = "Especiales";
+"ach.cat.streaks" = "Rachas";
+"ach.celebrate.carryOn" = "Seguir";
+"ach.celebrate.kicker.badge" = "INSIGNIA DESBLOQUEADA";
+"ach.celebrate.kicker.quest" = "MISIÓN CUMPLIDA";
+"ach.celebrate.kicker.rank" = "NUEVO RANGO";
+"ach.celebrate.kicker.streak" = "RACHA";
+"ach.celebrate.moreBadges" = "+%d insignias más";
+"ach.celebrate.quest.line" = "Bien hecho. Una más para el registro.";
+"ach.celebrate.rank.line" = "Nivel %d · portada %@. Aparece en cada tarjeta que compartas.";
+"ach.celebrate.streak.line.hundred" = "Tres cifras. Constancia que queda por escrito.";
+"ach.celebrate.streak.line.month" = "Un mes sin fallar un solo día. Eso ya es rutina.";
+"ach.celebrate.streak.line.week" = "Una semana entera de check-ins. El hábito toma forma.";
+"ach.celebrate.streak.line.year" = "Un año de check-ins diarios. Legendario.";
+"ach.celebrate.streak.title" = "%d días seguidos";
+"ach.celebrate.totalXP" = "%d XP en total";
+"ach.challenge.done" = "Hecho por hoy. Bien.";
+"ach.challenge.kicker" = "Reto de hoy";
+"ach.chip.badges" = "%d/%d insignias";
+"ach.chip.streak" = "Racha de %d días";
+"ach.chip.weeks" = "%d sem. a tiempo";
+"ach.flame.0" = "Apagada";
+"ach.flame.1" = "Chispa";
+"ach.flame.2" = "Encendida";
+"ach.flame.3" = "En llamas";
+"ach.flame.4" = "Infierno";
+"ach.flame.5" = "Incandescente";
+"ach.levelN" = "Nivel %d";
+"ach.more.app" = "App";
+"ach.more.tracking" = "Seguimiento";
+"ach.passport.kicker" = "Pasaporte de protocolo";
+"ach.passport.toNext" = "%d XP para %@";
+"ach.passport.topRank" = "Rango máximo";
+"ach.persona.kicker" = "Tu perfil de protocolo";
+"ach.persona.locked" = "Tu estilo de registro se revela tras %d check-ins (llevas %d).";
+"ach.persona.lockedTitle" = "Todavía tomando notas";
+"ach.quest.done" = "Completada";
+"ach.quest.open" = "Pendiente";
+"ach.quests.empty" = "Mañana llegan misiones nuevas.";
+"ach.quests.title" = "Misiones";
+"ach.rank.level" = "NIVEL";
+"ach.share" = "Compartir";
+"ach.share.badge.kicker" = "Insignia desbloqueada";
+"ach.share.cta" = "¿Hasta dónde llega tu constancia?";
+"ach.share.footer" = "Registro privado de protocolo · App Store";
+"ach.share.format" = "Formato";
+"ach.share.format.square" = "Cuadrado";
+"ach.share.format.story" = "Historia";
+"ach.share.message" = "¿Hasta dónde llega tu constancia? Yo llevo el registro de mi protocolo en privado con Trough — TRT Tracker.";
+"ach.share.privacy" = "Las tarjetas solo muestran rangos, rachas e insignias; nunca dosis ni valores de laboratorio.";
+"ach.share.rank.kicker" = "Mi rango de protocolo";
+"ach.share.stat.badges" = "insignias";
+"ach.share.stat.best" = "mejor racha";
+"ach.share.stat.dayStreak" = "días de racha";
+"ach.share.stat.level" = "nivel";
+"ach.share.stat.weeks" = "semanas a tiempo";
+"ach.share.streak.kicker" = "Mi racha de check-ins";
+"ach.share.streak.line" = "Racha de %d días de check-in";
+"ach.share.title.badge" = "Comparte esta insignia";
+"ach.share.title.rank" = "Comparte tu rango";
+"ach.share.title.streak" = "Comparte tu racha";
+"ach.streaks.best" = "récord: %d";
+"ach.streaks.checkin" = "Racha de check-ins";
+"ach.streaks.injection" = "Inyecciones a tiempo";
+"ach.streaks.title" = "Rachas";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "día";
+"ach.unit.days" = "días";
+"ach.unit.week" = "semana";
+"ach.unit.weeks" = "semanas";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "Próxima insignia";
+"dash.badge.moreCheckins" = "Check-ins restantes: %d";
+"dash.badge.moreDays" = "Días restantes: %d";
+"dash.badge.moreInjections" = "Inyecciones restantes: %d";
+"dash.badge.morePanels" = "Paneles restantes: %d";
+"dash.badge.moreWeeks" = "Semanas a tiempo restantes: %d";
+"dash.badge.reachLevel" = "Alcanza el nivel %d";
+"dash.badge.toGo" = "Restantes: %d";
+"dash.challenge.done" = "Completado. Nos vemos mañana";
+"dash.challenge.kicker" = "Reto diario";
+"dash.hero.a11y" = "Nivel %1$d, %2$@. %3$d XP para el siguiente nivel. Racha de check-ins de %4$d días. %5$d de %6$d insignias.";
+"dash.hero.a11yHint" = "Abre los logros";
+"dash.hero.lv" = "NV";
+"dash.hero.maxRank" = "Rango máximo alcanzado";
+"dash.hero.onScheduleWeeks" = "%d sem. a tiempo";
+"dash.hero.rankKicker" = "Rango · %@";
+"dash.hero.streakDays" = "Racha de %d días";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "%1$d XP para %2$@";
+"dash.insight.kicker" = "Insight";
+"dash.persona.kicker" = "Tu estilo de registro";
+"dash.personalBest.sub" = "Tu puntuación autoevaluada más alta de este mes.";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "Primeros pasos";
+"dash.score.avg7" = "Prom. 7 días: %.0f";
+"dash.score.noData" = "Aún no hay check-ins";
+"dash.score.vsLastWeek" = "vs. sem. pasada";
+"dash.section.progress" = "Progreso";
+"dash.section.today" = "Hoy";
+"dash.section.trends" = "Tendencias";
+"dash.stats.avgMood" = "Ánimo prom.";
+"dash.stats.avgSleep" = "Sueño prom.";
+"dash.today.checkedIn" = "Check-in hecho ✓";
+"dash.today.checkedInSub" = "Toca para revisar el registro de hoy";
+"dash.today.cycle" = "Ciclo";
+"dash.today.day" = "día";
+"dash.today.dayWord" = "Día";
+"dash.today.days" = "días";
+"dash.today.daysLate" = "días de retraso";
+"dash.today.dueToday" = "Hoy";
+"dash.today.nextShot" = "Próxima inyección";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "Tus últimos 7 días de un vistazo";
+"pk.legend.combined" = "Combinado";
+"pk.legend.estimated" = "Nivel estimado";
+"pk.legend.peak" = "Ventana de pico";
+"pk.legend.trough" = "Acercándose al valle";
+"pk.legend.variation" = "Variación ±20%";
+"pk.toggle.absorption" = "Retraso de absorción";
+"pk.toggle.bands" = "Mostrar bandas";
+
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "Paso %1$d de %2$d";
+"onb14.close" = "Cerrar";
+"onb14.reminders.streakNudge" = "Un aviso diario es la forma más fácil de mantener viva tu racha de check-ins.";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "Pasaporte de protocolo";
+"onb14.passport.levelCover" = "Nivel %1$d · %2$@";
+"onb14.passport.badges" = "Insignias";
+"onb14.passport.a11y" = "Nivel %1$d, %2$@. %3$d de %4$d insignias.";
+"onb14.passport.ready" = "Todo listo";
+"onb14.passport.title" = "Tu pasaporte de protocolo";
+"onb14.passport.subtitle" = "Cada check-in, inyección registrada y racha suma XP y estampa una insignia en tu pasaporte.";
+"onb14.passport.nextUp" = "Lo siguiente";
+"onb14.passport.firstBadge" = "Tu primera insignia está a un check-in";
+"onb14.passport.pillLevels" = "11 niveles";
+"onb14.passport.pillBadges" = "%d insignias";
+"onb14.passport.pillStreaks" = "Rachas";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "Prueba gratis de %d días";
+"onb14.trialLegal" = "Prueba gratis de %d días; luego se renueva automáticamente. Cancela cuando quieras.";
+"onb14.paywall.autoRenew" = "El pago se carga a tu Apple ID al confirmar. La suscripción se renueva automáticamente salvo que se cancele al menos 24 horas antes del final del periodo actual. Administra o cancela cuando quieras en Ajustes.";
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "Laboratorio";
+"bloodwork.addPanel" = "Agregar panel";
+"bloodwork.deleteConfirm" = "¿Eliminar este panel?";
+"bloodwork.delete" = "Eliminar panel";
+"bloodwork.summary.onePanel" = "1 panel registrado";
+"bloodwork.summary.panels" = "%d paneles registrados";
+"bloodwork.summary.lastDrawn" = "última extracción: %@";
+"bloodwork.summary.kicker" = "Registro de laboratorio";
+"bloodwork.stat.panels" = "Paneles";
+"bloodwork.stat.markers" = "Marcadores";
+"bloodwork.stat.photos" = "Fotos de laboratorio";
+"bloodwork.markerCount" = "%d marcadores";
+"bloodwork.doctorNotes" = "Notas del médico";
+"bloodwork.notes" = "Notas";
+"bloodwork.moreMarkers" = "+%d más";
+"bloodwork.viewPanel" = "Ver panel";
+"bloodwork.labPhoto" = "Foto de laboratorio adjunta";
+"bloodwork.labPhotoTitle" = "Foto de laboratorio";
+"bloodwork.range.within" = "Dentro de ref.";
+"bloodwork.range.below" = "Bajo ref.";
+"bloodwork.range.above" = "Sobre ref.";
+"bloodwork.range.none" = "Sin rango de ref.";
+"bloodwork.refShort" = "Ref. %@";
+"peptides.categories" = "Categorías";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / Auxiliar";
+"peptides.cat.gh" = "Secretagogo de GH";
+"peptides.cat.healing" = "Regeneración";
+"peptides.cat.longevity" = "Longevidad";
+"peptides.cat.specialty" = "Especiales";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "Desbloquea el laboratorio completo";
+"settings.pro.subtitle" = "Informes para el médico y todas las funciones Pro, todo en tu dispositivo.";
+"settings.spreadWord" = "Corre la voz";
+"settings.rateApp.subtitle" = "Ayuda muchísimo a una app pequeña y privada";
+"settings.onDeviceFooter" = "Todo lo que registras se queda en este dispositivo. Sin cuenta, sin nube.";
+"privacy.hero.title" = "Privada por diseño";
+"privacy.hero.subtitle" = "Sin cuenta. Sin nube. Tus datos se quedan en este dispositivo.";
+"export.hero.title" = "Tus datos, tus archivos";
+"export.hero.subtitle" = "Generados en este dispositivo y compartidos solo donde tú elijas.";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "Paso 1 de 2";
+"checkin14.streakDays" = "Racha de %d días";
+"checkin14.scoreKicker" = "Puntuación";
+"checkin14.scoreHint" = "Se actualiza en vivo mientras calificas tu día.";
+"checkin14.earnXP" = "Gana +20 XP";
+"checkin14.updatingToday" = "Actualizando hoy";
+"checkin14.step2" = "Paso 2 de 2";
+"checkin14.close" = "Cerrar";
+"checkin14.savedTitle" = "¡Check-in registrado!";
+"checkin14.savedSubtitle" = "Un día más en el registro. Buena constancia.";
+"checkin14.updatedSubtitle" = "El check-in de hoy está al día.";
+"checkin14.xpEarnedA11y" = "20 XP ganados";
+"checkin14.updatedPill" = "Check-in actualizado";
+"checkin14.streakKicker" = "Racha de check-ins";
+"checkin14.day" = "día";
+"checkin14.days" = "días";
+"checkin14.bestStreak" = "Récord: %d días";
+"checkin14.todaysQuests" = "Misiones de hoy";
+"checkin14.dailyChallenge" = "Reto diario";
+"checkin14.questDone" = "Hecho";
+"checkin14.questOpen" = "Pendiente";
+"checkin14.appleHealth" = "De Apple Salud";
+"checkin14.insightKicker" = "Insight de hoy";
+"checkin14.rating.1" = "Muy bajo";
+"checkin14.rating.2" = "Bajo";
+"checkin14.rating.3" = "Normal";
+"checkin14.rating.4" = "Bien";
+"checkin14.rating.5" = "Genial";
+"inj14.streakKicker" = "Racha a tiempo";
+"inj14.week" = "semana";
+"inj14.weeks" = "semanas";
+"inj14.stampsCollected" = "Sellos conseguidos: %d";
+"inj14.nextSite" = "Próximo sitio en la rotación";
+"inj14.fab" = "Registrar";
+"inj14.logTitle" = "Registro de sellos";
+"inj14.tip" = "Toca un sello para editar · mantén presionado para más";
+"inj14.stampHint" = "Abre la inyección para editarla";
+"inj14.thisWeek" = "Esta semana";
+"inj14.weekN" = "Semana %d";
+"inj14.onSchedule" = "a tiempo";
+"inj14.prevMonth" = "Mes anterior";
+"inj14.nextMonth" = "Mes siguiente";
+"inj14.stampIt" = "Sellar";
+"inj14.site.never" = "Sin usar";
+"inj14.site.today" = "Usado hoy";
+"inj14.site.daysAgo" = "hace %dd";
+"inj14.site.suggested" = "Siguiente sugerido";
+"inj14.side.left" = "I";
+"inj14.side.right" = "D";
+"inj14.stampA11y" = "Sello de inyección: %@";
+"inj14.stamped" = "¡Sellado!";
+"inj14.streakWeeksPill" = "Racha de %d sem.";
+
+// code-only
+"rank.cover.paper" = "Papel";
+"rank.cover.bronze" = "Bronce";
+"rank.cover.silver" = "Plata";
+"rank.cover.gold" = "Oro";
+"rank.cover.platinum" = "Platino";
+"rank.cover.diamond" = "Diamante";
+
+// String(localized:) literal keys (bloodwork/peptides/CSV import screens)
+"Add Results" = "Agregar resultados";
+"Choose File" = "Elegir archivo";
+"Draw Date" = "Fecha de extracción";
+"Included in your exported report for doctor visits." = "Se incluye en el informe exportado para tus consultas médicas.";
+"Log First Dose" = "Registrar primera dosis";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "Registra dosis de complementos y péptidos para\nrastrear tu stack y detectar patrones.";
+"Log your first panel to start tracking trends." = "Registra tu primer panel para comenzar a rastrear tendencias.";
+"No bloodwork recorded" = "Sin análisis registrados";
+"Notes for Doctor" = "Notas para el médico";
+"Results" = "Resultados";
+"Select a CSV File" = "Selecciona un archivo CSV";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = "Admite .csv, .tsv y .txt con delimitadores de coma, tabulación o punto y coma.";
+"Track Your Stack" = "Registra tu stack";
+"Trends" = "Tendencias";
+
+
+
+/* Daily challenges: supplements & adjuncts */
+"challenge.supplements.title" = "Reto diario: registra tus suplementos";
+"challenge.supplements.desc" = "Marca en el check-in de hoy los suplementos que tomaste.";
+"challenge.peptide.title" = "Reto diario: registra un complemento";
+"challenge.peptide.desc" = "Registra la dosis de hoy de tu péptido o complemento.";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "Registra tu check-in de hoy";
+"quest.log_checkin.desc" = "Completa tu check-in diario de bienestar";
+"quest.view_insights.title" = "Mira tus análisis de hoy";
+"quest.view_insights.desc" = "Revisa los análisis de tu protocolo en el Panel";
+"quest.daily_login.title" = "Abre Trough hoy";
+"quest.daily_login.desc" = "Abre la app y mantén el ritmo";
+"quest.inject_on_schedule.title" = "Inyección a tiempo";
+"quest.inject_on_schedule.desc" = "Registra tu inyección dentro de las 24 h del día programado";
+"quest.complete_bloodwork.title" = "Registra un análisis de sangre";
+"quest.complete_bloodwork.desc" = "Anota tus resultados de laboratorio esta semana";
+"quest.hit_streak.title" = "Racha de 7 días";
+"quest.hit_streak.desc" = "Haz tu check-in todos los días esta semana";
+"quest.supplement_adherence.title" = "Constancia con suplementos";
+"quest.supplement_adherence.desc" = "Alcanza ≥80 % de cumplimiento de suplementos esta semana";

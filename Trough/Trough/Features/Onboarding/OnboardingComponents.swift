@@ -527,7 +527,8 @@ private struct PassportWave: Shape {
 }
 
 /// First-value moment shown after setup, before the trial prompt: the user's new
-/// Protocol Passport and their first badge, one check-in away.
+/// Protocol Passport and their first badge (earned by the check-in onboarding just saved;
+/// it unlocks and celebrates on the first app load).
 struct OnboardingPassportReveal: View {
     let onContinue: () -> Void
 
@@ -574,7 +575,7 @@ struct OnboardingPassportReveal: View {
                                     Text(badge.title)
                                         .font(TR.Font.display(.headline, weight: .heavy))
                                         .foregroundStyle(TR.Palette.textPrimary)
-                                    Text(onbLoc("onb14.passport.firstBadge", "Your first badge is one check-in away"))
+                                    Text(onbLoc("onb14.passport.firstBadge", "Earned with the check-in you just logged. It's waiting for you inside."))
                                         .font(.caption)
                                         .foregroundStyle(TR.Palette.textSecondary)
                                         .fixedSize(horizontal: false, vertical: true)

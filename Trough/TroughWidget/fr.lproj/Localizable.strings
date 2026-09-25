@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "avant la prochaine";
 "widget.injection" = "Injection";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Série";
+"widget.kicker.checkInStreak" = "Série de bilans";
+"widget.checkedInToday" = "Bilan fait aujourd'hui";
+"widget.levelShort" = "N%d";
+"widget.nextBadge.displayName" = "Prochain badge";
+"widget.nextBadge.description" = "Le badge le plus proche, et ce qu'il vous reste à faire.";
+"widget.kicker.nextBadge" = "Prochain badge";
+"widget.badge.toGo" = "Plus que %d";
+"widget.badge.progress" = "%1$d sur %2$d";
+"widget.badge.allEarned" = "Tous les badges obtenus";
+"widget.badge.allEarnedSub" = "La collection complète. Gardez la série en vie.";
+"widget.badge.openApp" = "Ouvrez Trough pour lancer votre collection.";
+"widget.lock.displayName" = "Série";
+"widget.lock.description" = "Votre série de bilans et votre prochaine injection, sur l'écran verrouillé.";
+"widget.lock.streak" = "Série de %d jours";
+"widget.lock.inlineCheckIn" = "Série de %d j · faites le bilan";
+"widget.injLock.displayName" = "Prochaine injection";
+"widget.injLock.description" = "Jours restants avant votre prochaine injection prévue.";
+"widget.injLock.today" = "Aujourd'hui";
+"widget.injLock.daysShort" = "%dj";
+"widget.injLock.none" = "Aucune injection prévue";

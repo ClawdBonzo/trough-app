@@ -35,13 +35,18 @@ struct DashboardView: View {
                         .padding(.horizontal, TR.Metrics.gutter)
                         .transition(.opacity)
                 } else {
-                    ScrollView {
-                        content
-                            .padding(.horizontal, TR.Metrics.gutter)
-                            .padding(.top, 8)
-                            .padding(.bottom, 32)
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            content
+                                .padding(.horizontal, TR.Metrics.gutter)
+                                .padding(.top, 8)
+                                .padding(.bottom, 32)
+                        }
+                        .scrollIndicators(.hidden)
+                        #if DEBUG
+                        .task { await applyLaunchFocus(proxy) }
+                        #endif
                     }
-                    .scrollIndicators(.hidden)
                 }
             }
             .navigationTitle(NSLocalizedString("dashboard.title", comment: ""))
@@ -105,6 +110,23 @@ struct DashboardView: View {
             }
         }
     }
+
+    /// Scroll anchor on the PK curve card (full or preview).
+    private static let pkCardAnchor = "dashboard.pkCard"
+
+    #if DEBUG
+    /// Screenshot pipeline hook (`Tools/make_store_screenshots.sh`):
+    /// `-TRDashboardFocus pk` scrolls the PK curve card into view once on launch.
+    @State private var didApplyLaunchFocus = false
+
+    private func applyLaunchFocus(_ proxy: ScrollViewProxy) async {
+        guard !didApplyLaunchFocus, DemoMode.value(of: "-TRDashboardFocus") == "pk" else { return }
+        didApplyLaunchFocus = true
+        // Let the reveal-on-appear animations lay the cards out first.
+        try? await Task.sleep(for: .milliseconds(700))
+        withAnimation(nil) { proxy.scrollTo(Self.pkCardAnchor, anchor: .center) }
+    }
+    #endif
 
     // MARK: - Layout (ordered by importance)
 
@@ -174,6 +196,7 @@ struct DashboardView: View {
             if subscriptionManager.isSubscribed {
                 if userType == "trt" {
                     pkCurveCard
+                        .id(Self.pkCardAnchor)
                     if vm.hcgProtocol != nil { fertilityCard }
                 } else {
                     bodyCompositionCard
@@ -181,6 +204,7 @@ struct DashboardView: View {
             } else {
                 if userType == "trt" {
                     pkCurvePreviewCard
+                        .id(Self.pkCardAnchor)
                 } else {
                     LockedCard(
                         icon: "scalemass",
@@ -315,11 +339,14 @@ struct DashboardView: View {
 
     @ViewBuilder
     private func dailyChallenge(_ challenge: QuestDisplayModel) -> some View {
-        if !challenge.isCompleted, challenge.challenge == .checkin || challenge.challenge == .healthSync {
+        if !challenge.isCompleted, [.checkin, .healthSync, .supplements].contains(challenge.challenge) {
             Button { showCheckin = true } label: { DashboardDailyChallengeCard(challenge: challenge) }
                 .buttonStyle(.trPressable)
         } else if !challenge.isCompleted, challenge.challenge == .injection {
             NavigationLink(destination: InjectionsView()) { DashboardDailyChallengeCard(challenge: challenge) }
+                .buttonStyle(.trPressable)
+        } else if !challenge.isCompleted, challenge.challenge == .peptide {
+            NavigationLink(destination: PeptidesView()) { DashboardDailyChallengeCard(challenge: challenge) }
                 .buttonStyle(.trPressable)
         } else {
             DashboardDailyChallengeCard(challenge: challenge)

@@ -35,6 +35,8 @@ extension QuestDisplayModel {
             case .injection: return "syringe"
             case .note: return "note.text"
             case .healthSync: return "heart.text.square"
+            case .supplements: return "pills"
+            case .peptide: return "cross.vial"
             }
         }
         return frequency == "weekly" ? "calendar" : "target"

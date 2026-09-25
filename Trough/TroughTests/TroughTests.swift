@@ -883,14 +883,52 @@ final class DailyChallengeTests: XCTestCase {
     func testPickIsDeterministicAndRespectsFeasibility() {
         let all = Set(DailyChallengeKind.allCases)
         let a = DailyChallenge.pick(dayKey: "2026-09-24", feasible: all)
+        XCTAssertNotNil(a)
         for _ in 0..<5 { XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: all), a) }
-        XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: [.checkin]), .checkin)
-        XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: []), .checkin)
-        let distinct = Set((1...28).map { DailyChallenge.pick(dayKey: String(format: "2026-02-%02d", $0), feasible: all) })
+        XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: [.note]), .note)
+        XCTAssertNil(DailyChallenge.pick(dayKey: "2026-09-24", feasible: []), "Nothing feasible → no challenge")
+        let distinct = Set((1...28).compactMap { DailyChallenge.pick(dayKey: String(format: "2026-02-%02d", $0), feasible: all) })
         XCTAssertGreaterThan(distinct.count, 1, "Different days rotate challenges")
         for kind in DailyChallengeKind.allCases {
-            XCTAssertEqual(DailyChallengeKind(questType: kind.questType), kind)
+            XCTAssertEqual(DailyChallengeKind(questType: kind.questType), kind, "Legacy rows still parse")
         }
+    }
+
+    /// The challenge must never duplicate a standing daily quest ("Log Today's Check-in").
+    func testPickNeverChoosesPlainCheckIn() {
+        XCTAssertFalse(DailyChallengeKind.pickable.contains(.checkin))
+        XCTAssertNil(DailyChallenge.pick(dayKey: "2026-09-24", feasible: [.checkin]))
+        let all = Set(DailyChallengeKind.allCases)
+        for day in 1...60 {
+            let key = String(format: "2026-%02d-%02d", 1 + day / 29, 1 + day % 28)
+            XCTAssertNotEqual(DailyChallenge.pick(dayKey: key, feasible: all), .checkin)
+        }
+    }
+
+    @MainActor
+    func testFeasibleKindsFromData() throws {
+        let container = try ModelContainer(for: Schema(TroughSchemaV1.models),
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let ctx = container.mainContext
+        let uid = UUID()
+        XCTAssertTrue(DailyChallenge.feasibleKinds(context: ctx).isEmpty, "Empty store: nothing feasible")
+
+        ctx.insert(SDSupplementConfig(userID: uid, supplementName: "Vitamin D3", doseAmount: 5000, doseUnit: "IU",
+                                      frequencyDays: 1, startDate: .now))
+        ctx.insert(SDPeptideLog(userID: uid, administeredAt: .now.addingTimeInterval(-3 * 86_400),
+                                peptideName: "BPC-157", doseMcg: 250))
+        try ctx.save()
+        let kinds = DailyChallenge.feasibleKinds(context: ctx)
+        XCTAssertTrue(kinds.isSuperset(of: [.supplements, .peptide, .note]))
+        XCTAssertFalse(kinds.contains(.checkin))
+
+        XCTAssertFalse(DailyChallenge.isMet(.peptide, context: ctx))
+        XCTAssertFalse(DailyChallenge.isMet(.supplements, context: ctx))
+        ctx.insert(SDPeptideLog(userID: uid, administeredAt: .now, peptideName: "BPC-157", doseMcg: 250))
+        ctx.insert(SDCheckin(userID: uid, date: .now.startOfDay, supplementsTaken: "Vitamin D3"))
+        try ctx.save()
+        XCTAssertTrue(DailyChallenge.isMet(.peptide, context: ctx))
+        XCTAssertTrue(DailyChallenge.isMet(.supplements, context: ctx))
     }
 }
 

@@ -32,7 +32,7 @@ enum QuestService {
         QuestDef(questID: "daily_login",
                  questType: "daily_login",
                  frequency: "daily",
-                 title: "Daily Check-in",
+                 title: "Open Trough Today",
                  description: "Open the app and stay on track",
                  xpReward: 5),
     ]
@@ -121,8 +121,10 @@ enum QuestService {
 
     /// Seeds today's daily challenge (one per day, +20 XP): a deterministic
     /// FNV-1a pick over the date among the challenges feasible for this user
-    /// (check in; log an injection when one is due; add a note; sync Apple
-    /// Health). The pick is fixed once seeded for the day.
+    /// (log an injection when one is due; add a note; sync Apple Health; log
+    /// supplements; log an adjunct). Never a plain "check in" — that is already
+    /// the `log_checkin_daily` quest. The pick is fixed once seeded for the day;
+    /// no challenge is seeded when nothing is feasible.
     private static func seedDailyChallenge(context: ModelContext, userID: UUID, now: Date = .now) {
         let questID = dailyChallengeQuestID(now: now)
         let pred = #Predicate<SDQuest> { $0.questID == questID && $0.userID == userID }
@@ -130,10 +132,10 @@ enum QuestService {
         desc.fetchLimit = 1
         guard (try? context.fetch(desc).first) == nil else { return }
 
-        let kind = DailyChallenge.pick(
+        guard let kind = DailyChallenge.pick(
             dayKey: XPLedger.dayKey(now),
             feasible: DailyChallenge.feasibleKinds(context: context, now: now)
-        )
+        ) else { return }   // nothing feasible that isn't already a daily quest
         context.insert(SDQuest(
             userID: userID,
             questID: questID,
@@ -224,5 +226,21 @@ enum QuestService {
     /// Returns the questID for this week's supplement adherence quest.
     static func weeklySupplementQuestID() -> String {
         "supplement_adherence_weekly_\(currentWeekKey())"
+    }
+}
+
+// MARK: - Display localization
+
+extension SDQuest {
+    /// Quest rows store English copy at creation time; resolve the display text
+    /// from the quest type at read time so it follows the current language.
+    var localizedTitle: String {
+        if let kind = DailyChallengeKind(questType: questType) { return kind.title }
+        return gLoc("quest.\(questType).title", title)
+    }
+
+    var localizedDescription: String {
+        if let kind = DailyChallengeKind(questType: questType) { return kind.questDescription }
+        return gLoc("quest.\(questType).desc", questDescription)
     }
 }

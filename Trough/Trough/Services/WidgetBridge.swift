@@ -6,8 +6,19 @@ import WidgetKit
 /// (level/XP, streak, today's check-in, injection timing) changes.
 enum WidgetBridge {
 
+    /// True while the app runs on the seeded demo store (`-TRSeedDemo`, DEBUG only):
+    /// demo data must never overwrite the real home-screen widget snapshot.
+    static var isSuppressed: Bool {
+        #if DEBUG
+        return DemoMode.seedsDemo
+        #else
+        return false
+        #endif
+    }
+
     static func updateGamification(streak: Int, level: Int, levelName: String,
                                    progress: Double, xpToNext: Int) {
+        guard !isSuppressed else { return }
         guard let d = TroughShared.defaults else { return }
         d.set(streak,    forKey: TroughShared.Key.streak)
         d.set(level,     forKey: TroughShared.Key.level)
@@ -29,6 +40,7 @@ enum WidgetBridge {
     ///     widget can count down between app launches either way.
     static func updateDashboard(checkedInToday: Bool, daysUntilInjection: Int?,
                                 nextInjectionDate: Date? = nil) {
+        guard !isSuppressed else { return }
         guard let d = TroughShared.defaults else { return }
         d.set(checkedInToday, forKey: TroughShared.Key.checkedInToday)
         d.set(daysUntilInjection ?? Int.min, forKey: TroughShared.Key.daysUntilInjection)
@@ -64,6 +76,7 @@ enum WidgetBridge {
     ///   - current: progress toward the target (already clamped to `target`).
     ///   - target: units needed to earn it.
     static func updateNextBadge(name: String?, symbol: String?, current: Int, target: Int) {
+        guard !isSuppressed else { return }
         guard let d = TroughShared.defaults else { return }
         if let name, target > 0 {
             let clamped = min(max(current, 0), target)

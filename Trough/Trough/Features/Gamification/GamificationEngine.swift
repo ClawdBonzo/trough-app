@@ -150,10 +150,16 @@ struct XPLedger {
 // MARK: - Daily challenge
 
 enum DailyChallengeKind: String, CaseIterable {
-    case checkin, injection, note, healthSync
+    /// `.checkin` is legacy only (rows seeded before 1.4 final still parse): it
+    /// duplicated the "Log Today's Check-in" daily quest, so it is never picked.
+    case checkin, injection, note, healthSync, supplements, peptide
 
     static let questPrefix = "daily_challenge"
     static let xpReward = 20
+
+    /// Kinds the daily pick may choose — none may duplicate a standing daily
+    /// quest (see `QuestService.dailyDefs`), so plain "check in" is excluded.
+    static let pickable: [DailyChallengeKind] = allCases.filter { $0 != .checkin }
 
     var questType: String { "\(Self.questPrefix).\(rawValue)" }
 
@@ -171,6 +177,8 @@ enum DailyChallengeKind: String, CaseIterable {
         case .injection:  return ("Daily Challenge: On Schedule", "Your injection is due — log it today.")
         case .note:       return ("Daily Challenge: Add a Note", "Add a note to any log today.")
         case .healthSync: return ("Daily Challenge: Sync Apple Health", "Check in so Apple Health can fill in today's data.")
+        case .supplements: return ("Daily Challenge: Log Supplements", "Tick off the supplements you took in today's check-in.")
+        case .peptide:    return ("Daily Challenge: Log an Adjunct", "Log today's peptide or adjunct dose.")
         }
     }
 
@@ -195,16 +203,19 @@ enum DailyChallenge {
     }
 
     /// Deterministic pick for a day: the same date + feasible set always yields
-    /// the same challenge. `feasible` is used in canonical (allCases) order.
-    static func pick(dayKey: String, feasible: Set<DailyChallengeKind>) -> DailyChallengeKind {
-        let ordered = DailyChallengeKind.allCases.filter { feasible.contains($0) }
-        guard !ordered.isEmpty else { return .checkin }
+    /// the same challenge. `feasible` is used in canonical (`pickable`) order;
+    /// non-pickable kinds (legacy `.checkin`) are ignored. Returns nil when
+    /// nothing is feasible — no challenge that day rather than a duplicate of
+    /// a standing daily quest.
+    static func pick(dayKey: String, feasible: Set<DailyChallengeKind>) -> DailyChallengeKind? {
+        let ordered = DailyChallengeKind.pickable.filter { feasible.contains($0) }
+        guard !ordered.isEmpty else { return nil }
         return ordered[Int(fnv1a(dayKey) % UInt64(ordered.count))]
     }
 
     /// Which challenges make sense today, derived from the user's data.
     static func feasibleKinds(context: ModelContext, now: Date = .now) -> Set<DailyChallengeKind> {
-        var kinds: Set<DailyChallengeKind> = [.checkin]
+        var kinds: Set<DailyChallengeKind> = []
         let injections = (try? context.fetch(FetchDescriptor<SDInjection>(predicate: #Predicate { !$0.isSampleData }))) ?? []
         var protoDesc = FetchDescriptor<SDProtocol>(predicate: #Predicate { $0.isActive && $0.isPrimary && !$0.isSampleData })
         protoDesc.fetchLimit = 1
@@ -218,6 +229,16 @@ enum DailyChallenge {
         if !injections.isEmpty || hasPeptides { kinds.insert(.note) }
         let checkins = (try? context.fetch(FetchDescriptor<SDCheckin>(predicate: #Predicate { !$0.isSampleData }))) ?? []
         if checkins.contains(where: \.hasHealthKitData) { kinds.insert(.healthSync) }
+        // Supplements: the check-in shows the supplement checklist only when
+        // the user has active supplement configs.
+        var suppDesc = FetchDescriptor<SDSupplementConfig>(predicate: #Predicate { $0.isActive && !$0.isSampleData })
+        suppDesc.fetchLimit = 1
+        if ((try? context.fetchCount(suppDesc)) ?? 0) > 0 { kinds.insert(.supplements) }
+        // Adjunct/peptide: only for users actively logging them (last 14 days).
+        let recent = Calendar.current.date(byAdding: .day, value: -14, to: now.startOfDay) ?? now.startOfDay
+        var recentPepDesc = FetchDescriptor<SDPeptideLog>(predicate: #Predicate { $0.administeredAt >= recent && !$0.isSampleData })
+        recentPepDesc.fetchLimit = 1
+        if ((try? context.fetchCount(recentPepDesc)) ?? 0) > 0 { kinds.insert(.peptide) }
         return kinds
     }
 
@@ -230,6 +251,13 @@ enum DailyChallenge {
             let pred = #Predicate<SDCheckin> { $0.date >= start && $0.date <= end && !$0.isSampleData }
             let today = (try? context.fetch(FetchDescriptor(predicate: pred))) ?? []
             return kind == .checkin ? !today.isEmpty : today.contains(where: \.hasHealthKitData)
+        case .supplements:
+            let pred = #Predicate<SDCheckin> { $0.date >= start && $0.date <= end && !$0.isSampleData }
+            let today = (try? context.fetch(FetchDescriptor(predicate: pred))) ?? []
+            return today.contains { !($0.supplementsTaken ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        case .peptide:
+            let pred = #Predicate<SDPeptideLog> { $0.administeredAt >= start && $0.administeredAt <= end && !$0.isSampleData }
+            return ((try? context.fetchCount(FetchDescriptor(predicate: pred))) ?? 0) > 0
         case .injection:
             let pred = #Predicate<SDInjection> { $0.injectedAt >= start && $0.injectedAt <= end && !$0.isSampleData }
             return ((try? context.fetchCount(FetchDescriptor(predicate: pred))) ?? 0) > 0

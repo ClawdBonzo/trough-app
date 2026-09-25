@@ -70,7 +70,7 @@
 "quiz.cta" = "내 점수 보기";
 
 "scoreReveal.protocolScore" = "프로토콜 점수";
-"scoreReveal.cta" = "예상 개선 효과 보기";
+"scoreReveal.cta" = "계속";
 "scoreReveal.dialedIn" = "최적 상태";
 "scoreReveal.steady" = "안정적";
 "scoreReveal.trendingDown" = "하락 추세";
@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "이 설정은 언제든 변경할 수 있습니다.";
 "onboarding.getStarted" = "시작하기";
 
-"onboarding.startTrial" = "3일 무료 체험 시작";
+"onboarding.startTrial" = "7일 무료 체험 시작";
 "onboarding.trialSubtitle" = "전체 인사이트를 잠금 해제하고 85점 이상까지 진행 상황을 추적하세요.";
-"onboarding.noCharge" = "3일간 무료. 설정 → 구독에서 언제든 취소할 수 있습니다.";
+"onboarding.noCharge" = "7일간 무료. 설정 → 구독에서 언제든 취소할 수 있습니다.";
 "onboarding.maybeLater" = "나중에";
 
 /* Frequency labels */
@@ -304,11 +304,11 @@
 "greeting.evening" = "좋은 저녁입니다";
 
 /* Milestones */
-"milestone.7" = "🔥 일주일! TRT 트래커 상위 30%%";
-"milestone.14" = "🔥🔥 2주! TRT 트래커 상위 15%%";
-"milestone.30" = "🔥🔥🔥 한 달! TRT 트래커 상위 5%%";
-"milestone.60" = "🔥🔥🔥🔥 두 달! 상위 2%% — 엘리트입니다";
-"milestone.90" = "🔥🔥🔥🔥🔥 석 달! 상위 1%% — 전설입니다";
+"milestone.7" = "🔥 일주일 연속! 꾸준함 최고";
+"milestone.14" = "🔥🔥 2주 연속! 습관이 자리 잡고 있어요";
+"milestone.30" = "🔥🔥🔥 한 달 동안 체크인! 완전 몰입";
+"milestone.60" = "🔥🔥🔥🔥 두 달 연속! 진짜 꾸준함";
+"milestone.90" = "🔥🔥🔥🔥🔥 세 달 연속! 전설적인 꾸준함";
 
 /* Forecast */
 "forecast.injectionToday" = "오늘은 주사일입니다 — 활력은 24~48시간 후 정점에 이릅니다.";
@@ -486,20 +486,20 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "프로토콜 점수를 42 → 85로 끌어올리세요.";
-"paywall.subtitle" = "모든 기능. 3일간 무료.";
+"paywall.heroSubtitle" = "프로토콜의 모든 것을 하나의 비공개 공간에.";
+"paywall.subtitle" = "모든 기능. 7일간 무료.";
 "paywall.monthly" = "월간";
 "paywall.annual" = "연간";
-"paywall.save40" = "58%% 절약";
+"paywall.save40" = "58% 절약";
 "paywall.startTrial" = "무료 체험 시작";
-"paywall.startTrialFull" = "무료 체험 시작 — 3일 무료, 이후 %@";
+"paywall.startTrialFull" = "무료 체험 시작 — 7일 무료, 이후 %@";
 "paywall.restorePurchases" = "복원";
 "paywall.privacyPolicy" = "개인정보";
 "paywall.termsOfUse" = "약관";
 
 /* Pro features */
 "pro.title" = "Pro로 누릴 수 있는 기능";
-"pro.trialIncluded" = "3일 무료 체험 포함";
+"pro.trialIncluded" = "7일 무료 체험 포함";
 "pro.pkCurves" = "PK 곡선";
 "pro.pkCurvesDesc" = "신뢰 구간 및 다중 에스테르 스태킹과 함께 예상 혈중 농도 확인";
 "pro.trendHistory" = "전체 추세 기록";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "%d%% 절약";
 "paywall.ctaSub.trial" = "이후 %@ · 자동 갱신 · 언제든 해지 가능";
 "paywall.ctaSub.noTrial" = "%@ · 자동 갱신 · 언제든 해지 가능";
-"paywall.trialBadge" = "3일 무료 체험";
+"paywall.trialBadge" = "7일 무료 체험";
 "paywall.bestValue" = "최고 가성비";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "나의 프로토콜 점수";
 "onboarding.trialUnlock" = "무료 체험을 시작해 모든 인사이트를 잠금 해제하세요.";
 "onboarding.proUnlock" = "Trough Pro로 모든 인사이트를 잠금 해제하세요.";
-"onboarding.trialLegal" = "3일 무료 체험 후 자동 갱신됩니다. 언제든 해지할 수 있습니다.";
+"onboarding.trialLegal" = "7일 무료 체험 후 자동 갱신됩니다. 언제든 해지할 수 있습니다.";
 "onboarding.subscribeLegal" = "자동 갱신됩니다. 언제든 해지할 수 있습니다.";
 
 /* Export */
@@ -715,3 +715,499 @@
 "common.time" = "시간";
 "onboarding.enterPrescribedDose" = "처방받은 용량 입력";
 "onboarding.doseValidation" = "계속하려면 의사가 처방한 용량을 입력하세요.";
+
+/* ===== Trough 1.4 (redesign & gamification) ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "브론즈";
+"badge.tier.silver" = "실버";
+"badge.tier.gold" = "골드";
+"badge.tier.platinum" = "플래티넘";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "시크릿 배지";
+"badge.secret.how" = "계속 기록하다 보면 발견하게 돼요.";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "첫 페이지";
+"badge.checkins_1.how" = "첫 체크인을 기록하세요.";
+"badge.checkins_1.line" = "1일차, 기록 시작!";
+"badge.checkins_7.title" = "일주일 완주";
+"badge.checkins_7.how" = "체크인을 7회 기록하세요.";
+"badge.checkins_7.line" = "7번의 기록. 패턴이 보이기 시작해요.";
+"badge.checkins_30.title" = "한 달 치 데이터";
+"badge.checkins_30.how" = "체크인을 30회 기록하세요.";
+"badge.checkins_30.line" = "30번의 기록. 이제 흐름이 잡혔어요.";
+"badge.checkins_100.title" = "백전노장";
+"badge.checkins_100.how" = "체크인을 100회 기록하세요.";
+"badge.checkins_100.line" = "세 자릿수 돌파. 기록장이 두툼해졌어요.";
+"badge.checkins_365.title" = "1년의 기록";
+"badge.checkins_365.how" = "체크인을 365회 기록하세요.";
+"badge.checkins_365.line" = "1년 치 기록 완성. 놀라운 꾸준함이에요.";
+"badge.checkin_streak_3.title" = "시동 걸기";
+"badge.checkin_streak_3.how" = "3일 연속 체크인하세요.";
+"badge.checkin_streak_3.line" = "3일 연속! 탄력이 붙었어요.";
+"badge.streak_flame_7.title" = "불꽃 지킴이";
+"badge.streak_flame_7.how" = "7일 연속 체크인하세요.";
+"badge.streak_flame_7.line" = "일주일 내내 한 번도 안 빠졌어요.";
+"badge.checkin_streak_14.title" = "2주 집중";
+"badge.checkin_streak_14.how" = "14일 연속 체크인하세요.";
+"badge.checkin_streak_14.line" = "2주 연속. 이제 습관의 영역이에요.";
+"badge.consistency_king.title" = "꾸준함의 왕";
+"badge.consistency_king.how" = "30일 연속 체크인하세요.";
+"badge.consistency_king.line" = "30일 연속. 왕관은 당신 거예요.";
+"badge.checkin_streak_60.title" = "무결점";
+"badge.checkin_streak_60.how" = "60일 연속 체크인하세요.";
+"badge.checkin_streak_60.line" = "60일째. 연속 기록에 중력이 생겼어요.";
+"badge.checkin_streak_100.title" = "100일의 전설";
+"badge.checkin_streak_100.how" = "100일 연속 체크인하세요.";
+"badge.checkin_streak_100.line" = "100일 연속. 전설 등극이에요.";
+"badge.injections_1.title" = "첫 주사 기록";
+"badge.injections_1.how" = "첫 주사를 기록하세요.";
+"badge.injections_1.line" = "날짜까지 기록 완료. 모든 건 여기서 시작돼요.";
+"badge.injections_10.title" = "10회 기록";
+"badge.injections_10.how" = "주사를 10회 기록하세요.";
+"badge.injections_10.line" = "10번의 기록. 일정에 역사가 생겼어요.";
+"badge.injections_25.title" = "쿼터 달성";
+"badge.injections_25.how" = "주사를 25회 기록하세요.";
+"badge.injections_25.line" = "25회 기록. 캘린더가 고마워해요.";
+"badge.injections_52.title" = "1년 치 주사 기록";
+"badge.injections_52.how" = "주사를 52회 기록하세요.";
+"badge.injections_52.line" = "52회 기록. 1년 치 기록이 쌓였어요.";
+"badge.injections_100.title" = "기록의 달인";
+"badge.injections_100.how" = "주사를 100회 기록하세요.";
+"badge.injections_100.line" = "주사 100회 기록. 빈틈이 없네요.";
+"badge.on_schedule_weeks_4.title" = "칼같은 타이밍";
+"badge.on_schedule_weeks_4.how" = "4주 연속 일정대로 주사를 기록하세요.";
+"badge.on_schedule_weeks_4.line" = "4주 연속 일정대로. 시계처럼 정확해요.";
+"badge.on_schedule_weeks_12.title" = "메트로놈";
+"badge.on_schedule_weeks_12.how" = "12주 연속 일정대로 주사를 기록하세요.";
+"badge.on_schedule_weeks_12.line" = "12주 동안 딱 제시간에.";
+"badge.on_schedule_weeks_26.title" = "반년의 리듬";
+"badge.on_schedule_weeks_26.how" = "26주 연속 일정대로 주사를 기록하세요.";
+"badge.on_schedule_weeks_26.line" = "6개월 연속 일정대로. 흔들림이 없어요.";
+"badge.on_schedule_weeks_52.title" = "한 바퀴 완주";
+"badge.on_schedule_weeks_52.how" = "52주 연속 일정대로 주사를 기록하세요.";
+"badge.on_schedule_weeks_52.line" = "1년 내내 일정대로 기록했어요.";
+"badge.bloodwork_1.title" = "첫 패널";
+"badge.bloodwork_1.how" = "첫 혈액 검사 패널을 기록하세요.";
+"badge.bloodwork_1.line" = "첫 패널 등록 완료. 공식 기록이에요.";
+"badge.bloodwork_3.title" = "기록의 흔적";
+"badge.bloodwork_3.how" = "혈액 검사 패널을 3개 기록하세요.";
+"badge.bloodwork_3.line" = "패널 3개 기록. 다음 진료 때 요긴해요.";
+"badge.bloodwork_5.title" = "검사실 단골";
+"badge.bloodwork_5.how" = "혈액 검사 패널을 5개 기록하세요.";
+"badge.bloodwork_5.line" = "패널 5개 등록. 아카이브가 커지고 있어요.";
+"badge.bloodwork_master.title" = "혈액 검사 마스터";
+"badge.bloodwork_master.how" = "혈액 검사 패널을 10개 기록하세요.";
+"badge.bloodwork_master.line" = "패널 10개 보관 중. 흠잡을 데 없는 기록이에요.";
+"badge.health_synced_7.title" = "싱크 완료";
+"badge.health_synced_7.how" = "Apple 건강 데이터가 포함된 체크인을 7회 기록하세요.";
+"badge.health_synced_7.line" = "내 기록과 Apple 건강이 대화를 시작했어요.";
+"badge.health_synced_30.title" = "데이터 스트림";
+"badge.health_synced_30.how" = "Apple 건강 데이터가 포함된 체크인을 30회 기록하세요.";
+"badge.health_synced_30.line" = "동기화된 체크인 30회. 기록이 저절로 쌓여요.";
+"badge.health_synced_100.title" = "완벽한 연동";
+"badge.health_synced_100.how" = "Apple 건강 데이터가 포함된 체크인을 100회 기록하세요.";
+"badge.health_synced_100.line" = "동기화된 체크인 100회. 자동화의 정석이에요.";
+"badge.adjunct_logs_1.title" = "스택 시작";
+"badge.adjunct_logs_1.how" = "첫 펩타이드 또는 보조제 투여를 기록하세요.";
+"badge.adjunct_logs_1.line" = "첫 보조제 기록 완료.";
+"badge.adjunct_logs_10.title" = "스택 트래커";
+"badge.adjunct_logs_10.how" = "펩타이드 또는 보조제 투여를 10회 기록하세요.";
+"badge.adjunct_logs_10.line" = "보조제 기록 10회. 하나도 빠짐없이요.";
+"badge.adjunct_logs_50.title" = "스택 기록관";
+"badge.adjunct_logs_50.how" = "펩타이드 또는 보조제 투여를 50회 기록하세요.";
+"badge.adjunct_logs_50.line" = "보조제 기록 50회. 새는 틈이 없어요.";
+"badge.level_5.title" = "라이징 스타";
+"badge.level_5.how" = "레벨 5에 도달하세요.";
+"badge.level_5.line" = "레벨 5. 본격적인 상승 시작이에요.";
+"badge.level_10.title" = "마스터 티어";
+"badge.level_10.how" = "레벨 10에 도달하세요.";
+"badge.level_10.line" = "레벨 10. 아무나 못 오는 곳이에요.";
+"badge.level_11.title" = "정상 정복";
+"badge.level_11.how" = "레벨 11에 도달하세요.";
+"badge.level_11.line" = "만렙 달성. 이제 남은 건 꾸준함뿐이에요.";
+"badge.notes_10.title" = "현장 노트";
+"badge.notes_10.how" = "기록 10개에 메모를 추가하세요.";
+"badge.notes_10.line" = "메모 10개. 맥락이 곧 힘이에요.";
+"badge.notes_50.title" = "연대기 작가";
+"badge.notes_50.how" = "기록 50개에 메모를 추가하세요.";
+"badge.notes_50.line" = "메모 50개. 미래의 내가 고마워할 거예요.";
+"badge.testosterone_peak.title" = "좋은 날 기록";
+"badge.testosterone_peak.how" = "자가 평가 프로토콜 점수 80점 이상으로 체크인을 기록하세요.";
+"badge.testosterone_peak.line" = "최고의 하루, 기록으로 남겼어요.";
+"badge.perfect_week.title" = "퍼펙트 위크";
+"badge.perfect_week.how" = "월요일부터 일요일까지 한 주 동안 매일 체크인하세요.";
+"badge.perfect_week.line" = "월요일부터 일요일까지 7전 7승.";
+"badge.supplement_adherence.title" = "보충제 모범생";
+"badge.supplement_adherence.how" = "최근 30일 중 27일 이상 보충제를 기록하세요.";
+"badge.supplement_adherence.line" = "30일 중 27일. 성실 그 자체예요.";
+"badge.injection_precision.title" = "정밀 주사러";
+"badge.injection_precision.how" = "30일 동안 예정된 주사를 모두 제때 기록하세요.";
+"badge.injection_precision.line" = "30일간 누락 제로.";
+"badge.secret_night_owl.title" = "올빼미";
+"badge.secret_night_owl.how" = "자정부터 새벽 4시 사이에 체크인하세요.";
+"badge.secret_night_owl.line" = "기록은 잠들지 않아요. (당신은 주무셔야 해요.)";
+"badge.secret_new_year.title" = "새해 첫 기록";
+"badge.secret_new_year.how" = "1월 1일에 체크인하세요.";
+"badge.secret_new_year.line" = "새해에도 변함없는 기록 습관.";
+"badge.secret_full_year.title" = "지구 한 바퀴";
+"badge.secret_full_year.how" = "첫 체크인 후 1년을 채우세요.";
+"badge.secret_full_year.line" = "Trough와 함께 태양을 한 바퀴 돌았어요.";
+
+/* Level names (11 levels) */
+"level.name.1" = "입문자";
+"level.name.2" = "새싹";
+"level.name.3" = "도전자";
+"level.name.4" = "열정가";
+"level.name.5" = "질주자";
+"level.name.6" = "몰입가";
+"level.name.7" = "철인";
+"level.name.8" = "상급자";
+"level.name.9" = "전문가";
+"level.name.10" = "마스터";
+"level.name.11" = "완성형 알파";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "아침형 인간";
+"persona.earlyRiser.tagline" = "체크인 대부분이 오전 9시 전에 기록돼요.";
+"persona.metronome.title" = "메트로놈";
+"persona.metronome.tagline" = "주사 타이밍이 한 치의 오차도 없어요.";
+"persona.dataNerd.title" = "데이터 덕후";
+"persona.dataNerd.tagline" = "혈액 검사 기록을 꼼꼼히 챙겨요.";
+"persona.stackBuilder.title" = "스택 빌더";
+"persona.stackBuilder.tagline" = "보조제를 두 가지 이상 기록하고 있어요.";
+"persona.synced.title" = "싱크형";
+"persona.synced.tagline" = "Apple 건강이 세부 정보를 알아서 채워줘요.";
+"persona.steady.title" = "꾸준형";
+"persona.steady.tagline" = "조용히 꾸준하게. 가장 멋진 스타일이에요.";
+
+/* Daily challenges */
+"challenge.checkin.title" = "데일리 챌린지: 체크인";
+"challenge.checkin.desc" = "오늘의 체크인을 기록하세요.";
+"challenge.injection.title" = "데일리 챌린지: 일정 지키기";
+"challenge.injection.desc" = "주사 예정일이에요 — 오늘 기록하세요.";
+"challenge.note.title" = "데일리 챌린지: 메모 추가";
+"challenge.note.desc" = "오늘 아무 기록에나 메모를 추가하세요.";
+"challenge.healthSync.title" = "데일리 챌린지: Apple 건강 동기화";
+"challenge.healthSync.desc" = "체크인하면 Apple 건강이 오늘의 데이터를 채워줘요.";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "이번 주 체크인 1회";
+"notif.recap.checkins.other" = "이번 주 체크인 %d회";
+"notif.recap.injections.one" = "주사 1회 기록";
+"notif.recap.injections.other" = "주사 %d회 기록";
+"notif.streakRisk.title" = "%d일 연속 기록이 기다리고 있어요";
+"notif.streakRisk.body" = "짧은 체크인 한 번이면 이어갈 수 있어요.";
+"notif.recap.title" = "Trough로 본 나의 한 주";
+
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@, 잠김, %d/%d";
+"ach.badge.a11y.unlocked" = "%@, %@, 획득함";
+"ach.badge.howEarned" = "획득 방법";
+"ach.badge.secretHint" = "시크릿 배지예요. 때가 되면 열려요 — 계속 기록하세요.";
+"ach.badge.share" = "자랑하기";
+"ach.badge.unlockedOn" = "%@ 획득";
+"ach.badges.count" = "%d/%d";
+"ach.badges.title" = "배지 컬렉션";
+"ach.cat.adjuncts" = "보조제";
+"ach.cat.bloodwork" = "혈액 검사 기록";
+"ach.cat.checkins" = "체크인";
+"ach.cat.health" = "Apple 건강";
+"ach.cat.injections" = "주사 기록";
+"ach.cat.levels" = "레벨";
+"ach.cat.notes" = "메모";
+"ach.cat.secrets" = "시크릿";
+"ach.cat.specials" = "스페셜";
+"ach.cat.streaks" = "연속 기록";
+"ach.celebrate.carryOn" = "계속하기";
+"ach.celebrate.kicker.badge" = "배지 획득";
+"ach.celebrate.kicker.quest" = "퀘스트 완료";
+"ach.celebrate.kicker.rank" = "등급 상승";
+"ach.celebrate.kicker.streak" = "연속 기록";
+"ach.celebrate.moreBadges" = "+배지 %d개 더";
+"ach.celebrate.quest.line" = "잘했어요. 기록이 또 하나 늘었어요.";
+"ach.celebrate.rank.line" = "레벨 %d · %@ 등급. 공유하는 모든 카드에 표시돼요.";
+"ach.celebrate.streak.line.hundred" = "세 자릿수 돌파. 꾸준함이 기록으로 증명됐어요.";
+"ach.celebrate.streak.line.month" = "한 달 동안 하루도 안 빠졌어요. 이제 루틴이에요.";
+"ach.celebrate.streak.line.week" = "일주일 내내 체크인. 습관이 자리 잡고 있어요.";
+"ach.celebrate.streak.line.year" = "1년 동안 매일 체크인. 전설이에요.";
+"ach.celebrate.streak.title" = "%d일 연속";
+"ach.celebrate.totalXP" = "총 %d XP";
+"ach.challenge.done" = "오늘 완료. 멋져요.";
+"ach.challenge.kicker" = "오늘의 챌린지";
+"ach.chip.badges" = "배지 %d/%d";
+"ach.chip.streak" = "%d일 연속";
+"ach.chip.weeks" = "%d주 일정 준수";
+"ach.flame.0" = "꺼짐";
+"ach.flame.1" = "불씨";
+"ach.flame.2" = "모닥불";
+"ach.flame.3" = "활활";
+"ach.flame.4" = "용광로";
+"ach.flame.5" = "백열";
+"ach.levelN" = "레벨 %d";
+"ach.more.app" = "앱";
+"ach.more.tracking" = "기록";
+"ach.passport.kicker" = "프로토콜 패스포트";
+"ach.passport.toNext" = "%@까지 %d XP";
+"ach.passport.topRank" = "최고 등급";
+"ach.persona.kicker" = "나의 프로토콜 페르소나";
+"ach.persona.locked" = "체크인 %d회를 채우면 기록 스타일이 공개돼요 (현재 %d회).";
+"ach.persona.lockedTitle" = "아직 분석 중";
+"ach.quest.done" = "완료";
+"ach.quest.open" = "아직 안 함";
+"ach.quests.empty" = "새 퀘스트는 내일 도착해요.";
+"ach.quests.title" = "퀘스트";
+"ach.rank.level" = "레벨";
+"ach.share" = "공유";
+"ach.share.badge.kicker" = "배지 획득";
+"ach.share.cta" = "당신은 얼마나 꾸준한가요?";
+"ach.share.footer" = "프라이빗 프로토콜 기록 · App Store";
+"ach.share.format" = "형식";
+"ach.share.format.square" = "정사각형";
+"ach.share.format.story" = "스토리";
+"ach.share.message" = "당신은 얼마나 꾸준한가요? 저는 Trough — TRT 트래커로 프로토콜 기록을 프라이빗하게 관리해요.";
+"ach.share.privacy" = "카드에는 등급, 연속 기록, 배지만 표시돼요 — 용량이나 검사 수치는 절대 표시되지 않아요.";
+"ach.share.rank.kicker" = "나의 프로토콜 등급";
+"ach.share.stat.badges" = "배지";
+"ach.share.stat.best" = "최고 연속 기록";
+"ach.share.stat.dayStreak" = "일 연속";
+"ach.share.stat.level" = "레벨";
+"ach.share.stat.weeks" = "주 일정 준수";
+"ach.share.streak.kicker" = "나의 체크인 연속 기록";
+"ach.share.streak.line" = "%d일 연속 체크인";
+"ach.share.title.badge" = "이 배지 공유하기";
+"ach.share.title.rank" = "내 등급 공유하기";
+"ach.share.title.streak" = "연속 기록 공유하기";
+"ach.streaks.best" = "최고 %d";
+"ach.streaks.checkin" = "체크인 연속 기록";
+"ach.streaks.injection" = "제때 한 주사";
+"ach.streaks.title" = "연속 기록";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "일";
+"ach.unit.days" = "일";
+"ach.unit.week" = "주";
+"ach.unit.weeks" = "주";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "다음 배지";
+"dash.badge.moreCheckins" = "체크인 %d회 남음";
+"dash.badge.moreDays" = "%d일 남음";
+"dash.badge.moreInjections" = "주사 %d회 남음";
+"dash.badge.morePanels" = "혈액 검사 패널 %d개 남음";
+"dash.badge.moreWeeks" = "일정 준수 %d주 남음";
+"dash.badge.reachLevel" = "레벨 %d 달성";
+"dash.badge.toGo" = "%d 남음";
+"dash.challenge.done" = "완료 — 내일 또 만나요";
+"dash.challenge.kicker" = "데일리 챌린지";
+"dash.hero.a11y" = "레벨 %1$d, %2$@. 다음 레벨까지 %3$d XP. %4$d일 연속 체크인. 배지 %6$d개 중 %5$d개.";
+"dash.hero.a11yHint" = "업적 열기";
+"dash.hero.lv" = "LV";
+"dash.hero.maxRank" = "최고 등급 달성";
+"dash.hero.onScheduleWeeks" = "%d주 일정 준수";
+"dash.hero.rankKicker" = "등급 · %@";
+"dash.hero.streakDays" = "%d일 연속";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "%2$@까지 %1$d XP";
+"dash.insight.kicker" = "인사이트";
+"dash.persona.kicker" = "나의 기록 스타일";
+"dash.personalBest.sub" = "이번 달 자가 평가 최고 점수예요.";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "시작하기";
+"dash.score.avg7" = "7일 평균 %.0f";
+"dash.score.noData" = "아직 체크인이 없어요";
+"dash.score.vsLastWeek" = "지난주 대비";
+"dash.section.progress" = "진행 상황";
+"dash.section.today" = "오늘";
+"dash.section.trends" = "추세";
+"dash.stats.avgMood" = "평균 기분";
+"dash.stats.avgSleep" = "평균 수면";
+"dash.today.checkedIn" = "체크인 완료 ✓";
+"dash.today.checkedInSub" = "탭하여 오늘의 기록 확인";
+"dash.today.cycle" = "주기";
+"dash.today.day" = "일";
+"dash.today.dayWord" = "일차";
+"dash.today.days" = "일";
+"dash.today.daysLate" = "일 지연";
+"dash.today.dueToday" = "오늘";
+"dash.today.nextShot" = "다음 주사";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "최근 7일을 한눈에";
+"pk.legend.combined" = "합산";
+"pk.legend.estimated" = "추정 수치";
+"pk.legend.peak" = "최고 구간";
+"pk.legend.trough" = "트로프 근접";
+"pk.legend.variation" = "±20% 변동";
+"pk.toggle.absorption" = "흡수 지연";
+"pk.toggle.bands" = "범위 표시";
+
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "%2$d단계 중 %1$d단계";
+"onb14.close" = "닫기";
+"onb14.reminders.streakNudge" = "매일 알림 하나면 체크인 연속 기록을 가장 쉽게 이어갈 수 있어요.";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "프로토콜 패스포트";
+"onb14.passport.levelCover" = "레벨 %1$d · %2$@";
+"onb14.passport.badges" = "배지";
+"onb14.passport.a11y" = "레벨 %1$d, %2$@. 배지 %4$d개 중 %3$d개.";
+"onb14.passport.ready" = "준비 완료";
+"onb14.passport.title" = "나의 프로토콜 패스포트";
+"onb14.passport.subtitle" = "체크인, 주사 기록, 연속 기록마다 XP가 쌓이고 패스포트에 배지 도장이 찍혀요.";
+"onb14.passport.nextUp" = "다음 목표";
+"onb14.passport.firstBadge" = "체크인 한 번이면 첫 배지를 받아요";
+"onb14.passport.pillLevels" = "11단계 레벨";
+"onb14.passport.pillBadges" = "배지 %d개";
+"onb14.passport.pillStreaks" = "연속 기록";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "%d일 무료 체험";
+"onb14.trialLegal" = "%d일 무료 체험 후 자동 갱신됩니다. 언제든 해지할 수 있습니다.";
+"onb14.paywall.autoRenew" = "구매 확정 시 Apple 계정으로 결제됩니다. 현재 기간이 끝나기 최소 24시간 전에 취소하지 않으면 구독이 자동으로 갱신됩니다. 설정에서 언제든 구독을 관리하거나 취소할 수 있습니다.";
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "검사실";
+"bloodwork.addPanel" = "패널 추가";
+"bloodwork.deleteConfirm" = "이 패널을 삭제할까요?";
+"bloodwork.delete" = "패널 삭제";
+"bloodwork.summary.onePanel" = "패널 1개 기록됨";
+"bloodwork.summary.panels" = "패널 %d개 기록됨";
+"bloodwork.summary.lastDrawn" = "최근 채혈 %@";
+"bloodwork.summary.kicker" = "검사 기록";
+"bloodwork.stat.panels" = "패널";
+"bloodwork.stat.markers" = "추적 중인 마커";
+"bloodwork.stat.photos" = "검사 사진";
+"bloodwork.markerCount" = "마커 %d개";
+"bloodwork.doctorNotes" = "의사 메모";
+"bloodwork.notes" = "메모";
+"bloodwork.moreMarkers" = "+%d개 더";
+"bloodwork.viewPanel" = "패널 보기";
+"bloodwork.labPhoto" = "검사 사진 첨부됨";
+"bloodwork.labPhotoTitle" = "검사 사진";
+"bloodwork.range.within" = "참고 범위 내";
+"bloodwork.range.below" = "참고 범위 미만";
+"bloodwork.range.above" = "참고 범위 초과";
+"bloodwork.range.none" = "참고 범위 없음";
+"bloodwork.refShort" = "참고 %@";
+"peptides.categories" = "카테고리";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / 보조 약물";
+"peptides.cat.gh" = "GH 분비 촉진제";
+"peptides.cat.healing" = "회복";
+"peptides.cat.longevity" = "장수";
+"peptides.cat.specialty" = "특수";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "모든 기능 잠금 해제";
+"settings.pro.subtitle" = "진료용 리포트와 모든 Pro 기능 — 전부 기기 안에서.";
+"settings.spreadWord" = "Trough 알리기";
+"settings.rateApp.subtitle" = "작은 프라이빗 앱에 큰 힘이 돼요";
+"settings.onDeviceFooter" = "기록한 모든 것은 이 기기에만 저장됩니다. 계정도 클라우드도 없습니다.";
+"privacy.hero.title" = "설계부터 프라이빗하게";
+"privacy.hero.subtitle" = "계정 없음. 클라우드 없음. 데이터는 이 기기에만 남습니다.";
+"export.hero.title" = "나의 데이터, 나의 파일";
+"export.hero.subtitle" = "이 기기에서 생성되고, 내가 선택한 곳에만 공유됩니다.";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "1/2단계";
+"checkin14.streakDays" = "%d일 연속";
+"checkin14.scoreKicker" = "점수";
+"checkin14.scoreHint" = "하루를 평가하는 대로 실시간 반영돼요.";
+"checkin14.earnXP" = "+20 XP 획득";
+"checkin14.updatingToday" = "오늘 기록 수정 중";
+"checkin14.step2" = "2/2단계";
+"checkin14.close" = "닫기";
+"checkin14.savedTitle" = "체크인 완료!";
+"checkin14.savedSubtitle" = "오늘도 기록 완료. 꾸준함 멋져요.";
+"checkin14.updatedSubtitle" = "오늘의 체크인이 최신 상태예요.";
+"checkin14.xpEarnedA11y" = "20 XP 획득";
+"checkin14.updatedPill" = "체크인 수정됨";
+"checkin14.streakKicker" = "체크인 연속 기록";
+"checkin14.day" = "일";
+"checkin14.days" = "일";
+"checkin14.bestStreak" = "최고: %d일";
+"checkin14.todaysQuests" = "오늘의 퀘스트";
+"checkin14.dailyChallenge" = "데일리 챌린지";
+"checkin14.questDone" = "완료";
+"checkin14.questOpen" = "아직 안 함";
+"checkin14.appleHealth" = "Apple 건강에서 가져옴";
+"checkin14.insightKicker" = "오늘의 인사이트";
+"checkin14.rating.1" = "매우 나쁨";
+"checkin14.rating.2" = "나쁨";
+"checkin14.rating.3" = "보통";
+"checkin14.rating.4" = "좋음";
+"checkin14.rating.5" = "최고";
+"inj14.streakKicker" = "일정 준수 연속 기록";
+"inj14.week" = "주";
+"inj14.weeks" = "주";
+"inj14.stampsCollected" = "도장 %d개 수집";
+"inj14.nextSite" = "다음 순환 부위";
+"inj14.fab" = "기록";
+"inj14.logTitle" = "도장 기록";
+"inj14.tip" = "도장을 탭해 편집 · 길게 눌러 더 보기";
+"inj14.stampHint" = "주사 편집 화면을 열어요";
+"inj14.thisWeek" = "이번 주";
+"inj14.weekN" = "%d주차";
+"inj14.onSchedule" = "일정 준수";
+"inj14.prevMonth" = "이전 달";
+"inj14.nextMonth" = "다음 달";
+"inj14.stampIt" = "도장 쾅";
+"inj14.site.never" = "사용 안 함";
+"inj14.site.today" = "오늘 사용";
+"inj14.site.daysAgo" = "%d일 전";
+"inj14.site.suggested" = "다음 추천";
+"inj14.side.left" = "좌";
+"inj14.side.right" = "우";
+"inj14.stampA11y" = "주사 도장: %@";
+"inj14.stamped" = "도장 쾅!";
+"inj14.streakWeeksPill" = "%d주 연속";
+
+// code-only
+"rank.cover.paper" = "페이퍼";
+"rank.cover.bronze" = "브론즈";
+"rank.cover.silver" = "실버";
+"rank.cover.gold" = "골드";
+"rank.cover.platinum" = "플래티넘";
+"rank.cover.diamond" = "다이아몬드";
+
+// String(localized:) literal keys (bloodwork/peptides/CSV import screens)
+"Add Results" = "결과 추가";
+"Choose File" = "파일 선택";
+"Draw Date" = "채혈 날짜";
+"Included in your exported report for doctor visits." = "진료용으로 내보내는 리포트에 포함됩니다.";
+"Log First Dose" = "첫 용량 기록";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "보조제와 펩타이드 용량을 기록하여\n스택을 추적하고 패턴을 파악하세요.";
+"Log your first panel to start tracking trends." = "첫 패널을 기록하여 추세 추적을 시작하세요.";
+"No bloodwork recorded" = "기록된 혈액 검사가 없습니다";
+"Notes for Doctor" = "의사에게 전할 메모";
+"Results" = "결과";
+"Select a CSV File" = "CSV 파일 선택";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = "쉼표, 탭, 세미콜론 구분자를 사용하는 .csv, .tsv, .txt 파일을 지원합니다.";
+"Track Your Stack" = "스택 추적하기";
+"Trends" = "추세";
+
+
+
+/* Daily challenges: supplements & adjuncts */
+"challenge.supplements.title" = "데일리 챌린지: 보충제 기록";
+"challenge.supplements.desc" = "오늘 체크인에서 복용한 보충제를 체크하세요.";
+"challenge.peptide.title" = "데일리 챌린지: 보조제 기록";
+"challenge.peptide.desc" = "오늘의 펩타이드 또는 보조제 투여를 기록하세요.";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "오늘 체크인 기록하기";
+"quest.log_checkin.desc" = "매일 웰니스 체크인을 완료하세요";
+"quest.view_insights.title" = "오늘의 인사이트 보기";
+"quest.view_insights.desc" = "대시보드에서 프로토콜 인사이트를 확인하세요";
+"quest.daily_login.title" = "오늘 Trough 열기";
+"quest.daily_login.desc" = "앱을 열고 꾸준함을 유지하세요";
+"quest.inject_on_schedule.title" = "일정대로 주사하기";
+"quest.inject_on_schedule.desc" = "예정일로부터 24시간 이내에 주사를 기록하세요";
+"quest.complete_bloodwork.title" = "혈액 검사 결과 기록하기";
+"quest.complete_bloodwork.desc" = "이번 주 검사 결과를 기록하세요";
+"quest.hit_streak.title" = "7일 연속 체크인";
+"quest.hit_streak.desc" = "이번 주 매일 체크인하세요";
+"quest.supplement_adherence.title" = "보충제 꾸준히 먹기";
+"quest.supplement_adherence.desc" = "이번 주 보충제 복용률 80% 이상 달성";

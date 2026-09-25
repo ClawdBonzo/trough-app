@@ -70,7 +70,7 @@
 "quiz.cta" = "See My Score";
 
 "scoreReveal.protocolScore" = "Protocol Score";
-"scoreReveal.cta" = "See Your Projected Improvement";
+"scoreReveal.cta" = "Continue";
 "scoreReveal.dialedIn" = "Dialed in";
 "scoreReveal.steady" = "Steady";
 "scoreReveal.trendingDown" = "Trending down";
@@ -304,11 +304,11 @@
 "greeting.evening" = "Good evening";
 
 /* Milestones */
-"milestone.7" = "🔥 One week! Top 30% of TRT trackers";
-"milestone.14" = "🔥🔥 Two weeks! Top 15% of TRT trackers";
-"milestone.30" = "🔥🔥🔥 One month! Top 5% of TRT trackers";
-"milestone.60" = "🔥🔥🔥🔥 Two months! Top 2% — you're elite";
-"milestone.90" = "🔥🔥🔥🔥🔥 Three months! Top 1% — legend";
+"milestone.7" = "🔥 One week in a row — nice consistency";
+"milestone.14" = "🔥🔥 Two weeks straight — the habit is forming";
+"milestone.30" = "🔥🔥🔥 One month of check-ins — locked in";
+"milestone.60" = "🔥🔥🔥🔥 Two months straight — seriously consistent";
+"milestone.90" = "🔥🔥🔥🔥🔥 Three months straight — legendary consistency";
 
 /* Forecast */
 "forecast.injectionToday" = "Injection day today — energy should peak in 24–48 hours.";
@@ -486,7 +486,7 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "Go from 42 → 85 Protocol Score.";
+"paywall.heroSubtitle" = "Your whole protocol in one private place.";
 "paywall.subtitle" = "Everything. Free for 7 days.";
 "paywall.monthly" = "Monthly";
 "paywall.annual" = "Annual";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "Save %d%%";
 "paywall.ctaSub.trial" = "then %@ · auto-renews · cancel anytime";
 "paywall.ctaSub.noTrial" = "%@ · auto-renews · cancel anytime";
-"paywall.trialBadge" = "3-day free trial";
+"paywall.trialBadge" = "7-day free trial";
 "paywall.bestValue" = "BEST VALUE";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "Your Protocol Score";
 "onboarding.trialUnlock" = "Start your free trial to unlock full insights.";
 "onboarding.proUnlock" = "Unlock full insights with Trough Pro.";
-"onboarding.trialLegal" = "3-day free trial, then auto-renews. Cancel anytime.";
+"onboarding.trialLegal" = "7-day free trial, then auto-renews. Cancel anytime.";
 "onboarding.subscribeLegal" = "Auto-renews. Cancel anytime.";
 
 /* Export */
@@ -893,6 +893,10 @@
 "challenge.note.desc" = "Add a note to any log today.";
 "challenge.healthSync.title" = "Daily Challenge: Sync Apple Health";
 "challenge.healthSync.desc" = "Check in so Apple Health can fill in today's data.";
+"challenge.supplements.title" = "Daily Challenge: Log Supplements";
+"challenge.supplements.desc" = "Tick off the supplements you took in today's check-in.";
+"challenge.peptide.title" = "Daily Challenge: Log an Adjunct";
+"challenge.peptide.desc" = "Log today's peptide or adjunct dose.";
 
 /* Engagement notifications (local only; counts only) */
 "notif.recap.checkins.one" = "1 check-in this week";
@@ -1066,7 +1070,7 @@
 "onb14.passport.title" = "Your Protocol Passport";
 "onb14.passport.subtitle" = "Every check-in, injection log and streak earns XP and stamps a badge into your passport.";
 "onb14.passport.nextUp" = "Next up";
-"onb14.passport.firstBadge" = "Your first badge is one check-in away";
+"onb14.passport.firstBadge" = "Earned with the check-in you just logged. It's waiting for you inside.";
 "onb14.passport.pillLevels" = "11 levels";
 "onb14.passport.pillBadges" = "%d badges";
 "onb14.passport.pillStreaks" = "Streaks";
@@ -1172,3 +1176,43 @@
 "inj14.stampA11y" = "Injection stamp: %@";
 "inj14.stamped" = "Stamped!";
 "inj14.streakWeeksPill" = "%d-week streak";
+
+/* Rank cover names (design system: TroughTheme RankCover) */
+"rank.cover.paper" = "Paper";
+"rank.cover.bronze" = "Bronze";
+"rank.cover.silver" = "Silver";
+"rank.cover.gold" = "Gold";
+"rank.cover.platinum" = "Platinum";
+"rank.cover.diamond" = "Diamond";
+
+/* English-text keys used via String(localized:) on bloodwork / peptides / CSV import screens */
+"Add Results" = "Add Results";
+"Choose File" = "Choose File";
+"Draw Date" = "Draw Date";
+"Included in your exported report for doctor visits." = "Included in your exported report for doctor visits.";
+"Log First Dose" = "Log First Dose";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "Log adjuncts and peptide doses to\ntrack your stack and spot patterns.";
+"Log your first panel to start tracking trends." = "Log your first panel to start tracking trends.";
+"No bloodwork recorded" = "No bloodwork recorded";
+"Notes for Doctor" = "Notes for Doctor";
+"Results" = "Results";
+"Select a CSV File" = "Select a CSV File";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = "Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters.";
+"Track Your Stack" = "Track Your Stack";
+"Trends" = "Trends";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "Log Today's Check-in";
+"quest.log_checkin.desc" = "Complete your daily wellness check-in";
+"quest.view_insights.title" = "View Today's Insights";
+"quest.view_insights.desc" = "Check your protocol insights on the Dashboard";
+"quest.daily_login.title" = "Open Trough Today";
+"quest.daily_login.desc" = "Open the app and stay on track";
+"quest.inject_on_schedule.title" = "Inject On Schedule";
+"quest.inject_on_schedule.desc" = "Log your injection within 24h of your scheduled day";
+"quest.complete_bloodwork.title" = "Log a Bloodwork Result";
+"quest.complete_bloodwork.desc" = "Track your lab results this week";
+"quest.hit_streak.title" = "7-Day Check-in Streak";
+"quest.hit_streak.desc" = "Check in every day this week";
+"quest.supplement_adherence.title" = "Supplement Adherence";
+"quest.supplement_adherence.desc" = "Hit ≥80% supplement compliance this week";

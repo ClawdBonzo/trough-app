@@ -70,7 +70,7 @@
 "quiz.cta" = "Toon mijn score";
 
 "scoreReveal.protocolScore" = "Protocol Score";
-"scoreReveal.cta" = "Bekijk je verwachte verbetering";
+"scoreReveal.cta" = "Doorgaan";
 "scoreReveal.dialedIn" = "Optimaal afgesteld";
 "scoreReveal.steady" = "Stabiel";
 "scoreReveal.trendingDown" = "Dalende trend";
@@ -170,9 +170,9 @@
 "onboarding.changeInSettings" = "Je kunt dit altijd wijzigen in Instellingen.";
 "onboarding.getStarted" = "Aan de slag";
 
-"onboarding.startTrial" = "Start gratis proefperiode van 3 dagen";
+"onboarding.startTrial" = "Start gratis proefperiode van 7 dagen";
 "onboarding.trialSubtitle" = "Ontgrendel volledige inzichten en volg je voortgang naar 85+.";
-"onboarding.noCharge" = "3 dagen gratis. Annuleer altijd via Instellingen → Abonnementen.";
+"onboarding.noCharge" = "7 dagen gratis. Annuleer altijd via Instellingen → Abonnementen.";
 "onboarding.maybeLater" = "Misschien later";
 
 /* Frequency labels */
@@ -304,11 +304,11 @@
 "greeting.evening" = "Goedenavond";
 
 /* Milestones */
-"milestone.7" = "🔥 Eén week! Top 30% van de TRT-trackers";
-"milestone.14" = "🔥🔥 Twee weken! Top 15% van de TRT-trackers";
-"milestone.30" = "🔥🔥🔥 Eén maand! Top 5% van de TRT-trackers";
-"milestone.60" = "🔥🔥🔥🔥 Twee maanden! Top 2% — je bent een topper";
-"milestone.90" = "🔥🔥🔥🔥🔥 Drie maanden! Top 1% — legende";
+"milestone.7" = "🔥 Een week op rij! Mooi consequent";
+"milestone.14" = "🔥🔥 Twee weken op rij! De gewoonte zit erin";
+"milestone.30" = "🔥🔥🔥 Een maand check-ins! Helemaal on track";
+"milestone.60" = "🔥🔥🔥🔥 Twee maanden op rij! Echt consequent";
+"milestone.90" = "🔥🔥🔥🔥🔥 Drie maanden op rij! Legendarisch consequent";
 
 /* Forecast */
 "forecast.injectionToday" = "Vandaag is je injectiedag — je energie zou over 24–48 uur moeten pieken.";
@@ -414,7 +414,7 @@
    ═══════════════════════════════════════════════════════════════ */
 "peptides.title" = "Aanvullingen & peptiden";
 "peptides.trackYourStack" = "Volg je stack";
-"peptides.trackSubtitle" = "Log aanvullingen en peptidedoses om\nje stack te volgen en patronen te herkennen.";
+"peptides.trackSubtitle" = "Log bijmiddelen en peptidedoses om\nje stack te volgen en patronen te herkennen.";
 "peptides.logFirstDose" = "Eerste dosis loggen";
 "peptides.glp1Weight" = "GLP-1 / gewichtsbeheer";
 "peptides.weightTracking" = "Gewicht bijhouden";
@@ -486,20 +486,20 @@
    Paywall
    ═══════════════════════════════════════════════════════════════ */
 "paywall.title" = "TROUGH PRO";
-"paywall.heroSubtitle" = "Ga van 42 → 85 Protocol Score.";
-"paywall.subtitle" = "Alles. 3 dagen gratis.";
+"paywall.heroSubtitle" = "Je hele protocol op één privéplek.";
+"paywall.subtitle" = "Alles. 7 dagen gratis.";
 "paywall.monthly" = "Maandelijks";
 "paywall.annual" = "Jaarlijks";
 "paywall.save40" = "Bespaar 58%";
 "paywall.startTrial" = "Start gratis proefperiode";
-"paywall.startTrialFull" = "Start gratis proefperiode — 3 dagen gratis, daarna %@";
+"paywall.startTrialFull" = "Start gratis proefperiode — 7 dagen gratis, daarna %@";
 "paywall.restorePurchases" = "Herstellen";
 "paywall.privacyPolicy" = "Privacy";
 "paywall.termsOfUse" = "Voorwaarden";
 
 /* Pro features */
 "pro.title" = "Wat je krijgt met Pro";
-"pro.trialIncluded" = "Inclusief gratis proefperiode van 3 dagen";
+"pro.trialIncluded" = "Inclusief gratis proefperiode van 7 dagen";
 "pro.pkCurves" = "PK-curves";
 "pro.pkCurvesDesc" = "Bekijk je geschatte bloedwaarden met betrouwbaarheidsmarges en stapeling van meerdere esters";
 "pro.trendHistory" = "Volledige trendgeschiedenis";
@@ -678,14 +678,14 @@
 "paywall.savePct" = "Bespaar %d%%";
 "paywall.ctaSub.trial" = "daarna %@ · verlengt automatisch · altijd opzegbaar";
 "paywall.ctaSub.noTrial" = "%@ · verlengt automatisch · altijd opzegbaar";
-"paywall.trialBadge" = "3 dagen gratis proberen";
+"paywall.trialBadge" = "7 dagen gratis proberen";
 "paywall.bestValue" = "BESTE DEAL";
 
 /* Onboarding trial (additional) */
 "onboarding.yourProtocolScore" = "Jouw Protocol Score";
 "onboarding.trialUnlock" = "Start je gratis proefperiode om alle inzichten te ontgrendelen.";
 "onboarding.proUnlock" = "Ontgrendel alle inzichten met Trough Pro.";
-"onboarding.trialLegal" = "3 dagen gratis proberen, daarna automatische verlenging. Altijd opzegbaar.";
+"onboarding.trialLegal" = "7 dagen gratis proberen, daarna automatische verlenging. Altijd opzegbaar.";
 "onboarding.subscribeLegal" = "Verlengt automatisch. Altijd opzegbaar.";
 
 /* Export */
@@ -715,3 +715,499 @@
 "common.time" = "Tijd";
 "onboarding.enterPrescribedDose" = "Voer je voorgeschreven dosis in";
 "onboarding.doseValidation" = "Voer de door je arts voorgeschreven dosis in om door te gaan.";
+
+/* ===== Trough 1.4 (redesign & gamification) ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "Brons";
+"badge.tier.silver" = "Zilver";
+"badge.tier.gold" = "Goud";
+"badge.tier.platinum" = "Platina";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "Geheime badge";
+"badge.secret.how" = "Blijf loggen om hem te ontdekken.";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "Eerste aantekening";
+"badge.checkins_1.how" = "Log je eerste check-in.";
+"badge.checkins_1.line" = "Dag één staat in de boeken.";
+"badge.checkins_7.title" = "Week gelogd";
+"badge.checkins_7.how" = "Log 7 check-ins.";
+"badge.checkins_7.line" = "Zeven check-ins. Er tekent zich een patroon af.";
+"badge.checkins_30.title" = "Maand aan data";
+"badge.checkins_30.how" = "Log 30 check-ins.";
+"badge.checkins_30.line" = "Dertig check-ins. Je logboek krijgt vorm.";
+"badge.checkins_100.title" = "Centurion";
+"badge.checkins_100.how" = "Log 100 check-ins.";
+"badge.checkins_100.line" = "Drie cijfers. Het schrift wordt lekker dik.";
+"badge.checkins_365.title" = "Een jaar in de boeken";
+"badge.checkins_365.how" = "Log 365 check-ins.";
+"badge.checkins_365.line" = "Een vol jaar aan check-ins. Ijzersterk volgehouden.";
+"badge.checkin_streak_3.title" = "Opwarmertje";
+"badge.checkin_streak_3.how" = "Check 3 dagen op rij in.";
+"badge.checkin_streak_3.line" = "Drie dagen op rij. Het vliegwiel draait.";
+"badge.streak_flame_7.title" = "Vlammenhoeder";
+"badge.streak_flame_7.how" = "Check 7 dagen op rij in.";
+"badge.streak_flame_7.line" = "Een hele week zonder één dag over te slaan.";
+"badge.checkin_streak_14.title" = "Twee weken scherp";
+"badge.checkin_streak_14.how" = "Check 14 dagen op rij in.";
+"badge.checkin_streak_14.line" = "Twee weken op rij. Dit wordt een gewoonte.";
+"badge.consistency_king.title" = "Koning Consequent";
+"badge.consistency_king.how" = "Check 30 dagen op rij in.";
+"badge.consistency_king.line" = "Dertig dagen op rij. De kroon is verdiend.";
+"badge.checkin_streak_60.title" = "Onverbroken";
+"badge.checkin_streak_60.how" = "Check 60 dagen op rij in.";
+"badge.checkin_streak_60.line" = "Zestig dagen. Deze reeks heeft z'n eigen zwaartekracht.";
+"badge.checkin_streak_100.title" = "De Honderd";
+"badge.checkin_streak_100.how" = "Check 100 dagen op rij in.";
+"badge.checkin_streak_100.line" = "Honderd dagen op rij. Legendarisch.";
+"badge.injections_1.title" = "Eerste prik gelogd";
+"badge.injections_1.how" = "Log je eerste injectie.";
+"badge.injections_1.line" = "Gelogd en gedateerd. Zo begint het.";
+"badge.injections_10.title" = "Tien gelogd";
+"badge.injections_10.how" = "Log 10 injecties.";
+"badge.injections_10.line" = "Tien injecties. Je schema heeft een geschiedenis.";
+"badge.injections_25.title" = "Kwarteeuw";
+"badge.injections_25.how" = "Log 25 injecties.";
+"badge.injections_25.line" = "25 gelogd. De kalender is je dankbaar.";
+"badge.injections_52.title" = "Een jaar aan prikken";
+"badge.injections_52.how" = "Log 52 injecties.";
+"badge.injections_52.line" = "52 gelogd. Een jaar aan registraties.";
+"badge.injections_100.title" = "Boekhouder";
+"badge.injections_100.how" = "Log 100 injecties.";
+"badge.injections_100.line" = "100 injecties gelogd. Tot in de puntjes.";
+"badge.on_schedule_weeks_4.title" = "Klokvast";
+"badge.on_schedule_weeks_4.how" = "Log je injectie 4 weken op rij volgens schema.";
+"badge.on_schedule_weeks_4.line" = "Vier weken op schema. Als een klok.";
+"badge.on_schedule_weeks_12.title" = "Metronoom";
+"badge.on_schedule_weeks_12.how" = "Log je injectie 12 weken op rij volgens schema.";
+"badge.on_schedule_weeks_12.line" = "Twaalf weken, precies op tijd.";
+"badge.on_schedule_weeks_26.title" = "Halfjaarritme";
+"badge.on_schedule_weeks_26.how" = "Log je injectie 26 weken op rij volgens schema.";
+"badge.on_schedule_weeks_26.line" = "Zes maanden op schema. Vaste hand.";
+"badge.on_schedule_weeks_52.title" = "Rondje compleet";
+"badge.on_schedule_weeks_52.how" = "Log je injectie 52 weken op rij volgens schema.";
+"badge.on_schedule_weeks_52.line" = "Een vol jaar aan weken op schema.";
+"badge.bloodwork_1.title" = "Eerste panel";
+"badge.bloodwork_1.how" = "Log je eerste bloedpanel.";
+"badge.bloodwork_1.line" = "Eerste panel opgeslagen. Zwart op wit.";
+"badge.bloodwork_3.title" = "Papieren spoor";
+"badge.bloodwork_3.how" = "Log 3 bloedpanels.";
+"badge.bloodwork_3.line" = "Drie panels gelogd. Handig voor je volgende afspraak.";
+"badge.bloodwork_5.title" = "Vaste gast in het lab";
+"badge.bloodwork_5.how" = "Log 5 bloedpanels.";
+"badge.bloodwork_5.line" = "Vijf panels opgeslagen. Het archief groeit.";
+"badge.bloodwork_master.title" = "Bloedwaardenmeester";
+"badge.bloodwork_master.how" = "Log 10 bloedpanels.";
+"badge.bloodwork_master.line" = "Tien panels in het archief. Keurig bijgehouden.";
+"badge.health_synced_7.title" = "In sync";
+"badge.health_synced_7.how" = "Log 7 check-ins met gegevens uit Apple Gezondheid.";
+"badge.health_synced_7.line" = "Je logboek en Apple Gezondheid praten met elkaar.";
+"badge.health_synced_30.title" = "Datastroom";
+"badge.health_synced_30.how" = "Log 30 check-ins met gegevens uit Apple Gezondheid.";
+"badge.health_synced_30.line" = "Dertig gesynchroniseerde check-ins. Moeiteloos bijgehouden.";
+"badge.health_synced_100.title" = "Volledig geïntegreerd";
+"badge.health_synced_100.how" = "Log 100 check-ins met gegevens uit Apple Gezondheid.";
+"badge.health_synced_100.line" = "100 gesynchroniseerde check-ins. Automatisering op z'n best.";
+"badge.adjunct_logs_1.title" = "Stack gestart";
+"badge.adjunct_logs_1.how" = "Log je eerste dosis peptide of bijmiddel.";
+"badge.adjunct_logs_1.line" = "Eerste bijmiddel gelogd.";
+"badge.adjunct_logs_10.title" = "Stacktracker";
+"badge.adjunct_logs_10.how" = "Log 10 doses peptiden of bijmiddelen.";
+"badge.adjunct_logs_10.line" = "Tien bijmiddelen gelogd. Elke dosis verantwoord.";
+"badge.adjunct_logs_50.title" = "Stackarchivaris";
+"badge.adjunct_logs_50.how" = "Log 50 doses peptiden of bijmiddelen.";
+"badge.adjunct_logs_50.line" = "Vijftig bijmiddelen gelogd. Er glipt niets doorheen.";
+"badge.level_5.title" = "Rijzende ster";
+"badge.level_5.how" = "Bereik level 5.";
+"badge.level_5.line" = "Level 5. De klim is begonnen.";
+"badge.level_10.title" = "Meesterklasse";
+"badge.level_10.how" = "Bereik level 10.";
+"badge.level_10.line" = "Level 10. De lucht wordt hier ijl.";
+"badge.level_11.title" = "Top van de ladder";
+"badge.level_11.how" = "Bereik level 11.";
+"badge.level_11.line" = "Maximaal level. Vanaf hier: gewoon consequent blijven.";
+"badge.notes_10.title" = "Veldnotities";
+"badge.notes_10.how" = "Voeg notities toe aan 10 logs.";
+"badge.notes_10.line" = "Tien notities. Context is koning.";
+"badge.notes_50.title" = "Kroniekschrijver";
+"badge.notes_50.how" = "Voeg notities toe aan 50 logs.";
+"badge.notes_50.line" = "Vijftig notities. Je toekomstige ik zegt dankjewel.";
+"badge.testosterone_peak.title" = "Goede dag gelogd";
+"badge.testosterone_peak.how" = "Log een check-in met een zelf ingeschatte Protocol Score van 80 of hoger.";
+"badge.testosterone_peak.line" = "Een topdag, netjes genoteerd.";
+"badge.perfect_week.title" = "Perfecte week";
+"badge.perfect_week.how" = "Check elke dag van een kalenderweek in, van maandag tot en met zondag.";
+"badge.perfect_week.line" = "Zeven uit zeven, van maandag tot zondag.";
+"badge.supplement_adherence.title" = "Supplementenprof";
+"badge.supplement_adherence.how" = "Log je supplementen op 27 van de afgelopen 30 dagen.";
+"badge.supplement_adherence.line" = "Zevenentwintig van de dertig. Ijverig.";
+"badge.injection_precision.title" = "Precisieprikker";
+"badge.injection_precision.how" = "Log 30 dagen lang elke geplande injectie op tijd.";
+"badge.injection_precision.line" = "Dertig dagen, nul gemiste logs.";
+"badge.secret_night_owl.title" = "Nachtuil";
+"badge.secret_night_owl.how" = "Check in tussen middernacht en 4 uur 's nachts.";
+"badge.secret_night_owl.line" = "Het logboek slaapt nooit. (Jij mag best, hoor.)";
+"badge.secret_new_year.title" = "Frisse start";
+"badge.secret_new_year.how" = "Check in op 1 januari.";
+"badge.secret_new_year.line" = "Nieuw jaar, dezelfde goede loggewoonte.";
+"badge.secret_full_year.title" = "Rondje zon";
+"badge.secret_full_year.how" = "Bereik één jaar sinds je eerste check-in.";
+"badge.secret_full_year.line" = "Eén keer rond de zon met Trough.";
+
+/* Level names (11 levels) */
+"level.name.1" = "Beginner";
+"level.name.2" = "Opkomend";
+"level.name.3" = "Betrokken";
+"level.name.4" = "Toegewijd";
+"level.name.5" = "Gedreven";
+"level.name.6" = "Gefocust";
+"level.name.7" = "Gedisciplineerd";
+"level.name.8" = "Gevorderd";
+"level.name.9" = "Expert";
+"level.name.10" = "Meester";
+"level.name.11" = "Opperalfa";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "Vroege vogel";
+"persona.earlyRiser.tagline" = "De meeste check-ins doe je vóór 9 uur 's ochtends.";
+"persona.metronome.title" = "Metronoom";
+"persona.metronome.tagline" = "Je injecties lopen als een klok.";
+"persona.dataNerd.title" = "Datanerd";
+"persona.dataNerd.tagline" = "Je bloedwaarden heb je netjes in het archief.";
+"persona.stackBuilder.title" = "Stackbouwer";
+"persona.stackBuilder.tagline" = "Je houdt meer dan één bijmiddel bij.";
+"persona.synced.title" = "In sync";
+"persona.synced.tagline" = "Apple Gezondheid vult de details voor je in.";
+"persona.steady.title" = "Standvastig";
+"persona.steady.tagline" = "Stilletjes consequent. De beste soort.";
+
+/* Daily challenges */
+"challenge.checkin.title" = "Dagelijkse uitdaging: check in";
+"challenge.checkin.desc" = "Log de check-in van vandaag.";
+"challenge.injection.title" = "Dagelijkse uitdaging: op schema";
+"challenge.injection.desc" = "Je injectie staat gepland — log hem vandaag.";
+"challenge.note.title" = "Dagelijkse uitdaging: notitie toevoegen";
+"challenge.note.desc" = "Voeg vandaag een notitie toe aan een log.";
+"challenge.healthSync.title" = "Dagelijkse uitdaging: sync Apple Gezondheid";
+"challenge.healthSync.desc" = "Check in zodat Apple Gezondheid de gegevens van vandaag kan invullen.";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "1 check-in deze week";
+"notif.recap.checkins.other" = "%d check-ins deze week";
+"notif.recap.injections.one" = "1 injectie gelogd";
+"notif.recap.injections.other" = "%d injecties gelogd";
+"notif.streakRisk.title" = "Je reeks van %d dagen wacht op je";
+"notif.streakRisk.body" = "Een snelle check-in houdt hem in leven.";
+"notif.recap.title" = "Jouw week in Trough";
+
+/* ===== 1.4 achievements, celebrations & share cards (English source) ===== */
+"ach.badge.a11y.locked" = "%@, vergrendeld, %d van %d";
+"ach.badge.a11y.unlocked" = "%@, %@, ontgrendeld";
+"ach.badge.howEarned" = "Zo heb je hem verdiend";
+"ach.badge.secretHint" = "Een geheime badge. Die komt wanneer hij komt — blijf loggen.";
+"ach.badge.share" = "Laat maar zien";
+"ach.badge.unlockedOn" = "Ontgrendeld op %@";
+"ach.badges.count" = "%d van %d";
+"ach.badges.title" = "Badgemuur";
+"ach.cat.adjuncts" = "Aanvullingen";
+"ach.cat.bloodwork" = "Bloedwaarden";
+"ach.cat.checkins" = "Check-ins";
+"ach.cat.health" = "Apple Gezondheid";
+"ach.cat.injections" = "Injectielogboek";
+"ach.cat.levels" = "Levels";
+"ach.cat.notes" = "Notities";
+"ach.cat.secrets" = "Geheimen";
+"ach.cat.specials" = "Specials";
+"ach.cat.streaks" = "Reeksen";
+"ach.celebrate.carryOn" = "Ga zo door";
+"ach.celebrate.kicker.badge" = "BADGE ONTGRENDELD";
+"ach.celebrate.kicker.quest" = "MISSIE VOLBRACHT";
+"ach.celebrate.kicker.rank" = "NIEUWE RANG";
+"ach.celebrate.kicker.streak" = "REEKS";
+"ach.celebrate.moreBadges" = "+%d badges extra";
+"ach.celebrate.quest.line" = "Netjes gedaan. Weer eentje voor het logboek.";
+"ach.celebrate.rank.line" = "Level %d · cover %@. Die staat op elke kaart die je deelt.";
+"ach.celebrate.streak.line.hundred" = "Drie cijfers. Consequent, zwart op wit.";
+"ach.celebrate.streak.line.month" = "Een maand lang geen dag gemist. Dat is een routine.";
+"ach.celebrate.streak.line.week" = "Een hele week check-ins. De gewoonte ontstaat.";
+"ach.celebrate.streak.line.year" = "Een jaar lang elke dag ingecheckt. Legendarisch.";
+"ach.celebrate.streak.title" = "%d dagen op rij";
+"ach.celebrate.totalXP" = "%d XP in totaal";
+"ach.challenge.done" = "Klaar voor vandaag. Top.";
+"ach.challenge.kicker" = "Uitdaging van vandaag";
+"ach.chip.badges" = "%d/%d badges";
+"ach.chip.streak" = "%d dagen op rij";
+"ach.chip.weeks" = "%d wk op tijd";
+"ach.flame.0" = "Koud";
+"ach.flame.1" = "Vonkje";
+"ach.flame.2" = "Aangewakkerd";
+"ach.flame.3" = "Laaiend";
+"ach.flame.4" = "Vuurzee";
+"ach.flame.5" = "Witheet";
+"ach.levelN" = "Level %d";
+"ach.more.app" = "App";
+"ach.more.tracking" = "Bijhouden";
+"ach.passport.kicker" = "Protocolpaspoort";
+"ach.passport.toNext" = "Nog %d XP tot %@";
+"ach.passport.topRank" = "Hoogste rang";
+"ach.persona.kicker" = "Jouw protocolpersona";
+"ach.persona.locked" = "Je logstijl wordt onthuld na %d check-ins (nu %d).";
+"ach.persona.lockedTitle" = "Nog even observeren";
+"ach.quest.done" = "Voltooid";
+"ach.quest.open" = "Nog niet gedaan";
+"ach.quests.empty" = "Morgen komen er nieuwe missies.";
+"ach.quests.title" = "Missies";
+"ach.rank.level" = "LEVEL";
+"ach.share" = "Delen";
+"ach.share.badge.kicker" = "Badge ontgrendeld";
+"ach.share.cta" = "Hoe consequent ben jij?";
+"ach.share.footer" = "Privé protocollogboek · App Store";
+"ach.share.format" = "Formaat";
+"ach.share.format.square" = "Vierkant";
+"ach.share.format.story" = "Story";
+"ach.share.message" = "Hoe consequent ben jij? Ik houd mijn protocol privé bij met Trough — TRT Tracker.";
+"ach.share.privacy" = "Kaarten tonen alleen rangen, reeksen en badges — nooit doses of labwaarden.";
+"ach.share.rank.kicker" = "Mijn protocolrang";
+"ach.share.stat.badges" = "badges";
+"ach.share.stat.best" = "beste reeks";
+"ach.share.stat.dayStreak" = "dagen op rij";
+"ach.share.stat.level" = "level";
+"ach.share.stat.weeks" = "weken op tijd";
+"ach.share.streak.kicker" = "Mijn check-in-reeks";
+"ach.share.streak.line" = "%d dagen op rij ingecheckt";
+"ach.share.title.badge" = "Deel deze badge";
+"ach.share.title.rank" = "Deel je rang";
+"ach.share.title.streak" = "Deel je reeks";
+"ach.streaks.best" = "record %d";
+"ach.streaks.checkin" = "Check-in-reeks";
+"ach.streaks.injection" = "Injecties op tijd";
+"ach.streaks.title" = "Reeksen";
+"ach.toast.quest" = "%@ · +%d XP";
+"ach.unit.day" = "dag";
+"ach.unit.days" = "dagen";
+"ach.unit.week" = "week";
+"ach.unit.weeks" = "weken";
+"ach.xpReward" = "+%d XP";
+"ach.xpTotal" = "%@ XP";
+
+/* ===== 1.4 dashboard ===== */
+"dash.badge.kicker" = "Volgende badge";
+"dash.badge.moreCheckins" = "Nog %d check-in(s)";
+"dash.badge.moreDays" = "Nog %d dag(en)";
+"dash.badge.moreInjections" = "Nog %d injectie(s)";
+"dash.badge.morePanels" = "Nog %d bloedpanel(s)";
+"dash.badge.moreWeeks" = "Nog %d wk op schema";
+"dash.badge.reachLevel" = "Bereik level %d";
+"dash.badge.toGo" = "Nog %d";
+"dash.challenge.done" = "Voltooid — tot morgen";
+"dash.challenge.kicker" = "Dagelijkse uitdaging";
+"dash.hero.a11y" = "Level %1$d, %2$@. Nog %3$d XP tot het volgende level. Check-in-reeks van %4$d dagen. %5$d van %6$d badges.";
+"dash.hero.a11yHint" = "Opent prestaties";
+"dash.hero.lv" = "LV";
+"dash.hero.maxRank" = "Hoogste rang bereikt";
+"dash.hero.onScheduleWeeks" = "%d wk op tijd";
+"dash.hero.rankKicker" = "Rang · %@";
+"dash.hero.streakDays" = "%d dagen op rij";
+"dash.hero.totalXP" = "%d XP";
+"dash.hero.xpToNext" = "Nog %1$d XP tot %2$@";
+"dash.insight.kicker" = "Inzicht";
+"dash.persona.kicker" = "Jouw logstijl";
+"dash.personalBest.sub" = "Je hoogste zelf ingeschatte score deze maand.";
+"dash.pro.kicker" = "Trough Pro";
+"dash.sample.kicker" = "Aan de slag";
+"dash.score.avg7" = "Gem. 7 dagen %.0f";
+"dash.score.noData" = "Nog geen check-ins";
+"dash.score.vsLastWeek" = "vs vorige wk";
+"dash.section.progress" = "Voortgang";
+"dash.section.today" = "Vandaag";
+"dash.section.trends" = "Trends";
+"dash.stats.avgMood" = "Gem. stemming";
+"dash.stats.avgSleep" = "Gem. slaap";
+"dash.today.checkedIn" = "Ingecheckt ✓";
+"dash.today.checkedInSub" = "Tik om het logboek van vandaag te bekijken";
+"dash.today.cycle" = "Cyclus";
+"dash.today.day" = "dag";
+"dash.today.dayWord" = "Dag";
+"dash.today.days" = "dagen";
+"dash.today.daysLate" = "dagen te laat";
+"dash.today.dueToday" = "Vandaag";
+"dash.today.nextShot" = "Volgende injectie";
+"dash.today.xpEarned" = "+%d XP";
+"dash.weekly.sub" = "Je afgelopen 7 dagen in één oogopslag";
+"pk.legend.combined" = "Gecombineerd";
+"pk.legend.estimated" = "Geschatte waarde";
+"pk.legend.peak" = "Piekvenster";
+"pk.legend.trough" = "Richting dieptepunt";
+"pk.legend.variation" = "±20% variatie";
+"pk.toggle.absorption" = "Absorptievertraging";
+"pk.toggle.bands" = "Marges tonen";
+
+/* ===== 1.4 onboarding & paywall — English source; other locales translated separately ===== */
+"onb14.stepOf" = "Stap %1$d van %2$d";
+"onb14.close" = "Sluiten";
+"onb14.reminders.streakNudge" = "Een dagelijks seintje is de makkelijkste manier om je check-in-reeks in leven te houden.";
+
+/* Protocol Passport (first-value moment before the trial prompt) */
+"onb14.passport.kicker" = "Protocolpaspoort";
+"onb14.passport.levelCover" = "Level %1$d · %2$@";
+"onb14.passport.badges" = "Badges";
+"onb14.passport.a11y" = "Level %1$d, %2$@. %3$d van %4$d badges.";
+"onb14.passport.ready" = "Je bent er klaar voor";
+"onb14.passport.title" = "Jouw Protocolpaspoort";
+"onb14.passport.subtitle" = "Elke check-in, elke gelogde injectie en elke reeks levert XP op en zet een badgestempel in je paspoort.";
+"onb14.passport.nextUp" = "Hierna";
+"onb14.passport.firstBadge" = "Je eerste badge is maar één check-in verwijderd";
+"onb14.passport.pillLevels" = "11 levels";
+"onb14.passport.pillBadges" = "%d badges";
+"onb14.passport.pillStreaks" = "Reeksen";
+
+/* Trial & subscription terms (trial length comes from the StoreKit intro offer) */
+"onb14.trialBadge" = "%d dagen gratis proberen";
+"onb14.trialLegal" = "%d dagen gratis proberen, daarna automatische verlenging. Altijd opzegbaar.";
+"onb14.paywall.autoRenew" = "De betaling wordt bij bevestiging via je Apple-account in rekening gebracht. Abonnementen worden automatisch verlengd, tenzij je minimaal 24 uur voor het einde van de huidige periode opzegt. Beheer of annuleer op elk moment in Instellingen.";
+
+// MARK: 1.4 secondary screens
+"bloodwork.entry.lab" = "Lab";
+"bloodwork.addPanel" = "Panel toevoegen";
+"bloodwork.deleteConfirm" = "Dit panel verwijderen?";
+"bloodwork.delete" = "Panel verwijderen";
+"bloodwork.summary.onePanel" = "1 panel gelogd";
+"bloodwork.summary.panels" = "%d panels gelogd";
+"bloodwork.summary.lastDrawn" = "laatst afgenomen %@";
+"bloodwork.summary.kicker" = "Lablogboek";
+"bloodwork.stat.panels" = "Panels";
+"bloodwork.stat.markers" = "Gevolgde markers";
+"bloodwork.stat.photos" = "Labfoto's";
+"bloodwork.markerCount" = "%d markers";
+"bloodwork.doctorNotes" = "Notities van arts";
+"bloodwork.notes" = "Notities";
+"bloodwork.moreMarkers" = "+%d meer";
+"bloodwork.viewPanel" = "Panel bekijken";
+"bloodwork.labPhoto" = "Labfoto bijgevoegd";
+"bloodwork.labPhotoTitle" = "Labfoto";
+"bloodwork.range.within" = "Binnen ref.";
+"bloodwork.range.below" = "Onder ref.";
+"bloodwork.range.above" = "Boven ref.";
+"bloodwork.range.none" = "Geen ref.-waarden";
+"bloodwork.refShort" = "Ref. %@";
+"peptides.categories" = "Categorieën";
+"peptides.cat.glp1" = "GLP-1";
+"peptides.cat.ai" = "AI / ondersteunend";
+"peptides.cat.gh" = "GH-secretagoog";
+"peptides.cat.healing" = "Herstel";
+"peptides.cat.longevity" = "Longevity";
+"peptides.cat.specialty" = "Speciaal";
+"settings.pro.kicker" = "Trough Pro";
+"settings.pro.title" = "Ontgrendel het volledige lab";
+"settings.pro.subtitle" = "Artsenrapporten en alle Pro-functies — volledig op je apparaat.";
+"settings.spreadWord" = "Vertel het verder";
+"settings.rateApp.subtitle" = "Het helpt een kleine, privé-app echt enorm";
+"settings.onDeviceFooter" = "Alles wat je logt blijft op dit apparaat. Geen account, geen cloud.";
+"privacy.hero.title" = "Privé vanaf de basis";
+"privacy.hero.subtitle" = "Geen account. Geen cloud. Je gegevens blijven op dit apparaat.";
+"export.hero.title" = "Jouw gegevens, jouw bestanden";
+"export.hero.subtitle" = "Gemaakt op dit apparaat, alleen gedeeld waar jij dat wilt.";
+
+// MARK: 1.4 checkin-injections
+"checkin14.step1" = "Stap 1 van 2";
+"checkin14.streakDays" = "%d dagen op rij";
+"checkin14.scoreKicker" = "Score";
+"checkin14.scoreHint" = "Wordt live bijgewerkt terwijl je je dag beoordeelt.";
+"checkin14.earnXP" = "Verdien +20 XP";
+"checkin14.updatingToday" = "Vandaag bijwerken";
+"checkin14.step2" = "Stap 2 van 2";
+"checkin14.close" = "Sluiten";
+"checkin14.savedTitle" = "Check-in gelogd!";
+"checkin14.savedSubtitle" = "Weer een dag in de boeken. Mooi consequent.";
+"checkin14.updatedSubtitle" = "De check-in van vandaag is bijgewerkt.";
+"checkin14.xpEarnedA11y" = "20 XP verdiend";
+"checkin14.updatedPill" = "Check-in bijgewerkt";
+"checkin14.streakKicker" = "Check-in-reeks";
+"checkin14.day" = "dag";
+"checkin14.days" = "dagen";
+"checkin14.bestStreak" = "Record: %d dagen";
+"checkin14.todaysQuests" = "Missies van vandaag";
+"checkin14.dailyChallenge" = "Dagelijkse uitdaging";
+"checkin14.questDone" = "Klaar";
+"checkin14.questOpen" = "Nog niet gedaan";
+"checkin14.appleHealth" = "Uit Apple Gezondheid";
+"checkin14.insightKicker" = "Inzicht van vandaag";
+"checkin14.rating.1" = "Heel laag";
+"checkin14.rating.2" = "Laag";
+"checkin14.rating.3" = "Oké";
+"checkin14.rating.4" = "Goed";
+"checkin14.rating.5" = "Top";
+"inj14.streakKicker" = "Reeks op schema";
+"inj14.week" = "week";
+"inj14.weeks" = "weken";
+"inj14.stampsCollected" = "%d stempels verzameld";
+"inj14.nextSite" = "Volgende plek in de rotatie";
+"inj14.fab" = "Loggen";
+"inj14.logTitle" = "Stempellogboek";
+"inj14.tip" = "Tik op een stempel om te bewerken · houd vast voor meer";
+"inj14.stampHint" = "Opent de injectie om te bewerken";
+"inj14.thisWeek" = "Deze week";
+"inj14.weekN" = "Week %d";
+"inj14.onSchedule" = "op schema";
+"inj14.prevMonth" = "Vorige maand";
+"inj14.nextMonth" = "Volgende maand";
+"inj14.stampIt" = "Afstempelen";
+"inj14.site.never" = "Nooit gebruikt";
+"inj14.site.today" = "Vandaag gebruikt";
+"inj14.site.daysAgo" = "%dd geleden";
+"inj14.site.suggested" = "Voorgesteld";
+"inj14.side.left" = "L";
+"inj14.side.right" = "R";
+"inj14.stampA11y" = "Injectiestempel: %@";
+"inj14.stamped" = "Afgestempeld!";
+"inj14.streakWeeksPill" = "%d weken op rij";
+
+// code-only
+"rank.cover.paper" = "Papier";
+"rank.cover.bronze" = "Brons";
+"rank.cover.silver" = "Zilver";
+"rank.cover.gold" = "Goud";
+"rank.cover.platinum" = "Platina";
+"rank.cover.diamond" = "Diamant";
+
+// String(localized:) literal keys (bloodwork/peptides/CSV import screens)
+"Add Results" = "Resultaten toevoegen";
+"Choose File" = "Bestand kiezen";
+"Draw Date" = "Afnamedatum";
+"Included in your exported report for doctor visits." = "Wordt opgenomen in je geëxporteerde rapport voor bezoeken aan je arts.";
+"Log First Dose" = "Eerste dosis loggen";
+"Log adjuncts and peptide doses to\ntrack your stack and spot patterns." = "Log bijmiddelen en peptidedoses om\nje stack te volgen en patronen te herkennen.";
+"Log your first panel to start tracking trends." = "Log je eerste panel om trends te gaan volgen.";
+"No bloodwork recorded" = "Geen bloedwaarden vastgelegd";
+"Notes for Doctor" = "Notities voor arts";
+"Results" = "Resultaten";
+"Select a CSV File" = "Kies een CSV-bestand";
+"Supports .csv, .tsv, and .txt with comma, tab, or semicolon delimiters." = "Ondersteunt .csv, .tsv en .txt met komma, tab of puntkomma als scheidingsteken.";
+"Track Your Stack" = "Volg je stack";
+"Trends" = "Trends";
+
+
+
+/* Daily challenges: supplements & adjuncts */
+"challenge.supplements.title" = "Dagelijkse uitdaging: supplementen loggen";
+"challenge.supplements.desc" = "Vink in de check-in van vandaag de supplementen aan die je hebt genomen.";
+"challenge.peptide.title" = "Dagelijkse uitdaging: bijmiddel loggen";
+"challenge.peptide.desc" = "Log de dosis peptide of bijmiddel van vandaag.";
+
+/* Quests (resolved by questType at display time) */
+"quest.log_checkin.title" = "Check-in van vandaag loggen";
+"quest.log_checkin.desc" = "Voltooi je dagelijkse welzijns-check-in";
+"quest.view_insights.title" = "Inzichten van vandaag bekijken";
+"quest.view_insights.desc" = "Bekijk je protocolinzichten op het Dashboard";
+"quest.daily_login.title" = "Open Trough vandaag";
+"quest.daily_login.desc" = "Open de app en blijf op koers";
+"quest.inject_on_schedule.title" = "Injectie op schema";
+"quest.inject_on_schedule.desc" = "Log je injectie binnen 24 uur na je geplande dag";
+"quest.complete_bloodwork.title" = "Bloedwaarde loggen";
+"quest.complete_bloodwork.desc" = "Houd deze week je labuitslagen bij";
+"quest.hit_streak.title" = "Check-in-reeks van 7 dagen";
+"quest.hit_streak.desc" = "Check deze week elke dag in";
+"quest.supplement_adherence.title" = "Supplementtrouw";
+"quest.supplement_adherence.desc" = "Haal deze week ≥80% supplementtrouw";

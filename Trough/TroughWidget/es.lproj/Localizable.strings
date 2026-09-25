@@ -19,3 +19,28 @@
 /* Live Activity */
 "widget.untilNext" = "para la próxima";
 "widget.injection" = "Inyección";
+
+/* ===== Trough 1.4 ===== */
+
+/* ===== 1.4 widgets ===== */
+"widget.kicker.streak" = "Racha";
+"widget.kicker.checkInStreak" = "Racha de check-ins";
+"widget.checkedInToday" = "Check-in hecho hoy";
+"widget.levelShort" = "Nv%d";
+"widget.nextBadge.displayName" = "Próxima insignia";
+"widget.nextBadge.description" = "La insignia que tienes más cerca y cuánto te falta.";
+"widget.kicker.nextBadge" = "Próxima insignia";
+"widget.badge.toGo" = "Restantes: %d";
+"widget.badge.progress" = "%1$d de %2$d";
+"widget.badge.allEarned" = "Todas las insignias conseguidas";
+"widget.badge.allEarnedSub" = "La colección completa. Mantén viva la racha.";
+"widget.badge.openApp" = "Abre Trough para empezar a coleccionar.";
+"widget.lock.displayName" = "Racha";
+"widget.lock.description" = "Tu racha de check-ins y la próxima inyección, en la pantalla de bloqueo.";
+"widget.lock.streak" = "Racha de %d días";
+"widget.lock.inlineCheckIn" = "Racha de %d días · haz check-in";
+"widget.injLock.displayName" = "Próxima inyección";
+"widget.injLock.description" = "Días hasta tu próxima inyección programada.";
+"widget.injLock.today" = "Hoy";
+"widget.injLock.daysShort" = "%dd";
+"widget.injLock.none" = "Sin inyección programada";

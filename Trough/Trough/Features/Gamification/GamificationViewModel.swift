@@ -355,7 +355,7 @@ final class GamificationViewModel: ObservableObject {
             hapticManager?.questComplete()
             // Daily login / insights are routine — no toast for those.
             if quest.frequency == "weekly" || DailyChallengeKind(questType: quest.questType) != nil {
-                enqueue([.questCompleted(title: quest.title, xp: xp)])
+                enqueue([.questCompleted(title: quest.localizedTitle, xp: xp)])
             }
         }
     }
@@ -605,8 +605,8 @@ final class GamificationViewModel: ObservableObject {
         activeQuests = quests.map { quest in
             QuestDisplayModel(
                 id: quest.questID,
-                title: quest.title,
-                description: quest.questDescription,
+                title: quest.localizedTitle,
+                description: quest.localizedDescription,
                 xpReward: quest.xpReward,
                 isCompleted: quest.isCompleted,
                 dueDate: quest.dueDate,
@@ -624,6 +624,15 @@ final class GamificationViewModel: ObservableObject {
             return BadgeProgressModel(def: def, current: p.current, target: p.target,
                                       unlockedDate: rowsByID[def.id]?.unlockedDate)
         }
+
+        // "Next badge" widget: the nearest non-secret locked badge (highest
+        // fraction, then fewest units left, then least prestigious).
+        let next = badgeProgress
+            .filter { !$0.isUnlocked && !$0.def.isSecret }
+            .min { (-$0.fraction, $0.target - $0.current, $0.def.prestige)
+                 < (-$1.fraction, $1.target - $1.current, $1.def.prestige) }
+        WidgetBridge.updateNextBadge(name: next?.def.title, symbol: next?.def.symbol,
+                                     current: next?.current ?? 0, target: next?.target ?? 0)
 
         // Legacy list: unlocked newest-first, then locked by closest progress
         // (so "next badge to unlock" = the nearest one). Locked secrets are masked.

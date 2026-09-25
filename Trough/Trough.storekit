@@ -42,7 +42,7 @@
           "introductoryOffer" : {
             "internalID" : "400000001",
             "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
+            "subscriptionPeriod" : "P1W"
           },
           "localizations" : [
             {
@@ -71,7 +71,7 @@
           "introductoryOffer" : {
             "internalID" : "400000002",
             "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
+            "subscriptionPeriod" : "P1W"
           },
           "localizations" : [
             {

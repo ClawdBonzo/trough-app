@@ -87,11 +87,12 @@ struct MainTabView: View {
                 .tag(AppTab.more)
         }
         .onOpenURL { url in
-            // Deep links from the widget (trough://checkin) and the Live
-            // Activity (trough://injections). Unknown hosts are ignored.
+            // Deep links from the widgets (trough://checkin, trough://badges)
+            // and the Live Activity (trough://injections). Unknown hosts are ignored.
             switch url.host?.lowercased() {
             case "checkin":    selectedTab = .checkin
             case "injections": selectedTab = .injections
+            case "badges":     selectedTab = .achievements
             default:           break
             }
         }
