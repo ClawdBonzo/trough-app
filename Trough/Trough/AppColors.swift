@@ -1,14 +1,20 @@
 import SwiftUI
 
+/// Legacy colour names. Forwards to the 1.4 design tokens in `TR.Palette`
+/// (DesignSystem/TroughTheme.swift). Prefer `TR.Palette` in new code.
 enum AppColors {
-    static let background    = Color(hex: "#1A1A2E")
-    static let accent        = Color(hex: "#E94560")
-    static let card          = Color(hex: "#16213E")
-    static let secondary     = Color(hex: "#0F3460")
-    /// #FFFFFF — use for primary body text when `.primary` doesn't apply in dark context
-    static let textPrimary   = Color.white
+    /// #1A1A2E
+    static let background    = TR.Palette.background
+    /// #E94560
+    static let accent        = TR.Palette.coral
+    /// #16213E
+    static let card          = TR.Palette.surface
+    /// #0F3460
+    static let secondary     = TR.Palette.deepBlue
+    /// #F4F5FB — use for primary body text when `.primary` doesn't apply in dark context
+    static let textPrimary   = TR.Palette.textPrimary
     /// #A0A0C0 — use for secondary / muted text
-    static let textSecondary = Color(hex: "#A0A0C0")
+    static let textSecondary = TR.Palette.textSecondary
     /// #2E86AB — calm teal-blue for soft trial CTAs (replaces aggressive pink "Unlock")
     static let softCTA       = Color(hex: "#2E86AB")
 }

@@ -614,3 +614,391 @@ final class WidgetSnapshotTests: XCTestCase {
         XCTAssertEqual(s.resolved(at: Date()).daysUntilInjection, 4)
     }
 }
+
+// MARK: - 1.4 Gamification engine
+
+private func makeSuiteDefaults() -> UserDefaults {
+    let name = "trough.tests.\(UUID().uuidString)"
+    let d = UserDefaults(suiteName: name)!
+    d.removePersistentDomain(forName: name)
+    return d
+}
+
+@MainActor
+private func insertConsecutiveCheckins(_ n: Int, endingOn end: Date = Date(), into ctx: ModelContext) {
+    for i in 0..<n {
+        let day = Calendar.current.date(byAdding: .day, value: -i, to: end.startOfDay)!
+        ctx.insert(SDCheckin(userID: UUID(), date: day, createdAt: day.addingTimeInterval(10 * 3600)))
+    }
+    try? ctx.save()
+}
+
+final class BadgeCatalogTests: XCTestCase {
+
+    func testCatalogSizeIdsAndLegacyIDs() {
+        let ids = GamificationCatalog.badges.map(\.id)
+        XCTAssertGreaterThanOrEqual(ids.count, 40)
+        XCTAssertEqual(Set(ids).count, ids.count, "Badge ids must be unique")
+        for legacy in ["testosterone_peak", "consistency_king", "bloodwork_master", "streak_flame_7",
+                       "level_5", "level_10", "perfect_week", "supplement_adherence", "injection_precision"] {
+            XCTAssertNotNil(GamificationCatalog.badge(legacy), "Legacy badge id \(legacy) must stay in the catalog")
+        }
+        XCTAssertEqual(GamificationCatalog.badges.filter(\.isSecret).count, 3)
+    }
+
+    func testLadderTiers() {
+        XCTAssertEqual(GamificationCatalog.badge("checkins_1")?.tier, .bronze)
+        XCTAssertEqual(GamificationCatalog.badge("checkins_7")?.tier, .silver)
+        XCTAssertEqual(GamificationCatalog.badge("checkins_365")?.tier, .platinum)
+        XCTAssertEqual(GamificationCatalog.badge("checkin_streak_100")?.tier, .platinum)
+        XCTAssertEqual(GamificationCatalog.badge("notes_50")?.tier, .silver, "Short ladders top out at gold")
+        XCTAssertEqual(GamificationCatalog.badge("level_11")?.tier, .gold)
+    }
+
+    func testLadderProgressIsClampedAndEarnedAtTarget() {
+        var f = GamificationFacts()
+        f.checkins = 12
+        let seven = GamificationCatalog.badge("checkins_7")!
+        let thirty = GamificationCatalog.badge("checkins_30")!
+        XCTAssertTrue(seven.isEarned(f))
+        XCTAssertEqual(seven.progress(f).current, 7, "Progress clamps at target")
+        XCTAssertFalse(thirty.isEarned(f))
+        XCTAssertEqual(thirty.progress(f).current, 12)
+        XCTAssertEqual(thirty.progress(f).target, 30)
+
+        f.longestCheckinStreak = 30
+        XCTAssertTrue(GamificationCatalog.badge("consistency_king")!.isEarned(f))
+        XCTAssertFalse(GamificationCatalog.badge("checkin_streak_60")!.isEarned(f))
+
+        f.daysSinceFirstCheckin = 364
+        XCTAssertFalse(GamificationCatalog.badge("secret_full_year")!.isEarned(f))
+        f.daysSinceFirstCheckin = 365
+        XCTAssertTrue(GamificationCatalog.badge("secret_full_year")!.isEarned(f))
+    }
+
+    @MainActor
+    func testFactsDeriveStreakAndCountsFromRows() throws {
+        let ctx = ModelContext(try makeInMemoryContainer())
+        insertConsecutiveCheckins(7, into: ctx)
+        // Sample data never counts.
+        ctx.insert(SDCheckin(userID: UUID(), date: Calendar.current.date(byAdding: .day, value: -30, to: Date())!.startOfDay, isSampleData: true))
+        try ctx.save()
+        let f = GamificationFacts.compute(context: ctx, level: 1)
+        XCTAssertEqual(f.checkins, 7)
+        XCTAssertEqual(f.currentCheckinStreak, 7)
+        XCTAssertEqual(f.longestCheckinStreak, 7)
+        XCTAssertTrue(GamificationCatalog.badge("streak_flame_7")!.isEarned(f))
+    }
+
+    func testEveryEngineStringIsInEnglishStrings() throws {
+        let path = try XCTUnwrap(Bundle.main.path(forResource: "Localizable", ofType: "strings",
+                                                  inDirectory: nil, forLocalization: "en"))
+        let table = try XCTUnwrap(NSDictionary(contentsOfFile: path) as? [String: String])
+        let all = GamificationCatalog.englishStrings + EngagementNotifications.englishStrings
+            + [("badge.secret.title", "Secret Badge"), ("badge.secret.how", "Keep logging to discover it.")]
+        for (key, value) in all {
+            XCTAssertEqual(table[key], value, "en.lproj missing or mismatched: \(key)")
+        }
+        for tier in BadgeTier.allCases { XCTAssertNotNil(table[tier.nameKey]) }
+    }
+}
+
+@MainActor
+final class CelebrationQueueTests: XCTestCase {
+
+    func testSequenceOrdersTopBadgeThenLevelThenStreak() {
+        let badges = ["checkins_1", "consistency_king", "checkin_streak_3"].compactMap(GamificationCatalog.badge)
+        let seq = Celebration.sequence(newBadges: badges, levelUp: (level: 3, totalXP: 150), streak: (days: 30, xp: 100))
+        XCTAssertEqual(seq.count, 3)
+        guard case .badge(let top, let also, let xp) = seq[0] else { return XCTFail("badge first") }
+        XCTAssertEqual(top.id, "consistency_king", "Most prestigious badge leads")
+        XCTAssertEqual(also, 2, "+N counts the others")
+        XCTAssertEqual(xp, GamificationCatalog.badgeUnlockXP)
+        guard case .levelUp(let level, _, _) = seq[1] else { return XCTFail("level-up second") }
+        XCTAssertEqual(level, 3)
+        XCTAssertEqual(seq[2], .streak(days: 30, xp: 100))
+        XCTAssertTrue(seq.allSatisfy(\.isFullScreen))
+        XCTAssertFalse(Celebration.questCompleted(title: "x", xp: 20).isFullScreen)
+    }
+
+    func testViewModelQueuesAndAdvancesFIFO() throws {
+        let ctx = ModelContext(try makeInMemoryContainer())
+        insertConsecutiveCheckins(7, into: ctx)
+        let vm = GamificationViewModel(defaults: makeSuiteDefaults())
+        vm.interCelebrationDelay = 0
+        vm.plansNotifications = false
+        vm.mirrorsToastsToToastManager = false
+        vm.setup(context: ctx, userID: UUID())
+
+        guard case .badge(let top, let also, _) = vm.currentCelebration else {
+            return XCTFail("Expected a badge celebration first, got \(String(describing: vm.currentCelebration))")
+        }
+        let unlocked = vm.badgeProgress.filter(\.isUnlocked).map(\.def)
+        XCTAssertGreaterThanOrEqual(unlocked.count, 4)
+        XCTAssertEqual(also, unlocked.count - 1, "One card for the batch, +N for the rest")
+        XCTAssertEqual(top.id, GamificationCatalog.mostPrestigious(unlocked)?.id)
+        XCTAssertTrue(vm.showCelebration)
+        XCTAssertNotNil(vm.pendingCelebration, "Legacy mirror stays populated")
+
+        // Legacy ContentView dismissal path: showCelebration=false, pendingCelebration=nil.
+        vm.showCelebration = false
+        vm.pendingCelebration = nil
+        guard case .levelUp = vm.currentCelebration else {
+            return XCTFail("Badge XP levels up → level-up celebration second")
+        }
+        XCTAssertTrue(vm.showCelebration)
+
+        vm.dismissCurrentCelebration()
+        XCTAssertNil(vm.currentCelebration)
+        XCTAssertFalse(vm.showCelebration)
+
+        // Re-evaluating never re-celebrates.
+        vm.refresh()
+        XCTAssertNil(vm.currentCelebration)
+    }
+}
+
+@MainActor
+final class XPLedgerTests: XCTestCase {
+
+    func testKeyedAwardIsPaidOnce() {
+        let ledger = XPLedger(defaults: makeSuiteDefaults())
+        XCTAssertEqual(ledger.claim(key: "injection:A", amount: 15), 15)
+        XCTAssertEqual(ledger.claim(key: "injection:A", amount: 15), 0)
+        XCTAssertTrue(ledger.hasAwarded("injection:A"))
+        XCTAssertEqual(ledger.claim(key: "injection:B", amount: 15), 15)
+    }
+
+    func testPeptideDailyCap() {
+        let ledger = XPLedger(defaults: makeSuiteDefaults())
+        let now = Date()
+        let grants = (0..<4).map { ledger.claim(key: "peptide:\($0)", amount: 5, cap: .peptide, now: now) }
+        XCTAssertEqual(grants, [5, 5, 5, 0])
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: now)!
+        XCTAssertEqual(ledger.claim(key: "peptide:4", amount: 5, cap: .peptide, now: tomorrow), 5, "Cap resets daily")
+    }
+
+    func testCheckinDailyCap() {
+        let ledger = XPLedger(defaults: makeSuiteDefaults())
+        XCTAssertEqual(ledger.claim(key: "checkin:2026-09-24", amount: 20, cap: .checkin), 20)
+        XCTAssertEqual(ledger.claim(key: "checkin:other", amount: 20, cap: .checkin), 0)
+    }
+
+    func testResavesAndEditsNeverDoublePay() throws {
+        let ctx = ModelContext(try makeInMemoryContainer())
+        let vm = GamificationViewModel(defaults: makeSuiteDefaults())
+        vm.interCelebrationDelay = 0
+        vm.plansNotifications = false
+        vm.mirrorsToastsToToastManager = false
+        vm.setup(context: ctx, userID: UUID())
+
+        let checkin = SDCheckin(userID: UUID())
+        ctx.insert(checkin); try ctx.save()
+        vm.didSaveCheckin(checkin, isNew: true)
+        let afterFirst = vm.currentXP
+        vm.didSaveCheckin(checkin, isNew: true)   // e.g. import/re-save racing
+        vm.didSaveCheckin(checkin, isNew: false)  // edit
+        XCTAssertEqual(vm.currentXP, afterFirst, "Check-in XP is keyed per day")
+
+        let inj = SDInjection(userID: UUID(), compoundName: "Testosterone Cypionate", doseAmountMg: 100, volumeMl: 0.5)
+        ctx.insert(inj); try ctx.save()
+        vm.didSaveInjection(inj, isNew: true, onSchedule: false)
+        let afterInj = vm.currentXP
+        XCTAssertGreaterThanOrEqual(afterInj - afterFirst, 15)
+        vm.didSaveInjection(inj, isNew: true, onSchedule: false)
+        XCTAssertEqual(vm.currentXP, afterInj, "Injection XP is keyed per uuid")
+    }
+}
+
+final class InjectionWeekStreakTests: XCTestCase {
+
+    private func ny() -> Calendar {
+        InjectionWeekStreak.isoCalendar(timeZone: TimeZone(identifier: "America/New_York")!)
+    }
+    private func date(_ y: Int, _ m: Int, _ d: Int, _ h: Int = 9, cal: Calendar) -> Date {
+        cal.date(from: DateComponents(year: y, month: m, day: d, hour: h))!
+    }
+
+    func testWeeklyInjectorBuildsWeeksNotOne() {
+        let cal = ny()
+        let dates = (0..<6).map { cal.date(byAdding: .day, value: -7 * $0, to: date(2026, 9, 21, cal: cal))! }
+        let r = InjectionWeekStreak.compute(dates: dates, now: date(2026, 9, 24, cal: cal), calendar: cal)
+        XCTAssertEqual(r.current, 6)
+        XCTAssertEqual(r.longest, 6)
+    }
+
+    func testAcrossDSTFallBackAndSpringForward() {
+        let cal = ny()
+        // Fall back: Sun 2026-11-01. Mondays either side.
+        let fall = [date(2026, 10, 19, cal: cal), date(2026, 10, 26, cal: cal), date(2026, 11, 2, cal: cal), date(2026, 11, 9, cal: cal)]
+        XCTAssertEqual(InjectionWeekStreak.compute(dates: fall, now: date(2026, 11, 10, cal: cal), calendar: cal).current, 4)
+        // Spring forward: Sun 2026-03-08; late-Sunday injections (23:30) straddle it.
+        let spring = [date(2026, 3, 1, 23, cal: cal), date(2026, 3, 8, 23, cal: cal), date(2026, 3, 15, 23, cal: cal)]
+        XCTAssertEqual(InjectionWeekStreak.compute(dates: spring, now: date(2026, 3, 16, cal: cal), calendar: cal).current, 3)
+    }
+
+    func testAcrossYearBoundaryWithISOWeek53() {
+        let cal = ny()
+        // 2026 has 53 ISO weeks: W52 (Dec 21), W53 (Dec 28–Jan 3), 2027-W01 (Jan 4).
+        let dates = [date(2026, 12, 21, cal: cal), date(2026, 12, 30, cal: cal), date(2027, 1, 6, cal: cal)]
+        let r = InjectionWeekStreak.compute(dates: dates, now: date(2027, 1, 7, cal: cal), calendar: cal)
+        XCTAssertEqual(r.current, 3)
+        XCTAssertEqual(r.longest, 3)
+    }
+
+    func testCurrentWeekNeverBreaksButMissedWeekDoes() {
+        let cal = ny()
+        let dates = [date(2026, 9, 1, cal: cal), date(2026, 9, 8, cal: cal), date(2026, 9, 15, cal: cal)]
+        // Following week, nothing logged yet → still alive.
+        XCTAssertEqual(InjectionWeekStreak.compute(dates: dates, now: date(2026, 9, 25, cal: cal), calendar: cal).current, 3)
+        // A whole week missed → 0; longest kept.
+        let r = InjectionWeekStreak.compute(dates: dates, now: date(2026, 9, 29, cal: cal), calendar: cal)
+        XCTAssertEqual(r.current, 0)
+        XCTAssertEqual(r.longest, 3)
+        // Gap in the middle splits runs.
+        let gapped = [date(2026, 9, 1, cal: cal), date(2026, 9, 8, cal: cal), date(2026, 9, 22, cal: cal)]
+        let g = InjectionWeekStreak.compute(dates: gapped, now: date(2026, 9, 23, cal: cal), calendar: cal)
+        XCTAssertEqual(g.current, 1)
+        XCTAssertEqual(g.longest, 2)
+    }
+
+    func testBiweeklyCadenceSpansWeeks() {
+        let cal = ny()
+        XCTAssertEqual(InjectionWeekStreak.cadenceWeeks(frequencyDays: 7), 1)
+        XCTAssertEqual(InjectionWeekStreak.cadenceWeeks(frequencyDays: 3), 1)
+        XCTAssertEqual(InjectionWeekStreak.cadenceWeeks(frequencyDays: 14), 2)
+        let dates = [date(2026, 9, 1, cal: cal), date(2026, 9, 15, cal: cal), date(2026, 9, 29, cal: cal)]
+        let r = InjectionWeekStreak.compute(dates: dates, now: date(2026, 10, 7, cal: cal), cadenceWeeks: 2, calendar: cal)
+        XCTAssertEqual(r.current, 5, "E14D spans 5 calendar weeks without breaking")
+    }
+}
+
+final class DailyChallengeTests: XCTestCase {
+
+    func testFNV1aKnownVectors() {
+        XCTAssertEqual(DailyChallenge.fnv1a(""), 0xcbf2_9ce4_8422_2325)
+        XCTAssertEqual(DailyChallenge.fnv1a("a"), 0xaf63_dc4c_8601_ec8c)
+    }
+
+    func testPickIsDeterministicAndRespectsFeasibility() {
+        let all = Set(DailyChallengeKind.allCases)
+        let a = DailyChallenge.pick(dayKey: "2026-09-24", feasible: all)
+        for _ in 0..<5 { XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: all), a) }
+        XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: [.checkin]), .checkin)
+        XCTAssertEqual(DailyChallenge.pick(dayKey: "2026-09-24", feasible: []), .checkin)
+        let distinct = Set((1...28).map { DailyChallenge.pick(dayKey: String(format: "2026-02-%02d", $0), feasible: all) })
+        XCTAssertGreaterThan(distinct.count, 1, "Different days rotate challenges")
+        for kind in DailyChallengeKind.allCases {
+            XCTAssertEqual(DailyChallengeKind(questType: kind.questType), kind)
+        }
+    }
+}
+
+final class PersonaTests: XCTestCase {
+
+    private func base() -> GamificationFacts { var f = GamificationFacts(); f.checkins = 20; return f }
+
+    func testNeedsTenCheckins() {
+        var f = GamificationFacts(); f.checkins = 9; f.checkinsBeforeNine = 9
+        XCTAssertNil(Persona.derive(f))
+    }
+
+    func testEachPersona() {
+        var f = base(); f.checkinsBeforeNine = 12
+        XCTAssertEqual(Persona.derive(f), .earlyRiser)
+        f = base(); f.injectionIntervals = 10; f.onScheduleInjectionIntervals = 9
+        XCTAssertEqual(Persona.derive(f), .metronome)
+        f = base(); f.injectionIntervals = 10; f.onScheduleInjectionIntervals = 8
+        XCTAssertEqual(Persona.derive(f), .steady, "89% isn't Metronome")
+        f = base(); f.bloodworkPanels = 3
+        XCTAssertEqual(Persona.derive(f), .dataNerd)
+        f = base(); f.activeAdjuncts = 2
+        XCTAssertEqual(Persona.derive(f), .stackBuilder)
+        f = base(); f.healthSyncedCheckins = 14
+        XCTAssertEqual(Persona.derive(f), .synced)
+        XCTAssertEqual(Persona.derive(base()), .steady)
+    }
+
+    func testPriorityOrder() {
+        var f = base(); f.checkinsBeforeNine = 15; f.bloodworkPanels = 5
+        XCTAssertEqual(Persona.derive(f), .earlyRiser)
+    }
+}
+
+@MainActor
+final class ReviewPromptGateTests: XCTestCase {
+
+    private func gate(_ prev: [Date] = [], badges: Int = 3, checkins: Int = 3,
+                      paywall: Bool = false, screenshot: Bool = false, now: Date = Date()) -> Bool {
+        ReviewPromptService.shouldPrompt(now: now, previousPrompts: prev, unlockedBadgeCount: badges,
+                                         lifetimeCheckins: checkins, paywallShown: paywall, screenshotMode: screenshot)
+    }
+
+    func testGates() {
+        let now = Date()
+        XCTAssertTrue(gate())
+        XCTAssertFalse(gate(badges: 2))
+        XCTAssertFalse(gate(checkins: 2))
+        XCTAssertFalse(gate(paywall: true))
+        XCTAssertFalse(gate(screenshot: true))
+        XCTAssertFalse(gate([now.addingTimeInterval(-119 * 86_400)]), "120-day spacing after the first prompt")
+        XCTAssertTrue(gate([now.addingTimeInterval(-121 * 86_400)]))
+        let three = [-360, -240, -121].map { now.addingTimeInterval(Double($0) * 86_400) }
+        XCTAssertFalse(gate(three), "Max 3 per rolling year")
+    }
+
+    func testLegacyTriggersAreIgnored() {
+        XCTAssertFalse(ReviewPromptService.legacyQualifyingTriggers.contains("levelup"))
+        XCTAssertFalse(ReviewPromptService.legacyQualifyingTriggers.contains("highScore"))
+        XCTAssertTrue(ReviewPromptService.legacyQualifyingTriggers.contains("firstExport"))
+    }
+}
+
+final class EngagementNotificationPlanTests: XCTestCase {
+
+    private let cal = Calendar.current
+    private func at(_ day: Date, _ h: Int, _ m: Int = 0) -> Date {
+        cal.date(bySettingHour: h, minute: m, second: 0, of: day)!
+    }
+
+    func testStreakAtRiskTiming() {
+        let today = cal.startOfDay(for: Date())
+        let yesterday = cal.date(byAdding: .day, value: -1, to: today)!
+        let tomorrow = cal.date(byAdding: .day, value: 1, to: today)!
+
+        // Streak alive, not checked in today, before 20:30 → today 20:30.
+        var p = EngagementNotifications.plan(checkinDays: [yesterday], injectionDates: [], now: at(today, 12))
+        XCTAssertEqual(p.streakFireDate, at(today, 20, 30))
+        XCTAssertEqual(p.streakDays, 1)
+
+        // Checked in today → next risk is tomorrow 20:30.
+        p = EngagementNotifications.plan(checkinDays: [yesterday, today], injectionDates: [], now: at(today, 12))
+        XCTAssertEqual(p.streakFireDate, at(tomorrow, 20, 30))
+        XCTAssertEqual(p.streakDays, 2)
+
+        // After 20:30 without a check-in → nothing (no late nags).
+        p = EngagementNotifications.plan(checkinDays: [yesterday], injectionDates: [], now: at(today, 21))
+        XCTAssertNil(p.streakFireDate)
+
+        // No streak → nothing.
+        p = EngagementNotifications.plan(checkinDays: [], injectionDates: [], now: at(today, 12))
+        XCTAssertNil(p.streakFireDate)
+    }
+
+    func testWeeklyRecapIsSundayEveningWithCounts() {
+        var greg = Calendar(identifier: .gregorian)
+        greg.timeZone = TimeZone(identifier: "America/New_York")!
+        let wed = greg.date(from: DateComponents(year: 2026, month: 9, day: 23, hour: 12))!
+        let mon = greg.startOfDay(for: greg.date(from: DateComponents(year: 2026, month: 9, day: 21))!)
+        let tue = greg.date(byAdding: .day, value: 1, to: mon)!
+        let lastWeek = greg.date(byAdding: .day, value: -3, to: mon)!
+        let p = EngagementNotifications.plan(checkinDays: [mon, tue, greg.startOfDay(for: wed), lastWeek],
+                                             injectionDates: [tue.addingTimeInterval(3600)],
+                                             now: wed, calendar: greg)
+        XCTAssertEqual(p.recapFireDate, greg.date(from: DateComponents(year: 2026, month: 9, day: 27, hour: 18)))
+        XCTAssertEqual(p.recapCheckins, 3)
+        XCTAssertEqual(p.recapInjections, 1)
+        XCTAssertEqual(EngagementNotifications.recapBody(checkins: 5, injections: 1), "5 check-ins this week · 1 injection logged")
+        XCTAssertEqual(EngagementNotifications.recapBody(checkins: 1, injections: 0), "1 check-in this week")
+    }
+}

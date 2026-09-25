@@ -71,6 +71,7 @@ enum QuestService {
     static func seedIfNeeded(context: ModelContext, userID: UUID) {
         purgeExpired(context: context)
         seedDaily(context: context, userID: userID)
+        seedDailyChallenge(context: context, userID: userID)
         seedWeekly(context: context, userID: userID)
         try? context.save()
     }
@@ -118,6 +119,33 @@ enum QuestService {
         }
     }
 
+    /// Seeds today's daily challenge (one per day, +20 XP): a deterministic
+    /// FNV-1a pick over the date among the challenges feasible for this user
+    /// (check in; log an injection when one is due; add a note; sync Apple
+    /// Health). The pick is fixed once seeded for the day.
+    private static func seedDailyChallenge(context: ModelContext, userID: UUID, now: Date = .now) {
+        let questID = dailyChallengeQuestID(now: now)
+        let pred = #Predicate<SDQuest> { $0.questID == questID && $0.userID == userID }
+        var desc = FetchDescriptor<SDQuest>(predicate: pred)
+        desc.fetchLimit = 1
+        guard (try? context.fetch(desc).first) == nil else { return }
+
+        let kind = DailyChallenge.pick(
+            dayKey: XPLedger.dayKey(now),
+            feasible: DailyChallenge.feasibleKinds(context: context, now: now)
+        )
+        context.insert(SDQuest(
+            userID: userID,
+            questID: questID,
+            questType: kind.questType,
+            frequency: "daily",
+            title: kind.title,
+            questDescription: kind.questDescription,
+            xpReward: DailyChallengeKind.xpReward,
+            dueDate: now.endOfDay
+        ))
+    }
+
     private static func seedWeekly(context: ModelContext, userID: UUID) {
         let weekEnd = Date().endOfWeek
         // Use the start-of-week as part of the key so we seed once per week
@@ -161,6 +189,11 @@ enum QuestService {
     /// Returns the questID for today's daily check-in quest (for use in completeQuest).
     static func dailyCheckinQuestID() -> String {
         "\("log_checkin_daily")_\(Date().startOfDay.iso8601String)"
+    }
+
+    /// Returns the questID for today's daily challenge.
+    static func dailyChallengeQuestID(now: Date = .now) -> String {
+        "\(DailyChallengeKind.questPrefix)_\(now.startOfDay.iso8601String)"
     }
 
     /// Returns the questID for today's daily-login quest.

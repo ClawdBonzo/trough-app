@@ -101,6 +101,9 @@ final class PeptidesViewModel: ObservableObject {
     private var modelContext: ModelContext!
     private(set) var userID: UUID = UUID()
 
+    /// Optional view injection; falls back to `GamificationViewModel.active`.
+    weak var gamificationVM: GamificationViewModel?
+
     init() {}
 
     func setup(context: ModelContext, userID: UUID) {
@@ -178,7 +181,10 @@ final class PeptidesViewModel: ObservableObject {
             return
         }
 
+        let isNewLog = editingLog == nil
+        var savedLog: SDPeptideLog?
         if let existing = editingLog {
+            savedLog = existing
             existing.peptideName           = name
             existing.doseMcg               = dose
             existing.doseUnit              = formDoseUnit
@@ -201,12 +207,17 @@ final class PeptidesViewModel: ObservableObject {
                 notes: formNotes.isBlank ? nil : formNotes
             )
             modelContext.insert(log)
+            savedLog = log
         }
 
         do {
             try modelContext.save()
             showingLogSheet = false
             load()
+            // Gamification: 5 XP per NEW log ("peptide:<uuid>"), capped 15/day.
+            if let gvm = gamificationVM ?? GamificationViewModel.active, let savedLog {
+                gvm.didSavePeptideLog(savedLog, isNew: isNewLog)
+            }
         } catch {
             errorMessage = error.localizedDescription
         }

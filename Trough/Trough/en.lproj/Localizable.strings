@@ -715,3 +715,192 @@
 "common.time" = "Time";
 "onboarding.enterPrescribedDose" = "Enter your prescribed dose";
 "onboarding.doseValidation" = "Enter the dose your provider prescribed to continue.";
+
+// MARK: 1.4 gamification
+/* ===== 1.4 gamification (engine) — English source; other locales translated separately ===== */
+
+/* Badge tiers */
+"badge.tier.bronze" = "Bronze";
+"badge.tier.silver" = "Silver";
+"badge.tier.gold" = "Gold";
+"badge.tier.platinum" = "Platinum";
+
+/* Secret badge placeholder */
+"badge.secret.title" = "Secret Badge";
+"badge.secret.how" = "Keep logging to discover it.";
+
+/* Badges: <id>.title / .how (how to earn) / .line (unlocked line) */
+"badge.checkins_1.title" = "First Entry";
+"badge.checkins_1.how" = "Log your first check-in.";
+"badge.checkins_1.line" = "Day one is on the books.";
+"badge.checkins_7.title" = "Week Logged";
+"badge.checkins_7.how" = "Log 7 check-ins.";
+"badge.checkins_7.line" = "Seven entries. A pattern is forming.";
+"badge.checkins_30.title" = "Month of Data";
+"badge.checkins_30.how" = "Log 30 check-ins.";
+"badge.checkins_30.line" = "Thirty entries. Your log has a shape now.";
+"badge.checkins_100.title" = "Centurion";
+"badge.checkins_100.how" = "Log 100 check-ins.";
+"badge.checkins_100.line" = "Triple digits. The notebook is getting thick.";
+"badge.checkins_365.title" = "Year in the Log";
+"badge.checkins_365.how" = "Log 365 check-ins.";
+"badge.checkins_365.line" = "A full year of entries. Remarkable consistency.";
+"badge.checkin_streak_3.title" = "Warming Up";
+"badge.checkin_streak_3.how" = "Check in 3 days in a row.";
+"badge.checkin_streak_3.line" = "Three straight days. Momentum unlocked.";
+"badge.streak_flame_7.title" = "Flame Keeper";
+"badge.streak_flame_7.how" = "Check in 7 days in a row.";
+"badge.streak_flame_7.line" = "A full week without missing a beat.";
+"badge.checkin_streak_14.title" = "Fortnight Focus";
+"badge.checkin_streak_14.how" = "Check in 14 days in a row.";
+"badge.checkin_streak_14.line" = "Two weeks straight. Habit territory.";
+"badge.consistency_king.title" = "Consistency King";
+"badge.consistency_king.how" = "Check in 30 days in a row.";
+"badge.consistency_king.line" = "Thirty days running. Crown earned.";
+"badge.checkin_streak_60.title" = "Unbroken";
+"badge.checkin_streak_60.how" = "Check in 60 days in a row.";
+"badge.checkin_streak_60.line" = "Sixty days. The streak has its own gravity.";
+"badge.checkin_streak_100.title" = "The Hundred";
+"badge.checkin_streak_100.how" = "Check in 100 days in a row.";
+"badge.checkin_streak_100.line" = "One hundred days straight. Legendary.";
+"badge.injections_1.title" = "First Shot Logged";
+"badge.injections_1.how" = "Log your first injection.";
+"badge.injections_1.line" = "Logged and dated. That's how it starts.";
+"badge.injections_10.title" = "Ten Logged";
+"badge.injections_10.how" = "Log 10 injections.";
+"badge.injections_10.line" = "Ten entries. Your schedule has a history.";
+"badge.injections_25.title" = "Quarter Century";
+"badge.injections_25.how" = "Log 25 injections.";
+"badge.injections_25.line" = "25 logged. The calendar thanks you.";
+"badge.injections_52.title" = "Year of Logs";
+"badge.injections_52.how" = "Log 52 injections.";
+"badge.injections_52.line" = "52 logged. A year's worth of records.";
+"badge.injections_100.title" = "Record Keeper";
+"badge.injections_100.how" = "Log 100 injections.";
+"badge.injections_100.line" = "100 injections logged. Meticulous.";
+"badge.on_schedule_weeks_4.title" = "On the Clock";
+"badge.on_schedule_weeks_4.how" = "Log your injection on schedule for 4 weeks in a row.";
+"badge.on_schedule_weeks_4.line" = "Four on-schedule weeks. Clockwork.";
+"badge.on_schedule_weeks_12.title" = "Metronome";
+"badge.on_schedule_weeks_12.how" = "Log your injection on schedule for 12 weeks in a row.";
+"badge.on_schedule_weeks_12.line" = "Twelve weeks, right on time.";
+"badge.on_schedule_weeks_26.title" = "Half-Year Rhythm";
+"badge.on_schedule_weeks_26.how" = "Log your injection on schedule for 26 weeks in a row.";
+"badge.on_schedule_weeks_26.line" = "Six months on schedule. Steady hands.";
+"badge.on_schedule_weeks_52.title" = "Full Rotation";
+"badge.on_schedule_weeks_52.how" = "Log your injection on schedule for 52 weeks in a row.";
+"badge.on_schedule_weeks_52.line" = "A full year of on-schedule weeks.";
+"badge.bloodwork_1.title" = "First Panel";
+"badge.bloodwork_1.how" = "Log your first bloodwork panel.";
+"badge.bloodwork_1.line" = "First panel filed. On the record.";
+"badge.bloodwork_3.title" = "Paper Trail";
+"badge.bloodwork_3.how" = "Log 3 bloodwork panels.";
+"badge.bloodwork_3.line" = "Three panels logged. Handy for your next appointment.";
+"badge.bloodwork_5.title" = "Lab Regular";
+"badge.bloodwork_5.how" = "Log 5 bloodwork panels.";
+"badge.bloodwork_5.line" = "Five panels filed. The archive grows.";
+"badge.bloodwork_master.title" = "Bloodwork Master";
+"badge.bloodwork_master.how" = "Log 10 bloodwork panels.";
+"badge.bloodwork_master.line" = "Ten panels on file. Impeccable records.";
+"badge.health_synced_7.title" = "Synced Up";
+"badge.health_synced_7.how" = "Log 7 check-ins with Apple Health data.";
+"badge.health_synced_7.line" = "Your log and Apple Health are talking.";
+"badge.health_synced_30.title" = "Data Stream";
+"badge.health_synced_30.how" = "Log 30 check-ins with Apple Health data.";
+"badge.health_synced_30.line" = "Thirty synced check-ins. Effortless records.";
+"badge.health_synced_100.title" = "Fully Integrated";
+"badge.health_synced_100.how" = "Log 100 check-ins with Apple Health data.";
+"badge.health_synced_100.line" = "100 synced check-ins. Automation at its finest.";
+"badge.adjunct_logs_1.title" = "Stack Started";
+"badge.adjunct_logs_1.how" = "Log your first peptide or adjunct dose.";
+"badge.adjunct_logs_1.line" = "First adjunct entry logged.";
+"badge.adjunct_logs_10.title" = "Stack Tracker";
+"badge.adjunct_logs_10.how" = "Log 10 peptide or adjunct doses.";
+"badge.adjunct_logs_10.line" = "Ten adjunct logs. Every entry accounted for.";
+"badge.adjunct_logs_50.title" = "Stack Archivist";
+"badge.adjunct_logs_50.how" = "Log 50 peptide or adjunct doses.";
+"badge.adjunct_logs_50.line" = "Fifty adjunct logs. Nothing slips through.";
+"badge.level_5.title" = "Rising Star";
+"badge.level_5.how" = "Reach Level 5.";
+"badge.level_5.line" = "Level 5. The climb is on.";
+"badge.level_10.title" = "Master Tier";
+"badge.level_10.how" = "Reach Level 10.";
+"badge.level_10.line" = "Level 10. Rarefied air.";
+"badge.level_11.title" = "Top of the Ladder";
+"badge.level_11.how" = "Reach Level 11.";
+"badge.level_11.line" = "Max level. Nowhere to go but consistent.";
+"badge.notes_10.title" = "Field Notes";
+"badge.notes_10.how" = "Add notes to 10 logs.";
+"badge.notes_10.line" = "Ten notes. Context is king.";
+"badge.notes_50.title" = "Chronicler";
+"badge.notes_50.how" = "Add notes to 50 logs.";
+"badge.notes_50.line" = "Fifty notes. Your future self says thanks.";
+"badge.testosterone_peak.title" = "Good Day Logged";
+"badge.testosterone_peak.how" = "Log a check-in with a self-rated Protocol Score of 80 or higher.";
+"badge.testosterone_peak.line" = "A great day, noted for the record.";
+"badge.perfect_week.title" = "Perfect Week";
+"badge.perfect_week.how" = "Check in every day of a calendar week, Monday to Sunday.";
+"badge.perfect_week.line" = "Seven for seven, Monday to Sunday.";
+"badge.supplement_adherence.title" = "Supplement Scholar";
+"badge.supplement_adherence.how" = "Log your supplements on 27 of the last 30 days.";
+"badge.supplement_adherence.line" = "Twenty-seven of thirty. Diligent.";
+"badge.injection_precision.title" = "Precision Injector";
+"badge.injection_precision.how" = "Log every scheduled injection on time for 30 days.";
+"badge.injection_precision.line" = "Thirty days, zero missed entries.";
+"badge.secret_night_owl.title" = "Night Owl";
+"badge.secret_night_owl.how" = "Check in between midnight and 4 a.m.";
+"badge.secret_night_owl.line" = "The log never sleeps. (You should, though.)";
+"badge.secret_new_year.title" = "Fresh Start";
+"badge.secret_new_year.how" = "Check in on January 1.";
+"badge.secret_new_year.line" = "New year, same great logging habit.";
+"badge.secret_full_year.title" = "Full Orbit";
+"badge.secret_full_year.how" = "Reach one year since your first check-in.";
+"badge.secret_full_year.line" = "One trip around the sun with Trough.";
+
+/* Level names (11 levels) */
+"level.name.1" = "Beginner";
+"level.name.2" = "Rising";
+"level.name.3" = "Committed";
+"level.name.4" = "Dedicated";
+"level.name.5" = "Driven";
+"level.name.6" = "Focused";
+"level.name.7" = "Disciplined";
+"level.name.8" = "Advanced";
+"level.name.9" = "Expert";
+"level.name.10" = "Master";
+"level.name.11" = "Optimized Alpha";
+
+/* Personas (derived from logging behavior) */
+"persona.earlyRiser.title" = "Early Riser";
+"persona.earlyRiser.tagline" = "Most of your check-ins land before 9 a.m.";
+"persona.metronome.title" = "Metronome";
+"persona.metronome.tagline" = "Your injections keep perfect time.";
+"persona.dataNerd.title" = "Data Nerd";
+"persona.dataNerd.tagline" = "You keep your bloodwork on file.";
+"persona.stackBuilder.title" = "Stack Builder";
+"persona.stackBuilder.tagline" = "You track more than one adjunct.";
+"persona.synced.title" = "Synced";
+"persona.synced.tagline" = "Apple Health fills in the details for you.";
+"persona.steady.title" = "Steady";
+"persona.steady.tagline" = "Quietly consistent. The best kind.";
+
+/* Daily challenges */
+"challenge.checkin.title" = "Daily Challenge: Check In";
+"challenge.checkin.desc" = "Log today's check-in.";
+"challenge.injection.title" = "Daily Challenge: On Schedule";
+"challenge.injection.desc" = "Your injection is due — log it today.";
+"challenge.note.title" = "Daily Challenge: Add a Note";
+"challenge.note.desc" = "Add a note to any log today.";
+"challenge.healthSync.title" = "Daily Challenge: Sync Apple Health";
+"challenge.healthSync.desc" = "Check in so Apple Health can fill in today's data.";
+
+/* Engagement notifications (local only; counts only) */
+"notif.recap.checkins.one" = "1 check-in this week";
+"notif.recap.checkins.other" = "%d check-ins this week";
+"notif.recap.injections.one" = "1 injection logged";
+"notif.recap.injections.other" = "%d injections logged";
+"notif.streakRisk.title" = "Your %d-day streak is waiting";
+"notif.streakRisk.body" = "A quick check-in keeps it going.";
+"notif.recap.title" = "Your week in Trough";
+/* ===== end 1.4 gamification (engine) ===== */
+

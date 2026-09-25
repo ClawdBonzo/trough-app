@@ -258,20 +258,16 @@ final class DailyCheckinViewModel: ObservableObject {
             ReviewPromptService.shared.incrementLifetimeCheckinCount()
         }
 
-        // Gamification: streak + quests are idempotent and run on every save,
-        // but XP is awarded for NEW check-ins only — re-saving today's entry
-        // must not re-award.
-        if let gvm = gamificationVM {
-            if isNewCheckin {
-                gvm.awardXP(20, reason: "daily_checkin")
+        // Gamification: one batch per save so celebrations queue in order
+        // (top badge "+N" → level-up → streak milestone). XP is keyed per day
+        // ("checkin:<yyyy-mm-dd>") and only paid for NEW check-ins, so
+        // re-saving today's entry can never re-award. Badges (incl. the
+        // legacy Protocol Score / supplement ones) are evaluated inside.
+        if let gvm = gamificationVM ?? GamificationViewModel.active, let checkin = savedCheckin {
+            gvm.performBatch {
+                gvm.didSaveCheckin(checkin, isNew: isNewCheckin)
+                completeSupplementQuestIfEarned(gvm)
             }
-            gvm.updateStreak(type: "checkin")
-            gvm.completeQuest(QuestService.dailyCheckinQuestID())
-            completeSupplementQuestIfEarned(gvm)
-            // Check Protocol Score badge
-            BadgeService.checkProtocolScoreBadge(score: currentScore, context: ctx, userID: userID)
-            // 30-day supplement adherence badge (90%+ compliance)
-            BadgeService.checkSupplementAdherenceBadge(context: ctx, userID: userID)
         }
 
         if let kg = bwKg {
@@ -289,10 +285,9 @@ final class DailyCheckinViewModel: ObservableObject {
                 let count = ctx.recentCheckins.count
                 Task { await WeeklyReportService.scheduleStreakDay7Notification(checkinCount: count) }
             }
-            // Schedule (or push forward) the streak-at-risk reminder for tomorrow evening.
-            let streakNow = ctx.streak
-            Task { await WeeklyReportService.scheduleStreakAtRiskNotification(currentStreak: streakNow) }
         }
+        // Streak-at-risk (20:30) + Sunday recap are re-planned by
+        // GamificationViewModel.didSaveCheckin via EngagementNotifications.
 
         navigationPath = [.binaryTaps, .completion]
     }

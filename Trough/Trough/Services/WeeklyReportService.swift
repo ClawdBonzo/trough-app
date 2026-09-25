@@ -256,32 +256,23 @@ enum WeeklyReportService {
         try? await center.add(request)
     }
 
-    /// Schedules a one-shot evening reminder warning that the user's active check-in
-    /// streak will break if they don't log tomorrow. Uses a stable identifier so each
-    /// new check-in pushes it one day forward (self-replacing). Only streaks of 2+ days
-    /// qualify, so brand-new users aren't nagged.
+    /// Legacy entry point (pre-1.4). The streak-at-risk reminder is now owned
+    /// by `EngagementNotifications` (fixed id "streak_at_risk", 20:30 on the
+    /// next day without a check-in). This shim assumes the caller just checked
+    /// in, so the reminder moves to tomorrow 20:30. Prefer
+    /// `EngagementNotifications.replan(context:)`, which also plans the
+    /// Sunday recap.
     static func scheduleStreakAtRiskNotification(currentStreak: Int) async {
-        let center = UNUserNotificationCenter.current()
-        let id = "streak_at_risk"
-        // Always clear the previously scheduled reminder first.
-        center.removePendingNotificationRequests(withIdentifiers: [id])
-        guard currentStreak >= 2 else { return }
-
-        let settings = await center.notificationSettings()
-        guard settings.authorizationStatus == .authorized else { return }
-
+        var plan = EngagementNotifications.Plan()
         let cal = Calendar.current
-        guard let tomorrow = cal.date(byAdding: .day, value: 1, to: Date()) else { return }
-        var comps = cal.dateComponents([.year, .month, .day], from: tomorrow)
-        comps.hour = 20
-        comps.minute = 0
-
-        let content = UNMutableNotificationContent()
-        content.title = "Keep your \(currentStreak)-day streak alive 🔥"
-        content.body = "You haven't checked in yet today. A quick check-in keeps your streak going."
-        content.sound = .default
-
-        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-        try? await center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+        if currentStreak > 0,
+           let tomorrow = cal.date(byAdding: .day, value: 1, to: Date().startOfDay),
+           let fire = cal.date(bySettingHour: EngagementNotifications.streakHour,
+                               minute: EngagementNotifications.streakMinute, second: 0, of: tomorrow) {
+            plan.streakFireDate = fire
+            plan.streakDays = currentStreak
+        }
+        // Only touch the streak reminder; leave any planned recap alone.
+        await EngagementNotifications.apply(plan, includeRecap: false)
     }
 }

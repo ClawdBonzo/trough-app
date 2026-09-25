@@ -130,6 +130,7 @@ final class InjectionsViewModel: ObservableObject {
             isOnSchedule = abs(formDate.timeIntervalSince(due)) <= 86_400
         }
 
+        var savedInjection: SDInjection?
         if let existing = editingInjection {
             existing.compoundName  = formCompoundName
             existing.doseAmountMg  = dose
@@ -138,6 +139,7 @@ final class InjectionsViewModel: ObservableObject {
             existing.injectionSite = formSite.isBlank ? nil : formSite
             existing.notes         = formNotes.isBlank ? nil : formNotes
             existing.updatedAt     = .now
+            savedInjection = existing
         } else {
             let inj = SDInjection(
                 userID: userID,
@@ -149,6 +151,7 @@ final class InjectionsViewModel: ObservableObject {
                 notes: formNotes.isBlank ? nil : formNotes
             )
             modelContext.insert(inj)
+            savedInjection = inj
         }
 
         do {
@@ -156,21 +159,11 @@ final class InjectionsViewModel: ObservableObject {
             showingLogSheet = false
             load()
 
-            // Gamification: only award XP for new injections (not edits)
-            if isNewInjection, let gvm = gamificationVM {
-                gvm.awardXP(15, reason: "injection_logged")
-                gvm.updateStreak(type: "injection")
-                if isOnSchedule {
-                    gvm.completeQuest(QuestService.weeklyInjectionQuestID())
-                }
-                // Precision Injector badge: no missed injections for 30 days
-                if let proto = matchingProtocol {
-                    BadgeService.checkInjectionPrecisionBadge(
-                        context: modelContext,
-                        userID: userID,
-                        frequencyDays: proto.frequencyDays
-                    )
-                }
+            // Gamification: XP keyed per injection id ("injection:<uuid>") so
+            // edits never re-pay; the injection streak counts on-schedule
+            // weeks; badges (incl. Precision Injector) evaluate in the batch.
+            if let gvm = gamificationVM ?? GamificationViewModel.active, let inj = savedInjection {
+                gvm.didSaveInjection(inj, isNew: isNewInjection, onSchedule: isOnSchedule)
             }
         } catch {
             errorMessage = error.localizedDescription

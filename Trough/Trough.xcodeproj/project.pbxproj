@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DSGN0001BLD /* TroughTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0001REF /* TroughTheme.swift */; };
+		DSGN0002BLD /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0002REF /* Surfaces.swift */; };
+		DSGN0003BLD /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0003REF /* Controls.swift */; };
+		DSGN0004BLD /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0004REF /* Motion.swift */; };
+		DSGN0005BLD /* Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0005REF /* Confetti.swift */; };
+		DSGN0006BLD /* BadgeMedallion.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0006REF /* BadgeMedallion.swift */; };
+		DSGN0007BLD /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0007REF /* Toast.swift */; };
+		DSGN0008BLD /* GamificationCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0008REF /* GamificationCatalog.swift */; };
+		DSGN0009BLD /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0009REF /* GamificationEngine.swift */; };
+		DSGN0010BLD /* EngagementNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DSGN0010REF /* EngagementNotifications.swift */; };
 		097B4FD38F0E09972584D215 /* DiagnosticQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D004F1884913C720665C101 /* DiagnosticQuizView.swift */; };
 		0F7B1589E66B430DA6DE8191 /* InjectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DBDF7A47914F68ABCA540B /* InjectionsViewModel.swift */; };
 		1335C149E10345BAA59A8009 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8F16387807402AA8FF9181 /* AppColors.swift */; };
@@ -114,6 +124,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DSGN0001REF /* TroughTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TroughTheme.swift; sourceTree = "<group>"; };
+		DSGN0002REF /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfaces.swift; sourceTree = "<group>"; };
+		DSGN0003REF /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
+		DSGN0004REF /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
+		DSGN0005REF /* Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confetti.swift; sourceTree = "<group>"; };
+		DSGN0006REF /* BadgeMedallion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeMedallion.swift; sourceTree = "<group>"; };
+		DSGN0007REF /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		DSGN0008REF /* GamificationCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationCatalog.swift; sourceTree = "<group>"; };
+		DSGN0009REF /* GamificationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationEngine.swift; sourceTree = "<group>"; };
+		DSGN0010REF /* EngagementNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementNotifications.swift; sourceTree = "<group>"; };
 		04F1EB29D3651A04823A2272 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13AE4CE6503E4CBFB51DD253 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		1E9B39D5A6C4328CA98B8AF8 /* LiveActivityService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivityService.swift; sourceTree = "<group>"; };
@@ -249,6 +269,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DSGNGROUP000 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				DSGN0001REF /* TroughTheme.swift */,
+				DSGN0002REF /* Surfaces.swift */,
+				DSGN0003REF /* Controls.swift */,
+				DSGN0004REF /* Motion.swift */,
+				DSGN0005REF /* Confetti.swift */,
+				DSGN0006REF /* BadgeMedallion.swift */,
+				DSGN0007REF /* Toast.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
 		0B6AD58F2B427BFE109E9D1C /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +310,7 @@
 				QSVC0001 /* QuestService.swift */,
 				BSVC0001 /* BadgeService.swift */,
 				RPSV0001 /* ReviewPromptService.swift */,
+				DSGN0010REF /* EngagementNotifications.swift */,
 				8A50C939D559912F246C0817 /* WidgetBridge.swift */,
 				1E9B39D5A6C4328CA98B8AF8 /* LiveActivityService.swift */,
 			);
@@ -391,6 +426,7 @@
 				77403EEC9DAE42BAB03773FB /* TroughApp.swift */,
 				24AFCC3A86424879AC535649 /* ContentView.swift */,
 				2B8F16387807402AA8FF9181 /* AppColors.swift */,
+				DSGNGROUP000 /* DesignSystem */,
 				F0242BF1CC804F9D95D006A8 /* Assets.xcassets */,
 				577D31A90D4A49AF8077E3ED /* Info.plist */,
 				PRIV0011223344556677889900 /* PrivacyInfo.xcprivacy */,
@@ -508,6 +544,8 @@
 			isa = PBXGroup;
 			children = (
 				GMVM0001 /* GamificationViewModel.swift */,
+				DSGN0008REF /* GamificationCatalog.swift */,
+				DSGN0009REF /* GamificationEngine.swift */,
 				GMHV0001 /* GamificationHomeView.swift */,
 				LUVC0001 /* LevelUpCelebrationView.swift */,
 				QLST0001 /* QuestListView.swift */,
@@ -733,6 +771,16 @@
 				BCLV0002 /* BadgeCollectionView.swift in Sources */,
 				QSVC0002 /* QuestService.swift in Sources */,
 				BSVC0002 /* BadgeService.swift in Sources */,
+				DSGN0001BLD /* TroughTheme.swift in Sources */,
+				DSGN0002BLD /* Surfaces.swift in Sources */,
+				DSGN0003BLD /* Controls.swift in Sources */,
+				DSGN0004BLD /* Motion.swift in Sources */,
+				DSGN0005BLD /* Confetti.swift in Sources */,
+				DSGN0006BLD /* BadgeMedallion.swift in Sources */,
+				DSGN0007BLD /* Toast.swift in Sources */,
+				DSGN0008BLD /* GamificationCatalog.swift in Sources */,
+				DSGN0009BLD /* GamificationEngine.swift in Sources */,
+				DSGN0010BLD /* EngagementNotifications.swift in Sources */,
 				RPSV0002 /* ReviewPromptService.swift in Sources */,
 				5C69331B249D8D106F95A842 /* WidgetSharedData.swift in Sources */,
 				B5C1243E21948B32084E8679 /* WidgetBridge.swift in Sources */,
@@ -1045,7 +1093,7 @@
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
+				minimumVersion = 5.91.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

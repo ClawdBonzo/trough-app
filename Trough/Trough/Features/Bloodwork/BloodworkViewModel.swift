@@ -287,13 +287,10 @@ final class BloodworkViewModel: ObservableObject {
             showingEntrySheet = false
             load()
 
-            // Gamification: only award XP for new bloodwork results (not edits)
-            if isNewResult {
-                BadgeService.checkBloodworkMasterBadge(context: modelContext, userID: userID)
-                if let gvm = gamificationVM {
-                    gvm.awardXP(30, reason: "bloodwork_logged")
-                    gvm.completeQuest(QuestService.weeklyBloodworkQuestID())
-                }
+            // Gamification: XP keyed per panel id ("bloodwork:<uuid>") — edits
+            // never re-pay. Counts only; lab values are never scored.
+            if let gvm = gamificationVM ?? GamificationViewModel.active {
+                gvm.didSaveBloodwork(bw, isNew: isNewResult)
             }
         } catch {
             errorMessage = error.localizedDescription
