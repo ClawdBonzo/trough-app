@@ -198,9 +198,9 @@ struct MainTabView: View {
             case "injections": selectedTab = .injections
             case "achievements": selectedTab = .achievements
             case "more": selectedTab = .more
-            case "bloodwork": selectedTab = .more; morePath = [.bloodwork]
-            case "peptides": selectedTab = .more; morePath = [.peptides]
-            case "settings": selectedTab = .more; morePath = [.settings]
+            case "bloodwork": showcaseMore(.bloodwork)
+            case "peptides": showcaseMore(.peptides)
+            case "settings": showcaseMore(.settings)
             default: break
             }
         }
@@ -210,6 +210,16 @@ struct MainTabView: View {
                 try? await Task.sleep(for: .milliseconds(600))
                 debugCelebration = celebration
             }
+        }
+    }
+
+    /// The More tab's NavigationStack is built lazily on first selection, and a
+    /// path set in the same pass is dropped — push after the stack exists.
+    private func showcaseMore(_ route: MoreRoute) {
+        selectedTab = .more
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(350))
+            morePath = [route]
         }
     }
     #endif

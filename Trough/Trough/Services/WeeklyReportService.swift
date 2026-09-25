@@ -243,8 +243,8 @@ enum WeeklyReportService {
         guard settings.authorizationStatus == .authorized else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "You're on a roll"
-        content.body = "You've logged \(checkinCount) check-ins — see your protocol score."
+        content.title = gLoc("notif.day7.title", "You're on a roll")
+        content.body = String(format: gLoc("notif.day7.body", "You've logged %d check-ins — see your protocol score."), checkinCount)
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)

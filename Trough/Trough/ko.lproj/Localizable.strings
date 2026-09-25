@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "이번 주 매일 체크인하세요";
 "quest.supplement_adherence.title" = "보충제 꾸준히 먹기";
 "quest.supplement_adherence.desc" = "이번 주 보충제 복용률 80% 이상 달성";
+"notif.day7.title" = "좋은 흐름이에요";
+"notif.day7.body" = "체크인을 %d번 기록했어요. 프로토콜 점수를 확인해 보세요.";

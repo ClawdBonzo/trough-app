@@ -51,7 +51,9 @@ struct SettingsView: View {
     @AppStorage("reminderEnabled") private var checkinReminderEnabled = false
 
     var body: some View {
-        NavigationStack {
+        // Always pushed onto a parent NavigationStack (More tab / Dashboard);
+        // a nested stack here swallows value-based pushes.
+        Group {
             ZStack {
                 TRBackground()
                 ScrollView {
@@ -400,6 +402,7 @@ struct SettingsView: View {
     }
 
     private func rescheduleReminders() {
+        guard !WidgetBridge.isSuppressed else { return }   // demo store: never touch real reminders
         // Clear only this category's pending requests, then reschedule once the
         // removal has been issued (avoids racing the freshly added requests).
         removePendingReminders(
@@ -502,6 +505,7 @@ struct SettingsView: View {
     // MARK: Injection-day reminders
 
     private func rescheduleInjectionReminders() {
+        guard !WidgetBridge.isSuppressed else { return }   // demo store: never touch real reminders
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
         removePendingReminders(prefixes: [ReminderID.injectionPrefix]) {
             scheduleInjectionReminders()

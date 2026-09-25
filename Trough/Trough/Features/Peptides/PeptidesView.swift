@@ -9,7 +9,9 @@ struct PeptidesView: View {
     @StateObject private var vm = PeptidesViewModel()
 
     var body: some View {
-        NavigationStack {
+        // Always pushed onto a parent NavigationStack (More tab / Dashboard);
+        // a nested stack here swallows value-based pushes.
+        Group {
             ZStack(alignment: .bottomTrailing) {
                 TRBackground()
 

@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Checke diese Woche jeden Tag ein";
 "quest.supplement_adherence.title" = "Supplement-Treue";
 "quest.supplement_adherence.desc" = "Erreiche diese Woche ≥80 % Supplement-Einnahme";
+"notif.day7.title" = "Du bist voll dabei";
+"notif.day7.body" = "Du hast %d Check-ins erfasst – sieh dir deinen Protokoll-Score an.";

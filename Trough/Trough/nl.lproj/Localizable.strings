@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Check deze week elke dag in";
 "quest.supplement_adherence.title" = "Supplementtrouw";
 "quest.supplement_adherence.desc" = "Haal deze week ≥80% supplementtrouw";
+"notif.day7.title" = "Je bent lekker bezig";
+"notif.day7.body" = "Je hebt %d check-ins gelogd — bekijk je protocolscore.";

@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Faites votre check-in chaque jour cette semaine";
 "quest.supplement_adherence.title" = "Régularité des compléments";
 "quest.supplement_adherence.desc" = "Atteignez ≥80 % d’observance des compléments cette semaine";
+"notif.day7.title" = "Vous êtes lancé";
+"notif.day7.body" = "Vous avez enregistré %d check-ins — découvrez votre score de protocole.";

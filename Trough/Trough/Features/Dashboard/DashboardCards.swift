@@ -33,6 +33,8 @@ struct DashCardHeader<Trailing: View>: View {
                 .background(tint.opacity(0.16), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
                 .accessibilityHidden(true)
             TRKicker(Text(title), color: TR.Palette.textSecondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
                 .accessibilityAddTraits(.isHeader)
             Spacer(minLength: 6)
             trailing()

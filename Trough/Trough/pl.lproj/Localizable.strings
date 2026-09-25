@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Rób check-in codziennie w tym tygodniu";
 "quest.supplement_adherence.title" = "Regularność suplementów";
 "quest.supplement_adherence.desc" = "Osiągnij ≥80% regularności suplementów w tym tygodniu";
+"notif.day7.title" = "Świetnie ci idzie";
+"notif.day7.body" = "Masz już %d check-inów — zobacz swój wynik protokołu.";

@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "今週は毎日チェックイン";
 "quest.supplement_adherence.title" = "サプリの継続";
 "quest.supplement_adherence.desc" = "今週のサプリ服用率80%以上を達成";
+"notif.day7.title" = "いい調子です";
+"notif.day7.body" = "チェックインを%d回記録しました。プロトコルスコアを確認しましょう。";

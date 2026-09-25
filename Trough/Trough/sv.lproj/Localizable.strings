@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Checka in varje dag den här veckan";
 "quest.supplement_adherence.title" = "Tillskottsföljsamhet";
 "quest.supplement_adherence.desc" = "Nå ≥80 % följsamhet för kosttillskott den här veckan";
+"notif.day7.title" = "Du är på gång";
+"notif.day7.body" = "Du har loggat %d incheckningar – se din protokollpoäng.";

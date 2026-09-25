@@ -1211,3 +1211,5 @@
 "quest.hit_streak.desc" = "Fai il check-in ogni giorno questa settimana";
 "quest.supplement_adherence.title" = "Costanza con gli integratori";
 "quest.supplement_adherence.desc" = "Raggiungi ≥80% di aderenza agli integratori questa settimana";
+"notif.day7.title" = "Sei in serie positiva";
+"notif.day7.body" = "Hai registrato %d check-in: guarda il tuo punteggio del protocollo.";

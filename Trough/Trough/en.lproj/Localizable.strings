@@ -1216,3 +1216,5 @@
 "quest.hit_streak.desc" = "Check in every day this week";
 "quest.supplement_adherence.title" = "Supplement Adherence";
 "quest.supplement_adherence.desc" = "Hit ≥80% supplement compliance this week";
+"notif.day7.title" = "You're on a roll";
+"notif.day7.body" = "You've logged %d check-ins — see your protocol score.";

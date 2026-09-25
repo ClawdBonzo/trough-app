@@ -15,7 +15,9 @@ struct BloodworkView: View {
     @State private var pendingDelete: SDBloodwork? = nil
 
     var body: some View {
-        NavigationStack {
+        // Always pushed onto a parent NavigationStack (More tab / Dashboard);
+        // a nested stack here swallows value-based pushes.
+        Group {
             ZStack {
                 TRBackground()
 
