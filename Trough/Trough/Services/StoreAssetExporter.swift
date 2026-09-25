@@ -185,13 +185,14 @@ private struct StoreRankCard: View {
                     }
                 }
                 .frame(height: 9)
-                Text(verbatim: "\(xpToNext) XP to Level \(min(11, data.level + 1))")
+                Text(verbatim: String(format: gLoc("ach.passport.toNext", "%d XP to %@"), xpToNext,
+                                       String(format: gLoc("ach.levelN", "Level %d"), min(11, data.level + 1))))
                     .font(.system(size: 12, weight: .bold, design: .rounded))
                     .foregroundStyle(cover.ink.opacity(0.7))
             }
             HStack(spacing: 8) {
-                pill("flame.fill", "\(data.checkinStreak)-day streak", cover.ink)
-                pill("rosette", "\(data.badgesUnlocked)/\(data.badgesTotal) badges", cover.ink)
+                pill("flame.fill", String(format: gLoc("ach.chip.streak", "%d-day streak"), data.checkinStreak), cover.ink)
+                pill("rosette", String(format: gLoc("ach.chip.badges", "%d/%d badges"), data.badgesUnlocked, data.badgesTotal), cover.ink)
             }
         }
         .padding(20)

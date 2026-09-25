@@ -950,7 +950,7 @@
 "ach.more.app" = "앱";
 "ach.more.tracking" = "기록";
 "ach.passport.kicker" = "프로토콜 패스포트";
-"ach.passport.toNext" = "%@까지 %d XP";
+"ach.passport.toNext" = "%2$@까지 %1$d XP";
 "ach.passport.topRank" = "최고 등급";
 "ach.persona.kicker" = "나의 프로토콜 페르소나";
 "ach.persona.locked" = "체크인 %d회를 채우면 기록 스타일이 공개돼요 (현재 %d회).";

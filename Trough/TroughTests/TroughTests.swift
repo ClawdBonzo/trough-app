@@ -1040,3 +1040,55 @@ final class EngagementNotificationPlanTests: XCTestCase {
         XCTAssertEqual(EngagementNotifications.recapBody(checkins: 1, injections: 0), "1 check-in this week")
     }
 }
+
+// MARK: - Localization integrity
+
+/// Every translated value must use the same format placeholders as English (same
+/// positions and types), and every regional English table must be complete: a
+/// mismatch crashes String(format:) (1.4: ko "%@까지 %d XP" swapped arguments), and
+/// a key missing from en-GB/AU/CA renders as the raw key.
+final class LocalizationIntegrityTests: XCTestCase {
+    private func table(_ lproj: String) -> [String: String] {
+        guard let url = Bundle(for: GamificationViewModel.self).url(forResource: "Localizable", withExtension: "strings", subdirectory: nil, localization: lproj),
+              let dict = NSDictionary(contentsOf: url) as? [String: String] else { return [:] }
+        return dict
+    }
+
+    /// Placeholders as (position, kind) pairs, kind d = integer, f = floating, @ = object.
+    private func placeholders(_ s: String) -> [String] {
+        let regex = try! NSRegularExpression(pattern: #"%(?:(\d+)\$)?(?:ll|l|h)?([@dDuUxXoOfeEgGcCs])|%%"#)
+        var out: [String] = []
+        var implicit = 0
+        for m in regex.matches(in: s, range: NSRange(s.startIndex..., in: s)) {
+            guard m.range(at: 2).location != NSNotFound, let typeRange = Range(m.range(at: 2), in: s) else { continue }
+            implicit += 1
+            let pos = Range(m.range(at: 1), in: s).flatMap { Int(s[$0]) } ?? implicit
+            let t = s[typeRange]
+            let kind = "dDuUxXoOcC".contains(t) ? "d" : ("fFeEgG".contains(t) ? "f" : "@")
+            out.append("\(pos)\(kind)")
+        }
+        return out.sorted()
+    }
+
+    func testTranslationsKeepEnglishPlaceholders() {
+        let en = table("en")
+        XCTAssertFalse(en.isEmpty)
+        for lproj in ["de", "es", "fr", "it", "ja", "ko", "nl", "pl", "pt-BR", "sv", "en-GB", "en-AU", "en-CA"] {
+            let translated = table(lproj)
+            XCTAssertGreaterThan(translated.count, 900, "\(lproj) table did not load")
+            for (key, value) in translated {
+                // Only format strings matter; plain labels may carry a literal "%" ("Body Fat %").
+                guard let english = en[key], english.range(of: #"%(\d+\$)?(ll|l)?[@df]"#, options: .regularExpression) != nil else { continue }
+                XCTAssertEqual(placeholders(value), placeholders(english), "\(lproj): \(key) = \"\(value)\"")
+            }
+        }
+    }
+
+    func testRegionalEnglishTablesAreComplete() {
+        let en = Set(table("en").keys)
+        for lproj in ["en-GB", "en-AU", "en-CA"] {
+            let missing = en.subtracting(table(lproj).keys)
+            XCTAssertTrue(missing.isEmpty, "\(lproj) is missing \(missing.count) keys, e.g. \(missing.sorted().prefix(5))")
+        }
+    }
+}
